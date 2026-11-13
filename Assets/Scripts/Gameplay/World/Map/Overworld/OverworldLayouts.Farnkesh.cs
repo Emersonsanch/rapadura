@@ -59,6 +59,9 @@ namespace Rapadura.Gameplay.World.Map.Overworld
 
         /// <summary>O Ouro de Midas's arena (53, map boss): the stone ring on the bank of the Rio Pactolo, by the trail, where Midas comes to wash his hands.</summary>
         public static readonly Vector2 OuroDeMidasArena = new Vector2(548f, 140f);
+
+        /// <summary>O Rei dos Ays's arena (57, map boss): the stone ring on the Escarpa dos Ventos, by the trail, where the gorge's wind comes out.</summary>
+        public static readonly Vector2 ReiDosAysArena = new Vector2(-52f, 1476f);
         public static readonly Vector2 ValeSatirosOffset = Vector2.zero;
         public static readonly Vector2 FarnkeshOffset = new Vector2(0f, 1080f);
         public static readonly Vector2 ErmidaBaixaOffset = new Vector2(960f, 1080f);
@@ -344,6 +347,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             Landmark(w, MapLandmarkKind.StoneRing, CortadorDeCordasArena.x, CortadorDeCordasArena.y, 0f, 1.1f);
             Landmark(w, MapLandmarkKind.StoneRing, SinoQueNaoParaArena.x, SinoQueNaoParaArena.y, 0f, 1.1f);
             Landmark(w, MapLandmarkKind.StoneRing, OuroDeMidasArena.x, OuroDeMidasArena.y, 0f, 1.1f);
+            Landmark(w, MapLandmarkKind.StoneRing, ReiDosAysArena.x, ReiDosAysArena.y, 0f, 1.1f);
 
             // ---------------- Finishing ----------------
             SplitPaths(w.World);

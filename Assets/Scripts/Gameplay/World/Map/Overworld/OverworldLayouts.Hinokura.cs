@@ -65,6 +65,9 @@ namespace Rapadura.Gameplay.World.Map.Overworld
 
         /// <summary>A Tartaruga-Vulcão's arena (68, map boss): the stone ring on the Ilhotas de Vidro of the Obsidian Reef, by the trail.</summary>
         public static readonly Vector2 TartarugaVulcaoArena = new Vector2(432f, 1144f);
+
+        /// <summary>Guayota's arena (67, map boss): the stone ring on the cone of Monte Echeyde, by the trail up to the crater.</summary>
+        public static readonly Vector2 GuayotaArena = new Vector2(-1176f, -36f);
         public static readonly Vector2 CasaDeChaOffset = new Vector2(0f, 600f);
         public static readonly Vector2 AbrigoPastoresOffset = new Vector2(-960f, -380f);
         public static readonly Vector2 BarcoFarolOffset = new Vector2(0f, 1080f);
@@ -178,7 +181,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             public const string Salamander = "enemy_mountain_devouring_salamander";
             public const string EmberGull = "enemy_mountain_ember_gull";
             public const string Bomb = "enemy_mountain_volcanic_bomb";
-            public const string Pumice = "enemy_mountain_rolling_stone";
+            public const string Pumice = "enemy_mountain_flying_pumice";
             public const string Shisa = "enemy_mountain_dimmed_shisa";
             public const string Carp = "enemy_cave_lantern_fish";
             public const string Smoke = "enemy_mountain_ill_wind_mist";
@@ -189,7 +192,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             public const string Octopus = "enemy_cave_ooze";
             public const string Blade = "enemy_mountain_blade_fish";
             public const string Coral = "enemy_mountain_ember_coral";
-            public const string Urchin = "enemy_forest_stone_turtle";
+            public const string Urchin = "enemy_forest_glass_urchin";
             public const string Ushabti = "enemy_mountain_lacquer_ushabti";
             public const string Ogre = "enemy_mountain_furnace_ogre";
             public const string Spark = NightVariantRules.FireflySwarmEnemyId;
@@ -387,6 +390,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             Landmark(w, MapLandmarkKind.StoneRing, ReiShisaArena.x, ReiShisaArena.y, 0f, 1.1f);
             Landmark(w, MapLandmarkKind.StoneRing, MestreDasFornalhasArena.x, MestreDasFornalhasArena.y, 0f, 1.1f);
             Landmark(w, MapLandmarkKind.StoneRing, TartarugaVulcaoArena.x, TartarugaVulcaoArena.y, 0f, 1.1f);
+            Landmark(w, MapLandmarkKind.StoneRing, GuayotaArena.x, GuayotaArena.y, 0f, 1.1f);
 
             // ---------------- Finishing ----------------
             SplitPaths(w.World);
@@ -429,7 +433,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             NightSpecies sparks = NightVariantRules.VagaLume;
 
             // Hinokura, the beach, the fumaroles, the strait, the lava channels, the springs (65): the Caranguejo-Vulcão [tanque], the
-            // Lagarto de Lava [rápido], the Gaivota-Brasa [distância], the Pedra-Pomes Voadora [enxame] (the rolling stone).
+            // Lagarto de Lava [rápido], the Gaivota-Brasa [distância], the Pedra-Pomes Voadora [enxame] (its own beast now, BorrowedBeasts).
             hinokura.Fauna.Add(Fauna("gaivotas_brasa", "[distância]", T(N(Fogo.EmberGull, 3), N(Fogo.Lizard, 1)), T(V(Fogo.EmberGull, 2), S(sparks, 1)), 4));
             hinokura.Fauna.Add(Fauna("lagartos_de_lava", "[rápido]", T(N(Fogo.Lizard, 3), N(Fogo.Crab, 1)), T(V(Fogo.Lizard, 2), S(owl, 1)), 4));
             praia.Fauna.Add(Fauna("caranguejos_vulcao", "[tanque]", T(N(Fogo.Crab, 3), N(Fogo.EmberGull, 1)), T(V(Fogo.Crab, 2), S(owl, 1)), 3, null, 30f));
@@ -464,8 +468,8 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             malpais.Fauna.Add(Fauna("fumarolas", "[controle]", T(N(Fogo.Smoke, 3), N(Fogo.GiantLizard, 1)), T(V(Fogo.Smoke, 2), S(sparks, 1)), 4));
 
             // Canais Quentes, Recife de Obsidiana, Ilhotas de Vidro (68): the Polvo de Obsidiana [controle] (the ooze), the Peixe-Lâmina
-            // [rápido], the Coral de Brasa [distância], the Ouriço de Vidro [tanque] (the stone
-            // turtle); the reef glows at night.
+            // [rápido], the Coral de Brasa [distância], the Ouriço de Vidro [tanque] (its own
+            // beast now, BorrowedBeasts); the reef glows at night.
             canaisQuentes.Fauna.Add(Fauna("peixes_lamina", "[rápido]", T(N(Fogo.Blade, 3), N(Fogo.Octopus, 1)), T(V(Fogo.Blade, 2), S(sparks, 1)), 4));
             canaisQuentes.Fauna.Add(Fauna("polvos_dos_canais", "[controle]", T(N(Fogo.Octopus, 3), N(Fogo.Blade, 1)), T(V(Fogo.Octopus, 2), S(moon, 1)), 4));
             recife.Fauna.Add(Fauna("polvos_de_obsidiana", "[controle]", T(N(Fogo.Octopus, 3), N(Fogo.Coral, 1)), T(V(Fogo.Octopus, 2), S(sparks, 1)), 4));

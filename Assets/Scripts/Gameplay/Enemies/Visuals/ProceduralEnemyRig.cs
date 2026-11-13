@@ -460,6 +460,13 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                 case ProceduralEnemyKind.CoralUshabti:
                 case ProceduralEnemyKind.ConfusedSpark:
                 case ProceduralEnemyKind.DarkDrop:
+                case ProceduralEnemyKind.FlyingPumice:
+                case ProceduralEnemyKind.GlassUrchin:
+                case ProceduralEnemyKind.Tremor:
+                case ProceduralEnemyKind.ErasingWater:
+                case ProceduralEnemyKind.WrongCurrent:
+                case ProceduralEnemyKind.SkyCrack:
+                case ProceduralEnemyKind.LivingCrevasse:
                 case ProceduralEnemyKind.DriftingFloe:
                 case ProceduralEnemyKind.LittleKul:
                 case ProceduralEnemyKind.HungryFlame:
@@ -701,6 +708,11 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                 case ProceduralEnemyKind.FiddlerCrab:
                 case ProceduralEnemyKind.SteppeWolf:
                 case ProceduralEnemyKind.Mudskipper:
+                case ProceduralEnemyKind.IceMole:
+                case ProceduralEnemyKind.InstantLizard:
+                case ProceduralEnemyKind.BlackCatfish:
+                case ProceduralEnemyKind.SwimmingShadow:
+                case ProceduralEnemyKind.StowawayShadow:
                 case ProceduralEnemyKind.LittleShadow:
                 {
                     // Hinokura's biters: the jaw gapes on the windup and the tail sways; the blade fish's fins row in the steam, the
@@ -935,12 +947,25 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                 case ProceduralEnemyKind.SledgeSerpent:
                 case ProceduralEnemyKind.PitchKing:
                 case ProceduralEnemyKind.GreatStowaway:
+                case ProceduralEnemyKind.AysKing:
+                case ProceduralEnemyKind.TrappedAurora:
+                case ProceduralEnemyKind.Guayota:
+                case ProceduralEnemyKind.WrongKnot:
+                case ProceduralEnemyKind.DarkWingedEagle:
+                case ProceduralEnemyKind.SailShadow:
                 case ProceduralEnemyKind.MireMother:
                 case ProceduralEnemyKind.CrownedChief:
                 case ProceduralEnemyKind.DarkBellows:
                 case ProceduralEnemyKind.SleepingVishap:
                 case ProceduralEnemyKind.ReliefLion:
                 case ProceduralEnemyKind.SmokeStallion:
+                case ProceduralEnemyKind.MazanMason:
+                case ProceduralEnemyKind.GreyMoray:
+                case ProceduralEnemyKind.PalaceCrab:
+                case ProceduralEnemyKind.GoldenScarecrow:
+                case ProceduralEnemyKind.TabletNightmare:
+                case ProceduralEnemyKind.AzSaw:
+                case ProceduralEnemyKind.GreyStallion:
                     TickRegionBoss(deltaTime, t, k, speed);
                     break;
             }
@@ -997,7 +1022,7 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                 Rotate(ProceduralEnemyParts.Tail, Quaternion.Euler(0f, Mathf.Sin(t * 1.4f) * 18f * k, 0f));
             }
             else if (_kind == ProceduralEnemyKind.WindKing || _kind == ProceduralEnemyKind.GreatDark || _kind == ProceduralEnemyKind.Aydahar
-                     || _kind == ProceduralEnemyKind.RopeCutter)
+                     || _kind == ProceduralEnemyKind.RopeCutter || _kind == ProceduralEnemyKind.DarkWingedEagle)
             {
                 FlapWings(t, speed * 0.6f, Mathf.Max(k, 0.25f) * (1f - 0.6f * r), Mathf.Max(Mathf.Clamp01(MoveSpeed01), 0.5f));
             }

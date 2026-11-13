@@ -23,7 +23,7 @@ namespace Rapadura.Gameplay.Enemies
     /// ossuary's Colosso: this only adds on top. Each strike sends out a ring (<see cref="RegionBossRules.RingDamageFactor"/>), the Storm phase adds barrages of the boss's
     /// shot, the Last Stand a great blow telegraphed on the ground where the hero stood. Numbers in <see cref="RegionBossRules"/>.
     /// </summary>
-    public sealed class RegionBossAbilities : MonoBehaviour
+    public sealed partial class RegionBossAbilities : MonoBehaviour
     {
         private EnemyController _controller;
         private Health _health;
@@ -117,6 +117,19 @@ namespace Rapadura.Gameplay.Enemies
         private int _rises;
         private int _rise;
 
+        // The last of Regions 1–9 (16, 28, 29, 44, 49, 50, 51): the mason's builds and the quarter he walls in, the moray's looks at the hero,
+        // the hero's distance when the scarecrow spread his arms, where the hero stood when the saw started turning or the herd started running.
+        private int _builds;
+        private int _walledIn;
+        private float _morayLookTimer;
+        private Vector2 _morayLastLook;
+        private float _morayStill;
+        private float _morayLongestStill;
+        private float _scareAt;
+        private Vector2 _heroAtWarning;
+        private int _runs;
+        private HerdWay _herdWay;
+
         public RegionBossPhase Phase => _phase;
 
         /// <summary>True while a great blow is telegraphed.</summary>
@@ -167,9 +180,13 @@ namespace Rapadura.Gameplay.Enemies
             _wake.Clear();
             _wakeTimer = 0f;
             _tarSeconds = 0f;
+            ResetUpperMapBosses();
             _tosses = 0;
             _breaths = 0;
             _rises = 0;
+            _builds = 0;
+            _morayLongestStill = 0f;
+            _runs = 0;
             EventBus.Subscribe<CombatTargetDiedEvent>(HandleTargetDied);
         }
 
@@ -397,6 +414,20 @@ namespace Rapadura.Gameplay.Enemies
                     _tarSeconds += deltaTime;
                 }
 
+                if (signature == RegionBossSignature.StillPrey && hero != null)
+                {
+                    // The moray looks at the hero every so often while she warns: each look that finds them where they were adds to their stillness.
+                    _morayLookTimer += deltaTime;
+                    if (_morayLookTimer >= RegionBossRules.MorayLookSeconds)
+                    {
+                        _morayLookTimer = 0f;
+                        Vector2 look = Flat(hero.position);
+                        _morayStill = RegionBossRules.MorayLookIsStill(_morayLastLook, look) ? _morayStill + RegionBossRules.MorayLookSeconds : 0f;
+                        _morayLongestStill = Mathf.Max(_morayLongestStill, _morayStill);
+                        _morayLastLook = look;
+                    }
+                }
+
                 if (signature == RegionBossSignature.LeadCast && hero != null)
                 {
                     // The fisher looks twice at where the hero is going, then casts ahead of them.
@@ -582,6 +613,36 @@ namespace Rapadura.Gameplay.Enemies
             {
                 DungeonShockwave.Spawn(_home, null, _controller.gameObject, 0f, 0f);
             }
+            else if (signature == RegionBossSignature.TurningWalls)
+            {
+                _walledIn = RegionBossRules.MasonQuarterOf(_builds, Flat(_signatureOrigin), Flat(_signatureImpact));
+            }
+            else if (signature == RegionBossSignature.StillPrey)
+            {
+                _morayLookTimer = 0f;
+                _morayLastLook = Flat(_signatureImpact);
+                _morayStill = 0f;
+                _morayLongestStill = 0f;
+            }
+            else if (signature == RegionBossSignature.SidewaysScuttle)
+            {
+                // The row he will scuttle along runs through the hero's spot.
+                DungeonShockwave.Spawn(_signatureImpact, null, _controller.gameObject, 0f, 0f);
+            }
+            else if (signature == RegionBossSignature.ScareOff)
+            {
+                _scareAt = FlatDistance(_signatureImpact, _signatureOrigin);
+            }
+            else if (signature == RegionBossSignature.OutrunSaw)
+            {
+                _heroAtWarning = Flat(_signatureImpact);
+            }
+            else if (signature == RegionBossSignature.HerdRun)
+            {
+                _heroAtWarning = Flat(_signatureImpact);
+                _herdWay = RegionBossRules.HerdWayFor(_runs++);
+                warning = RegionBossTexts.HerdWayKey(_herdWay);
+            }
             else if (signature == RegionBossSignature.HoldHatches)
             {
                 foreach (Vector2 hatch in RegionBossRules.HatchSpots(Flat(_home)))
@@ -592,6 +653,7 @@ namespace Rapadura.Gameplay.Enemies
                 }
             }
 
+            WarnUpperMapBoss(signature, ref warning);
             DungeonShockwave.Spawn(MarksTheHeroSpot(signature) ? _signatureImpact : transform.position, null, _controller.gameObject, 0f, 0f);
             DungeonFx.Warn(transform.position + Vector3.up * 4f, Text(warning));
         }
@@ -631,6 +693,11 @@ namespace Rapadura.Gameplay.Enemies
             }
 
             Vector2 heroFlat = new Vector2(hero.position.x, hero.position.z);
+            if (ResolveUpperMapBoss(heroFlat, victim))
+            {
+                return;
+            }
+
             switch (_spawn.Signature)
             {
                 case RegionBossSignature.DrinkTheRiver:
@@ -1075,6 +1142,76 @@ namespace Rapadura.Gameplay.Enemies
                     if (RegionBossRules.SmokeCorralHits(Flat(_signatureImpact), heroFlat))
                     {
                         victim.ApplyDamage(Damage(RegionBossRules.CorralDamageFactor), ElementType.Dark, _controller.gameObject);
+                    }
+
+                    break;
+
+                case RegionBossSignature.TurningWalls:
+                    DungeonShockwave.Spawn(transform.position, null, _controller.gameObject, 0f, 0f);
+                    if (RegionBossRules.MasonWallHits(_builds++, Flat(_signatureOrigin), _walledIn, heroFlat))
+                    {
+                        victim.ApplyDamage(Damage(RegionBossRules.MasonDamageFactor), ElementType.Earth, _controller.gameObject);
+                    }
+
+                    break;
+
+                case RegionBossSignature.StillPrey:
+                    DungeonShockwave.Spawn(hero.position, null, _controller.gameObject, 0f, 0f);
+                    if (RegionBossRules.MorayBites(_morayLongestStill, FlatDistance(hero.position, transform.position)))
+                    {
+                        victim.ApplyDamage(Damage(RegionBossRules.MorayDamageFactor), ElementType.Dark, _controller.gameObject);
+                    }
+
+                    break;
+
+                case RegionBossSignature.SidewaysScuttle:
+                    DungeonShockwave.Spawn(_signatureImpact, null, _controller.gameObject, 0f, 0f);
+                    if (RegionBossRules.ScuttleHits(Flat(_signatureOrigin), Flat(_signatureImpact), heroFlat))
+                    {
+                        victim.ApplyDamage(Damage(RegionBossRules.ScuttleDamageFactor), ElementType.Physical, _controller.gameObject);
+                    }
+
+                    break;
+
+                case RegionBossSignature.ScareOff:
+                    DungeonShockwave.Spawn(transform.position, null, _controller.gameObject, 0f, 0f);
+                    if (RegionBossRules.ScareHits(_scareAt, FlatDistance(hero.position, transform.position)))
+                    {
+                        victim.ApplyDamage(Damage(RegionBossRules.ScareDamageFactor), ElementType.Wind, _controller.gameObject);
+                    }
+
+                    break;
+
+                case RegionBossSignature.FearGrip:
+                {
+                    // The health the hero has when the dream lands: a potion drunk during the warning is what sends the nightmare off.
+                    DungeonShockwave.Spawn(transform.position, null, _controller.gameObject, 0f, 0f);
+                    PlayerStats dreamer = hero.GetComponentInParent<PlayerStats>();
+                    float factor = dreamer != null
+                        ? RegionBossRules.NightmareDamageFactor(dreamer.CurrentHealth, dreamer.MaxHealth, FlatDistance(hero.position, transform.position))
+                        : RegionBossRules.NightmareDamageFactor(1f, 1f, FlatDistance(hero.position, transform.position));
+                    if (factor > 0f)
+                    {
+                        victim.ApplyDamage(Damage(factor), ElementType.Dark, _controller.gameObject);
+                    }
+
+                    break;
+                }
+
+                case RegionBossSignature.OutrunSaw:
+                    DungeonShockwave.Spawn(transform.position, null, _controller.gameObject, 0f, 0f);
+                    if (RegionBossRules.SawHits(Flat(_signatureOrigin), _heroAtWarning, heroFlat))
+                    {
+                        victim.ApplyDamage(Damage(RegionBossRules.SawDamageFactor), ElementType.Physical, _controller.gameObject);
+                    }
+
+                    break;
+
+                case RegionBossSignature.HerdRun:
+                    DungeonShockwave.Spawn(transform.position, null, _controller.gameObject, 0f, 0f);
+                    if (RegionBossRules.HerdRunHits(_herdWay, Flat(_signatureOrigin), _heroAtWarning, heroFlat))
+                    {
+                        victim.ApplyDamage(Damage(RegionBossRules.HerdDamageFactor), ElementType.Earth, _controller.gameObject);
                     }
 
                     break;

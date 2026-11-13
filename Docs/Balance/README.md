@@ -2773,7 +2773,7 @@ Implementa `Docs/Progressao500.md` §1–4 (escopo de conteúdo "até 100"; o c�
 - Estrada: `ach_world_all_regions` (as 16 regiões; chegar de barca também conta).
 - As Cartas da Estrada: `ach_letters_complete` (`QuestsCompleted`, última etapa) e `ach_letters_all_cousins` (secreta, `HeroDeed`, a última etapa com cada um dos cinco).
 - Montarias (`MountsOwned`): `ach_mounts_far_regions` (as 8 de `MountFarRegionCatalog`), `ach_column_griffin`.
-- Móveis (`HouseItemsCollected`): `ach_house_cais_de_luz` (8 peças) e `ach_house_far_sets` (40 peças dos cinco conjuntos das Regiões 12–16).
+- Móveis (`HouseItemsCollected`): `ach_house_cais_de_luz` (8 peças) e `ach_house_far_sets` (40 peças dos cinco conjuntos das Regiões 11–16) e `ach_house_far_sets_second` (48 peças dos seis conjuntos mais novos das Regiões 10–16: Ninho de Pedra, Palácio de Laca, Campo de Juncos, Relógio de Sol, Novelo, Barca da Lua).
 
 **Recompensas**, nos canais que já existiam: `mount_caipora_peccary` (`MountSourceHooks`) em `ach_world_all_regions`, `mount_elder_tortoise` em `ach_porch_story`; `HouseRewardRules.ExtraAchievementRewards` dá `casa_luz_010` em `ach_lavine_sky_golds`, `casa_luz_037` em `ach_letters_complete` e `casa_regional_049` em `ach_bosses_far_all`. As demais só marcam a conquista, como a maioria das antigas.
 

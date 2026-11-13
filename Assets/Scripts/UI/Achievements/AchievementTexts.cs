@@ -183,7 +183,9 @@ namespace Rapadura.UI.Achievements
             Title("ach_house_cais_de_luz", "A Room on the Quay of Light", "Um Cômodo no Cais de Luz"),
             Description("ach_house_cais_de_luz", "Collect all 8 pieces of the Quay of Light furniture.", "Reúna as 8 peças dos Móveis do Cais de Luz."),
             Title("ach_house_far_sets", "Furnished from Far Away", "Mobiliada de Longe"),
-            Description("ach_house_far_sets", "Collect all 40 pieces of the five furniture sets from Regions 12 to 16.", "Reúna as 40 peças dos cinco conjuntos de móveis das Regiões 12 a 16."),
+            Description("ach_house_far_sets", "Collect all 40 pieces of the five furniture sets from Regions 11 to 16.", "Reúna as 40 peças dos cinco conjuntos de móveis das Regiões 11 a 16."),
+            Title("ach_house_far_sets_second", "Furnished to the Last Shore", "Mobiliada até a Última Margem"),
+            Description("ach_house_far_sets_second", "Collect all 48 pieces of the six newer furniture sets from Regions 10 to 16: Stone Nest, Lacquer Palace, Reed Fields, Sundial, Bōlos and Moon Ship.", "Reúna as 48 peças dos seis conjuntos de móveis mais novos das Regiões 10 a 16: Ninho de Pedra, Palácio de Laca, Campo de Juncos, Relógio de Sol, Novelo e Barca da Lua."),
         };
 
         private static LocalizationEntry Title(string id, string en, string ptBR) => new LocalizationEntry($"achievement.{id}.title", en, ptBR);

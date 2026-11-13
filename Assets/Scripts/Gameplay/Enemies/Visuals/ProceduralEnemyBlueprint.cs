@@ -474,6 +474,32 @@ namespace Rapadura.Gameplay.Enemies.Visuals
         /// <summary>Gota de Treva (94): a teardrop of the Dark on its puddle; squashes on the windup and the swallowed light flares.</summary>
         DarkDrop = 323,
 
+        // The sixteenth pass of beasts (bible §3.2.1): roles of Regions 7–16 still played by stand-ins (BorrowedRoleBeastRecipes).
+        /// <summary>Pedra-Pomes Voadora (65): a light grey pumice stone afloat on its own steam; squashes on the windup and the ember in its pores flares.</summary>
+        FlyingPumice = 324,
+        /// <summary>Ouriço de Vidro (68): an urchin of black volcanic glass; squashes on the windup and the heat inside flares.</summary>
+        GlassUrchin = 325,
+        /// <summary>Toupeira-Gelo (62): a pale mole of the frozen tunnels with ice claws; jaw and tail.</summary>
+        IceMole = 326,
+        /// <summary>Lagarto do Instante (78): a sand lizard with a sundial fin; jaw and tail.</summary>
+        InstantLizard = 327,
+        /// <summary>Bagre Negro (79): a tar-black catfish with long barbels; jaw and tail.</summary>
+        BlackCatfish = 328,
+        /// <summary>Tremor (81): a heap of shoulder stone shaking on its seam; squashes on the windup and the seam flares.</summary>
+        Tremor = 329,
+        /// <summary>Água que Apaga (82): a standing column of still water that wipes the tablets; squashes on the windup and the drowned light flares.</summary>
+        ErasingWater = 330,
+        /// <summary>Corrente Errada (92): a coil of the River of Light running the wrong way; squashes on the windup and its knot of light flares.</summary>
+        WrongCurrent = 331,
+        /// <summary>Sombra Nadadora (92): a shadow swimming in the light like an eel; jaw and tail.</summary>
+        SwimmingShadow = 332,
+        /// <summary>Sombra Clandestina (91): a shadow hidden under a Barca's rag sail; jaw and tail.</summary>
+        StowawayShadow = 333,
+        /// <summary>Rachadura do Céu (99): a crack of the sky that walked off with its edges; squashes on the windup and the dark inside flares.</summary>
+        SkyCrack = 334,
+        /// <summary>Fenda Viva (38): a crevasse of the glacier that opens and shuts; squashes on the windup and the blue deep flares.</summary>
+        LivingCrevasse = 335,
+
         // The map bosses of the fichas (RegionBossRules.MapSpawns, MapBossRecipes): one per map the story walks through in the 150–300 band.
         /// <summary>O Cortador de Cordas (55): a shadow bird with blade-edged wings and a frayed rope in its beak; map boss of the Pontes de Vento.</summary>
         RopeCutter = 204,
@@ -544,6 +570,20 @@ namespace Rapadura.Gameplay.Enemies.Visuals
         /// <summary>O Clandestino Grande (93): a hunched shadow wrapped in a sail-cloth, a lantern stolen from the deck; map boss of the Barca da Lua.</summary>
         GreatStowaway = 263,
 
+        // Six more map bosses of Regions 10–16 (Docs/Mapas100.md 57, 63, 67, 74, 86, 97), from 280 on.
+        /// <summary>O Rei dos Ays (57): a whirlwind of dust standing up like a funnel, a ring of stones round it, a crown of wind; map boss of the Garganta dos Ays.</summary>
+        AysKing = 280,
+        /// <summary>A Aurora Presa (63): a jagged iceberg with the green and violet light of the aurora caught inside; map boss of the Mar das Auroras.</summary>
+        TrappedAurora = 281,
+        /// <summary>Guayota (67): a hunched giant of black lava rock with glowing cracks, the stolen sun held in his chest; map boss of Monte Echeyde.</summary>
+        Guayota = 282,
+        /// <summary>O Nó Errado (74): a coil of Mehen tied in a wrong knot, rearing, its loops for arms; map boss of the Anéis de Mehen.</summary>
+        WrongKnot = 283,
+        /// <summary>A Águia de Asas de Treva (86): a grey eagle under wings of darkness far too big for it; map boss of the Cova do Vento Destruidor.</summary>
+        DarkWingedEagle = 284,
+        /// <summary>A Sombra da Vela (97): a shadow hanging from a lateen sail and its boom, a scrap of the noon sun in it; map boss of the Barca do Sol.</summary>
+        SailShadow = 285,
+
         // Six more map bosses of Regions 1–9 (Docs/Mapas100.md 03, 11, 17, 21, 27, 47).
         /// <summary>Mãe-Lodo (03): a giant dark toad sitting up in the mud, throat swollen with the spring she swallowed; map boss of the Brejo do Lodo Escuro.</summary>
         MireMother = 264,
@@ -557,6 +597,22 @@ namespace Rapadura.Gameplay.Enemies.Visuals
         ReliefLion = 268,
         /// <summary>O Cavalo de Fumaça (47): a stallion of smoke rearing on four legs, mane streaming; map boss of the Acampamento de Soslan.</summary>
         SmokeStallion = 269,
+
+        // The last map bosses of Regions 1–9 (Docs/Mapas100.md 16, 28, 29, 44, 49, 50, 51; LastMapBossRecipes).
+        /// <summary>O Pedreiro Mazan (16): a stone giant laid in drystone courses, a block of granite in his hand; map boss of the Muralhas de Pedra Seca.</summary>
+        MazanMason = 270,
+        /// <summary>A Moreia do Coral Cinza (28): a grey moray reared up out of the mother coral she coiled round; map boss of the Lagoa Grande of Kirta.</summary>
+        GreyMoray = 271,
+        /// <summary>O Caranguejo-Palácio (29): a hermit crab wearing the dome of Husuni's palace for a shell; map boss of the Ruínas de Gedi.</summary>
+        PalaceCrab = 272,
+        /// <summary>O Espantalho de Palha Dourada (44): a golden-straw scarecrow on its pole, sleeves flung wide; map boss of the Arrozais Espelhados.</summary>
+        GoldenScarecrow = 273,
+        /// <summary>O Pesadelo da Tábua (49): a shadow climbing out of a giant's clay dream tablet; map boss of the Vale das Tábuas de Sonho.</summary>
+        TabletNightmare = 274,
+        /// <summary>A Serra de Āz (50): an iron sawing engine on four legs with a great round blade; map boss of the Taiga de Lariços.</summary>
+        AzSaw = 275,
+        /// <summary>O Garanhão Cinzento (51): the dappled grey chief of the thousand horses, a long white mane; map boss of the Pradaria dos Mil Cavalos.</summary>
+        GreyStallion = 276,
     }
 
     /// <summary>

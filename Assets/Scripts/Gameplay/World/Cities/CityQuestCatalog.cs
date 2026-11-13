@@ -422,10 +422,10 @@ namespace Rapadura.Gameplay.World.Cities
                 new[] { new RegionObjectiveSpec("chase_the_ushabti", QuestObjectiveType.KillEnemyType, "enemy_mountain_rope_ushabti", 6) },
                 new[] { new RegionRewardSpec("item_lamparina_runica", 1), new RegionRewardSpec("item_gold", 260) })),
 
-            // -- Cais da Coluna: Ammo, then Adda. The creeping dark stands in for the Sombra Clandestina of the ficha (Docs/Mapas100.md 91) and the dimmed ibis for its
-            // Ave de Nuvem Apagada, until the region's own creatures exist. --
+            // -- Cais da Coluna: Ammo, then Adda. The Sombra Clandestina of the ficha (Docs/Mapas100.md 91) is its own beast now (BorrowedRoleBeastRecipes);
+            // the dimmed ibis still stands in for its Ave de Nuvem Apagada. --
             new CityQuestSpec(CityCatalog.CaisDaColuna, "ammo_caravaneiro", new RegionQuestSpec(CaisColunaStowaways, BiomeType.Forest, null, 4000,
-                new[] { new RegionObjectiveSpec("chase_the_stowaways", QuestObjectiveType.KillEnemyType, "enemy_forest_creeping_dark", 8) },
+                new[] { new RegionObjectiveSpec("chase_the_stowaways", QuestObjectiveType.KillEnemyType, "enemy_forest_stowaway_shadow", 8) },
                 new[] { new RegionRewardSpec("item_health_potion", 5), new RegionRewardSpec("item_mana_potion", 5), new RegionRewardSpec("item_gold", 270) })),
             new CityQuestSpec(CityCatalog.CaisDaColuna, "adda_roda", new RegionQuestSpec(CaisColunaBirds, BiomeType.Forest, CaisColunaStowaways, 4200,
                 new[] { new RegionObjectiveSpec("chase_the_birds", QuestObjectiveType.KillEnemyType, "enemy_forest_dimmed_ibis", 6) },
@@ -526,7 +526,7 @@ namespace Rapadura.Gameplay.World.Cities
                 new[] { new RegionObjectiveSpec("chase_the_shadow_dragons", QuestObjectiveType.KillEnemyType, "enemy_forest_lesser_shadow_dragon", 5) },
                 new[] { new RegionRewardSpec("item_pedra_alma", 2), new RegionRewardSpec("item_gold", 305) })),
             new CityQuestSpec(CityCatalog.CaisDaColuna, "ammo_caravaneiro", "map_092_rio_de_luz", "foz_oeste", 432, new RegionQuestSpec(CaisColunaRiverShadows, BiomeType.Forest, CaisColunaStowaways, 7100,
-                new[] { new RegionObjectiveSpec("chase_the_swimming_shadows", QuestObjectiveType.KillEnemyType, "enemy_forest_late_shadow", 7) },
+                new[] { new RegionObjectiveSpec("chase_the_swimming_shadows", QuestObjectiveType.KillEnemyType, "enemy_forest_swimming_shadow", 7) },
                 new[] { new RegionRewardSpec("item_health_potion", 5), new RegionRewardSpec("item_mana_potion", 5), new RegionRewardSpec("item_gold", 300) })),
             new CityQuestSpec(CityCatalog.CaisDaColuna, "adda_roda", "map_093_barca_da_lua", "conves_da_lua", 436, new RegionQuestSpec(CaisColunaHold, BiomeType.Forest, CaisColunaBirds, 7200,
                 new[] { new RegionObjectiveSpec("chase_the_hold_shadows", QuestObjectiveType.KillEnemyType, "enemy_forest_hold_shadow", 6) },

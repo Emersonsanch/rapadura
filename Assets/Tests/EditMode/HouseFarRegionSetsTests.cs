@@ -10,8 +10,8 @@ using Rapadura.UI.Housing;
 namespace Rapadura.Tests
 {
     /// <summary>
-    /// The five furniture sets of the far regions (Docs/Mapas100.md, regions 12–16; Docs/Housing/CatalogoCasa.md): each one is
-    /// sold in its region's city, has 8 pieces in a fixed rarity spread, and its texts say it is furniture, so it is not
+    /// The nine furniture sets of the far regions (Docs/Mapas100.md, regions 11 and 13–16, two in each of 13–16;
+    /// Docs/Housing/CatalogoCasa.md): each one is sold in its region's city, has 8 pieces in a fixed rarity spread, and its texts say it is furniture, so it is not
     /// mistaken for the equipment sets of the same theme.
     /// </summary>
     public class HouseFarRegionSetsTests
@@ -23,6 +23,11 @@ namespace Rapadura.Tests
             ("set_moveis_tijolo_azul", CityShopCatalog.BetumeAtrahasis, CityCatalog.DurJarras, "Móveis de Tijolo Azul", "Blue Brick Furniture"),
             ("set_moveis_mil_lampadas", CityShopCatalog.PaviosTehat, CityCatalog.FortalezaUltimaLampada, "Móveis das Mil Lâmpadas", "Thousand Lamps Furniture"),
             ("set_moveis_cais_luz", CityShopCatalog.UltimaCaravanaAmmo, CityCatalog.CaisDaColuna, "Móveis do Cais de Luz", "Quay of Light Furniture"),
+            // The second sets of Regions 13–16 (fichas 72, 78, 89, 93), at the same counter as the first.
+            ("set_moveis_campo_juncos", CityShopCatalog.TrocasKhunanup, CityCatalog.CaisDeMesektet, "Móveis do Campo de Juncos", "Reed Fields Furniture"),
+            ("set_moveis_relogio_sol", CityShopCatalog.BetumeAtrahasis, CityCatalog.DurJarras, "Móveis do Relógio de Sol", "Sundial Furniture"),
+            ("set_moveis_novelo", CityShopCatalog.PaviosTehat, CityCatalog.FortalezaUltimaLampada, "Móveis do Novelo", "Bōlos Furniture"),
+            ("set_moveis_barca_lua", CityShopCatalog.UltimaCaravanaAmmo, CityCatalog.CaisDaColuna, "Móveis da Barca da Lua", "Moon Ship Furniture"),
         };
 
         private static List<HouseItemDefinition> PiecesOf(string setId) => HouseCatalog.All.Where(i => i.SetId == setId).ToList();

@@ -50,6 +50,9 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         /// <summary>A Grande Serpente do Areal's arena (73, map boss): the stone ring on the Areal Escondido, by the trail the sledge would take.</summary>
         public static readonly Vector2 GrandeSerpenteDoArealArena = new Vector2(-832f, 96f);
 
+        /// <summary>O Nó Errado's arena (74, map boss): the stone ring in the Nó Errado of the Anéis de Mehen, by the trail, where the coils tied themselves wrong.</summary>
+        public static readonly Vector2 NoErradoArena = new Vector2(-936f, 852f);
+
         public static readonly Vector2 CaisMesektetOffset = Vector2.zero;
         public static readonly Vector2 CasaDeJuncoOffset = new Vector2(0f, 600f);
         public static readonly Vector2 TrenoDeAreiaOffset = new Vector2(-960f, 120f);
@@ -374,6 +377,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             Landmark(w, MapLandmarkKind.StoneRing, -330f, 640f, 0f, 1f);
             Landmark(w, MapLandmarkKind.StoneRing, ApepArena.x, ApepArena.y, 0f, 1.1f);
             Landmark(w, MapLandmarkKind.StoneRing, GrandeSerpenteDoArealArena.x, GrandeSerpenteDoArealArena.y, 0f, 1.1f);
+            Landmark(w, MapLandmarkKind.StoneRing, NoErradoArena.x, NoErradoArena.y, 0f, 1.1f);
 
             // ---------------- Finishing ----------------
             SplitPaths(w.World);

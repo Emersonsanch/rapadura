@@ -26,6 +26,10 @@ namespace Rapadura.Gameplay.Items.Sets
         public const string HermitageToll = "armor_set.hermitage_toll";
         public const string LanternWarmth = "armor_set.lantern_warmth";
         public const string AnvilEmber = "armor_set.anvil_ember";
+        public const string MehenCoil = "armor_set.mehen_coil";
+        public const string GiantsTremor = "armor_set.giants_tremor";
+        public const string ReturningLight = "armor_set.returning_light";
+        public const string ColumnRise = "armor_set.column_rise";
 
         public static readonly List<LocalizationEntry> Entries = new List<LocalizationEntry>
         {
@@ -45,6 +49,10 @@ namespace Rapadura.Gameplay.Items.Sets
             new LocalizationEntry(HermitageToll, "Toll of the Hermitages!", "Badalada das Ermidas!"),
             new LocalizationEntry(LanternWarmth, "Lantern Warmth!", "Calor da Lanterna!"),
             new LocalizationEntry(AnvilEmber, "Anvil Ember!", "Brasa da Bigorna!"),
+            new LocalizationEntry(MehenCoil, "Coil of Mehen!", "Anel de Mehen!"),
+            new LocalizationEntry(GiantsTremor, "Tremor of the Giants!", "Tremor dos Gigantes!"),
+            new LocalizationEntry(ReturningLight, "Returning Light!", "Luz que Volta!"),
+            new LocalizationEntry(ColumnRise, "Rise of the Column!", "Subida da Coluna!"),
         };
 
         private static LocalizationManager _mergedInto;

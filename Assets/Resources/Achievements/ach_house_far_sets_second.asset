@@ -1,0 +1,71 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b7fe309d8334becbc1f92b69454b59e, type: 3}
+  m_Name: ach_house_far_sets_second
+  m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Achievements.AchievementDefinition
+  _achievementId: ach_house_far_sets_second
+  _titleKey: achievement.ach_house_far_sets_second.title
+  _descriptionKey: achievement.ach_house_far_sets_second.description
+  _icon: {fileID: 0}
+  _conditionType: 74
+  _targetValue: 48
+  _targetIds:
+  - casa_sala_076
+  - casa_sala_077
+  - casa_quintal_046
+  - casa_luz_047
+  - casa_parede_058
+  - casa_tapete_036
+  - casa_cortina_022
+  - casa_regional_056
+  - casa_sala_078
+  - casa_sala_079
+  - casa_quarto_045
+  - casa_cozinha_052
+  - casa_luz_048
+  - casa_parede_059
+  - casa_tapete_037
+  - casa_planta_035
+  - casa_sala_080
+  - casa_cozinha_053
+  - casa_quintal_047
+  - casa_luz_049
+  - casa_parede_060
+  - casa_tapete_038
+  - casa_cortina_023
+  - casa_planta_036
+  - casa_sala_081
+  - casa_sala_082
+  - casa_quintal_048
+  - casa_luz_050
+  - casa_parede_061
+  - casa_tapete_039
+  - casa_regional_057
+  - casa_regional_058
+  - casa_sala_083
+  - casa_quarto_046
+  - casa_luz_051
+  - casa_parede_062
+  - casa_tapete_040
+  - casa_cortina_024
+  - casa_regional_059
+  - casa_regional_060
+  - casa_sala_084
+  - casa_quarto_047
+  - casa_luz_052
+  - casa_parede_063
+  - casa_tapete_041
+  - casa_cortina_025
+  - casa_regional_061
+  - casa_regional_062
+  _hidden: 0
+  _sortOrder: 105

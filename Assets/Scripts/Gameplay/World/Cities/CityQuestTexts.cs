@@ -1243,9 +1243,9 @@ namespace Rapadura.Gameplay.World.Cities
             // ================= Sombras no Rio de Luz (nível 432, foz_oeste) =================
             new LocalizationEntry("quest.city_cais_coluna_shadows_in_the_light_river.title", "Shadows in the River of Light", "Sombras no Rio de Luz"),
             new LocalizationEntry("quest.city_cais_coluna_shadows_in_the_light_river.description",
-                "Late shadows swim against the River of Light at its western mouth and muddy the light Ammo's bales pour into it. Ammo asked the cousins to chase them so the gifts of every city flow up clean.",
-                "Sombras atrasadas nadam contra o Rio de Luz na foz oeste e sujam a luz que os fardos do Ammo despejam nele. O Ammo pediu aos primos que espantem as sombras para os presentes de cada cidade subirem limpos."),
-            new LocalizationEntry("quest.city_cais_coluna_shadows_in_the_light_river.obj_chase_the_swimming_shadows", "Chase the late shadows out of the western mouth", "Espantar as sombras atrasadas da foz oeste"),
+                "Swimming shadows slide against the River of Light at its western mouth and muddy the light Ammo's bales pour into it. Ammo asked the cousins to chase them so the gifts of every city flow up clean.",
+                "Sombras nadadoras nadam contra o Rio de Luz na foz oeste e sujam a luz que os fardos do Ammo despejam nele. O Ammo pediu aos primos que espantem as sombras para os presentes de cada cidade subirem limpos."),
+            new LocalizationEntry("quest.city_cais_coluna_shadows_in_the_light_river.obj_chase_the_swimming_shadows", "Chase the swimming shadows out of the western mouth", "Espantar as sombras nadadoras da foz oeste"),
             new LocalizationEntry("quest.city_cais_coluna_shadows_in_the_light_river.journal",
                 "Ammo poured Grandma Edna's Golden Brick into the river, a spoonful, and the water turned the colour of the tacho. Joaquim wanted to eat the rest. Ammo let him.",
                 "O Ammo jogou uma colher do Torrão Dourado da Vó Edna no rio, e a água ficou da cor do tacho. O Joaquim quis comer o resto. O Ammo deixou."),

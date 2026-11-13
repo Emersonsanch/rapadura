@@ -152,17 +152,10 @@ namespace Rapadura.Tests
         private static OverworldFauna Group(string id) =>
             OverworldLayouts.Get(MisturaId).Zones.SelectMany(z => z.Fauna).First(f => f.Id == id);
 
-        [TestCase("lagartos_do_instante", LavaLizard)]
-        [TestCase("lagartos_das_horas", LavaLizard)]
         [TestCase("ushabtis_de_relogio", LacquerUshabti)]
         [TestCase("ushabtis_das_horas", LacquerUshabti)]
-        [TestCase("bagres_negros", Pike)]
         [TestCase("fumacas_de_piche", SmokeHarpy)]
         [TestCase("fumacas_do_juncal", SmokeHarpy)]
-        [TestCase("tremores_das_dobras", Golem)]
-        [TestCase("tremores_da_clavicula", Golem)]
-        [TestCase("aguas_que_apagam", ShadowSeal)]
-        [TestCase("aguas_das_tabuas", ShadowSeal)]
         public void TheOtherSheets_KeepTheirStandIn(string group, string standIn)
         {
             OverworldFauna fauna = Group(group);
@@ -202,12 +195,10 @@ namespace Rapadura.Tests
         }
 
         [Test]
-        public void TheGolem_StaysOnlyAsTheTremor_OnTheShoulder()
+        public void TheGolem_LeftTheShoulder_TheTremorIsItsOwnBeast()
         {
             OverworldLayout w = OverworldLayouts.Get(MisturaId);
-            List<MapSpawnZone> withGolem = w.World.Zones.Where(s => s.Day.Any(e => e.EnemyId == Golem)).ToList();
-            Assert.IsNotEmpty(withGolem, "the Tremor is still the golem");
-            Assert.IsTrue(withGolem.All(s => w.ZoneOfSpawn[s.Id].MapIdOrOwner == OverworldLayouts.OmbroUpelluriMapId), "the golem only on the shoulder (81)");
+            Assert.IsFalse(w.World.Zones.SelectMany(s => s.Day).Any(e => e.EnemyId == Golem), "the Tremor (81) is its own beast now (BorrowedRoleBeastsTests)");
         }
     }
 }

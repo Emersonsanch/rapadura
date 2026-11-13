@@ -40,6 +40,9 @@ namespace Rapadura.Gameplay.World.Map.Overworld
 
         /// <summary>O Clandestino Grande's arena (93, map boss): the stone ring in the hold of the Moon Ship, by the trail, over the hatches.</summary>
         public static readonly Vector2 ClandestinoGrandeArena = new Vector2(468f, 836f);
+
+        /// <summary>A Sombra da Vela's arena (97, map boss): the stone ring on the deck under the sail of the Sun Ship, by the trail.</summary>
+        public static readonly Vector2 SombraDaVelaArena = new Vector2(736f, 2504f);
         public const string BarcaDoSolMapId = "map_097_barca_do_sol";
         public const string PesDaColunaMapId = "map_098_pes_da_coluna";
         public const string MiranteCeuMapId = "map_099_mirante_do_ceu";
@@ -136,10 +139,10 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             public const string LesserArchon = "enemy_forest_lesser_archon";
             public const string ConfusedSpark = "enemy_desert_confused_spark";
             public const string CloudBird = "enemy_forest_dimmed_cloud_bird";
-            public const string StowawayShadow = "enemy_forest_garden_shadow";
+            public const string StowawayShadow = "enemy_forest_stowaway_shadow";
             public const string LightFish = "enemy_forest_dimmed_light_fish";
-            public const string SwimmingShadow = "enemy_forest_late_shadow";
-            public const string WrongCurrent = "enemy_mountain_ill_wind_mist";
+            public const string SwimmingShadow = "enemy_forest_swimming_shadow";
+            public const string WrongCurrent = "enemy_mountain_wrong_current";
             public const string RunawayLantern = FarBeasts.RunawayLantern;
             public const string DarkStowaway = "enemy_forest_dark_stowaway";
             public const string StubbornSpark = "enemy_forest_glow_mantle";
@@ -161,7 +164,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             public const string DimmedGull = "enemy_forest_dimmed_light_gull";
             public const string LastShadow = "enemy_forest_creeping_dark";
             public const string HighWind = "enemy_mountain_smoke_harpy";
-            public const string SkyCrackBeast = "enemy_mountain_ill_wind_mist";
+            public const string SkyCrackBeast = "enemy_mountain_sky_crack";
             public const string FledArchon = "enemy_forest_lesser_archon";
             public const string SkyStone = "enemy_forest_sky_stone";
         }
@@ -365,6 +368,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             Landmark(w, MapLandmarkKind.StoneRing, 1040f, 3000f, 0f, 1f);
             Landmark(w, MapLandmarkKind.StoneRing, CapitaAzArena.x, CapitaAzArena.y, 0f, 1.1f);
             Landmark(w, MapLandmarkKind.StoneRing, ClandestinoGrandeArena.x, ClandestinoGrandeArena.y, 0f, 1.1f);
+            Landmark(w, MapLandmarkKind.StoneRing, SombraDaVelaArena.x, SombraDaVelaArena.y, 0f, 1.1f);
 
             // ---------------- Finishing ----------------
             SplitPaths(w.World);
@@ -441,7 +445,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             NightSpecies werewolf = NightVariantRules.Lobisomem;
 
             // The edges of the Cais (91): the Arconte Fujão Menor [elite], the Faísca Confusa [enxame] (its own beast now, WideBeasts), the Ave de Nuvem Apagada [rápido],
-            // the Sombra Clandestina [controle] (the garden shadow).
+            // the Sombra Clandestina [controle] (its own beast now, BorrowedBeasts).
             CeuGroup(beira, "arcontes_da_beira", "[elite]", Ceu.LesserArchon, Ceu.CloudBird, moon, 3, 32f);
             CeuGroup(beira, "faiscas_da_beira", "[enxame]", Ceu.ConfusedSpark, Ceu.StowawayShadow, sparks, 5);
             CeuGroup(pierLua, "aves_da_lua", "[rápido]", Ceu.CloudBird, Ceu.ConfusedSpark, moon);
@@ -453,7 +457,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             CeuGroup(fresta, "aves_da_fresta", "[rápido]", Ceu.CloudBird, Ceu.LesserArchon, owl);
             CeuGroup(fresta, "sombras_da_fresta", "[controle]", Ceu.StowawayShadow, Ceu.ConfusedSpark, bats);
 
-            // The Rio de Luz (92): the Peixe de Luz Apagado [rápido], the Sombra Nadadora [controle] (the late shadow), the Corrente Errada [controle] (the ill-wind mist),
+            // The Rio de Luz (92): the Peixe de Luz Apagado [rápido], the Sombra Nadadora [controle] and the Corrente Errada [controle] (their own beasts now, BorrowedBeasts),
             // the Lanterna Fugitiva [enxame] (its own beast now, FarBeasts).
             CeuGroup(fozOeste, "peixes_apagados", "[rápido]", Ceu.LightFish, Ceu.SwimmingShadow, moon);
             CeuGroup(fozOeste, "sombras_nadadoras", "[controle]", Ceu.SwimmingShadow, Ceu.LightFish, owl);
@@ -525,7 +529,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             CeuGroup(pes, "arcontes_do_degrau", "[elite]", Ceu.LesserArchon, Ceu.LastShadow, werewolf, 3, 32f);
             CeuGroup(pes, "sombras_dos_pes", "[rápido]", Ceu.LastShadow, Ceu.HighWind, bats);
 
-            // The Lookout (99): the Rachadura do Céu [controle] (the ill-wind mist), the Arconte Fugido [elite], the Vento do Alto [rápido] (the storm eagle), the Pedra do Céu [tanque].
+            // The Lookout (99): the Rachadura do Céu [controle] (its own beast now, BorrowedBeasts), the Arconte Fugido [elite], the Vento do Alto [rápido] (the storm eagle), the Pedra do Céu [tanque].
             CeuGroup(rachaduras, "rachaduras_do_ceu", "[controle]", Ceu.SkyCrackBeast, Ceu.SkyStone, moon);
             CeuGroup(rachaduras, "pedras_do_ceu", "[tanque]", Ceu.SkyStone, Ceu.SkyCrackBeast, owl, 3, 30f);
             CeuGroup(mirante, "arcontes_fugidos", "[elite]", Ceu.FledArchon, Ceu.OrbitWind, werewolf, 3, 32f);

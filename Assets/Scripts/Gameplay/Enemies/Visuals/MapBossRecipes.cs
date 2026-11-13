@@ -45,7 +45,7 @@ namespace Rapadura.Gameplay.Enemies.Visuals
     /// <item><b>O Cavalo de Fumaça</b> (47, ~2.9 m): a stallion of smoke, the mane streaming; four legs and a <c>Tail</c>.</item>
     /// </list>
     /// </summary>
-    public static class MapBossRecipes
+    public static partial class MapBossRecipes
     {
         // ------------------------------------------------------------------
         // O Cortador de Cordas (55)

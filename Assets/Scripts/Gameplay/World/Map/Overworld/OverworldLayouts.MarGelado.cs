@@ -63,6 +63,9 @@ namespace Rapadura.Gameplay.World.Map.Overworld
 
         /// <summary>O Primeiro Desajeitado's arena (61, map boss): the stone ring on the open Tundra de Omöl, by the trail, among the crooked things Omöl made.</summary>
         public static readonly Vector2 PrimeiroDesajeitadoArena = new Vector2(-956f, 164f);
+
+        /// <summary>A Aurora Presa's arena (63, map boss): the stone ring on a great floe of the Mar das Auroras, by the trail, round the iceberg that holds the light.</summary>
+        public static readonly Vector2 AuroraPresaArena = new Vector2(12f, 1120f);
         public static readonly Vector2 CasaDeNeveOffset = new Vector2(0f, 600f);
         public static readonly Vector2 TendaDeYenOffset = new Vector2(-960f, 120f);
         public static readonly Vector2 BocaDoGeloOffset = new Vector2(960f, 600f);
@@ -191,7 +194,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             public const string Mosquito = NightVariantRules.FireflySwarmEnemyId;
             public const string Kul = FarBeasts.LittleKul;
             public const string Mammoth = "enemy_mountain_burrow_mammoth";
-            public const string Mole = "enemy_mountain_giant_marmot";
+            public const string Mole = "enemy_mountain_ice_mole";
             public const string Crystal = "enemy_desert_broken_lantern";
             public const string SeaWolf = "enemy_mountain_sea_wolf";
             public const string Floe = FarBeasts.DriftingFloe;
@@ -386,6 +389,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             Landmark(w, MapLandmarkKind.StoneRing, MorsaRainhaArena.x, MorsaRainhaArena.y, 0f, 1.1f);
             Landmark(w, MapLandmarkKind.StoneRing, MamuteAvoArena.x, MamuteAvoArena.y, 0f, 1.1f);
             Landmark(w, MapLandmarkKind.StoneRing, PrimeiroDesajeitadoArena.x, PrimeiroDesajeitadoArena.y, 0f, 1.1f);
+            Landmark(w, MapLandmarkKind.StoneRing, AuroraPresaArena.x, AuroraPresaArena.y, 0f, 1.1f);
 
             // ---------------- Finishing ----------------
             SplitPaths(w.World);
@@ -465,7 +469,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             lagos.Fauna.Add(Fauna("aves_graveto_dos_lagos", "[distância]", T(N(Gelo.TwigBird, 3), N(Gelo.Reindeer, 1)), T(V(Gelo.TwigBird, 1), S(moon, 2)), 3));
 
             // Terra Congelada, Fiorde das Presas, Galerias dos Mamutes (62): the Mamute de Baixo da Terra [elite], the
-            // Toupeira-Gelo [enxame] (the giant marmot), the Cristal Vivo [distância] (the broken lantern), the Raiz-Gelo [controle]
+            // Toupeira-Gelo [enxame] (its own beast now, BorrowedBeasts), the Cristal Vivo [distância] (the broken lantern), the Raiz-Gelo [controle]
             // (the ooze); the irbis on the fjord's ledges; the vampire bats at night.
             galerias.Fauna.Add(Fauna("mamutes_de_baixo_da_terra", "[elite]", T(N(Gelo.Mammoth, 3), N(Gelo.Mole, 1)), T(V(Gelo.Mammoth, 2), S(bats, 1)), 3, null, 32f));
             galerias.Fauna.Add(Fauna("cristais_vivos", "[distância]", T(N(Gelo.Crystal, 3), N(Gelo.Ooze, 1)), T(V(Gelo.Crystal, 2), S(bats, 1)), 3));

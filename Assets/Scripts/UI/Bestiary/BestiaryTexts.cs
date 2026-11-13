@@ -287,6 +287,9 @@ namespace Rapadura.UI.Bestiary
             // -- Os papéis mais vistos das Regiões 5–16 que ainda eram substitutos (own file too) --
             WideStandInBestiaryTexts.AddPages(entries);
 
+            // -- Papéis das Regiões 7–16 que ainda usavam bicho de outra região (own file too) --
+            BorrowedRoleBestiaryTexts.AddPages(entries);
+
             // -- Guardiões do Ossuário dos Artífices (Docs/Dungeons.md, own file) --
             RegionBossTexts.AddPages(entries);
 

@@ -139,6 +139,26 @@ namespace Rapadura.Gameplay.Enemies
         /// <summary>O Clandestino Grande bursts out of the hatch of the hold nearest the hero; the middle of the hold and far away are safe.</summary>
         HoldHatches = 39,
 
+        // Six more of Regions 10–16, one in each of 10, 11, 12, 13, 15 and 16 (Docs/Mapas100.md 57, 63, 67, 74, 86, 97; numbers from 60 on).
+
+        /// <summary>O Rei dos Ays blows a gust down the gorge's axis (up it, then down it, in turn): downwind of him, on its line, is hit; upwind and aside are safe.</summary>
+        GorgeGust = 60,
+
+        /// <summary>A Aurora Presa lights one route out from her (north, then 120° on each dance); the ice cracks everywhere round her but on the route.</summary>
+        AuroraRoute = 61,
+
+        /// <summary>Guayota spits lava on every other square of the slope round where he stood (the others the next time); the cold squares are safe.</summary>
+        CraterSpit = 62,
+
+        /// <summary>O Nó Errado throws two loops either side of itself, across the line to the hero; stepping aside into one is hit, staying on the line is safe.</summary>
+        CoilLoops = 63,
+
+        /// <summary>A Águia de Asas de Treva swoops through the hero's spot: the shadow of her wings falls in two long bars across her flight; short of the mark, under her, is safe.</summary>
+        WingSpan = 64,
+
+        /// <summary>A Sombra da Vela swings the boom to one side of the mast (starboard, then port): on that side, between the mast and the boom's end, is hit.</summary>
+        BoomSwing = 65,
+
         // Six more of Regions 1–9 (Docs/Mapas100.md 03, 11, 17, 21, 27, 47).
 
         /// <summary>A Mãe-Lodo shoots her tongue at whoever walks into her mouth: coming closer during the warning (or standing at her lips) is caught; keeping your distance is safe.</summary>
@@ -158,6 +178,29 @@ namespace Rapadura.Gameplay.Enemies
 
         /// <summary>O Cavalo de Fumaça gallops a ring of smoke round the hero's spot; inside the corral, with the foals, and outside it are safe.</summary>
         SmokeCorral = 45,
+
+        // The last of Regions 1–9 (Docs/Mapas100.md 16, 28, 29, 44, 49, 50, 51), numbered from 70.
+
+        /// <summary>O Pedreiro Mazan walls in the quarter round him the hero stood in, and crushes it; the walls turn 45° each time, and climbing over into another quarter is safe.</summary>
+        TurningWalls = 70,
+
+        /// <summary>A Moreia do Coral Cinza bites whoever stood still too long during the warning (a moray strikes what stops); keep moving and she misses.</summary>
+        StillPrey = 71,
+
+        /// <summary>O Caranguejo-Palácio scuttles sideways across the hero's spot: a long row across the line from him; a step toward him or away is safe, sideways is not.</summary>
+        SidewaysScuttle = 72,
+
+        /// <summary>O Espantalho de Palha Dourada scares off whoever is near him: only those who backed away from him during the warning are safe.</summary>
+        ScareOff = 73,
+
+        /// <summary>O Pesadelo da Tábua grips the frightened: whoever is below half health when it dreams takes the full blow, the others only a bad dream; heal and it slips off.</summary>
+        FearGrip = 74,
+
+        /// <summary>A Serra de Āz turns to follow the hero, slowly: whoever did not get round it far enough during the warning is cut; running straight away does not help.</summary>
+        OutrunSaw = 75,
+
+        /// <summary>O Garanhão Cinzento leads the herd one way (it turns clockwise each time): only those who ran with the herd during the warning are not trampled.</summary>
+        HerdRun = 76,
     }
 
     /// <summary>The four appetites of the Cidadela (46), one a week in turn (<see cref="RegionBossRules.AppetiteFor"/>).</summary>
@@ -572,6 +615,13 @@ namespace Rapadura.Gameplay.Enemies
                 case RegionBossSignature.PassBreath: return BreathIntervalSeconds;
                 case RegionBossSignature.FourAppetites: return AppetiteIntervalSeconds;
                 case RegionBossSignature.ChainSweep: return ChainIntervalSeconds;
+                case RegionBossSignature.GorgeGust:
+                case RegionBossSignature.AuroraRoute:
+                case RegionBossSignature.CraterSpit:
+                case RegionBossSignature.CoilLoops:
+                case RegionBossSignature.WingSpan:
+                case RegionBossSignature.BoomSwing:
+                    return UpperMapBossInterval(signature);
                 case RegionBossSignature.RopeCut:
                 case RegionBossSignature.EchoToll:
                 case RegionBossSignature.BellyFlop:
@@ -608,6 +658,13 @@ namespace Rapadura.Gameplay.Enemies
                 case RegionBossSignature.RisingSprings:
                 case RegionBossSignature.ReliefPounce:
                 case RegionBossSignature.SmokeCorral:
+                case RegionBossSignature.TurningWalls:
+                case RegionBossSignature.StillPrey:
+                case RegionBossSignature.SidewaysScuttle:
+                case RegionBossSignature.ScareOff:
+                case RegionBossSignature.FearGrip:
+                case RegionBossSignature.OutrunSaw:
+                case RegionBossSignature.HerdRun:
                     return MapBossInterval(signature);
                 default: return FormSeconds;
             }
@@ -625,6 +682,13 @@ namespace Rapadura.Gameplay.Enemies
                 case RegionBossSignature.PassBreath: return BreathWindupSeconds;
                 case RegionBossSignature.FourAppetites: return AppetiteWindupSeconds;
                 case RegionBossSignature.ChainSweep: return ChainWindupSeconds;
+                case RegionBossSignature.GorgeGust:
+                case RegionBossSignature.AuroraRoute:
+                case RegionBossSignature.CraterSpit:
+                case RegionBossSignature.CoilLoops:
+                case RegionBossSignature.WingSpan:
+                case RegionBossSignature.BoomSwing:
+                    return UpperMapBossWindup(signature);
                 case RegionBossSignature.RopeCut:
                 case RegionBossSignature.EchoToll:
                 case RegionBossSignature.BellyFlop:
@@ -661,6 +725,13 @@ namespace Rapadura.Gameplay.Enemies
                 case RegionBossSignature.RisingSprings:
                 case RegionBossSignature.ReliefPounce:
                 case RegionBossSignature.SmokeCorral:
+                case RegionBossSignature.TurningWalls:
+                case RegionBossSignature.StillPrey:
+                case RegionBossSignature.SidewaysScuttle:
+                case RegionBossSignature.ScareOff:
+                case RegionBossSignature.FearGrip:
+                case RegionBossSignature.OutrunSaw:
+                case RegionBossSignature.HerdRun:
                     return MapBossWindup(signature);
                 default: return 0f;
             }

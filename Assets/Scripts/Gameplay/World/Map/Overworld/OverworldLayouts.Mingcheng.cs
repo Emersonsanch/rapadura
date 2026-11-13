@@ -66,6 +66,9 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         /// <summary>O Pequeno Eclipse's arena (42, map boss): the stone ring on the Colinas dos Espelhos north-west of the White Spires, by the trail, where no Sun Seal is asked.</summary>
         public static readonly Vector2 PequenoEclipseArena = new Vector2(692f, 1216f);
 
+        /// <summary>O Espantalho de Palha Dourada's arena (44, map boss): the stone ring on the paddies by the Calhas road, west of the Moinho d'Água and its pools.</summary>
+        public static readonly Vector2 EspantalhoDePalhaArena = new Vector2(-1060f, 88f);
+
         /// <summary>Half the side (m) of Mingcheng's flat ground (reserved for the ring city's recipe, ±28 m and more).</summary>
         public const float MingchengGround = 30f;
 
@@ -325,6 +328,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             Landmark(w, MapLandmarkKind.StoneRing, CarpaQueNaoPulouArena.x, CarpaQueNaoPulouArena.y, 0f, 1.1f);
             Landmark(w, MapLandmarkKind.StoneRing, NianArena.x, NianArena.y, 0f, 1.1f);
             Landmark(w, MapLandmarkKind.StoneRing, PequenoEclipseArena.x, PequenoEclipseArena.y, 0f, 1.1f);
+            Landmark(w, MapLandmarkKind.StoneRing, EspantalhoDePalhaArena.x, EspantalhoDePalhaArena.y, 0f, 1.1f);
 
             // ---------------- Finishing ----------------
             SplitPaths(w.World);

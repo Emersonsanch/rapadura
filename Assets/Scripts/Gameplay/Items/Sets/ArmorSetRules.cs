@@ -59,6 +59,13 @@ namespace Rapadura.Gameplay.Items.Sets
         /// </summary>
         public const double HighDropChance = 0.0075;
 
+        /// <summary>
+        /// The chance for the second sets of Regions 13–16, the old sets of the fichas (one kill in 50): each drops from the 3 own beasts the
+        /// first set of the region left out, among 21–25 species, so at 1/200 the pair would cost ~5 000 kills hunting the region; at 1/50 it
+        /// is 1 050–1 250, inside the 1 500 of the economy budget.
+        /// </summary>
+        public const double AncientDropChance = 0.02;
+
         public const string PapyrusChestId = "armor_papiro_chest";
         public const string PapyrusHelmId = "armor_papiro_helm";
         public const string BlueBrickChestId = "armor_tijolo_chest";
@@ -91,6 +98,14 @@ namespace Rapadura.Gameplay.Items.Sets
         public const string AuroraSilverHelmId = "armor_aurora_helm";
         public const string CelestialIronChestId = "armor_ferro_chest";
         public const string CelestialIronHelmId = "armor_ferro_helm";
+        public const string MehenScaleChestId = "armor_mehen_chest";
+        public const string MehenScaleHelmId = "armor_mehen_helm";
+        public const string GiantsChestId = "armor_gigantes_chest";
+        public const string GiantsHelmId = "armor_gigantes_helm";
+        public const string FiveLightsChestId = "armor_cinco_chest";
+        public const string FiveLightsHelmId = "armor_cinco_helm";
+        public const string GloryColumnChestId = "armor_coluna_chest";
+        public const string GloryColumnHelmId = "armor_coluna_helm";
 
         // ---- Regions 1–4, the hub regions: Uncommon sets below the Marfim, from the region's own beasts (Docs/Status_100Mapas.md).
 
@@ -230,22 +245,53 @@ namespace Rapadura.Gameplay.Items.Sets
             "enemy_forest_runaway_lantern", "enemy_forest_orbit_wind",
         });
 
+        // ---- Regions 13–16, the second set of each: the old sets of the fichas (74, 82, the Primal Man's armour of the Cinco Covas, 98), from
+        // the 3 own beasts each region's first set left out, at AncientDropChance.
+
+        /// <summary>Escamas de Mehen (Região 13): the coiled serpent of map 74, who guards the barge from Apep.</summary>
+        public static readonly ArmorSetDefinition MehenScale = new ArmorSetDefinition("escamas_de_mehen", MehenScaleChestId, MehenScaleHelmId, AncientDropChance, new[]
+        {
+            "enemy_forest_child_of_apep", "enemy_forest_quicksand", "enemy_forest_thief_goose",
+        });
+
+        /// <summary>Gigantes (Região 14): the "conjunto antigo" of the sheet of map 82, of the dream tablets of Hahya and Ohya.</summary>
+        public static readonly ArmorSetDefinition Giants = new ArmorSetDefinition("gigantes", GiantsChestId, GiantsHelmId, AncientDropChance, new[]
+        {
+            "enemy_forest_scorpion_man", "enemy_forest_cedar_lynx", "enemy_forest_resin_bee",
+        });
+
+        /// <summary>Cinco Luzes (Região 15): the armour of the five Light elements the Primal Man wore down into the Land of Darkness.</summary>
+        public static readonly ArmorSetDefinition FiveLights = new ArmorSetDefinition("cinco_luzes", FiveLightsChestId, FiveLightsHelmId, AncientDropChance, new[]
+        {
+            "enemy_forest_ash_bull", "enemy_forest_blade_bat", "enemy_forest_great_eel",
+        });
+
+        /// <summary>Coluna da Glória (Região 16): the Column of Glory of map 98, the road of the freed light.</summary>
+        public static readonly ArmorSetDefinition GloryColumn = new ArmorSetDefinition("coluna_da_gloria", GloryColumnChestId, GloryColumnHelmId, AncientDropChance, new[]
+        {
+            "enemy_cave_dark_drop", "enemy_desert_confused_spark", "enemy_forest_smoke_rope",
+        });
+
         /// <summary>The four sets of Regions 1–4, in region order.</summary>
         public static readonly IReadOnlyList<ArmorSetDefinition> Early = new[] { Garden, RedLeather, Drystone, Wick };
 
         /// <summary>The five sets of Regions 5–9, in region order.</summary>
         public static readonly IReadOnlyList<ArmorSetDefinition> Middle = new[] { Coral, Lotus, Yak, Bronze, Kurgan };
 
-        /// <summary>The four sets of Regions 13–16, in region order.</summary>
         /// <summary>The three sets of Regions 10–12, in region order.</summary>
         public static readonly IReadOnlyList<ArmorSetDefinition> High = new[] { WindBell, AuroraSilver, CelestialIron };
 
+        /// <summary>The four sets of Regions 13–16, in region order.</summary>
         public static readonly IReadOnlyList<ArmorSetDefinition> Far = new[] { Papyrus, BlueBrick, Seal, Light };
 
-        /// <summary>Every set, in region order.</summary>
+        /// <summary>The second sets of Regions 13–16 (the old sets of the fichas), in region order.</summary>
+        public static readonly IReadOnlyList<ArmorSetDefinition> Ancient = new[] { MehenScale, Giants, FiveLights, GloryColumn };
+
+        /// <summary>Every set, in region order; the second sets of Regions 13–16 last.</summary>
         public static readonly IReadOnlyList<ArmorSetDefinition> All = new[]
         {
             Garden, RedLeather, Drystone, Wick, Coral, Lotus, Yak, Bronze, Kurgan, WindBell, AuroraSilver, CelestialIron, Papyrus, BlueBrick, Seal, Light,
+            MehenScale, Giants, FiveLights, GloryColumn,
         };
 
         // "Orvalho do Jardim" (Jardim de Mihrshah): a kill may heal the hero a little.
@@ -321,6 +367,25 @@ namespace Rapadura.Gameplay.Items.Sets
         public const float ColumnRayDamageFraction = 0.40f;
         public const float ColumnRayRadius = 5f;
         public const int ColumnRayMaxTargets = 4;
+
+        // "Anel de Mehen" (Escamas de Mehen): a hit taken may coil up, healing part of it back.
+        public const double MehenCoilChance = 0.18;
+        public const float MehenCoilHealFraction = 0.35f;
+
+        // "Tremor dos Gigantes" (Gigantes): a hit taken may shake the ground under the enemies around the hero.
+        public const double GiantsTremorChance = 0.15;
+        public const float GiantsTremorDamageFraction = 0.30f;
+        public const float GiantsTremorRadius = 4.5f;
+        public const int GiantsTremorMaxTargets = 4;
+
+        // "Luz que Volta" (Cinco Luzes): a kill may give back both health and mana.
+        public const double ReturningLightChance = 0.20;
+        public const float ReturningLightHealFraction = 0.04f;
+        public const float ReturningLightManaFraction = 0.04f;
+
+        // "Subida da Coluna" (Coluna da Glória): a critical hit may heal the hero.
+        public const double ColumnRiseChance = 0.20;
+        public const float ColumnRiseHealFraction = 0.05f;
 
         /// <summary>The set whose own beasts include <paramref name="enemyId"/> (the asset name), or null.</summary>
         public static ArmorSetDefinition SetOfBeast(string enemyId)
@@ -467,5 +532,25 @@ namespace Rapadura.Gameplay.Items.Sets
 
         /// <summary>Damage burnt back: 30% of the hit taken (never below 1 for a positive hit).</summary>
         public static float AnvilEmberDamage(float damageTaken) => damageTaken > 0f ? Mathf.Max(1f, damageTaken * AnvilEmberFraction) : 0f;
+
+        public static bool MehenCoilProcs(ArmorSetDefinition worn, double roll) => worn == MehenScale && roll < MehenCoilChance;
+
+        /// <summary>Health given back: 35% of the hit taken.</summary>
+        public static float MehenCoilHeal(float damageTaken) => damageTaken > 0f ? damageTaken * MehenCoilHealFraction : 0f;
+
+        public static bool GiantsTremorProcs(ArmorSetDefinition worn, double roll) => worn == Giants && roll < GiantsTremorChance;
+
+        /// <summary>Damage of the tremor to each enemy around: 30% of the hit taken (never below 1 for a positive hit).</summary>
+        public static float GiantsTremorDamage(float damageTaken) => damageTaken > 0f ? Mathf.Max(1f, damageTaken * GiantsTremorDamageFraction) : 0f;
+
+        public static bool ReturningLightProcs(ArmorSetDefinition worn, double roll) => worn == FiveLights && roll < ReturningLightChance;
+
+        public static float ReturningLightHeal(float maxHealth) => maxHealth > 0f ? maxHealth * ReturningLightHealFraction : 0f;
+
+        public static float ReturningLightMana(float maxMana) => maxMana > 0f ? maxMana * ReturningLightManaFraction : 0f;
+
+        public static bool ColumnRiseProcs(ArmorSetDefinition worn, bool critical, double roll) => critical && worn == GloryColumn && roll < ColumnRiseChance;
+
+        public static float ColumnRiseHeal(float maxHealth) => maxHealth > 0f ? maxHealth * ColumnRiseHealFraction : 0f;
     }
 }

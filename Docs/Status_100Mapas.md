@@ -64,11 +64,12 @@
   - Faltam 39 (lista por região abaixo), 13 deles nas Regiões 1–9.
 - **Montarias:** 30 do catálogo-base (`MountCodex`), mais o Grifo da Coluna, as 8 das Regiões 10–14 (`MountFarRegionCatalog`) e
   1 própria em cada Região 5–9 (`MountMidRegionCatalog`, 2026-11-11): o Caderno lista 44.
-- **Conjuntos de equipamento:** 14. Marfim dos Artífices (Ossuário, mapa 24b), 1 Incomum em cada Região 1–4
+- **Conjuntos de equipamento:** 21. Marfim dos Artífices (Ossuário, mapa 24b), 1 Incomum em cada Região 1–4
   (`ArmorSetRules.Early`, `07a4770`, 1 em 200 abates dos bichos próprios), 1 em cada Região 5–9 (`ArmorSetRules.Middle`,
-  1 em 100) e 4 das Regiões 13–16 (`ArmorSetRules.Far`). Faltam os das Regiões 10–12.
-- **Conjuntos de móveis regionais:** 14, de 8 peças, vendidos numa loja da região (`Docs/Housing.md` §6.2): 1 em cada
-  Região 1–4 (`07a4770`), 1 em cada Região 5–9 (`7d36b1f`), na 11 e nas 13–16. Faltam os das Regiões 10 e 12.
+  1 em 100), 1 em cada Região 10–12 (`ArmorSetRules.High`, `bca7acd`, 1 em ~133) e 2 em cada Região 13–16 (`ArmorSetRules.Far`,
+  1 em 200, e os segundos, antigos das fichas, `ArmorSetRules.Ancient`, 1 em 50 dos 3 bichos próprios que o primeiro deixou de fora).
+- **Conjuntos de móveis regionais:** 20, de 8 peças, vendidos numa loja da região (`Docs/Housing.md` §6.2): 1 em cada
+  Região 1–12 e 2 em cada Região 13–16 (o segundo é o "conjunto novo" de uma ficha: 72, 78, 89, 93).
 - **História:**
   - Campanha dos Atos I–V nas Regiões 1–4, até o nível ~20.
   - Cadeias pessoais dos 5 primos e a convergência.
@@ -241,7 +242,7 @@ de uma ficha feito por um bicho de outra região ou do bioma.
 | Mecânicas feitas | Rajadas nas pontes e na Garganta (55, 57); cestos de corda (54–57); medidor de silêncio nas Ermidas, barulho chama o Eco (56, `FarnkeshSilenceRules`); correntes de planar às ilhas de nuvem (58) |
 | Mecânicas faltantes | Dourado e Baile do Vale (53); pináculos em alturas de verdade (54); os Ecos como bichos e o medidor na UI (56); vento contra ×0,7 e pedras-abrigo (57); chão de nuvem e ajuda da Huma (58); pontes sem chão |
 | Chefe do mundo | O Rei-Vendaval (58) |
-| Chefe de mapa | Feitos 2 (`5b6dcb7`, no mundo contínuo): O Cortador de Cordas (55, Nv 160) e O Sino que Não Para (56, Nv 168, badalada com eco). Faltam 2: O Ouro de Midas (53), O Rei dos Ays (57); e o evento Vendaval (54) |
+| Chefe de mapa | Feitos 4: O Cortador de Cordas (55, Nv 160) e O Sino que Não Para (56, Nv 168, badalada com eco), no mundo contínuo desde `5b6dcb7`; O Ouro de Midas (53); e O Rei dos Ays (57, Nv 180: a rajada corre pela linha da garganta a partir dele, subindo numa vez e descendo na outra; atrás dele ou de lado é seguro). Falta o evento Vendaval (54) |
 | Montaria | Bode Dourado de Gordias (53). Falta o Filhote de Huma |
 | Conjunto | Nenhum (Ninho de Pedra só na ficha) |
 | Móveis | Nenhum |
@@ -256,7 +257,7 @@ de uma ficha feito por um bicho de outra região ou do bioma.
 | Mecânicas feitas | Canais que mudam com a fase da lua (59); gelo fino (60); pesca no gelo (64) |
 | Mecânicas faltantes | Lojas que mudam com a lua e Noite Polar (59); espessura do gelo no mapa da UI (60); estação na tundra (61); túneis que mudam (62); placas que se movem e rota da aurora (63); iscas para chamar o chefe (64) |
 | Chefe do mundo | O Velho Kul (64), que ainda não vem à isca |
-| Chefe de mapa | Feitos 2 (`5b6dcb7`): A Morsa-Rainha (60) e O Mamute Avô (62, Nv 214, o teto cai em cruz). Faltam 2: O Primeiro Desajeitado (61), A Aurora Presa (63); e o evento Noite Polar (59) |
+| Chefe de mapa | Feitos 4: A Morsa-Rainha (60) e O Mamute Avô (62, Nv 214, o teto cai em cruz), desde `5b6dcb7`; O Primeiro Desajeitado (61); e A Aurora Presa (63, Nv 226: o gelo racha em volta dela, menos no caminho que ela acende, que gira 120° a cada dança). Falta o evento Noite Polar (59) |
 | Montaria | Rena da Aurora (59) |
 | Conjunto | Nenhum de equipamento |
 | Móveis | Móveis da Casa da Lua Branca (8 peças) |
@@ -271,7 +272,7 @@ de uma ficha feito por um bicho de outra região ou do bioma.
 | Mecânicas feitas | Comportas e Tremor com 3 forjas (65/69); erupção do Echeyde (67); medidor de calor da Caldeira (70) |
 | Mecânicas faltantes | Bônus de refino da forja do dia e G4 do Ícaro (65); cascalho rastelado (66); resfriar a lava em ponte (68); temperatura das fornalhas (69); chão quente para a Cabra anular |
 | Chefe do mundo | O Glutão de Brasa (70), com loot próprio e troféu. Falta a montaria do chefe |
-| Chefe de mapa | Feitos 2 (`5b6dcb7`): O Rei Shisa do Telhado (66, Nv 236, as duas bocas) e O Mestre das Nove Fornalhas (69, Nv 264, mais forte à noite). Faltam 2: Guayota (67), A Tartaruga-Vulcão (68); e o evento Tremor (65) |
+| Chefe de mapa | Feitos 4: O Rei Shisa do Telhado (66, Nv 236, as duas bocas) e O Mestre das Nove Fornalhas (69, Nv 264, mais forte à noite), desde `5b6dcb7`; A Tartaruga-Vulcão (68); e Guayota (67, Nv 246: lava em quadrado sim, quadrado não, de 4 m, e o tabuleiro vira a cada erupção; mais forte à noite). Falta o evento Tremor (65) |
 | Montaria | Leão-Guardião de Laca (65), Cabra-dos-Pastores do Vulcão (67) |
 | Conjunto | Nenhum (Kurdalægon e Palácio de Laca só nas fichas) |
 | Móveis | Nenhum |
@@ -286,10 +287,10 @@ de uma ficha feito por um bicho de outra região ou do bioma.
 | Mecânicas feitas | Horas da barca com 12 píeres e hora de 3 min (71); jangadas de junco nos canais (72, `RioRaftRules`, `075b4ef`: 864 m em ~62 s em vez de ~2 km pelas estradas); anel de Mehen que gira (74); fogo que escolhe (75); defender a barca encalhada enquanto os remadores a desencalham (76, `RioBarqueDefenseRules`) |
 | Mecânicas faltantes | Evento A Barca Atrasou e noite permanente (71); puxar o trenó (73) |
 | Chefe do mundo | Apep (76), que recua até a noite seguinte. Loot próprio e troféu (Barca de luz vencendo Apep). Falta a Pedra da Mistura |
-| Chefe de mapa | Nenhum feito. Faltam 4: O Hipopótamo-de-Junco Gigante (72), A Grande Serpente do Areal (73), O Nó Errado (74), O Guardião do Lago (75); e o evento A Barca Atrasou (71) |
+| Chefe de mapa | Nenhum feito. Faltam 4: O Hipopótamo-de-Junco Gigante (72), A Grande Serpente do Areal (73), O Nó Errado (74, feito: Nv 296, duas alças dos lados atravessadas na linha até o herói; ficar na linha é seguro, desviar não), O Guardião do Lago (75); e o evento A Barca Atrasou (71) |
 | Montaria | Íbis Real de Mesektet (71, voadora). Falta a Barquinha de Luz (76) |
-| Conjunto | Cais do Papiro (2 peças, por drop) |
-| Móveis | Móveis do Cais do Papiro (8 peças) |
+| Conjunto | Cais do Papiro (2 peças, por drop) e Escamas de Mehen (o de Mehen da ficha 74: Couraça de Escamas de Mehen e Elmo da Serpente Enrolada, Defesa 31/17; Anel de Mehen: ao ser atingido, 18% de curar 35% do golpe). Drop do Filho de Apep, da Areia Movediça e do Ganso Ladrão, 1 em 50 (`ArmorSetRules.MehenScale`) |
+| Móveis | Móveis do Cais do Papiro e Móveis do Campo de Juncos (o da ficha 72; 8 peças cada, no Khunanup) |
 
 ## Região 14 — Margens da Mistura · mapas 77–82 · nv 300–360
 
@@ -303,8 +304,8 @@ de uma ficha feito por um bicho de outra região ou do bioma.
 | Chefe do mundo | O Sonho da Destruição (82). Faltam Hahya e Ohya juntos e a versão sonho do mapa |
 | Chefe de mapa | Nenhum feito. Faltam 4: O Instante Perdido (78), O Rei do Piche (79), Hobabish (80), Ullikummi (81); e o evento Cheia (77) |
 | Montaria | Mušḫuššu Manso (77), Alce da Taiga (80), Carneiro Gigante da Colina (82) |
-| Conjunto | Tijolo Azul (2 peças, por drop) |
-| Móveis | Móveis de Tijolo Azul (8 peças) |
+| Conjunto | Tijolo Azul (2 peças, por drop) e Gigantes (o conjunto antigo da ficha 82: Couraça das Tábuas do Sonho e Elmo de Ohya, Defesa 34/19; Tremor dos Gigantes: ao ser atingido, 15% de atingir até 4 inimigos a 4,5 m com 30% do golpe). Drop do Homem-Escorpião, do Lince do Cedro e da Abelha-Resina, 1 em 50 (`ArmorSetRules.Giants`) |
+| Móveis | Móveis de Tijolo Azul e Móveis do Relógio de Sol (o da ficha 78; 8 peças cada, no Atrahasis) |
 
 ## Região 15 — Limiar Profundo · mapas 83–90 · nv 340–440
 
@@ -316,10 +317,10 @@ de uma ficha feito por um bicho de outra região ou do bioma.
 | Mecânicas feitas | Rede de 12 lâmpadas com a Maré de Treva (83); vento limpa a fumaça (84); chão que acende (85); limite comum de dano que nunca mata (`ProfundoHazardRules`); os 5 portões das covas na muralha da Fortaleza, que abrem ao chegar à lâmpada de cada cova (83, `ProfundoGateRules`, `ProfundoGateMechanicsDriver`). Desde `075b4ef` (`ProfundoPathsMechanicsDriver`): correntes de ar do poço (86, sobem 340–410 m em 13–16 s), comportas da coluna (87, atravessar a água funda perdendo vida ou baixar a água o dia todo pela alavanca) e a ponte do Novelo (89, 9 gaiolas acendem os lances para sempre) |
 | Mecânicas faltantes | Dano no escuro (88); a raide de 5 grupos (90, precisa de servidor) |
 | Chefe do mundo | A Grande Treva, versão solo (90). Falta a raide (precisa de servidor) |
-| Chefe de mapa | Nenhum feito. Faltam 6, os chefes das covas e da ponte: O Rei da Fumaça (84), A Leoa do Fogo Devorador (85), A Águia de Asas de Treva (86), O Peixe de Cauda Negra (87), O Dragão do Fundo (88), O Guardião do Novelo (89); e o evento Maré de Treva (83) |
+| Chefe de mapa | Nenhum feito. Faltam 6, os chefes das covas e da ponte: O Rei da Fumaça (84), A Leoa do Fogo Devorador (85), A Águia de Asas de Treva (86, feita: Nv 388, a sombra das asas cai em duas faixas largas no ponto do herói e uma batida adiante; entrar debaixo dela é seguro), O Peixe de Cauda Negra (87), O Dragão do Fundo (88), O Guardião do Novelo (89); e o evento Maré de Treva (83) |
 | Montaria | Nenhuma. A Raposa-Joia e o Cavalo-Estrela (precisa de servidor) faltam |
-| Conjunto | Selo dos Artífices (2 peças, por drop até existir a raide) |
-| Móveis | Móveis das Mil Lâmpadas (8 peças) |
+| Conjunto | Selo dos Artífices (2 peças, por drop até existir a raide) e Cinco Luzes (a armadura do Homem Primordial: Couraça das Cinco Luzes e Elmo do Homem Primordial, Defesa 38/21; Luz que Volta: ao matar, 20% de curar 4% da vida e devolver 4% da mana). Drop do Touro de Cinza, do Morcego-Lâmina e da Enguia Grande, 1 em 50 (`ArmorSetRules.FiveLights`) |
+| Móveis | Móveis das Mil Lâmpadas e Móveis do Novelo (o da ficha 89; 8 peças cada, na Tehat) |
 
 ## Região 16 — Reinos do Céu · mapas 91–100 · nv 420–500
 
@@ -331,10 +332,10 @@ de uma ficha feito por um bicho de outra região ou do bioma.
 | Mecânicas feitas | Correnteza do Rio de Luz entre boias acesas (92, `CeuRiverRules`); Barca da Lua só à noite (93); segurar o céu nas 5 rachaduras (99); sentar ao lado da cadeira do Vô Jorge, uma história por dia (100) |
 | Mecânicas faltantes | Pouca gravidade e Chegada da Caravana (91); andar livre sobre a luz e as sombras mexendo no percurso (92); lua crescendo e lanternas (93); jarras e esferas que giram (94–95); plantar luz (96); carregar lanternas entre as barcas (97); faíscas escoltadas; pilares em grupo (99, online); pose sentada e história do dia no save (100) |
 | Chefe do mundo | Āz, a Capitã Cobiçosa (96). A Arca nunca mata (tira no máximo vida − 1). Loot próprio (Semente de Luz de Āz) e troféu (Estátua de Āz devolvendo a arca). Falta a Arca Resgatada +5. Falta a revanche de Saklas e Namrael na forma do céu (95) |
-| Chefe de mapa | Nenhum feito. Faltam 6: O Remador Perdido (92), O Clandestino Grande (93), O Arconte da Roda (94), A Sombra da Vela (97), O Último Arconte do Degrau (98), A Rachadura Grande (99); e o evento Chegada da Caravana (91) |
+| Chefe de mapa | Nenhum feito. Faltam 6: O Remador Perdido (92), O Clandestino Grande (93), O Arconte da Roda (94), A Sombra da Vela (97, feita: Nv 486, a retranca varre um lado do mastro, estibordo e bombordo alternando; colado no mastro, além da ponta ou do outro lado é seguro), O Último Arconte do Degrau (98), A Rachadura Grande (99); e o evento Chegada da Caravana (91) |
 | Montaria | Nenhuma (o Cavalo-Estrela da ficha é de temporada e online) |
-| Conjunto | Cais de Luz (2 peças, por drop) |
-| Móveis | Móveis do Cais de Luz (8 peças) |
+| Conjunto | Cais de Luz (2 peças, por drop) e Coluna da Glória (a da ficha 98: Manto da Coluna da Glória e Coroa do Homem Perfeito, Defesa 42/24; Subida da Coluna: no crítico, 20% de curar 5% da vida). Drop da Gota de Treva, da Faísca Confusa e da Corda de Fumaça, 1 em 50 (`ArmorSetRules.GloryColumn`) |
+| Móveis | Móveis do Cais de Luz e Móveis da Barca da Lua (o da ficha 93; 8 peças cada, no Ammo) |
 
 ---
 

@@ -1,3 +1,4 @@
+using Rapadura.Gameplay.Player;
 using UnityEngine;
 
 namespace Rapadura.Gameplay.World.Map.Mechanics
@@ -16,6 +17,13 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         public static Vector3 Motion(Vector2 step, bool grounded) => new Vector3(step.x, grounded ? -Mathf.Max(MinPress, step.magnitude) : 0f, step.y);
 
         /// <summary>Shoves the hero by <paramref name="step"/> metres, keeping them on the ground they stand on.</summary>
-        public static void Shove(CharacterController character, Vector2 step) => character.Move(Motion(step, character.isGrounded));
+        public static void Shove(CharacterController character, Vector2 step)
+        {
+            character.Move(Motion(step, character.isGrounded));
+            if (character.TryGetComponent(out PlayerMotor motor))
+            {
+                motor.NoteExternalShove();
+            }
+        }
     }
 }

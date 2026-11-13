@@ -165,12 +165,12 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             public const string ScorpionMan = "enemy_forest_scorpion_man";
             public const string Locust = "enemy_forest_bitumen_locust";
             public const string Hourglass = "enemy_forest_living_hourglass";
-            public const string InstantLizard = "enemy_mountain_lava_lizard";
+            public const string InstantLizard = "enemy_mountain_instant_lizard";
             public const string LateShadow = "enemy_forest_late_shadow";
             public const string ClockUshabti = "enemy_mountain_lacquer_ushabti";
             public const string LivingTar = "enemy_forest_living_tar";
             public const string TarHeron = "enemy_forest_tar_heron";
-            public const string Catfish = "enemy_mountain_giant_pike";
+            public const string Catfish = "enemy_mountain_black_catfish";
             public const string TarSmoke = "enemy_mountain_smoke_harpy";
             public const string AngryCedar = "enemy_forest_angry_cedar";
             public const string CedarLynx = "enemy_forest_cedar_lynx";
@@ -178,12 +178,12 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             public const string GlowMantle = "enemy_forest_glow_mantle";
             public const string Diorite = FarBeasts.DioriteStone;
             public const string ShoulderBird = FarBeasts.ShoulderBird;
-            public const string Tremor = "enemy_mountain_stone_golem";
+            public const string Tremor = "enemy_mountain_tremor";
             public const string UllikummiSon = "enemy_forest_ullikummi_son";
             public const string BrokenTablet = "enemy_forest_broken_tablet";
             public const string GardenShadow = "enemy_forest_garden_shadow";
             public const string DreamBird = FarBeasts.DreamBird;
-            public const string ErasingWater = "enemy_mountain_shadow_seal";
+            public const string ErasingWater = "enemy_mountain_erasing_water";
         }
 
         private static OverworldLayout MisturaRegion()
@@ -413,7 +413,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             MisturaGroup(cevada, "gafanhotos_da_cevada", "[enxame]", Mistura.Locust, Mistura.Mushussu, sparks, 5);
             MisturaGroup(cevada, "mushussu_da_cevada", "[elite]", Mistura.Mushussu, Mistura.BrickLion, werewolf, 3, 32f);
 
-            // The Desert of the Clock (78): the Ampulheta Viva [tanque], the Lagarto do Instante [rápido] (the lava lizard), the
+            // The Desert of the Clock (78): the Ampulheta Viva [tanque], the Lagarto do Instante [rápido] (its own beast now, BorrowedBeasts), the
             // Sombra Atrasada [controle], the Ushabti de Relógio [distância] (the lacquer ushabti).
             MisturaGroup(relogio, "ampulhetas_vivas", "[tanque]", Mistura.Hourglass, Mistura.InstantLizard, bats, 3, 30f);
             MisturaGroup(relogio, "lagartos_do_instante", "[rápido]", Mistura.InstantLizard, Mistura.LateShadow, owl);
@@ -423,7 +423,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             MisturaGroup(horas, "ushabtis_das_horas", "[distância]", Mistura.ClockUshabti, Mistura.LateShadow, owl);
 
             // The Bitumen Wells (79): the Betume Vivo [controle], the Garça de Piche [distância], the Bagre Negro [tanque]
-            // (the giant pike), the Fumaça de Piche [enxame] (the smoke harpy).
+            // (its own beast now, BorrowedBeasts), the Fumaça de Piche [enxame] (the smoke harpy).
             MisturaGroup(pocos, "betumes_vivos", "[controle]", Mistura.LivingTar, Mistura.Catfish, moon);
             MisturaGroup(pocos, "bagres_negros", "[tanque]", Mistura.Catfish, Mistura.TarSmoke, moon, 3, 30f);
             MisturaGroup(pocas, "fumacas_de_piche", "[enxame]", Mistura.TarSmoke, Mistura.LivingTar, sparks, 5);
@@ -441,7 +441,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             MisturaGroup(anciaos, "mantos_dos_anciaos", "[controle]", Mistura.GlowMantle, Mistura.ResinBee, bats);
 
             // The shoulder of Upelluri (81): the Pedra de Diorito [tanque] and the Ave do Ombro [rápido] (their own beasts now, FarBeasts), the Tremor
-            // [controle] (the stone golem), the Filho de Ullikummi [elite].
+            // [controle] (its own beast now, BorrowedBeasts), the Filho de Ullikummi [elite].
             MisturaGroup(ombro, "aves_do_ombro", "[rápido]", Mistura.ShoulderBird, Mistura.Diorite, owl);
             MisturaGroup(ombro, "pedras_de_diorito", "[tanque]", Mistura.Diorite, Mistura.ShoulderBird, bats, 3, 30f);
             MisturaGroup(dobras, "tremores_das_dobras", "[controle]", Mistura.Tremor, Mistura.Diorite, bats);
@@ -454,7 +454,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             MisturaGroup(beiral, "aves_do_beiral", "[rápido]", Mistura.ShoulderBird, Mistura.UllikummiSon, owl);
 
             // The Field of the Dream Tablets (82): the Tábua Quebrada [distância], the Jardim-Sombra [tanque], the Pássaro-Sonho [rápido]
-            // (its own beast now, FarBeasts), the Água que Apaga [controle] (the shadow seal).
+            // (its own beast now, FarBeasts), the Água que Apaga [controle] (its own beast now, BorrowedBeasts).
             MisturaGroup(campo, "tabuas_do_campo", "[distância]", Mistura.BrokenTablet, Mistura.DreamBird, moon);
             MisturaGroup(campo, "passaros_sonho", "[rápido]", Mistura.DreamBird, Mistura.BrokenTablet, owl);
             MisturaGroup(jardim, "jardins_sombra", "[tanque]", Mistura.GardenShadow, Mistura.DreamBird, werewolf, 3, 30f);

@@ -60,6 +60,12 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         /// <summary>O Leão dos Relevos's arena (27, map boss): the stone ring on the Falésias do Norte above Meroë, by the trail, where no Artificer relic is asked.</summary>
         public static readonly Vector2 LeaoDosRelevosArena = new Vector2(998f, 1020f);
 
+        /// <summary>A Moreia do Coral Cinza's arena (28, map boss): the stone ring by the trail down the Lagoa Grande, west of the great lagoon (an area of Kirta that asks no shell).</summary>
+        public static readonly Vector2 MoreiaDoCoralCinzaArena = new Vector2(837f, -387f);
+
+        /// <summary>O Caranguejo-Palácio's arena (29, map boss): the stone ring by the trail through the Ruínas de Gedi, Kilwa's area that asks no air bubble.</summary>
+        public static readonly Vector2 CaranguejoPalacioArena = new Vector2(542f, -895f);
+
         /// <summary>Half the side (m) of the flat town ground of the race cities Aratta and Kirta (their solids reach 22 m).</summary>
         public const float RaceCityGround = 28f;
 
@@ -109,6 +115,27 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             public const string CoralUshabti = Coast.CoralUshabti;
             public const string ConfusedSpark = Ceu.ConfusedSpark;
             public const string DarkDrop = Ceu.DarkDrop;
+        }
+
+        /// <summary>
+        /// The sixteenth pass of beasts (bible §3.2.1, <c>BorrowedRoleBeastRecipes</c>): roles of Regions 7–16 that the continuous world still played
+        /// with another region's beast (Docs/Mapas100.md 38, 62, 65, 68, 78, 79, 81, 82, 91, 92, 99), placed in the groups of their sheets in the Teto,
+        /// Mar Gelado, Hinokura, Mistura and Céu layouts. Each keeps its stand-in's biome and numbers.
+        /// </summary>
+        public static class BorrowedBeasts
+        {
+            public const string LivingCrevasse = Teto.Crevasse;
+            public const string IceMole = Gelo.Mole;
+            public const string FlyingPumice = Fogo.Pumice;
+            public const string GlassUrchin = Fogo.Urchin;
+            public const string InstantLizard = Mistura.InstantLizard;
+            public const string BlackCatfish = Mistura.Catfish;
+            public const string Tremor = Mistura.Tremor;
+            public const string ErasingWater = Mistura.ErasingWater;
+            public const string StowawayShadow = Ceu.StowawayShadow;
+            public const string SwimmingShadow = Ceu.SwimmingShadow;
+            public const string WrongCurrent = Ceu.WrongCurrent;
+            public const string SkyCrack = Ceu.SkyCrackBeast;
         }
 
         private static class Coast
@@ -375,6 +402,8 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             Landmark(w, MapLandmarkKind.StoneRing, PolvoDasMoncoesArena.x, PolvoDasMoncoesArena.y, 0f, 1.1f);
             Landmark(w, MapLandmarkKind.StoneRing, TouroDeFumacaArena.x, TouroDeFumacaArena.y, 0f, 1.1f);
             Landmark(w, MapLandmarkKind.StoneRing, LeaoDosRelevosArena.x, LeaoDosRelevosArena.y, 0f, 1.1f);
+            Landmark(w, MapLandmarkKind.StoneRing, MoreiaDoCoralCinzaArena.x, MoreiaDoCoralCinzaArena.y, 0f, 1.1f);
+            Landmark(w, MapLandmarkKind.StoneRing, CaranguejoPalacioArena.x, CaranguejoPalacioArena.y, 0f, 1.1f);
 
             // ---------------- Finishing ----------------
             SplitPaths(w.World);

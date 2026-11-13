@@ -1,0 +1,48 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f171d806ae04e9545a71dcbace88f076, type: 3}
+  m_Name: armor_gigantes_helm
+  m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Items.ItemDefinition
+  _itemId: armor_gigantes_helm
+  _displayName: Elmo de Ohya
+  _description: "Elmo grande demais, de bronze dos gigantes, com o jardim do sonho gravado na testa. Conjunto Gigantes (2 pe\xE7as): Tremor dos Gigantes."
+  _icon: {fileID: 21300000, guid: 2b262a150a09226d279bf1e343115b00, type: 3}
+  _worldModelPrefab: {fileID: 0}
+  _type: 3
+  _category: 11
+  _rarity: 2
+  _weight: 1
+  _value: 5400
+  _maxStack: 1
+  _gridWidth: 0
+  _gridHeight: 0
+  _isBound: 0
+  _hasDurability: 1
+  _maxDurability: 150
+  _equipSlot: 1
+  _armorDefense: 19
+  _weaponDamage: 0
+  _weaponAttackSpeed: 1
+  _equipStatModifiers:
+  - displayName: "F\xF4lego de Gigante"
+    affectedStat: 0
+    application: 1
+    value: 0.06
+    durationSeconds: 0
+    isDebuff: 0
+    ticksOverTime: 0
+    tickIntervalSeconds: 1
+    tickDamageOrHeal: 0
+  _healthRestore: 0
+  _staminaRestore: 0
+  _manaRestore: 0
+  _consumeBuffs: []

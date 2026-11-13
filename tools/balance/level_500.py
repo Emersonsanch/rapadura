@@ -78,13 +78,16 @@ FARM_KILLS = 400  # commons farmed on top of the campaign before the band's gear
 FARM_BOSSES = 20
 DEFAULT_RUNS = 120
 
-# Which layout file holds each set's region (ArmorSetRules: Regions 5-16; the Uncommon sets of 1-4 stay below level 100).
+# Which layout file holds each set's region (ArmorSetRules: Regions 5-16; the Uncommon sets of 1-4 stay below level 100). The second
+# sets of 13-16 (ArmorSetRules.Ancient) come after their region's first one: a point less defence each, so the hero keeps the first.
 SET_REGION = {"coral": "Costa", "lotus": "Delta", "iaque": "Teto", "bronze": "Mingcheng", "kurgan": "Nartes",
-              "sino": "Farnkesh", "aurora": "MarGelado", "ferro": "Hinokura", "papiro": "Rio", "tijolo": "Mistura", "selo": "Profundo", "luz": "Ceu"}
+              "sino": "Farnkesh", "aurora": "MarGelado", "ferro": "Hinokura", "papiro": "Rio", "tijolo": "Mistura", "selo": "Profundo", "luz": "Ceu",
+              "mehen": "Rio", "gigantes": "Mistura", "cinco": "Profundo", "coluna": "Ceu"}
 SET_NAMES = {"bone": "Marfim (Ossuário)", "coral": "Coral de Kilwa", "lotus": "Seda de Lótus", "iaque": "Lã de Iaque",
              "bronze": "Vasos de Bronze", "kurgan": "Ouro dos Kurgans", "sino": "Sino de Vento", "aurora": "Prata da Aurora",
              "ferro": "Kurdalægon", "papiro": "Cais do Papiro", "tijolo": "Tijolo Azul",
-             "selo": "Selo dos Artífices", "luz": "Cais de Luz", None: "peças do saque"}
+             "selo": "Selo dos Artífices", "luz": "Cais de Luz", "mehen": "Escamas de Mehen", "gigantes": "Gigantes",
+             "cinco": "Cinco Luzes", "coluna": "Coluna da Glória", None: "peças do saque"}
 LOOT_ARMOR = 12.0  # item_leather_helmet + item_leather_chest: what the loot table drops for those slots
 BOOTS_ARMOR = 3.0  # item_leather_boots / item_botas_raiz: the only boots there are
 

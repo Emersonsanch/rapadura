@@ -83,7 +83,7 @@ namespace Rapadura.Tests
         public void Sets_TheCatalogsTwentyOneSets_AreAllKnown_WithTheDocsPieceCounts()
         {
             var catalogSets = HouseCatalog.All.Select(i => i.SetId).Where(s => !string.IsNullOrEmpty(s)).Distinct().ToList();
-            Assert.AreEqual(37, HouseSetCatalog.All.Count);
+            Assert.AreEqual(41, HouseSetCatalog.All.Count);
             CollectionAssert.AreEquivalent(catalogSets, HouseSetCatalog.All.Select(s => s.Id));
             Assert.AreEqual(26, HouseSetCatalog.PieceCount("set_varanda_vo_zefa", HouseCatalog.All));
             Assert.AreEqual(7, HouseSetCatalog.PieceCount("set_cantinho_caramelo", HouseCatalog.All));

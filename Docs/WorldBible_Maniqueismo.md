@@ -716,6 +716,31 @@ lobos-cinzentos/de neve dos Nartes, a Neblina do Rio e o Pesadelo de Fumaça.
 | `enemy_desert_confused_spark` | **Faísca Confusa** / *Confused Spark* | 91 Beira Oeste, Cais da Coluna, Píer do Sol (era o enxame de vaga-lumes) | [enxame], voa | faíscas que esperaram tanto a vez nas Barcas que esqueceram o que esperavam. |
 | `enemy_cave_dark_drop` | **Gota de Treva** / *Drop of the Dark* | 94 Engrenagens e Jarras da Roda (era o Lodo de Gruta) | [rápido], pesado | a gota da Treva que sobe grudada nas jarras da Roda e desce atrás de mais luz para cair em cima. |
 
+**Décima sexta leva (2026-11-13): papéis das Regiões 7–16 que ainda usavam bicho de outra região (Mapas100 38, 62, 65, 68, 78, 79, 81, 82, 91, 92, 99).**
+Mesmo contrato da décima quinta. Modelos em `BorrowedRoleBeastRecipes` (`ProceduralEnemyKind` 324–335), Caderno em `BorrowedRoleBestiaryTexts`.
+**Bioma e números:** todos ficam no bioma do substituto que trocaram e copiam vida, dano, recarga, XP e loot base dele (só o modelo, o nome
+e o arquétipo de movimento da Pedra-Pomes mudam), para a economia das faixas 80–500 (`tools/balance`) não mudar. Nenhum atira. Os ids ficam
+como texto nas constantes de cada região e `OverworldLayouts.BorrowedBeasts` aponta para elas. Missões que apontavam para o substituto agora
+apontam para o bicho: Cais da Coluna "chase_the_stowaways" (Sombra Clandestina; era a Treva Rastejante) e "chase_the_swimming_shadows"
+(Sombra Nadadora; era a Sombra Atrasada). Seguem com substituto os papéis que dividiam o bicho: a Sombra que Pisa as Flores e a Sombra do
+Meio-Dia no Céu, a Rachadura e a Raiz-Gelo do Mar Gelado, o Polvo de Obsidiana e a Cinza Viva de Hinokura. Testes: `BorrowedRoleBeastsTests` e
+`BorrowedRoleBeastsPlacementTests`.
+
+| `id` | pt / en | Ficha (Mapas100) | Tipo | Fonte / lore |
+|---|---|---|---|---|
+| `enemy_cave_living_crevasse` | **Fenda Viva** / *Living Crevasse* | 38 Geleira e Campo de Seracs (era o Lodo de Gruta) | [controle], pesado | a geleira racha e fecha todo ano e os pastores sabiam onde; desde a sombra as rachaduras andam, deitam no caminho e fecham. |
+| `enemy_mountain_ice_mole` | **Toupeira-Gelo** / *Ice Mole* | 62 Terra Congelada, Galerias, Fiorde das Presas (era a Marmota Gigante) | [enxame] | cavavam os túneis pequenos ao lado dos do mamute e seguravam as galerias; o frio entrou nas unhas. |
+| `enemy_mountain_flying_pumice` | **Pedra-Pomes Voadora** / *Flying Pumice* | 65 Costa das Fumarolas e Canais de Lava (era a Pedra que Rola) | [enxame], voa | a pomes que os respiros sopram e caía de volta como areia dos polidores; desde a sombra não desce, boia em bando com a brasa nos furos. |
+| `enemy_forest_glass_urchin` | **Ouriço de Vidro** / *Glass Urchin* | 68 Ilhotas de Vidro e Recife de Obsidiana (era a Tartaruga de Pedra) | [tanque], pesado | a lava que entrou no mar virou vidro preto e um pouco dela continuou andando; o calor do vulcão ainda dentro. |
+| `enemy_mountain_instant_lizard` | **Lagarto do Instante** / *Instant Lizard* | 78 Deserto do Relógio e Areia das Horas (era o Lagarto de Lava) | [rápido] | vive no instante de atraso das sombras de Zurvan (só relógio, §1.1); o relógio de sol nas costas é o único certo do deserto. |
+| `enemy_mountain_black_catfish` | **Bagre Negro** / *Black Catfish* | 79 Poços de Betume (era o Lúcio Gigante) | [tanque] | mantinha o piche mole para os calafates dos barcos de junco (Atrahasis); o piche escureceu e ele junto, vira as balsas. |
+| `enemy_mountain_tremor` | **Tremor** / *Tremor* | 81 Dobras de Pedra e Clavícula do Gigante (era o Ushabti de Pedra) | [controle], pesado | o arrepio da pele de pedra de Upelluri onde o diorito cresce, que ganhou forma e anda derrubando gente. |
+| `enemy_mountain_erasing_water` | **Água que Apaga** / *Erasing Water* | 82 Água Parada e Tábuas Quebradas (era a Foca-Sombra) | [controle], pesado | a água parada que sobe entre as tábuas do sonho e lava os sinais até ficarem em branco. |
+| `enemy_forest_stowaway_shadow` | **Sombra Clandestina** / *Stowaway Shadow* | 91 Píer da Lua, Fresta das Luzinhas, Beira Oeste, Cais (era o Jardim-Sombra) | [controle], pesado | a sombra que se esconde no porão de uma Barca (§1.5) debaixo de um trapo de vela para subir sem pagar. |
+| `enemy_forest_swimming_shadow` | **Sombra Nadadora** / *Swimming Shadow* | 92 Foz Oeste, Margens da Corrente, Ilhotas (era a Sombra Atrasada) | [controle], voa | sombra não nada na água, mas nada na luz: desliza sob o Rio de Luz (§3.16) e bebe o brilho dos barcos. |
+| `enemy_mountain_wrong_current` | **Corrente Errada** / *Wrong Current* | 92 Rio de Luz, Foz Leste, Margens (era a Neblina do Vento Ruim) | [controle], voa | um fio do Rio de Luz que corre ao contrário, de volta para baixo, enrolado no nó onde virou. |
+| `enemy_mountain_sky_crack` | **Rachadura do Céu** / *Sky Crack* | 99 Rachaduras do Oeste e Varanda (era a Neblina do Vento Ruim) | [controle], voa | as rachaduras pequenas do céu que se soltaram com as beiradas douradas e andam pelo mirante querendo deixar entrar mais sombra. |
+
 ### 3.3 Chefes de região (apagados, nunca vilões)
 
 | Antigo (`id`) | Novo | O que era antes da sombra | Fonte |

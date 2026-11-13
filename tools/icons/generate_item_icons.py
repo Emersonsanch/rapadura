@@ -963,6 +963,82 @@ def r_armor_ferro_helm(ic):
     ic.dot(64, 44, 4, EMBER)
 
 
+
+# ---- segundos conjuntos das Regiões 13–16, os antigos das fichas (Docs/Items.md)
+MEHEN_SCALE = (54, 78, 70)
+MEHEN_GOLD = (214, 172, 74)
+DREAM_CLAY = (176, 140, 104)
+GIANT_BRONZE = (140, 96, 56)
+FIVE_LIGHT = (246, 232, 190)
+FIVE_COLOURS = ((170, 220, 245), (190, 230, 200), (255, 240, 170), (110, 170, 230), (255, 150, 70))
+COLUMN_WHITE = (238, 236, 250)
+
+
+def r_armor_mehen_chest(ic):
+    tunic(ic, MEHEN_SCALE, trim=MEHEN_GOLD)
+    for y in (42, 56, 70, 84):
+        for x in range(44, 88, 10):
+            ic.poly([(x, y), (x + 5, y + 8), (x + 10, y)], lighter(MEHEN_SCALE, 0.25), shade=False)
+    ic.stroke([(42, 92), (56, 84), (72, 92), (86, 84)], 3, MEHEN_GOLD)
+
+
+def r_armor_mehen_helm(ic):
+    ic.poly([(28, 92), (30, 56), (44, 30), (64, 22), (84, 30), (98, 56), (100, 92)], MEHEN_SCALE)
+    ic.stroke([(36, 84), (40, 54), (56, 36), (76, 36), (88, 54), (88, 74), (72, 82), (58, 74), (60, 60), (70, 58)], 3, MEHEN_GOLD)
+    ic.rect(26, 88, 102, 98, darker(MEHEN_SCALE, 0.3))
+    ic.dot(70, 58, 3, FLAME_CORE)
+
+
+def r_armor_gigantes_chest(ic):
+    tunic(ic, DREAM_CLAY, trim=GIANT_BRONZE)
+    for (x, y) in ((40, 40), (66, 40), (40, 68), (66, 68)):
+        ic.rect(x, y, x + 22, y + 24, lighter(DREAM_CLAY, 0.15))
+        for k in range(3):
+            ic.stroke([(x + 4, y + 6 + k * 6), (x + 18, y + 6 + k * 6)], 1.4, darker(DREAM_CLAY, 0.4))
+
+
+def r_armor_gigantes_helm(ic):
+    ic.poly([(20, 96), (22, 54), (38, 24), (90, 24), (106, 54), (108, 96)], GIANT_BRONZE)
+    ic.rect(20, 86, 108, 98, darker(GIANT_BRONZE, 0.3))
+    ic.poly([(44, 60), (84, 60), (80, 82), (48, 82)], NIGHT, shade=False)
+    for x in (42, 54, 64, 74, 86):
+        ic.poly([(x - 3, 44), (x, 34), (x + 3, 44)], LEAF_DARK)
+
+
+def r_armor_cinco_chest(ic):
+    ic.glow(64, 64, 50, FIVE_LIGHT, 150)
+    tunic(ic, FIVE_LIGHT, trim=GOLD)
+    for i, col in enumerate(FIVE_COLOURS):
+        a = math.radians(-90 + i * 72)
+        ic.ngon(64 + 16 * math.cos(a), 66 + 16 * math.sin(a), 6, 6, col)
+
+
+def r_armor_cinco_helm(ic):
+    ic.glow(64, 52, 42, FIVE_LIGHT, 160)
+    ic.poly([(28, 94), (30, 58), (46, 28), (82, 28), (98, 58), (100, 94)], FIVE_LIGHT)
+    ic.rect(28, 84, 100, 94, GOLD)
+    ic.poly([(48, 58), (80, 58), (76, 80), (52, 80)], NIGHT, shade=False)
+    for i, col in enumerate(FIVE_COLOURS):
+        ic.dot(40 + i * 12, 44, 3.5, col)
+
+
+def r_armor_coluna_chest(ic):
+    ic.glow(64, 64, 52, COLUMN_WHITE, 170)
+    ic.poly([(42, 16), (86, 16), (104, 108), (24, 108)], COLUMN_WHITE)
+    ic.poly([(56, 16), (72, 16), (78, 108), (50, 108)], GOLD_LIGHT, shade=False)
+    for y in (40, 64, 88):
+        ic.dot(64, y, 3, FLAME_CORE)
+    ic.poly([(24, 100), (104, 100), (104, 108), (24, 108)], GOLD)
+
+
+def r_armor_coluna_helm(ic):
+    ic.glow(64, 60, 44, COLUMN_WHITE, 170)
+    ic.poly([(26, 92), (30, 62), (98, 62), (102, 92)], GOLD)
+    for x, h in ((38, 22), (51, 34), (64, 50), (77, 34), (90, 22)):
+        ic.poly([(x - 5, 64), (x, 64 - h), (x + 5, 64)], COLUMN_WHITE)
+    ic.ngon(64, 78, 7, 4, LIGHT_LILAC, rot=45)
+
+
 def r_item_bone_fragment(ic):
     ic.bar(30, 92, 94, 36, 14, BONE)
     for (x, y) in ((24, 92), (34, 102), (90, 26), (100, 38)):
@@ -1398,6 +1474,15 @@ RECIPES = {
     "armor_aurora_helm": r_armor_aurora_helm,
     "armor_ferro_chest": r_armor_ferro_chest,
     "armor_ferro_helm": r_armor_ferro_helm,
+    # Segundos conjuntos das Regiões 13–16
+    "armor_mehen_chest": r_armor_mehen_chest,
+    "armor_mehen_helm": r_armor_mehen_helm,
+    "armor_gigantes_chest": r_armor_gigantes_chest,
+    "armor_gigantes_helm": r_armor_gigantes_helm,
+    "armor_cinco_chest": r_armor_cinco_chest,
+    "armor_cinco_helm": r_armor_cinco_helm,
+    "armor_coluna_chest": r_armor_coluna_chest,
+    "armor_coluna_helm": r_armor_coluna_helm,
     # ferramentas / armas / armaduras
     "item_axe": r_axe,
     "item_pickaxe": r_pickaxe,

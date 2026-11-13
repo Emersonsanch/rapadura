@@ -53,6 +53,10 @@ def test_sets_only_from_the_level_they_can_be_had(world):
         "bone", "coral", "lotus", "iaque", "bronze", "kurgan", "sino", "aurora", "ferro", None)
     assert keys["sino"] == world.regions["Farnkesh"].low and keys["ferro"] == world.regions["Hinokura"].low
     assert keys["kurgan"] == world.regions["Nartes"].low and keys["coral"] == world.regions["Costa"].low
+    # The second sets of Regions 13-16 come with the first one of their region, a point of defence below it: never the hero's pick.
+    assert keys["mehen"] == keys["papiro"] and keys["gigantes"] == keys["tijolo"]
+    assert keys["cinco"] == keys["selo"] and keys["coluna"] == keys["luz"]
+    assert all(l5.loadout(world.slots, world.sets, lv).set_key not in ("mehen", "gigantes", "cinco", "coluna") for lv in l5.LEVELS)
     assert all(l5.loadout(world.slots, world.sets, lv).set_key in [k for k, m in keys.items() if m <= lv] + [None]
                for lv in l5.LEVELS)
 

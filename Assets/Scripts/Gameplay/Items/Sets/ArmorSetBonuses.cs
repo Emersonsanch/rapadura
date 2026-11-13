@@ -15,7 +15,7 @@ namespace Rapadura.Gameplay.Items.Sets
 {
     /// <summary>
     /// Wires <see cref="ArmorSetRules"/> to combat through the same events the combat FX listen to (like the Armadura de Marfim's
-    /// <c>SpectralTouchSetBonus</c>): the sixteen two-piece bonuses, and the rare drop of a piece when a region's own beast dies. The
+    /// <c>SpectralTouchSetBonus</c>): the twenty two-piece bonuses, and the rare drop of a piece when a region's own beast dies. The
     /// drop lives here, not in the enemy's single <c>_lootItem</c> (the gold of every beast). Reflected hits and rays are plain,
     /// non-critical hits dealt by the hero, so no bonus can chain.
     /// </summary>
@@ -106,6 +106,26 @@ namespace Rapadura.Gameplay.Items.Sets
                 return;
             }
 
+            if (ArmorSetRules.MehenCoilProcs(worn, roll))
+            {
+                PlayerStats stats = inventory.GetComponentInParent<PlayerStats>();
+                if (stats != null && stats.IsAlive)
+                {
+                    stats.Heal(ArmorSetRules.MehenCoilHeal(evt.FinalDamage));
+                    Say(evt.Target, ArmorSetTexts.MehenCoil);
+                }
+
+                return;
+            }
+
+            if (ArmorSetRules.GiantsTremorProcs(worn, roll))
+            {
+                StrikeAround(evt.Target.transform.position, null, evt.Target, ArmorSetRules.GiantsTremorDamage(evt.FinalDamage),
+                    ArmorSetRules.GiantsTremorRadius, ArmorSetRules.GiantsTremorMaxTargets, ElementType.Earth);
+                Say(evt.Target, ArmorSetTexts.GiantsTremor);
+                return;
+            }
+
             if (ArmorSetRules.BronzeGongProcs(worn, roll))
             {
                 StrikeAround(evt.Target.transform.position, null, evt.Target, ArmorSetRules.BronzeGongDamage(evt.FinalDamage),
@@ -165,6 +185,15 @@ namespace Rapadura.Gameplay.Items.Sets
                 StrikeAround(evt.Target.transform.position, evt.Target, evt.Source, ArmorSetRules.ColumnRayDamage(evt.FinalDamage),
                     ArmorSetRules.ColumnRayRadius, ArmorSetRules.ColumnRayMaxTargets, ElementType.Holy);
                 Say(evt.Target, ArmorSetTexts.ColumnRay);
+            }
+            else if (ArmorSetRules.ColumnRiseProcs(worn, true, roll))
+            {
+                PlayerStats stats = inventory.GetComponentInParent<PlayerStats>();
+                if (stats != null && stats.IsAlive)
+                {
+                    stats.Heal(ArmorSetRules.ColumnRiseHeal(stats.MaxHealth));
+                    Say(evt.Target, ArmorSetTexts.ColumnRise);
+                }
             }
             else if (ArmorSetRules.PamirBreathProcs(worn, true, roll))
             {
@@ -239,7 +268,28 @@ namespace Rapadura.Gameplay.Items.Sets
             TryGardenDew(inventory, worn, roll);
             TryLitWick(inventory, worn, roll);
             TryLanternWarmth(inventory, worn, roll);
+            TryReturningLight(inventory, worn, roll);
             TryDropPiece(evt.Target, enemy, inventory);
+        }
+
+        /// <summary>The Luz que Volta bonus: heals the hero and gives mana back when <paramref name="roll"/> procs. True if it fired.</summary>
+        public static bool TryReturningLight(InventoryManager inventory, ArmorSetDefinition worn, double roll)
+        {
+            if (inventory == null || !ArmorSetRules.ReturningLightProcs(worn, roll))
+            {
+                return false;
+            }
+
+            PlayerStats stats = inventory.GetComponentInParent<PlayerStats>();
+            if (stats == null || !stats.IsAlive)
+            {
+                return false;
+            }
+
+            stats.Heal(ArmorSetRules.ReturningLightHeal(stats.MaxHealth));
+            stats.RestoreMana(ArmorSetRules.ReturningLightMana(stats.MaxMana));
+            Say(inventory.gameObject, ArmorSetTexts.ReturningLight);
+            return true;
         }
 
         /// <summary>The Calor da Lanterna bonus: heals the hero when <paramref name="roll"/> procs. True if it healed.</summary>

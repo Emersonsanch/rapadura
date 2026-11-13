@@ -58,7 +58,9 @@ namespace Rapadura.UI.Bestiary
             AddFirstMapBossPages(entries);
             AddMoreMapBossPages(entries);
             AddHighMapBossPages(entries);
+            AddUpperMapBossPages(entries);
             AddLastFirstMapBossPages(entries);
+            AddLastMapBossPages(entries);
 
             // -- Pontes de Vento (55) --
             Page(entries, RegionBossRules.RopeCutterId,

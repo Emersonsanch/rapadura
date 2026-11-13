@@ -1,11 +1,11 @@
 # Rapadura — Conjuntos de armadura das Regiões 1–16
 
-Dezesseis conjuntos de **2 peças** (peitoral + elmo), no molde da Armadura de Marfim dos Artífices (`Docs/Dungeons.md` §6):
+Vinte conjuntos de **2 peças** (peitoral + elmo), no molde da Armadura de Marfim dos Artífices (`Docs/Dungeons.md` §6):
 assets em `Assets/Resources/Items/Sets/`, regras puras em `ArmorSetRules` (`Early` = Regiões 1–4, `Middle` = 5–9, `High` =
-10–12, `Far` = 13–16, `All` = os dezesseis), ligação ao combate em `ArmorSetBonuses`, textos das peças em `ContentTexts` e dos avisos em
-`ArmorSetTexts`, ícones em `tools/icons/generate_item_icons.py`, testes em `ArmorSetsTests`, `EarlyArmorSetsTests`,
-`MiddleArmorSetsTests` e `HighArmorSetsTests`. Quebrada, a peça não conta para
-o conjunto.
+10–12, `Far` = 13–16, `Ancient` = o segundo conjunto de cada Região 13–16, `All` = os vinte), ligação ao combate em `ArmorSetBonuses`,
+textos das peças em `ContentTexts` e dos avisos em `ArmorSetTexts`, ícones em `tools/icons/generate_item_icons.py`, testes em
+`ArmorSetsTests`, `EarlyArmorSetsTests`, `MiddleArmorSetsTests`, `HighArmorSetsTests` e `AncientArmorSetsTests`. Quebrada, a peça não
+conta para o conjunto.
 
 > **Nomes:** nas fichas de `Docs/Mapas100.md` e em `Docs/Cities.md`, "Cais do Papiro", "Tijolo Azul" e "Cais de Luz" são
 > também conjuntos de **casa** (móveis do `CatalogoCasa`, "Móveis do Cais do Papiro" e outros). Estes aqui são os conjuntos
@@ -14,7 +14,9 @@ o conjunto.
 > "Móveis da Tenda de Feltro", `Docs/Housing.md` §6.2). O mesmo vale para as Regiões 1–4 ("Móveis do Tear de Seda", "Móveis da
 > Cisterna de Qocho", "Móveis do Rondavel", "Móveis da Casa na Rocha"). As Regiões 10 e 12 também ("Móveis do Ninho de
 > Pedra", "Móveis do Palácio de Laca"). "Jardim de Mihrshah" é o "conjunto antigo do jardim" da ficha do mapa 06, "Kurdalægon"
-> o da ficha do mapa 69, "Vasos de Bronze" o da ficha do mapa 46 e o "Selo dos Artífices" o da ficha do mapa 90.
+> o da ficha do mapa 69, "Vasos de Bronze" o da ficha do mapa 46, o "Selo dos Artífices" o da ficha do mapa 90 e "Gigantes" o da ficha do
+> mapa 82. Os segundos conjuntos das Regiões 13–16 também não colidem com os segundos móveis dessas regiões ("Móveis do Campo de
+> Juncos", "Móveis do Relógio de Sol", "Móveis do Novelo", "Móveis da Barca da Lua").
 
 ## Peças
 
@@ -52,6 +54,14 @@ o conjunto.
 | | | `armor_selo_helm` | Elmo do Último Selo | Épica | 22 | +4% crítico | 165 | 6 400 |
 | Cais de Luz | 16 Reinos do Céu (420–500) | `armor_luz_chest` | Couraça de Luz Sólida | Épica | 43 | +5% crítico | 260 | 10 400 |
 | | | `armor_luz_helm` | Diadema dos Remadores de Luz | Épica | 25 | +40 mana máx. | 180 | 7 500 |
+| Escamas de Mehen | 13 Rio das Doze Horas (260–320) | `armor_mehen_chest` | Couraça de Escamas de Mehen | Rara | 31 | +30 mana máx. | 200 | 6 500 |
+| | | `armor_mehen_helm` | Elmo da Serpente Enrolada | Rara | 17 | +5% vida máx. | 140 | 4 700 |
+| Gigantes | 14 Margens da Mistura (300–360) | `armor_gigantes_chest` | Couraça das Tábuas do Sonho | Rara | 34 | +3% crítico | 220 | 7 400 |
+| | | `armor_gigantes_helm` | Elmo de Ohya | Rara | 19 | +6% vida máx. | 150 | 5 400 |
+| Cinco Luzes | 15 Limiar Profundo (340–440) | `armor_cinco_chest` | Couraça das Cinco Luzes | Épica | 38 | +4% crítico | 240 | 8 800 |
+| | | `armor_cinco_helm` | Elmo do Homem Primordial | Épica | 21 | +40 mana máx. | 165 | 6 400 |
+| Coluna da Glória | 16 Reinos do Céu (420–500) | `armor_coluna_chest` | Manto da Coluna da Glória | Épica | 42 | +40 mana máx. | 260 | 10 400 |
+| | | `armor_coluna_helm` | Coroa do Homem Perfeito | Épica | 24 | +5% crítico | 180 | 7 500 |
 
 ## Bônus de 2 peças
 
@@ -73,8 +83,12 @@ o conjunto.
 | Tijolo Azul | Reflexo Vidrado | ao ser atingido por um bicho, 20% de devolver 35% do dano ao atacante (Terra) |
 | Selo dos Artífices | Selo Reaberto | no acerto crítico, 25% de devolver 8% da mana máxima |
 | Cais de Luz | Raio da Coluna | no acerto crítico, 15% de atingir até 4 outros inimigos a 5 m com 40% do dano do crítico (Sagrado) |
+| Escamas de Mehen | Anel de Mehen | ao ser atingido por um bicho, 18% de curar 35% do dano recebido |
+| Gigantes | Tremor dos Gigantes | ao ser atingido por um bicho, 15% de atingir até 4 inimigos a 4,5 m do herói com 30% do dano recebido (Terra) |
+| Cinco Luzes | Luz que Volta | ao matar, 20% de curar 4% da vida máxima e devolver 4% da mana máxima |
+| Coluna da Glória | Subida da Coluna | no acerto crítico, 20% de curar 5% da vida máxima |
 
-O reflexo, a areia, o gongo, a rajada, o galope e os raios são golpes comuns, nunca críticos, então nenhum bônus encadeia. Com dois espaços (peito
+O reflexo, a areia, o gongo, o tremor, a rajada, o galope e os raios são golpes comuns, nunca críticos, então nenhum bônus encadeia. Com dois espaços (peito
 e cabeça) só um conjunto fica completo por vez.
 
 ## Como obter
@@ -85,6 +99,13 @@ abaixo do herói não larga equipamento. O drop mora em `ArmorSetBonuses` e não
 único e é o ouro de todos eles: **nenhum asset de inimigo foi alterado**.
 
 - **Regiões 13–16:** os 12 bichos próprios de cada região, **0,5%** por abate (`DropChance`), ~200 abates por peça.
+- **Segundos conjuntos das Regiões 13–16** (`ArmorSetRules.Ancient`): os 3 bichos próprios que o primeiro conjunto da região deixou
+  de fora, **2%** por abate (`AncientDropChance`), ~50 abates por peça. São 3 no meio de 21–25 espécies: a 0,5% o par custaria ~5 000
+  abates caçando a região; a 2% fica em 1 050–1 250, dentro dos 1 500 do orçamento.
+  - Escamas de Mehen: Filho de Apep, Areia Movediça, Ganso Ladrão.
+  - Gigantes: Homem-Escorpião, Lince do Cedro, Abelha-Resina.
+  - Cinco Luzes: Touro de Cinza, Morcego-Lâmina, Enguia Grande.
+  - Coluna da Glória: Gota de Treva, Faísca Confusa, Corda de Fumaça.
 - **Regiões 10–12:** os 12 bichos próprios de cada região, **0,75%** por abate (`HighDropChance`), ~133 abates por peça. Têm 12
   próprios como o norte, mas no meio de 17–32 espécies (os Picos de Farnkesh são os que mais emprestam): a 0,5% o Sino de Vento
   passaria dos 1 500 abates do orçamento (1 600); a 0,75% fica em 570–1 070 caçando a região.
@@ -156,15 +177,24 @@ Não há nível de item no jogo: quem segura o espólio é o nível da região.
   Bônus com valor esperado entre o do meio e o do norte, do mesmo tipo: Badalada das Ermidas 12,6% (3 alvos a 4,5 m) entre o
   Galope dos Nartes (9%) e o Raio da Coluna (24%); Calor da Lanterna 1,1% entre a Seiva do Lótus (1%) e a Hora da Barca (1,25%);
   Brasa da Bigorna 6% entre o Coral que Fecha (4,5%) e o Reflexo Vidrado (7%). `HighArmorSetsTests` trava essas desigualdades.
+- **Segundos conjuntos das Regiões 13–16:** uma escolha ao lado, nunca um passo acima. Cada peça tem 1 de defesa a menos que a peça
+  do primeiro conjunto da região no mesmo espaço (31/17, 34/19, 38/21, 42/24), a mesma raridade, o mesmo valor e a mesma durabilidade,
+  e os dois atributos do primeiro conjunto trocados de espaço (o Cais do Papiro dá vida no peito e mana na cabeça; as Escamas de Mehen,
+  mana no peito e vida na cabeça). Bônus com valor esperado acima do bônus de mesmo tipo do meio e no máximo o do norte: Anel de Mehen
+  6,3% entre o Coral que Fecha (4,5%) e o Reflexo Vidrado (7%); Tremor dos Gigantes 18% (4 alvos a 4,5 m) entre o Gongo de Bronze (6%)
+  e o Raio da Coluna (24%); Luz que Volta 0,8% de vida e 0,8% de mana, abaixo da Hora da Barca (1,25%) e da Seiva do Lótus (1%) cada;
+  Subida da Coluna 1% entre o Fôlego do Pamir (0,6%) e a Hora da Barca (1,25%). `AncientArmorSetsTests` trava essas regras.
 - **Pilha de poder:** `power_stack.py` lê só `Resources/Items/*.asset`, então a subpasta `Sets/` não entra na campanha
   (como a `Dungeon/`). A seção "Faixas 100–500" (`level_500.py`) conhece os doze de 5–16: o herói de referência veste o
   Ouro dos Kurgans de 100 a 139, o Sino de Vento de 140, a Prata da Aurora de 180 e o Kurdalægon de 220 a 259 (a Brasa da Bigorna
   entra como espinho, como o Reflexo Vidrado); as lutas de comuns e chefes não mudam de faixa e nada novo sai do orçamento.
-  A economia (`economy.py`) lista os dezesseis com os abates esperados.
+  Os segundos conjuntos de 13–16 entram na lista com o nível de entrada da região, mas o herói de referência nunca os escolhe (a
+  defesa é menor e os atributos são os mesmos), e `test_level_500.py` confere isso. A economia (`economy.py`) lista os vinte com os
+  abates esperados.
 
 ## Falta
 
 - Listar as peças no Bestiário (`BestiaryCatalog` só conhece o `_lootItem` e a tabela do bioma).
-- O "conjunto antigo" das fichas que ainda não existe: "Gigantes" (Região 14).
-- Uma conquista para os conjuntos de equipamento das Regiões 1–12 (como a `ach_house_far_sets` dos móveis): os textos de
+- O bônus do chefe do Sonho da Destruição (82) ainda é o peitoral do Tijolo Azul, não o dos Gigantes (asset do inimigo, não mexido).
+- Uma conquista para os conjuntos de equipamento das Regiões 1–12 e para os segundos de 13–16 (como a `ach_house_far_sets` dos móveis): os textos de
   conquista moram em `UI/Achievements`.

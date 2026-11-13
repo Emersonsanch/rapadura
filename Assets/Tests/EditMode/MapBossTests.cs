@@ -74,6 +74,10 @@ namespace Rapadura.Tests
             RegionBossRules.SledgeSerpentId, RegionBossRules.PitchKingId, RegionBossRules.GreatStowawayId,
             RegionBossRules.MireMotherId, RegionBossRules.CrownedChiefId, RegionBossRules.DarkBellowsId,
             RegionBossRules.SleepingVishapId, RegionBossRules.ReliefLionId, RegionBossRules.SmokeStallionId,
+            RegionBossRules.MazanMasonId, RegionBossRules.GreyMorayId, RegionBossRules.PalaceCrabId, RegionBossRules.GoldenScarecrowId,
+            RegionBossRules.TabletNightmareId, RegionBossRules.AzSawId, RegionBossRules.GreyStallionId,
+            RegionBossRules.AysKingId, RegionBossRules.TrappedAuroraId, RegionBossRules.GuayotaId,
+            RegionBossRules.WrongKnotId, RegionBossRules.DarkWingedEagleId, RegionBossRules.SailShadowId,
         };
 
         /// <summary>The maps the story walks through in the 150–300 band (LateStoryCatalog) that have a boss in their ficha.</summary>
@@ -121,7 +125,21 @@ namespace Rapadura.Tests
             OverworldLayouts.PedrasDragaoMapId, OverworldLayouts.MeroeId, OverworldLayouts.SoslanMapId,
         };
 
-        private static readonly string[] StoryMaps = LateStoryMaps.Concat(MidStoryMaps).Concat(FirstMaps).Concat(MoreMaps).Concat(HighMaps).Concat(RestMaps).ToArray();
+        /// <summary>The maps of the last of Regions 1–9 (16, 28, 29, 44, 49, 50, 51; LastMapBossTests).</summary>
+        private static readonly string[] LastMaps =
+        {
+            OverworldLayouts.PedraSecaId, OverworldLayouts.KirtaMapId, OverworldLayouts.KilwaId, OverworldLayouts.ArrozaisMapId,
+            OverworldLayouts.FortimMapId, OverworldLayouts.HaripushpaMapId, OverworldLayouts.MilCavalosMapId,
+        };
+
+        /// <summary>The maps of six more of Regions 10–16 (57, 63, 67, 74, 86, 97; UpperMapBossTests).</summary>
+        private static readonly string[] UpperMaps =
+        {
+            OverworldLayouts.GargantaAysMapId, OverworldLayouts.MarAurorasMapId, OverworldLayouts.MonteEcheydeMapId,
+            OverworldLayouts.AneisMehenMapId, OverworldLayouts.CovaVentoMapId, OverworldLayouts.BarcaDoSolMapId,
+        };
+
+        private static readonly string[] StoryMaps = LateStoryMaps.Concat(MidStoryMaps).Concat(FirstMaps).Concat(MoreMaps).Concat(HighMaps).Concat(RestMaps).Concat(LastMaps).Concat(UpperMaps).ToArray();
 
         private const float WalkableDegrees = 45f;
 

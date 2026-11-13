@@ -122,6 +122,18 @@ namespace Rapadura.Gameplay.Player
         /// <summary>0..1 how hard the current direction change is braking (0 = not braking) — the procedural layer plants and leans on it.</summary>
         public float TurnBrake { get; private set; }
 
+        /// <summary>Frame of the last shove from the world (wind, a drifting island): see <see cref="WasShovedRecently"/>.</summary>
+        private int _shovedFrame = -100;
+
+        /// <summary>
+        /// The world shoved the hero this frame or the last (<c>GroundedPush.Shove</c>: Kaggen's winds, Farnkesh's gusts, an island). Click-to-move
+        /// reads it so a headwind that holds the hero in place is not taken for a wall (the destination used to be dropped mid-gust).
+        /// </summary>
+        public bool WasShovedRecently => Time.frameCount - _shovedFrame <= 1;
+
+        /// <summary>Called by <c>GroundedPush.Shove</c> each frame it moves this hero.</summary>
+        public void NoteExternalShove() => _shovedFrame = Time.frameCount;
+
         public bool IsCrouching => _isCrouching;
         public float VerticalVelocity => _verticalVelocity;
 

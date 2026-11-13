@@ -83,7 +83,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             public const string Almas = "enemy_mountain_almas";
             public const string Wolf = PeriodSpawnTable.ForestWolf;
             public const string Irbis = "enemy_mountain_irbis";
-            public const string Crevasse = "enemy_cave_ooze";
+            public const string Crevasse = "enemy_cave_living_crevasse";
             public const string Kite = "enemy_desert_broken_lantern";
             public const string Hawk = "enemy_mountain_crested_hawk";
             public const string Bats = PeriodSpawnTable.CaveBats;
@@ -344,7 +344,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             morenas.Fauna.Add(Fauna("lobos_das_morenas", "[rápido]", T(N(MidBeasts.IceWolf, 3), N(Teto.Chough, 1)), T(V(MidBeasts.IceWolf, 2), S(werewolf, 1)), 4));
 
             // Geleira do Teto do Mundo and Campo de Seracs (38): the Iaque Selvagem Apagado [tanque], the Almas [elite, shy,
-            // snowballs] (the baboon; it comes out at night), the Lobo de Gelo [rápido], the Fenda Viva [controle] (the ooze).
+            // snowballs] (the baboon; it comes out at night), the Lobo de Gelo [rápido], the Fenda Viva [controle] (its own beast now, BorrowedBeasts).
             geleira.Fauna.Add(Fauna("iaques_da_geleira", "[tanque]", T(N(Teto.Yak, 3), N(Teto.Wolf, 1)), T(V(Teto.Yak, 2), S(herd, 1), V(Teto.Wolf, 1)), 3, null, 28f));
             geleira.Fauna.Add(Fauna("almas", "[elite]", T(N(Teto.Almas, 3), N(Teto.Yak, 1)), T(V(Teto.Almas, 3), S(owl, 1)), 3, null, 32f));
             geleira.Fauna.Add(Fauna("fendas_vivas", "[controle]", T(N(Teto.Crevasse, 3), N(Teto.Mist, 1)), T(V(Teto.Crevasse, 2), V(Teto.Mist, 1)), 4));

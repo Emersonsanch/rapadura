@@ -57,6 +57,9 @@ namespace Rapadura.Gameplay.World.Map.Overworld
 
         /// <summary>O Fole Apagado's arena (17, map boss): the stone ring in the Salões de Napirasu, by the trail down to the Great Forge.</summary>
         public static readonly Vector2 FoleApagadoArena = new Vector2(-1384f, -228f);
+
+        /// <summary>O Pedreiro Mazan's arena (16, map boss): the stone ring among the drystone walls, by the trail east of the Recinto Curvo.</summary>
+        public static readonly Vector2 PedreiroMazanArena = new Vector2(-640f, 1288f);
         public static readonly Vector2 RecintoOffset = new Vector2(-900f, 1300f);
         public static readonly Vector2 SaloesOffset = new Vector2(-1500f, -300f);
         public static readonly Vector2 EstelaOffset = new Vector2(-1500f, 500f);
@@ -214,6 +217,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             Landmark(w, MapLandmarkKind.StoneRing, -1080f, -620f, 0f, 0.7f);
             Landmark(w, MapLandmarkKind.StoneRing, GrandeBorraoArena.x, GrandeBorraoArena.y, 0f, 1.1f);
             Landmark(w, MapLandmarkKind.StoneRing, FoleApagadoArena.x, FoleApagadoArena.y, 0f, 1.1f);
+            Landmark(w, MapLandmarkKind.StoneRing, PedreiroMazanArena.x, PedreiroMazanArena.y, 0f, 1.1f);
             Sign(w, westFork, new Vector2(-280f, 60f), 4f, 0f);
             Sign(w, new Vector2(220f, -108f), new Vector2(440f, -104f), 4f, 20f);
             Sign(w, new Vector2(-40f, -420f), new Vector2(-230f, -380f), 4f, 0f);

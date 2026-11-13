@@ -55,6 +55,9 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         public static readonly Vector2 PilarDoMeioOffset = new Vector2(1560f, -480f);
         public static readonly Vector2 SeloArtificesOffset = new Vector2(1560f, 480f);
 
+        /// <summary>A Águia de Asas de Treva's arena (86, map boss): the stone ring on a ledge of the Cova do Vento Destruidor, by the trail, off the updrafts.</summary>
+        public static readonly Vector2 AguiaDeAsasDeTrevaArena = new Vector2(176f, 860f);
+
         /// <summary>Half the side (m) of the flat ground reserved for the fortress' recipe (±30 m at y = 0).</summary>
         public const float FortalezaProfundoGround = 30f;
 
@@ -329,6 +332,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             Landmark(w, MapLandmarkKind.Campfire, 930f, 180f, 0f, 1f);
             Landmark(w, MapLandmarkKind.Campfire, 1410f, -860f, 0f, 1f);
             Landmark(w, MapLandmarkKind.StoneRing, 1400f, 1000f, 0f, 1f);
+            Landmark(w, MapLandmarkKind.StoneRing, AguiaDeAsasDeTrevaArena.x, AguiaDeAsasDeTrevaArena.y, 0f, 1.1f);
 
             // ---------------- Finishing ----------------
             SplitPaths(w.World);

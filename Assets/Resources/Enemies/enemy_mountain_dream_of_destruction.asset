@@ -22,7 +22,7 @@ MonoBehaviour:
   _lootQuantityMin: 1
   _lootQuantityMax: 1
   _bossGuaranteedLoot: 0
-  _bossBonusDropItem: {fileID: 11400000, guid: d0ea0e317340af64d0f856e5efca6483, type: 2}
+  _bossBonusDropItem: {fileID: 11400000, guid: 6cba68308a7a40aca3e67e19fbd84ace, type: 2}
   _bossBonusDropRarity: 3
   _bossExperienceMultiplier: 8
   _visualPrefab: {fileID: 0}

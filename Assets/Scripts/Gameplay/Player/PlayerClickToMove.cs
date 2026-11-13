@@ -197,6 +197,14 @@ namespace Rapadura.Gameplay.Player
                 return;
             }
 
+            // A gust against the walk (Kaggen 2,4 m/s vs a 2,5 m/s walk) keeps the distance from shrinking with no wall in the way:
+            // the shoved frames restart the watch from where the hero now stands instead of counting as blocked.
+            if (_motor != null && _motor.WasShovedRecently)
+            {
+                _blocked.Reset();
+                return;
+            }
+
             Vector3 toDestination = Destination - transform.position;
             toDestination.y = 0f;
             bool pushing = _motor != null && _motor.TargetHorizontalSpeed > 0.1f;

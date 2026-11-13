@@ -36,13 +36,13 @@ namespace Rapadura.Tests
         [Test]
         public void Catalog_Has580Items_WithTheDocumentedRarities()
         {
-            Assert.AreEqual(720, HouseCatalog.All.Count);
-            Assert.AreEqual(720, HouseCatalog.GeneratedItemCount);
+            Assert.AreEqual(752, HouseCatalog.All.Count);
+            Assert.AreEqual(752, HouseCatalog.GeneratedItemCount);
             var byRarity = HouseCatalog.All.GroupBy(i => i.Rarity).ToDictionary(g => g.Key, g => g.Count());
-            Assert.AreEqual(241, byRarity[ItemRarity.Common]);
-            Assert.AreEqual(197, byRarity[ItemRarity.Uncommon]);
-            Assert.AreEqual(174, byRarity[ItemRarity.Rare]);
-            Assert.AreEqual(90, byRarity[ItemRarity.Epic]);
+            Assert.AreEqual(245, byRarity[ItemRarity.Common]);
+            Assert.AreEqual(209, byRarity[ItemRarity.Uncommon]);
+            Assert.AreEqual(186, byRarity[ItemRarity.Rare]);
+            Assert.AreEqual(94, byRarity[ItemRarity.Epic]);
             Assert.AreEqual(18, byRarity[ItemRarity.Legendary]);
         }
 
@@ -166,7 +166,7 @@ namespace Rapadura.Tests
         public void TheDocumentedOriginCounts_Hold()
         {
             int Count(params HouseItemSourceType[] types) => HouseCatalog.All.Count(i => types.Contains(i.PrimarySource.Type));
-            Assert.AreEqual(504, Count(HouseItemSourceType.Shop));
+            Assert.AreEqual(536, Count(HouseItemSourceType.Shop));
             Assert.AreEqual(80, Count(HouseItemSourceType.Drop));
             Assert.AreEqual(48, Count(HouseItemSourceType.Event));
             Assert.AreEqual(34, Count(HouseItemSourceType.Quest, HouseItemSourceType.HouseQuest, HouseItemSourceType.DailyQuest));

@@ -179,16 +179,9 @@ namespace Rapadura.Tests
         private static OverworldFauna Group(string id) =>
             OverworldLayouts.Get(CeuId).Zones.SelectMany(z => z.Fauna).First(f => f.Id == id);
 
-        [TestCase("sombras_clandestinas", GardenShadow)]
-        [TestCase("sombras_da_fresta", GardenShadow)]
         [TestCase("sombras_das_flores", GardenShadow)]
         [TestCase("sombras_da_pergola", GardenShadow)]
-        [TestCase("sombras_nadadoras", LateShadow)]
-        [TestCase("sombras_das_margens", LateShadow)]
         [TestCase("sombras_do_meio_dia", LateShadow)]
-        [TestCase("correntes_erradas", Mist)]
-        [TestCase("correntes_da_foz", Mist)]
-        [TestCase("rachaduras_do_ceu", Mist)]
         [TestCase("faiscas_teimosas", GlowMantle)]
         [TestCase("faiscas_do_conves", GlowMantle)]
         [TestCase("fumacas_de_esfera", SmokeGoat)]

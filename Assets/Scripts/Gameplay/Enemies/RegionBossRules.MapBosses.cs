@@ -44,6 +44,22 @@ namespace Rapadura.Gameplay.Enemies
         West = 3,
     }
 
+    /// <summary>Which way O Garanhão Cinzento leads the herd (<see cref="RegionBossRules.HerdWayFor"/>): it turns a quarter, clockwise, each run.</summary>
+    public enum HerdWay
+    {
+        /// <summary>The herd runs north: run north with it.</summary>
+        North = 0,
+
+        /// <summary>The herd runs east.</summary>
+        East = 1,
+
+        /// <summary>The herd runs south.</summary>
+        South = 2,
+
+        /// <summary>The herd runs west.</summary>
+        West = 3,
+    }
+
     /// <summary>
     /// The map bosses of the fichas (Docs/Mapas100.md 55, 56, 60, 62, 66, 69; on the road of the middle story, 25, 26, 32, 37, 38, 43; in the first regions,
     /// that every player walks, 04, 09, 15; and 34, 45, 48): smaller than the world bosses, one per map the story walks through in the 150–300 band, in
@@ -93,6 +109,14 @@ namespace Rapadura.Gameplay.Enemies
         public const string PitchKingId = "enemy_mountain_pitch_king";
         public const string GreatStowawayId = "enemy_mountain_great_stowaway";
 
+        // Six more of Regions 10–16, one in each of 10, 11, 12, 13, 15 and 16: Docs/Mapas100.md 57, 63, 67, 74, 86, 97 (rules in RegionBossRules.UpperMapBosses.cs).
+        public const string AysKingId = "enemy_mountain_ays_king";
+        public const string TrappedAuroraId = "enemy_mountain_trapped_aurora";
+        public const string GuayotaId = "enemy_mountain_guayota";
+        public const string WrongKnotId = "enemy_mountain_wrong_knot";
+        public const string DarkWingedEagleId = "enemy_mountain_dark_winged_eagle";
+        public const string SailShadowId = "enemy_mountain_sail_shadow";
+
         // Six more of Regions 1–9, one in each of 1, 2, 3, 4, 5 and 9: Docs/Mapas100.md 03, 11, 17, 21, 27, 47.
         public const string MireMotherId = "enemy_mountain_mire_mother";
         public const string CrownedChiefId = "enemy_mountain_crowned_chief";
@@ -100,6 +124,15 @@ namespace Rapadura.Gameplay.Enemies
         public const string SleepingVishapId = "enemy_mountain_sleeping_vishap";
         public const string ReliefLionId = "enemy_mountain_relief_lion";
         public const string SmokeStallionId = "enemy_mountain_smoke_stallion";
+
+        // The last of Regions 1–9: Docs/Mapas100.md 16, 28, 29, 44, 49, 50, 51.
+        public const string MazanMasonId = "enemy_mountain_mazan_mason";
+        public const string GreyMorayId = "enemy_mountain_grey_coral_moray";
+        public const string PalaceCrabId = "enemy_mountain_palace_crab";
+        public const string GoldenScarecrowId = "enemy_mountain_golden_scarecrow";
+        public const string TabletNightmareId = "enemy_mountain_tablet_nightmare";
+        public const string AzSawId = "enemy_mountain_saw_of_az";
+        public const string GreyStallionId = "enemy_mountain_grey_stallion";
 
         /// <summary>The map bosses (03, 04, 05, 09, 10, 11, 15, 17, 21, 22; 25, 26, 27, 32, 33, 34, 37, 38, 39, 42, 43, 45, 47, 48; 53, 55, 56, 60, 61, 62, 66, 68, 69, 73, 79, 93), each at the top of its map's band.</summary>
         public static readonly IReadOnlyList<RegionBossSpawn> MapSpawns = new[]
@@ -164,6 +197,18 @@ namespace Rapadura.Gameplay.Enemies
                 OverworldLayouts.MisturaWorldOffset, 326, EnemyProjectileKind.LureGlob, false, RegionBossSignature.TarSoak, neverDies: true),
             new RegionBossSpawn(GreatStowawayId, OverworldLayouts.BarcaDaLuaMapId, "porao_da_lua", OverworldLayouts.ClandestinoGrandeArena,
                 OverworldLayouts.CeuWorldOffset, 450, EnemyProjectileKind.LanternBolt, true, RegionBossSignature.HoldHatches, neverDies: true),
+            new RegionBossSpawn(AysKingId, OverworldLayouts.GargantaAysMapId, "escarpa_dos_ventos", OverworldLayouts.ReiDosAysArena,
+                OverworldLayouts.FarnkeshWorldOffset, 180, EnemyProjectileKind.Feather, false, RegionBossSignature.GorgeGust, neverDies: true),
+            new RegionBossSpawn(TrappedAuroraId, OverworldLayouts.MarAurorasMapId, "mar_das_auroras", OverworldLayouts.AuroraPresaArena,
+                OverworldLayouts.MarGeladoWorldOffset, 226, EnemyProjectileKind.LanternBolt, false, RegionBossSignature.AuroraRoute, neverDies: true),
+            new RegionBossSpawn(GuayotaId, OverworldLayouts.MonteEcheydeMapId, "monte_echeyde", OverworldLayouts.GuayotaArena,
+                OverworldLayouts.HinokuraWorldOffset, 246, EnemyProjectileKind.Ember, true, RegionBossSignature.CraterSpit, neverDies: true),
+            new RegionBossSpawn(WrongKnotId, OverworldLayouts.AneisMehenMapId, "no_errado", OverworldLayouts.NoErradoArena,
+                OverworldLayouts.RioWorldOffset, 296, EnemyProjectileKind.LureGlob, true, RegionBossSignature.CoilLoops, neverDies: true),
+            new RegionBossSpawn(DarkWingedEagleId, OverworldLayouts.CovaVentoMapId, "cova_do_vento_destruidor", OverworldLayouts.AguiaDeAsasDeTrevaArena,
+                OverworldLayouts.ProfundoWorldOffset, 388, EnemyProjectileKind.Feather, false, RegionBossSignature.WingSpan, neverDies: true),
+            new RegionBossSpawn(SailShadowId, OverworldLayouts.BarcaDoSolMapId, "vela_do_sol", OverworldLayouts.SombraDaVelaArena,
+                OverworldLayouts.CeuWorldOffset, 486, EnemyProjectileKind.LanternBolt, false, RegionBossSignature.BoomSwing, neverDies: true),
             new RegionBossSpawn(MireMotherId, MapLayouts.BrejoId, "brejo", OverworldLayouts.MaeLodoArena,
                 OverworldLayouts.ZarafshanWorldOffset, 22, EnemyProjectileKind.LureGlob, false, RegionBossSignature.TongueSnap, neverDies: true),
             new RegionBossSpawn(CrownedChiefId, OverworldLayouts.TamborRubroMapId, "ermos_do_tambor_rubro", OverworldLayouts.ChefeCoroadoArena,
@@ -176,6 +221,20 @@ namespace Rapadura.Gameplay.Enemies
                 OverworldLayouts.CostaWorldOffset, 58, EnemyProjectileKind.LanternBolt, false, RegionBossSignature.ReliefPounce, neverDies: true),
             new RegionBossSpawn(SmokeStallionId, OverworldLayouts.SoslanMapId, "pistas_de_corrida", OverworldLayouts.CavaloDeFumacaArena,
                 OverworldLayouts.NartesWorldOffset, 108, EnemyProjectileKind.Feather, true, RegionBossSignature.SmokeCorral, neverDies: true),
+            new RegionBossSpawn(MazanMasonId, OverworldLayouts.PedraSecaId, "muralhas_pedra_seca", OverworldLayouts.PedreiroMazanArena,
+                OverworldLayouts.KaggenWorldOffset, 34, EnemyProjectileKind.LanternBolt, false, RegionBossSignature.TurningWalls, neverDies: true),
+            new RegionBossSpawn(GreyMorayId, OverworldLayouts.KirtaMapId, "lagoa_grande", OverworldLayouts.MoreiaDoCoralCinzaArena,
+                OverworldLayouts.CostaWorldOffset, 62, EnemyProjectileKind.LureGlob, true, RegionBossSignature.StillPrey, neverDies: true),
+            new RegionBossSpawn(PalaceCrabId, OverworldLayouts.KilwaId, "ruinas_de_gedi", OverworldLayouts.CaranguejoPalacioArena,
+                OverworldLayouts.CostaWorldOffset, 66, EnemyProjectileKind.LanternBolt, false, RegionBossSignature.SidewaysScuttle, neverDies: true),
+            new RegionBossSpawn(GoldenScarecrowId, OverworldLayouts.ArrozaisMapId, "arrozais_espelhados", OverworldLayouts.EspantalhoDePalhaArena,
+                OverworldLayouts.MingchengWorldOffset, 116, EnemyProjectileKind.Feather, true, RegionBossSignature.ScareOff, neverDies: true),
+            new RegionBossSpawn(TabletNightmareId, OverworldLayouts.FortimMapId, "vale_das_tabuas_de_sonho", OverworldLayouts.PesadeloDaTabuaArena,
+                OverworldLayouts.NartesWorldOffset, 120, EnemyProjectileKind.LanternBolt, true, RegionBossSignature.FearGrip, neverDies: true),
+            new RegionBossSpawn(AzSawId, OverworldLayouts.HaripushpaMapId, "taiga_de_laricos", OverworldLayouts.SerraDeAzArena,
+                OverworldLayouts.NartesWorldOffset, 126, EnemyProjectileKind.Ember, false, RegionBossSignature.OutrunSaw, neverDies: true),
+            new RegionBossSpawn(GreyStallionId, OverworldLayouts.MilCavalosMapId, "pradaria_dos_mil_cavalos", OverworldLayouts.GaranhaoCinzentoArena,
+                OverworldLayouts.NartesWorldOffset, 134, EnemyProjectileKind.Feather, false, RegionBossSignature.HerdRun, neverDies: true),
         };
 
         /// <summary>Every boss the <see cref="RegionBossDirector"/> keeps: the world bosses (<see cref="AllSpawns"/>) and the map bosses (<see cref="MapSpawns"/>).</summary>
@@ -638,6 +697,88 @@ namespace Rapadura.Gameplay.Enemies
 
         public const float CorralHalfWidth = 1.2f;
 
+        // ---- O Pedreiro Mazan (16): the walls turn ----
+
+        public const float MasonIntervalSeconds = 10f;
+        public const float MasonWindupSeconds = 2.2f;
+        public const float MasonDamageFactor = 1.35f;
+
+        /// <summary>How far round him his walls reach: the quarter he walls in is crushed this far out.</summary>
+        public const float MasonReach = 12f;
+
+        /// <summary>Each build his two crossing walls turn this many degrees: straight (a +), then slanted (an ×), then straight again.</summary>
+        public const float MasonWallTurnDegrees = 45f;
+
+        // ---- A Moreia do Coral Cinza (28): don't stop ----
+
+        public const float MorayIntervalSeconds = 10f;
+        public const float MorayWindupSeconds = 2.4f;
+        public const float MorayDamageFactor = 1.35f;
+        public const float MorayReach = 14f;
+
+        /// <summary>How often she looks at the hero during the warning, and how little a hero may move between two looks and still be standing still.</summary>
+        public const float MorayLookSeconds = 0.4f;
+
+        public const float MorayStillStep = 0.6f;
+
+        /// <summary>Standing still this long at a stretch during the warning (two looks running), she has her prey.</summary>
+        public const float MorayStillSeconds = 0.8f;
+
+        // ---- O Caranguejo-Palácio (29): he walks sideways ----
+
+        public const float ScuttleIntervalSeconds = 10f;
+        public const float ScuttleWindupSeconds = 2f;
+        public const float ScuttleDamageFactor = 1.4f;
+
+        /// <summary>Half the width of the row he scuttles along (toward and away from him), and half its length (sideways, the way a crab walks).</summary>
+        public const float ScuttleHalfWidth = 2f;
+
+        public const float ScuttleHalfLength = 9f;
+
+        // ---- O Espantalho de Palha Dourada (44): back away ----
+
+        public const float ScareIntervalSeconds = 10f;
+        public const float ScareWindupSeconds = 2.2f;
+        public const float ScareDamageFactor = 1.35f;
+        public const float ScareReach = 12f;
+
+        /// <summary>How much further from him than when he spread his arms a hero must be to count as scared off.</summary>
+        public const float ScareFlee = 3f;
+
+        // ---- O Pesadelo da Tábua (49): the frightened are gripped ----
+
+        public const float NightmareIntervalSeconds = 11f;
+        public const float NightmareWindupSeconds = 2.4f;
+        public const float NightmareReach = 14f;
+
+        /// <summary>Below this share of their health a hero is frightened, and the nightmare grips them hard; above it, only a bad dream.</summary>
+        public const float NightmareFearFraction = 0.5f;
+
+        public const float NightmareGripFactor = 1.6f;
+        public const float NightmareDreamFactor = 0.3f;
+
+        // ---- A Serra de Āz (50): get round it ----
+
+        public const float SawIntervalSeconds = 10f;
+        public const float SawWindupSeconds = 2.2f;
+        public const float SawDamageFactor = 1.4f;
+        public const float SawReach = 11f;
+
+        /// <summary>How far round the saw (degrees, seen from it) a hero must get during the warning: it turns to follow, but no faster than that.</summary>
+        public const float SawOutrunDegrees = 50f;
+
+        // ---- O Garanhão Cinzento (51): run with the herd ----
+
+        public const float HerdIntervalSeconds = 10f;
+        public const float HerdWindupSeconds = 2.2f;
+        public const float HerdDamageFactor = 1.4f;
+        public const float HerdReach = 14f;
+
+        /// <summary>How many metres the way the herd runs a hero must have gone during the warning to be running with it.</summary>
+        public const float HerdRunWith = 2.5f;
+
+        public const int HerdWays = 4;
+
         private static float MapBossInterval(RegionBossSignature signature)
         {
             switch (signature)
@@ -677,6 +818,13 @@ namespace Rapadura.Gameplay.Enemies
                 case RegionBossSignature.RisingSprings: return SpringsIntervalSeconds;
                 case RegionBossSignature.ReliefPounce: return ReliefIntervalSeconds;
                 case RegionBossSignature.SmokeCorral: return CorralIntervalSeconds;
+                case RegionBossSignature.TurningWalls: return MasonIntervalSeconds;
+                case RegionBossSignature.StillPrey: return MorayIntervalSeconds;
+                case RegionBossSignature.SidewaysScuttle: return ScuttleIntervalSeconds;
+                case RegionBossSignature.ScareOff: return ScareIntervalSeconds;
+                case RegionBossSignature.FearGrip: return NightmareIntervalSeconds;
+                case RegionBossSignature.OutrunSaw: return SawIntervalSeconds;
+                case RegionBossSignature.HerdRun: return HerdIntervalSeconds;
                 default: return ForgeIntervalSeconds;
             }
         }
@@ -720,6 +868,13 @@ namespace Rapadura.Gameplay.Enemies
                 case RegionBossSignature.RisingSprings: return SpringsWindupSeconds;
                 case RegionBossSignature.ReliefPounce: return ReliefWindupSeconds;
                 case RegionBossSignature.SmokeCorral: return CorralWindupSeconds;
+                case RegionBossSignature.TurningWalls: return MasonWindupSeconds;
+                case RegionBossSignature.StillPrey: return MorayWindupSeconds;
+                case RegionBossSignature.SidewaysScuttle: return ScuttleWindupSeconds;
+                case RegionBossSignature.ScareOff: return ScareWindupSeconds;
+                case RegionBossSignature.FearGrip: return NightmareWindupSeconds;
+                case RegionBossSignature.OutrunSaw: return SawWindupSeconds;
+                case RegionBossSignature.HerdRun: return HerdWindupSeconds;
                 default: return ForgeWindupSeconds;
             }
         }
@@ -1338,5 +1493,106 @@ namespace Rapadura.Gameplay.Enemies
 
         /// <summary>Does the ring of smoke O Cavalo de Fumaça gallops round <paramref name="mark"/> catch a hero at <paramref name="hero"/>? Only on the ring; inside and outside are safe.</summary>
         public static bool SmokeCorralHits(Vector2 mark, Vector2 hero) => Mathf.Abs(Vector2.Distance(mark, hero) - CorralRadius) <= CorralHalfWidth;
+
+        /// <summary>How far round (degrees, clockwise from north) O Pedreiro Mazan's two crossing walls stand on build number <paramref name="build"/> (0 first): 0, 45, 0…</summary>
+        public static float MasonWallTurn(int build) => (Mathf.Abs(build) % 2) * MasonWallTurnDegrees;
+
+        /// <summary>Which of the four quarters between the walls of build <paramref name="build"/> round the mason at <paramref name="mason"/> a point <paramref name="p"/> is in (0–3, clockwise).</summary>
+        public static int MasonQuarterOf(int build, Vector2 mason, Vector2 p)
+        {
+            Vector2 offset = p - mason;
+            float bearing = Mathf.Atan2(offset.x, offset.y) * Mathf.Rad2Deg;
+            return Mathf.FloorToInt(Mathf.Repeat(bearing - MasonWallTurn(build), 360f) / 90f) % 4;
+        }
+
+        /// <summary>
+        /// Does build <paramref name="build"/> of O Pedreiro Mazan (at <paramref name="mason"/>), walling in quarter <paramref name="walledIn"/>, crush a hero at
+        /// <paramref name="hero"/>? Within <see cref="MasonReach"/>, in that quarter: climbing over a wall into the next one, or getting out of reach, is safe.
+        /// </summary>
+        public static bool MasonWallHits(int build, Vector2 mason, int walledIn, Vector2 hero) =>
+            (hero - mason).sqrMagnitude <= MasonReach * MasonReach && MasonQuarterOf(build, mason, hero) == walledIn;
+
+        /// <summary>Did the hero stand still between two of A Moreia's looks, going from <paramref name="from"/> to <paramref name="to"/>?</summary>
+        public static bool MorayLookIsStill(Vector2 from, Vector2 to) => (to - from).sqrMagnitude < MorayStillStep * MorayStillStep;
+
+        /// <summary>Does A Moreia do Coral Cinza bite a hero <paramref name="distance"/> m from her who stood still <paramref name="longestStill"/> s at a stretch during the warning?</summary>
+        public static bool MorayBites(float longestStill, float distance) => distance <= MorayReach && longestStill >= MorayStillSeconds - 1e-4f;
+
+        /// <summary>
+        /// Does O Caranguejo-Palácio, at <paramref name="crab"/>, scuttling sideways across the hero's spot <paramref name="mark"/>, run over a hero at
+        /// <paramref name="hero"/>? The row across the line from him to the mark: <see cref="ScuttleHalfWidth"/> toward and away, <see cref="ScuttleHalfLength"/> sideways.
+        /// </summary>
+        public static bool ScuttleHits(Vector2 crab, Vector2 mark, Vector2 hero)
+        {
+            Vector2 axis = mark - crab;
+            axis = axis.sqrMagnitude < 1e-6f ? Vector2.up : axis.normalized;
+            Vector2 offset = hero - mark;
+            float along = Vector2.Dot(offset, axis);
+            float across = Vector2.Dot(offset, new Vector2(-axis.y, axis.x));
+            return Mathf.Abs(along) <= ScuttleHalfWidth && Mathf.Abs(across) <= ScuttleHalfLength;
+        }
+
+        /// <summary>
+        /// Does O Espantalho de Palha Dourada scare off (and hit) a hero who was <paramref name="distanceAtWarning"/> m from him when he spread his arms and is now
+        /// <paramref name="distanceNow"/> m away? Within <see cref="ScareReach"/>, unless the hero backed off <see cref="ScareFlee"/> m: standing your ground is no good.
+        /// </summary>
+        public static bool ScareHits(float distanceAtWarning, float distanceNow) => distanceNow <= ScareReach && distanceNow - distanceAtWarning < ScareFlee;
+
+        /// <summary>
+        /// How hard O Pesadelo da Tábua's dream hits a hero with <paramref name="health"/> of <paramref name="maxHealth"/>, <paramref name="distance"/> m from it:
+        /// <see cref="NightmareGripFactor"/> below <see cref="NightmareFearFraction"/> of their health, else <see cref="NightmareDreamFactor"/>; 0 beyond its reach.
+        /// </summary>
+        public static float NightmareDamageFactor(float health, float maxHealth, float distance)
+        {
+            if (distance > NightmareReach || maxHealth <= 0f)
+            {
+                return 0f;
+            }
+
+            return health < maxHealth * NightmareFearFraction ? NightmareGripFactor : NightmareDreamFactor;
+        }
+
+        /// <summary>
+        /// Does A Serra de Āz (at <paramref name="saw"/>) cut a hero who was at <paramref name="heroAtWarning"/> when it started turning and is at <paramref name="heroNow"/>?
+        /// Within <see cref="SawReach"/>, unless the hero got <see cref="SawOutrunDegrees"/> round it: close in it is a short run, far out a long one.
+        /// </summary>
+        public static bool SawHits(Vector2 saw, Vector2 heroAtWarning, Vector2 heroNow)
+        {
+            Vector2 now = heroNow - saw;
+            if (now.sqrMagnitude > SawReach * SawReach)
+            {
+                return false;
+            }
+
+            Vector2 then = heroAtWarning - saw;
+            if (now.sqrMagnitude < 0.25f || then.sqrMagnitude < 0.25f)
+            {
+                return true;
+            }
+
+            return Vector2.Angle(then, now) < SawOutrunDegrees;
+        }
+
+        /// <summary>The way O Garanhão Cinzento leads the herd on run number <paramref name="run"/> of the fight (0 first): north, east, south, west, north…</summary>
+        public static HerdWay HerdWayFor(int run) => (HerdWay)(Mathf.Abs(run) % HerdWays);
+
+        /// <summary>The flat direction of <paramref name="way"/> (+y is north).</summary>
+        public static Vector2 HerdDirection(HerdWay way)
+        {
+            switch (way)
+            {
+                case HerdWay.North: return Vector2.up;
+                case HerdWay.East: return Vector2.right;
+                case HerdWay.South: return Vector2.down;
+                default: return Vector2.left;
+            }
+        }
+
+        /// <summary>
+        /// Does the herd running <paramref name="way"/> trample a hero who was at <paramref name="heroAtWarning"/> and is at <paramref name="heroNow"/>, the stallion at
+        /// <paramref name="stallion"/>? Within <see cref="HerdReach"/>, unless the hero ran <see cref="HerdRunWith"/> m the herd's way: across it or against it is trampled.
+        /// </summary>
+        public static bool HerdRunHits(HerdWay way, Vector2 stallion, Vector2 heroAtWarning, Vector2 heroNow) =>
+            (heroNow - stallion).sqrMagnitude <= HerdReach * HerdReach && Vector2.Dot(heroNow - heroAtWarning, HerdDirection(way)) < HerdRunWith;
     }
 }

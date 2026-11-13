@@ -361,6 +361,10 @@ namespace Rapadura.UI.Housing
                 ("set_moveis_casa_rocha", "House in the Rock Furniture", "Móveis da Casa na Rocha", "House in the rock", "Casa na rocha"),
                 ("set_moveis_ninho_pedra", "Stone Nest Furniture", "Móveis do Ninho de Pedra", "Stone nest over the clouds", "Ninho de pedra sobre as nuvens"),
                 ("set_moveis_palacio_laca", "Lacquer Palace Furniture", "Móveis do Palácio de Laca", "Lacquer palace house", "Casa do palácio de laca"),
+                ("set_moveis_campo_juncos", "Reed Fields Furniture", "Móveis do Campo de Juncos", "House among the reed fields", "Casa entre os campos de juncos"),
+                ("set_moveis_relogio_sol", "Sundial Furniture", "Móveis do Relógio de Sol", "House of the hours of the sun", "Casa das horas do sol"),
+                ("set_moveis_novelo", "Bōlos Furniture", "Móveis do Novelo", "House of the bridge of the Bōlos", "Casa da ponte do Novelo"),
+                ("set_moveis_barca_lua", "Moon Ship Furniture", "Móveis da Barca da Lua", "Moon Ship deck house", "Casa no convés da Barca da Lua"),
             };
 
             foreach ((string id, string enName, string ptName, string enTitle, string ptTitle) in sets)

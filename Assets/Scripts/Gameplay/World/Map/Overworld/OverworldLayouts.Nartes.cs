@@ -63,6 +63,15 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         /// <summary>O Cavalo de Fumaça's arena (47, map boss): the stone ring on the race tracks of Soslan's camp, by the trail.</summary>
         public static readonly Vector2 CavaloDeFumacaArena = new Vector2(596f, -184f);
 
+        /// <summary>O Pesadelo da Tábua's arena (49, map boss): the stone ring in the Vale das Tábuas de Sonho, by the trail down from the dream fork.</summary>
+        public static readonly Vector2 PesadeloDaTabuaArena = new Vector2(-820f, 600f);
+
+        /// <summary>A Serra de Āz's arena (50, map boss): the stone ring in the larch taiga, by the trail from the Fortim to the Arvoredo.</summary>
+        public static readonly Vector2 SerraDeAzArena = new Vector2(-770f, 1074f);
+
+        /// <summary>O Garanhão Cinzento's arena (51, map boss): the stone ring on the Pradaria dos Mil Cavalos, by the trail from the Poço da Taça up to Ohya's crest.</summary>
+        public static readonly Vector2 GaranhaoCinzentoArena = new Vector2(1050f, 1176f);
+
         /// <summary>Half the side (m) of the flat ground of the three towns of the steppe (reserved for their recipes, ±28 m and more).</summary>
         public const float NartesCityGround = 30f;
 
@@ -323,6 +332,9 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             Landmark(w, MapLandmarkKind.StoneRing, OhyaArena.x, OhyaArena.y, 0f, 1.1f);
             Landmark(w, MapLandmarkKind.StoneRing, GrifoVelhoArena.x, GrifoVelhoArena.y, 0f, 1.1f);
             Landmark(w, MapLandmarkKind.StoneRing, CavaloDeFumacaArena.x, CavaloDeFumacaArena.y, 0f, 1.1f);
+            Landmark(w, MapLandmarkKind.StoneRing, PesadeloDaTabuaArena.x, PesadeloDaTabuaArena.y, 0f, 1.1f);
+            Landmark(w, MapLandmarkKind.StoneRing, SerraDeAzArena.x, SerraDeAzArena.y, 0f, 1.1f);
+            Landmark(w, MapLandmarkKind.StoneRing, GaranhaoCinzentoArena.x, GaranhaoCinzentoArena.y, 0f, 1.1f);
 
             // ---------------- Finishing ----------------
             SplitPaths(w.World);

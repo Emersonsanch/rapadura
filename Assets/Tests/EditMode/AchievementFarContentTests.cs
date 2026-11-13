@@ -20,7 +20,7 @@ using UnityEngine;
 namespace Rapadura.Tests
 {
     /// <summary>
-    /// The 25 achievements of the far content (Regions 10–16 bosses, one-cousin deeds, region mechanics, the whole world,
+    /// The 26 achievements of the far content (Regions 10–16 bosses, one-cousin deeds, region mechanics, the whole world,
     /// "As Cartas da Estrada", new mounts and furniture sets): texts in both languages, a requirement that can really be met
     /// (every id exists in its catalog) and the event wiring of the conditions they added.
     /// </summary>
@@ -33,6 +33,7 @@ namespace Rapadura.Tests
             "ach_cousin_icaro_dream", "ach_cousin_lavine_az", "ach_nartes_race_gold", "ach_lavine_sky_golds", "ach_amirani_chain_top",
             "ach_porch_story", "ach_sky_whole", "ach_world_all_regions", "ach_letters_complete", "ach_letters_all_cousins",
             "ach_mounts_far_regions", "ach_column_griffin", "ach_house_cais_de_luz", "ach_house_far_sets",
+            "ach_house_far_sets_second",
         };
 
         private readonly List<AchievementManager> _managers = new List<AchievementManager>();
@@ -93,7 +94,7 @@ namespace Rapadura.Tests
         [Test]
         public void Every_new_achievement_exists_and_has_both_languages()
         {
-            Assert.AreEqual(25, NewIds.Length);
+            Assert.AreEqual(26, NewIds.Length);
             Assert.AreEqual(NewIds.Length, NewIds.Distinct().Count());
 
             foreach (AchievementDefinition definition in NewDefinitions())
@@ -187,6 +188,28 @@ namespace Rapadura.Tests
             CollectionAssert.AreEquivalent(OverworldLayouts.StitchedWorld.Parts.Select(p => p.Id), seeded.Single(d => d.AchievementId == "ach_world_all_regions").TargetIds);
             CollectionAssert.AreEquivalent(MountFarRegionCatalog.Specs.Select(s => s.MountId), seeded.Single(d => d.AchievementId == "ach_mounts_far_regions").TargetIds);
             Assert.AreEqual(LateStoryCatalog.SkyPorch, seeded.Single(d => d.AchievementId == "ach_letters_complete").TargetIds.Single());
+        }
+
+        [Test]
+        public void The_two_far_furniture_achievements_cover_every_far_set_once()
+        {
+            string[] firstSets = { "set_moveis_casa_lua_branca", "set_moveis_cais_papiro", "set_moveis_tijolo_azul", "set_moveis_mil_lampadas", "set_moveis_cais_luz" };
+            string[] newerSets =
+            {
+                "set_moveis_ninho_pedra", "set_moveis_palacio_laca", "set_moveis_campo_juncos", "set_moveis_relogio_sol", "set_moveis_novelo", "set_moveis_barca_lua",
+            };
+            AchievementDefinition[] seeded = Seeded();
+            foreach ((string id, string[] sets) in new[] { ("ach_house_far_sets", firstSets), ("ach_house_far_sets_second", newerSets) })
+            {
+                AchievementDefinition definition = seeded.Single(d => d.AchievementId == id);
+                List<string> pieces = HouseCatalog.All.Where(i => sets.Contains(i.SetId)).Select(i => i.ItemId).ToList();
+                Assert.AreEqual(sets.Length * 8, pieces.Count, id);
+                CollectionAssert.AreEquivalent(pieces, definition.TargetIds, id);
+                Assert.AreEqual(pieces.Count, definition.TargetValue, id);
+            }
+
+            CollectionAssert.IsEmpty(seeded.Single(d => d.AchievementId == "ach_house_far_sets").TargetIds
+                .Intersect(seeded.Single(d => d.AchievementId == "ach_house_far_sets_second").TargetIds), "no piece counts for both");
         }
 
         [Test]
