@@ -49,7 +49,7 @@
     um comum do nível (`28b8f39`). O Lodo-que-Engole só surge com as 5 Fontes acesas (`f0991e3`).
     - Regiões 5–9: Hedammu (30), Lodo-que-Engole (35), Aydahar (40), Quatro Gulosos (46) e Ohya (52).
     - Regiões 10–16: Rei-Vendaval, Velho Kul, Glutão de Brasa, Apep, Sonho da Destruição, A Grande Treva (solo) e Āz.
-- **Chefes de mapa:** 49 feitos, de cerca de 68 pedidos pelas fichas (5 antigos e 44 em `RegionBossRules.MapSpawns`; 13 entraram em `70a3a73`).
+- **Chefes de mapa:** 54 feitos, de 68 pedidos pelas fichas (5 antigos e 49 em `RegionBossRules.MapSpawns`; 13 entraram em `70a3a73`). Faltam 14, todos nas Regiões 13–16.
   - 5 antigos: Kök-Böri (02), O Grande Ushabti (08), Hahya (14) e Tages (20), lutados pelo mapa-múndi, e o Colosso de
     Crânios no Ossuário (24b).
   - 6 novos no mundo contínuo (`5b6dcb7`, `RegionBossRules.MapSpawns`, Nv 160–264), com golpe próprio, arena na trilha,
@@ -107,7 +107,7 @@ de uma ficha feito por um bicho de outra região ou do bioma.
 | Mecânicas feitas | Colheita diária no Pomar (01); vaus de Água Viva que curam até 70% (02); lama ×0,7 fora das passarelas, com poças limpas pelas skills do Joaquim (03, `ZarafshanMireRules`); teias que prendem 1,5 s ou são cortadas por skill (04, `ZarafshanWebRules`); névoa a cada 3 min que esconde os bichos a mais de 8 m no chão, com orvalho a cada névoa (05, `GarajonayFogRules`); as 4 faíscas libertadas enchem os canais e viram pontos de cura (06, `ZarafshanGardenRules`) |
 | Mecânicas faltantes | Item de damasco próprio (01); a poção de Água Viva limpar poça (03); andar nas plataformas de verdade, Coletor de Névoa e Gota de Névoa própria (05); abrir o pavilhão e Pétala de Luz (06) |
 | Chefe do mundo | Saklas, o Lobo de Cinzas (evento com horário, arena do mapa-múndi) |
-| Chefe de mapa | Feitos 3: Kök-Böri (02, pelo mapa-múndi), A Fiandeira Esquecida (04, Nv 24: fio esticado) e O Velho da Névoa (05, Nv 26, `07a4770`: morde quem está de costas). Falta 1: Mãe-Lodo (03) |
+| Chefe de mapa | Feitos 3: Kök-Böri (02, pelo mapa-múndi), A Fiandeira Esquecida (04, Nv 24: fio esticado) e O Velho da Névoa (05, Nv 26, `07a4770`: morde quem está de costas). E A Mãe-Lodo (03, `bca7acd`) |
 | Montaria | Catálogo-base. Faltam as da ficha: Garça do Brejo (03), Lagarto-do-Louro (05) |
 | Conjunto | Jardim de Mihrshah (o "do jardim" da ficha 06: Colete do Jardineiro de Mihrshah e Grinalda de Pétalas de Luz; Orvalho do Jardim: ao matar, 15% de curar 3% da vida). Drop dos 12 bichos próprios, 1 em 200 abates (`ArmorSetRules.Garden`, `07a4770`) |
 | Móveis | Móveis do Tear de Seda (8 peças, 16–300 de ouro, na Costureira Mestra Narisah; Épica: Cama de dossel de seda sogdiana; `07a4770`). Mais Tugai do Zarafshan, Iwan da Vó Edna, Moinho do Pomar, Cozinha da Vó e outros conjuntos de família |
@@ -122,7 +122,7 @@ de uma ficha feito por um bicho de outra região ou do bioma.
 | Mecânicas feitas | Tempestade de areia em toda a região, com abrigos (`AreiasStormRules`), e nela só se veem bichos a 6 m (07); fachos de sol nas Galerias do Karez: mana ×2,5 no facho e ×0,5 no escuro, bichos ofuscados (09, `KarezSunbeamRules`); descer a duna correndo atordoa os bichos a 14 m (10, `DuneSongRules`); das 11h às 14h, fora da sombra das torres, só se veem bichos a 10 m (12, `NamraelGlareRules`) |
 | Mecânicas faltantes | Escolta da caravana (07); leitura das inscrições (08); os 3 andares do Karez (09); clarão na tela e Espelho de Sal (12); Ritmo do Tambor e Têmpera do Tambor (11); Tambor Rubro numa mesa |
 | Chefe do mundo | Namrael, o Escorpião-Rei (evento com horário) |
-| Chefe de mapa | Feitos 3: O Grande Ushabti (08, pelo mapa-múndi), A Raiz que Bebeu o Poço (09, Nv 26: raízes nos passos) e O Coral da Duna (10, Nv 28, `07a4770`: versos em anéis de 4, 7 e 10 m). Falta 1: O Chefe Coroado (11) |
+| Chefe de mapa | Feitos 3: O Grande Ushabti (08, pelo mapa-múndi), A Raiz que Bebeu o Poço (09, Nv 26: raízes nos passos) e O Coral da Duna (10, Nv 28, `07a4770`: versos em anéis de 4, 7 e 10 m). E O Chefe Coroado (11, `bca7acd`) |
 | Montaria | Catálogo-base. Falta a da ficha: Lobo de Guerra Ocre (11) |
 | Conjunto | Couro Rubro (Gibão de Couro Rubro e Turbante de Seda da Caravana; Areia que Queima: ao ser atingido, 10% de devolver 20% do golpe). Drop dos 8 bichos próprios, 1 em 200 abates (`ArmorSetRules.RedLeather`, `07a4770`) |
 | Móveis | Móveis da Cisterna de Qocho (8 peças, 17–310 de ouro, na Selaria do Vandak; Épica: Painel das iluminuras de Qocho; `07a4770`). Mais Areias Flamejantes e Caravana do Vô Jorge |
@@ -137,7 +137,7 @@ de uma ficha feito por um bicho de outra região ou do bioma.
 | Mecânicas feitas | Ventos da serra (13–14) e pontes de corda que gastam fôlego dobrado, que a Maithe ignora (`KaggenWindRules`); ar fino no platô do Cume, fôlego volta 30% mais devagar, a Maithe não sente (18, `MazanThinAirRules`) |
 | Mecânicas faltantes | Curvar projéteis (13); neve no chão (14); balanço visual das pontes; gravar 1 runa por dia e as 5 etapas da Grande Forja (17) |
 | Chefe do mundo | Mazan, o Gigante da Serra (evento com horário) |
-| Chefe de mapa | Feitos: Hahya (14, pelo mapa-múndi) e O Grande Borrão (15, Nv 32: a cor que sobrou). e O Pedreiro Mazan (16, `70a3a73`). Falta 1: O Fole Apagado (17) |
+| Chefe de mapa | Feitos 4: Hahya (14, pelo mapa-múndi), O Grande Borrão (15, Nv 32: a cor que sobrou), O Pedreiro Mazan (16, `70a3a73`) e O Fole Apagado (17, `bca7acd`) |
 | Montaria | Catálogo-base. Faltam as da ficha: Eland (15), Carneiro de Bronze (17) |
 | Conjunto | Pedra Seca (Couraça de Pedra Seca e Elmo de Granito em Espinha; Rajada do Kaggen: no crítico, 10% de atingir até 2 inimigos a 3 m com 20% do golpe). Drop dos 9 bichos próprios, 1 em 200 abates (`ArmorSetRules.Drystone`, `07a4770`) |
 | Móveis | Móveis do Rondavel (8 peças, 18–320 de ouro, na Forja do Mestre Mihr; Épica: Estela com janelinhas entalhadas; `07a4770`). Mais Picos de Litema |
@@ -152,7 +152,7 @@ de uma ficha feito por um bicho de outra região ou do bioma.
 | Mecânicas feitas | Lâmpadas salvas que encurtam a volta à Vila (19, `LimiarLampRules`); barco do Lago do Limiar, ~7 s em vez de ~32 s a pé (19, `LimiarBoatRules`); medo do escuro: lâmpadas acesas enfraquecem os bichos, apagadas os fortalecem (20, `TagesDarkRules`); pedras-dragão: [E] acende uma fonte que cura e acorda o bicho mais perto, cada pedra 1 vez por dia (21, `VishapStoneRules`); ar parado longe dos 11 tubos, o fôlego escorre até 30%, a Garrafa de Ar Sereno corta (22, `TunnelStillAirRules`); poços de vento para planar sobre os abismos do Ninho de Mahaway (24, `LimiarWindWellRules`) |
 | Mecânicas faltantes | Modelo de barco e barqueiro (19); o Vishap Jovem saindo da pedra (21); a feira que muda de galeria por dia e a Garrafa limpar lentidão (22); entrada direta no Ossuário sem passar pelo mapa da ilha |
 | Chefe do mundo | Mahaway, o Rei da Revoada (evento com horário) |
-| Chefe de mapa | Feitos 3: Tages (20, pelo mapa-múndi), O Engarrafador Guloso (22, Nv 42, `07a4770`: ar parado, só se salva atrás de uma garrafa) e o Colosso de Crânios no Ossuário (24b). Falta 1: O Vishap Adormecido (21). O 23 é gancho da sala de evento Torre das Jarras |
+| Chefe de mapa | Feitos 3: Tages (20, pelo mapa-múndi), O Engarrafador Guloso (22, Nv 42, `07a4770`: ar parado, só se salva atrás de uma garrafa) e o Colosso de Crânios no Ossuário (24b). E O Vishap Adormecido (21, `bca7acd`). O 23 é gancho da sala de evento Torre das Jarras |
 | Montaria | Grifo da Coluna da Glória (missão de nível 40, voadora) |
 | Conjunto | Marfim dos Artífices (Ossuário, 2 peças, Toque Espectral) e Pavio do Limiar (Túnica Branca do Lamparineiro e Capuz de Tufo Rosa; Pavio Aceso: ao matar, 15% de devolver 4% da mana). Drop dos 6 bichos próprios, 1 em 200 abates (`ArmorSetRules.Wick`, `07a4770`) |
 | Móveis | Móveis da Casa na Rocha (8 peças, 20–340 de ouro, nas Lamparinas da Parthenos; Épica: Estante de nichos de lâmpada escavada; `07a4770`). Mais Tufo Rosa das Lamparinas |
@@ -167,7 +167,7 @@ de uma ficha feito por um bicho de outra região ou do bioma.
 | Mecânicas feitas | Maré do recife de 8 min com 6 baixios e baú (25, `CostaTideRules`); fogo baixo na Savana dos Auroques: 4 faixas de capim que se revezam, na cinza o herói anda ×1,2 e os bichos ficam lentos (26, `SavannaFireRules`) |
 | Mecânicas faltantes | Corrida de Shulgi e Lira do Touro (26); câmera em corte, andar no fundo e reacender o coral (28); 27, 29 e 30 sem mecânica própria |
 | Chefe do mundo | Hedammu (30, Nv 72): mordida em cone, vida ×1,2 (`068253c`). Loot próprio (Escama de Hedammu) e troféu de casa |
-| Chefe de mapa | Feitos 4: O Polvo das Monções (25, Nv 50) e O Touro de Fumaça (26, Nv 55), de `27e4b96`; A Moreia do Coral Cinza (28) e O Caranguejo-Palácio (29), de `70a3a73`. Falta 1: O Leão dos Relevos (27) |
+| Chefe de mapa | Feitos 4: O Polvo das Monções (25, Nv 50) e O Touro de Fumaça (26, Nv 55), de `27e4b96`; A Moreia do Coral Cinza (28) e O Caranguejo-Palácio (29), de `70a3a73`. E O Leão dos Relevos (27, `bca7acd`) |
 | Montaria | Dhow-Tartaruga (25, épica, aquática; missão Garras no Mangue de Taa Pwani), `MountMidRegionCatalog`. Faltam Auroque de Aratta e Elefante de Musawwarat |
 | Conjunto | Coral de Kilwa (2 peças: Couraça de Pedra de Coral e Elmo de Madrepérola, Defesa 17/10; Coral que Fecha: ao ser atingido, 15% de curar 30% do golpe). Drop dos 9 bichos próprios da região, 1% por abate (`ArmorSetRules.Coral`, `7d36b1f`) |
 | Móveis | Móveis da Porta Suaíli (8 peças, 22–360 de ouro, no Bazar de Pérolas da Mwana; Épica: Painel da porta entalhada de Taa Pwani, especial da semana; 2026-11-11) |
@@ -182,7 +182,7 @@ de uma ficha feito por um bicho de outra região ou do bioma.
 | Mecânicas feitas | Ilhas de junco que mudam de lugar a cada 15 min (33, `DeltaIslandRules`); as 5 Fontes do Lodo (35, `LodoFountainRules`, `f0991e3`): espiral até o Olho do Lodo, lodo preto que morde e puxa e encolhe a cada fonte purificada (3 s com [E]/Usar), fonte limpa vira zona segura por 2 min, prêmio diário de 1 Pedra da Água Viva; filhotes que brilham a cada 12 s no Charco do Ninki Nanka, quem olha de frente fica ×0,6 por 3 s (34, `NinkiGazeRules`) |
 | Mecânicas faltantes | Monção, escola de barco e Maré de Lodo (31); Lanterna de Fogo-Fátuo e Despertar o vizinho (33); o brilho da própria Ninki Nanka e a seta no HUD (34); 32 sem mecânica própria |
 | Chefe do mundo | Lodo-que-Engole (35, Nv 88): puxão, mais forte à noite, vida ×1,18 (`068253c`). Só surge com as 5 Fontes acesas, e cada fonte apagada na luta o fortalece 10%. Loot próprio (Lama Limpa do Lodo) e troféu |
-| Chefe de mapa | Feitos 3: A Ponte que Esqueceu (32, Nv 70, `27e4b96`), O Pescador de Luzes (33, Nv 78, `07a4770`: a isca onde o herói vai estar) e Ninki Nanka (34, Nv 82: não olhe). Falta o evento Maré de Lodo (31) |
+| Chefe de mapa | Feitos 3: A Ponte que Esqueceu (32, Nv 70, `27e4b96`), O Pescador de Luzes (33, Nv 78, `07a4770`: a isca onde o herói vai estar) e Ninki Nanka (34, Nv 82: não olhe); o evento Maré de Lodo (31) entrou em `bca7acd` |
 | Montaria | Sapo-Gigante de Tarchon (33, incomum, aquático; apito na Cestaria da Larthia), `MountMidRegionCatalog`. Faltam Búfalo-d'Água e Ninki Nanka Mansa |
 | Conjunto | Seda de Lótus (Gibão de Seda de Lótus e Capuz de Raiz Aérea, Defesa 18/10; Seiva do Lótus: ao matar, 20% de devolver 5% da mana). Drop dos 6 bichos próprios, 1% por abate (`ArmorSetRules.Lotus`, 2026-11-11) |
 | Móveis | Móveis da Casa nas Raízes (8 peças, 22–375 de ouro, em Barcos e Trocas do Nuhzadag; Épica: Estátua de búfalo-d'água entalhada em raiz; 2026-11-11) |
@@ -197,7 +197,7 @@ de uma ficha feito por um bicho de outra região ou do bioma.
 | Mecânicas feitas | Avalanches com sino de 20 s nas 4 calhas (37, `TetoAvalancheRules`); descida de carrinho de ~48 s pegando faíscas, com recorde salvo e prêmio do dia (37, `TetoCartRules`); medidor de frio na Geleira, cheio deixa o passo ×0,85, as 5 fogueiras zeram (38, `GlacierColdRules`); 4 cata-ventos no Forte dos Ventos, alinhados fazem vento a favor ou contra (39, `WindVaneRules`) |
 | Mecânicas faltantes | Os 7 terraços (36); ranking online e modelo do carrinho (37); medidor de frio na tela (38); projéteis a favor do vento indo mais longe (39); 40 sem mecânica própria |
 | Chefe do mundo | Aydahar (40, Nv 98): sopro em linha, vida ×1,2 (`068253c`). Loot próprio e troféu |
-| Chefe de mapa | Feitos 3: O Carrinho Desgovernado (37, Nv 80, `27e4b96`), O Grande Almas (38, Nv 86, `27e4b96`) e O Senhor do Cata-Vento (39, Nv 92, `07a4770`: o vento vira). Falta o evento Avalanche (36) |
+| Chefe de mapa | Feitos 3: O Carrinho Desgovernado (37, Nv 80, `27e4b96`), O Grande Almas (38, Nv 86, `27e4b96`) e O Senhor do Cata-Vento (39, Nv 92, `07a4770`: o vento vira); o evento Avalanche (36) entrou em `bca7acd` |
 | Montaria | Iaque do Teto do Mundo (36, incomum, carrega 350; apito nos Agasalhos do Sisinnios), `MountMidRegionCatalog`. Falta o Camelo-Bactriano Branco |
 | Conjunto | Lã de Iaque (Casaco de Lã de Iaque e Gorro de Feltro do Pamir, Defesa 19/10; Fôlego do Pamir: no crítico, 20% de curar 3% da vida). Drop dos 8 bichos próprios, 1% por abate (`ArmorSetRules.Yak`, 2026-11-11) |
 | Móveis | Móveis do Terraço do Pamir (o conjunto da ficha 36: 8 peças, 24–395 de ouro, em Agasalhos do Sisinnios; Épica: Fogão de pedra do terraço; 2026-11-11) |
@@ -227,7 +227,7 @@ de uma ficha feito por um bicho de outra região ou do bioma.
 | Mecânicas feitas | Corrida de estepe (47), Ouros do Céu (48, só a Lavine levanta), subida da Corrente de Amirani (52) |
 | Mecânicas faltantes | A cidade que anda (47); escala gigante e sonhos com baús (49); tempo lento (50); 51 sem mecânica própria |
 | Chefe do mundo | Ohya (52, Nv 150): corrente girando. Loot próprio (Elo de Ferro Antigo de Ohya) e troféu |
-| Chefe de mapa | Feitos 4: O Grifo Velho do Kurgan (48, Nv 114: o tesouro); O Pesadelo da Tábua (49), A Serra de Āz (50) e O Garanhão Cinzento (51), de `70a3a73`. Falta 1: O Cavalo de Fumaça (47) |
+| Chefe de mapa | Feitos 4: O Grifo Velho do Kurgan (48, Nv 114: o tesouro); O Pesadelo da Tábua (49), A Serra de Āz (50) e O Garanhão Cinzento (51), de `70a3a73`. E O Cavalo de Fumaça (47, `bca7acd`) |
 | Montaria | Cavalo Dourado da Estepe (47, raro; missão das águias do Acampamento de Soslan), `MountMidRegionCatalog`. Carneiro Gigante da Colina e Alce da Taiga (fichas 49/50) existem, mas vendidos em Dur-Jarras (R14). Falta o Cavalo de Fumaça |
 | Conjunto | Ouro dos Kurgans (Couraça de Escamas de Ouro e Elmo de Feltro e Ouro, Defesa 21/12; Galope dos Nartes: no crítico, 10% de atingir até 3 inimigos a 4 m com 30% do crítico). Drop dos 7 bichos próprios, 1% por abate (`ArmorSetRules.Kurgan`, 2026-11-11) |
 | Móveis | Móveis da Tenda de Feltro (o conjunto da ficha 47: 8 peças, 24–420 de ouro, na Selaria Nômade do Acampamento de Soslan; Épica: Tenda de feltro dos Nartes; 2026-11-11) |
@@ -287,7 +287,7 @@ de uma ficha feito por um bicho de outra região ou do bioma.
 | Mecânicas feitas | Horas da barca com 12 píeres e hora de 3 min (71); jangadas de junco nos canais (72, `RioRaftRules`, `075b4ef`: 864 m em ~62 s em vez de ~2 km pelas estradas); anel de Mehen que gira (74); fogo que escolhe (75); defender a barca encalhada enquanto os remadores a desencalham (76, `RioBarqueDefenseRules`) |
 | Mecânicas faltantes | Evento A Barca Atrasou e noite permanente (71); puxar o trenó (73) |
 | Chefe do mundo | Apep (76), que recua até a noite seguinte. Loot próprio e troféu (Barca de luz vencendo Apep). Falta a Pedra da Mistura |
-| Chefe de mapa | Feito 1 (74). Faltam 3: O Hipopótamo-de-Junco Gigante (72), A Grande Serpente do Areal (73), O Nó Errado (74, feito: Nv 296, duas alças dos lados atravessadas na linha até o herói; ficar na linha é seguro, desviar não), O Guardião do Lago (75); e o evento A Barca Atrasou (71) |
+| Chefe de mapa | Feitos 2: A Grande Serpente do Areal (73) e O Nó Errado (74). Faltam 2: O Hipopótamo-de-Junco Gigante (72) e O Guardião do Lago (75). O Nó Errado (74, feito: Nv 296, duas alças dos lados atravessadas na linha até o herói; ficar na linha é seguro, desviar não); falta o evento A Barca Atrasou (71) |
 | Montaria | Íbis Real de Mesektet (71, voadora). Falta a Barquinha de Luz (76) |
 | Conjunto | Cais do Papiro (2 peças, por drop) e Escamas de Mehen (o de Mehen da ficha 74: Couraça de Escamas de Mehen e Elmo da Serpente Enrolada, Defesa 31/17; Anel de Mehen: ao ser atingido, 18% de curar 35% do golpe). Drop do Filho de Apep, da Areia Movediça e do Ganso Ladrão, 1 em 50 (`ArmorSetRules.MehenScale`) |
 | Móveis | Móveis do Cais do Papiro e Móveis do Campo de Juncos (o da ficha 72; 8 peças cada, no Khunanup) |
@@ -302,7 +302,7 @@ de uma ficha feito por um bicho de outra região ou do bioma.
 | Mecânicas feitas | Bolhas de tempo (78); acender o piche (79); o ombro que respira (81) |
 | Mecânicas faltantes | Degraus do zigurate e evento da Cheia (77); ataques acelerados nas bolhas (78); os sete mantos (80); Ullikummi crescendo (81); acordar/sonhar (82) |
 | Chefe do mundo | O Sonho da Destruição (82). Faltam Hahya e Ohya juntos e a versão sonho do mapa |
-| Chefe de mapa | Nenhum feito. Faltam 4: O Instante Perdido (78), O Rei do Piche (79), Hobabish (80), Ullikummi (81); e o evento Cheia (77) |
+| Chefe de mapa | Feito 1: O Rei do Piche (79). Faltam 3: O Instante Perdido (78), Hobabish (80), Ullikummi (81); e o evento Cheia (77) |
 | Montaria | Mušḫuššu Manso (77), Alce da Taiga (80), Carneiro Gigante da Colina (82) |
 | Conjunto | Tijolo Azul (2 peças, por drop) e Gigantes (o conjunto antigo da ficha 82: Couraça das Tábuas do Sonho e Elmo de Ohya, Defesa 34/19; Tremor dos Gigantes: ao ser atingido, 15% de atingir até 4 inimigos a 4,5 m com 30% do golpe). Drop do Homem-Escorpião, do Lince do Cedro e da Abelha-Resina, 1 em 50 (`ArmorSetRules.Giants`) |
 | Móveis | Móveis de Tijolo Azul e Móveis do Relógio de Sol (o da ficha 78; 8 peças cada, no Atrahasis) |
@@ -332,7 +332,7 @@ de uma ficha feito por um bicho de outra região ou do bioma.
 | Mecânicas feitas | Correnteza do Rio de Luz entre boias acesas (92, `CeuRiverRules`); Barca da Lua só à noite (93); segurar o céu nas 5 rachaduras (99); sentar ao lado da cadeira do Vô Jorge, uma história por dia (100) |
 | Mecânicas faltantes | Pouca gravidade e Chegada da Caravana (91); andar livre sobre a luz e as sombras mexendo no percurso (92); lua crescendo e lanternas (93); jarras e esferas que giram (94–95); plantar luz (96); carregar lanternas entre as barcas (97); faíscas escoltadas; pilares em grupo (99, online); pose sentada e história do dia no save (100) |
 | Chefe do mundo | Āz, a Capitã Cobiçosa (96). A Arca nunca mata (tira no máximo vida − 1). Loot próprio (Semente de Luz de Āz) e troféu (Estátua de Āz devolvendo a arca). Falta a Arca Resgatada +5. Falta a revanche de Saklas e Namrael na forma do céu (95) |
-| Chefe de mapa | Feito 1 (97). Faltam 5: O Remador Perdido (92), O Clandestino Grande (93), O Arconte da Roda (94), A Sombra da Vela (97, feita: Nv 486, a retranca varre um lado do mastro, estibordo e bombordo alternando; colado no mastro, além da ponta ou do outro lado é seguro), O Último Arconte do Degrau (98), A Rachadura Grande (99); e o evento Chegada da Caravana (91) |
+| Chefe de mapa | Feitos 2: O Clandestino Grande (93) e A Sombra da Vela (97). Faltam 4: O Remador Perdido (92), O Arconte da Roda (94), O Último Arconte do Degrau (98), A Rachadura Grande (99). A Sombra da Vela (97, feita: Nv 486, a retranca varre um lado do mastro, estibordo e bombordo alternando; colado no mastro, além da ponta ou do outro lado é seguro); falta o evento Chegada da Caravana (91) |
 | Montaria | Nenhuma (o Cavalo-Estrela da ficha é de temporada e online) |
 | Conjunto | Cais de Luz (2 peças, por drop) e Coluna da Glória (a da ficha 98: Manto da Coluna da Glória e Coroa do Homem Perfeito, Defesa 42/24; Subida da Coluna: no crítico, 20% de curar 5% da vida). Drop da Gota de Treva, da Faísca Confusa e da Corda de Fumaça, 1 em 50 (`ArmorSetRules.GloryColumn`) |
 | Móveis | Móveis do Cais de Luz e Móveis da Barca da Lua (o da ficha 93; 8 peças cada, no Ammo) |
@@ -403,13 +403,12 @@ Revisto em 2026-11-12 (código até `7381c7f`). Saíram da lista, porque ficaram
    - Ela passou inteira em `8422885` (22/22). Depois disso entraram 16 mecânicas, 6 chefes de mapa, 12 bichos e os
      conjuntos das Regiões 1–4, e só a fumaça das regiões (`RegionMechanicsSmokeTests`, 3/3 em `7381c7f`) rodou na PlayMode.
      A suíte inteira fica protegida do falso vermelho pelo `PlayModeReloadLock`.
-4. **Chefes de mapa das fichas: faltam 23.**
-   - Por quê: cada ficha promete um chefe que "se liberta", e hoje há 49 (a lista abaixo é a dos primeiros 29: Kök-Böri, Grande Ushabti, Hahya, Tages, o
+4. **Chefes de mapa das fichas: faltam 14.**
+   - Por quê: cada ficha promete um chefe que "se liberta", e hoje há 54 (a lista abaixo é a dos primeiros 29: Kök-Böri, Grande Ushabti, Hahya, Tages, o
      Colosso e os 24 de `RegionBossRules.MapSpawns`: 6 de `5b6dcb7` nas Regiões 10–12, 6 da história do meio de `27e4b96`,
      6 de `f5073f8` em 04, 09, 15, 34, 45 e 48 e 6 de `07a4770` em 05, 10, 22, 33, 39 e 42). É só reusar o sistema.
-   - Em `bca7acd` e `70a3a73` entraram 25 (agora 49). Nas Regiões 1–9 faltam 6: Mãe-Lodo (03), Chefe Coroado (11),
-     Fole Apagado (17), Vishap Adormecido (21), Leão dos Relevos (27) e Cavalo de Fumaça (47).
-     Nas Regiões 13–16 faltam 17: 72, 73, 75, 78–81, as covas do Profundo (84, 85, 87–89) e o Céu (92–94, 98, 99).
+   - Em `bca7acd` e `70a3a73` entraram 25; as Regiões 1–12 estão completas. Faltam 14, nas Regiões 13–16: 72, 75,
+     78, 80, 81, as covas do Profundo (84, 85, 87–89) e o Céu (92, 94, 98, 99).
 5. **Mecânicas que ainda mudam o percurso.**
    - Na estrada das Regiões 1–8: escolta da caravana (07), andar no fundo do recife (28), escola de barco e monção (31), os
      7 terraços (36), 9 anéis e portões por hora (41), as 4 eclusas (43).
@@ -454,8 +453,8 @@ Revisto em 2026-11-12 (código até `7381c7f`). Saíram da lista, porque ficaram
       - música e efeitos reais (`Docs/Audio.md`);
       - rig da Maithe (Meshy ou Mixamo).
 
-Fora da lista, ainda faltando: os eventos de cidade das fichas (Maré de Lodo, Avalanche, Festa das Lanternas, Vendaval,
-Noite Polar, Tremor, A Barca Atrasou, Cheia, Maré de Treva, Chegada da Caravana), a entrada direta no Ossuário e as
+Fora da lista, ainda faltando: os eventos de cidade A Barca Atrasou (71), Cheia (77) e Chegada da Caravana (91) (Maré de Lodo,
+Avalanche e Festa das Lanternas entraram em `bca7acd`; Vendaval, Noite Polar e Grande Tremor em `70a3a73`), a entrada direta no Ossuário e as
 montarias de chefe.
 
 ### Só o dono decide (resumo)
