@@ -350,6 +350,11 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             var spots = new List<Spot>();
             foreach (MapSpawnZone zone in layout.World.Zones)
             {
+                if (zone.AlongTrail)
+                {
+                    continue; // The road keeps its own slope under the beasts on it.
+                }
+
                 spots.Add(new Spot { C = zone.Center, Inner = zone.Radius * 0.95f + 1f, Ramp = 12f, Radius = zone.Radius, IsClearing = true });
             }
 

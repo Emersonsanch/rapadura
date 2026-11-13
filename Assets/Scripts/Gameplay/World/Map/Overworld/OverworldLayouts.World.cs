@@ -261,6 +261,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             }
 
             OpenPasses(w, removed, regionPaths);
+            AddTrailSpawns(w);
             _ = w.Holes; // The corner no region covers (walled, backdrop), found once now that every part is in.
             if (desert.Count > 0)
             {

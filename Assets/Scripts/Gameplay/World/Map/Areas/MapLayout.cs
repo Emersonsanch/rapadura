@@ -62,6 +62,9 @@ namespace Rapadura.Gameplay.World.Map.Areas
         public string PassiveSpeciesId;
         public int PassiveBelowHeroLevel;
 
+        /// <summary>A group standing on a road or trail of the stitched world (OverworldLayouts.AddTrailSpawns), not a clearing: no plateau under it.</summary>
+        public bool AlongTrail;
+
         /// <summary>The table for <paramref name="phase"/>: dawn/dusk fall back to the day table when not given.</summary>
         public IReadOnlyList<PeriodSpawnEntry> EntriesFor(TimeOfDayPhase phase)
         {
