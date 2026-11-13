@@ -410,20 +410,24 @@ Revisto em 2026-11-12 (código até `7381c7f`). Saíram da lista, porque ficaram
    - Em `bca7acd` e `70a3a73` entraram 25 e por último os 14 das Regiões 13–16: 72, 75, 78, 80, 81 (`RiverMapBossTests`), as
      covas do Profundo 84, 85, 87–89 (`DeepMapBossTests`) e o Céu 92, 94, 98, 99 (`SkyMapBossTests`).
 5. **Mecânicas que ainda mudam o percurso.**
-   - Na estrada das Regiões 1–8: escolta da caravana (07), andar no fundo do recife (28), escola de barco e monção (31), os
-     7 terraços (36), 9 anéis e portões por hora (41), as 4 eclusas (43).
-   - Mais tarde: túneis que mudam (62), placas que se movem (63), degraus do zigurate (77), dano no escuro (88), trenó (73),
-     pouca gravidade (91) e lanternas entre as barcas (97).
-   - Mapas sem mecânica própria nenhuma: 27, 29, 30, 32, 40 e 51.
-6. **Trocar os bichos emprestados que sobram (cerca de 125 papéis).**
-   - Por quê: a sensação de "região nova" depende deles. As 3 levas tiraram 36; os maiores buracos agora são as Regiões
-     9 (~15), 16 (~14), 5, 6 e 7 (~11 cada). Seguir pela estrada da história: 9, depois 5–7.
+   - Feitas em `80d79f5`: escolta da caravana (07), monção e escola de barco (31), elevadores e calhas dos 7 terraços (36),
+     barcas do tambor (41) e as 4 eclusas (43); em `dd6161a`, degraus do zigurate (77) e pouca gravidade (91). Os mapas 27–51
+     já tinham mecânica própria desde `bca7acd` (as tabelas por região abaixo ainda dizem o contrário em 27, 29, 30, 32, 40).
+   - Faltam: andar no fundo do recife (28), portões dos anéis (41, a cidade só tem a muralha do 7º anel), túneis que mudam
+     (62), placas que se movem (63), trenó (73), dano no escuro (88) e lanternas entre as barcas (97).
+6. **Trocar os bichos emprestados que sobram.**
+   - Em `dd6161a` e `80d79f5` saíram mais 46 papéis: Estepe dos Nartes (12), Céu (10), Costa e Delta (12), Teto e Mingcheng
+     (12). Sobram sobretudo os das Regiões 1–4, 8 e 10–15; os lobos do Teto, o Tubarão-de-Lodo, a Raia de Fumaça, a Garça
+     Apagada, o Gavial-Sombra e o Crocodilo de Musgo do Delta e da Costa ainda usam substituto.
+   - Desde `380606e` os bichos aparecem também nas estradas e trilhas (um grupo pequeno a cada 70 m, copiado da clareira
+     mais próxima da mesma área; 2972 grupos em 260 km), não só nas clareiras: só a cidade fica vazia.
 7. **Montarias das Regiões 1–9 e conjuntos que faltam.**
    - Por quê: as Regiões 1–9 já têm 1 conjunto de equipamento e 1 de móveis cada (1–4 em `07a4770`: Jardim de Mihrshah,
      Couro Rubro, Pedra Seca e Pavio do Limiar; Móveis do Tear de Seda, da Cisterna de Qocho, do Rondavel e da Casa na Rocha.
      5–9 em `7d36b1f`), e as 5–9 têm 1 montaria própria cada (Dhow-Tartaruga, Sapo-Gigante, Iaque, Cervo de Luz Branca e
-     Cavalo Dourado). As 1–4 só têm o Grifo da Coluna. Faltam 11 montarias das Regiões 1–9 propostas no `Mapas100.md` §6
-     (Garça do Brejo, Lobo de Guerra Ocre, Eland, Auroque de Aratta, Búfalo-d'Água, Camelo-Bactriano…), os conjuntos de
+     Cavalo Dourado). As 1–4 só têm o Grifo da Coluna. Em `80d79f5` entraram Garça do Brejo (1), Lobo de Guerra Ocre (2),
+     Eland do Capim Alto (3), Proteu-Lanterna do Limiar (4), Auroque de Aratta (5) e Camelo-Bactriano Branco (7); faltam
+     as outras do §6 (Búfalo-d'Água…), os conjuntos de
      equipamento das Regiões 10–12, os de móveis da 10 e da 12 e os outros conjuntos de casa das fichas 5–9 (Jardim de
      Coral, Palafita, Arrozal, Torre Branca, Ouro da Estepe…).
 8. **Medir o mundo de 7200 × 15600 m num celular Android, com toque de verdade.**
