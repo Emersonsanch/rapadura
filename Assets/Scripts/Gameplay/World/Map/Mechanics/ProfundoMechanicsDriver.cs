@@ -335,6 +335,8 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
 
         private void EndTide(int rings)
         {
+            // The pay of the Maré de Treva (the first tide held each real hour) is the FinalCityEventsMechanicsDriver's.
+            EventBus.Publish(new ProfundoTideEndedEvent(ProfundoLampRules.Held(rings) ? rings : 0));
             if (!ProfundoLampRules.Held(rings))
             {
                 Say(ProfundoMechanicsTexts.TideFell);

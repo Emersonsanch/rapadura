@@ -84,6 +84,12 @@ namespace Rapadura.Gameplay.Player
 
         public bool IsGrounded { get; private set; }
 
+        /// <summary>
+        /// Multiplier on gravity while falling or rising (1 = normal). The take-off speed of <see cref="Jump"/> is not scaled, so under 2/3 the hero
+        /// jumps 1.5× as high and falls slower: the low gravity of the Cais da Coluna (<c>CeuLowGravityRules</c>), set and reset by its driver.
+        /// </summary>
+        public float GravityScale { get; set; } = 1f;
+
         private Vector3 _groundNormal = Vector3.up;
         private Vector3 _lastContactNormal = Vector3.up;
         private bool _hasContactNormal;
@@ -478,7 +484,7 @@ namespace Rapadura.Gameplay.Player
             }
             else
             {
-                _verticalVelocity += _gravity * Time.deltaTime;
+                _verticalVelocity += _gravity * GravityScale * Time.deltaTime;
             }
         }
 

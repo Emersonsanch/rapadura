@@ -289,9 +289,45 @@ MonoBehaviour:
     _weight: 0
   - _enemy: {fileID: 11400000, guid: fde44025e40a4b61909e226598327606, type: 2}
     _weight: 0
+  - _enemy: {fileID: 11400000, guid: dc92260b56704fa2a7b58db35e5e5354, type: 2}
+    _weight: 0
+  - _enemy: {fileID: 11400000, guid: 5836fae44d0c4bd3ab23fc5fc9f45ba6, type: 2}
+    _weight: 0
+  - _enemy: {fileID: 11400000, guid: ee5c5da64ed14cde9ab4cc709908942a, type: 2}
+    _weight: 0
+  - _enemy: {fileID: 11400000, guid: 94663517438c4d11a8952dea73103935, type: 2}
+    _weight: 0
+  - _enemy: {fileID: 11400000, guid: 30465f75ff8b42d7b84f1d33a606aa59, type: 2}
+    _weight: 0
   - _enemy: {fileID: 11400000, guid: e1b7b60cc9d5400a894bad6ffbfdde73, type: 2}
     _weight: 0
+  - _enemy: {fileID: 11400000, guid: d774d32e54a74fdaaaba0c257e0a9df2, type: 2}
+    _weight: 0
+  - _enemy: {fileID: 11400000, guid: f01183945cb544338c3dde83a14cef20, type: 2}
+    _weight: 0
+  - _enemy: {fileID: 11400000, guid: 52a38e657b8f4312a6a25e14c31549c6, type: 2}
+    _weight: 0
+  - _enemy: {fileID: 11400000, guid: 3882887b862142d4b8abd97985e23d96, type: 2}
+    _weight: 0
+  - _enemy: {fileID: 11400000, guid: f87e156c25a447c49bf671235ed61154, type: 2}
+    _weight: 0
   - _enemy: {fileID: 11400000, guid: 38063032c57e48c68f7f307b8bb2f35b, type: 2}
+    _weight: 0
+  - _enemy: {fileID: 11400000, guid: 4a42b56ea4184cdb9db362aa5ac11876, type: 2}
+    _weight: 0
+  - _enemy: {fileID: 11400000, guid: cf9b943c54934b219550b099ef6d3c85, type: 2}
+    _weight: 0
+  - _enemy: {fileID: 11400000, guid: 754a8f4a0c0d4dbca75a246880bf279d, type: 2}
+    _weight: 0
+  - _enemy: {fileID: 11400000, guid: 04547e18e8e747ba85f1c54bb2113fc5, type: 2}
+    _weight: 0
+  - _enemy: {fileID: 11400000, guid: 75516f439cf040af95d0cdab391dbe11, type: 2}
+    _weight: 0
+  - _enemy: {fileID: 11400000, guid: c794aa93dc5e4a01a260d3146d3f1ec9, type: 2}
+    _weight: 0
+  - _enemy: {fileID: 11400000, guid: 53040419a87f44c78f5d4000b9d7e9b5, type: 2}
+    _weight: 0
+  - _enemy: {fileID: 11400000, guid: 781c4a5e2d164cd4b127670fbe674c40, type: 2}
     _weight: 0
   _loot:
   - _item: {fileID: 11400000, guid: cd94a946f8299c04893b92f91853aede, type: 2}

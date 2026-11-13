@@ -151,6 +151,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             root.AddComponent<Mechanics.ZarafshanMireMechanicsDriver>(); root.AddComponent<Mechanics.LimiarLakeMechanicsDriver>();
             root.AddComponent<Mechanics.CityEventsMechanicsDriver>();
             root.AddComponent<Mechanics.LateCityEventsMechanicsDriver>();
+            root.AddComponent<Mechanics.FinalCityEventsMechanicsDriver>();
 
             // Switches off, ten times a second, the drivers whose region is far from the hero (added after them: it reads them all).
             root.AddComponent<Mechanics.MechanicsDriverHub>();

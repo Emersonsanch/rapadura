@@ -121,6 +121,10 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                 case ProceduralEnemyKind.StoneHare:
                 case ProceduralEnemyKind.BurrowMammoth:
                 case ProceduralEnemyKind.AshBull:
+                case ProceduralEnemyKind.GoldenStag:
+                case ProceduralEnemyKind.GiantIbex:
+                case ProceduralEnemyKind.HillBoar:
+                case ProceduralEnemyKind.DimmedStallion:
                     return ChargerParts;
                 default: return null;
             }
@@ -467,6 +471,7 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                 case ProceduralEnemyKind.WrongCurrent:
                 case ProceduralEnemyKind.SkyCrack:
                 case ProceduralEnemyKind.LivingCrevasse:
+                case ProceduralEnemyKind.DimmedFungus:
                 case ProceduralEnemyKind.DriftingFloe:
                 case ProceduralEnemyKind.LittleKul:
                 case ProceduralEnemyKind.HungryFlame:
@@ -493,6 +498,7 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                 case ProceduralEnemyKind.GrassLion:
                 case ProceduralEnemyKind.Irbis:
                 case ProceduralEnemyKind.BrownBear:
+                case ProceduralEnemyKind.CaucasusBear:
                 {
                     // The big cats and the bear: jaws open to roar/bite on the windup (the lion pants a little in the heat).
                     float r = StepAttack(deltaTime, 5f, 3f);
@@ -513,6 +519,10 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                 case ProceduralEnemyKind.StoneHare:
                 case ProceduralEnemyKind.BurrowMammoth:
                 case ProceduralEnemyKind.AshBull:
+                case ProceduralEnemyKind.GoldenStag:
+                case ProceduralEnemyKind.GiantIbex:
+                case ProceduralEnemyKind.HillBoar:
+                case ProceduralEnemyKind.DimmedStallion:
                 {
                     // Chargers: the head swings while grazing and drops, horns first, on the windup.
                     float r = StepAttack(deltaTime, 4f, 2.5f);
@@ -651,6 +661,10 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                 case ProceduralEnemyKind.ShoulderBird:
                 case ProceduralEnemyKind.DreamBird:
                 case ProceduralEnemyKind.DarkBat:
+                case ProceduralEnemyKind.DimmedGoldenEagle:
+                case ProceduralEnemyKind.SmokeMessenger:
+                case ProceduralEnemyKind.SmokeWoodpecker:
+                case ProceduralEnemyKind.IronEagle:
                 {
                     // The birds of the peaks: the eagle soars on long glides, the chough and the flute bird beat quicker; the wings
                     // hold still and the beak opens on the windup (the flute bird's note, the chough's and the harpy's screech).
@@ -714,6 +728,8 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                 case ProceduralEnemyKind.SwimmingShadow:
                 case ProceduralEnemyKind.StowawayShadow:
                 case ProceduralEnemyKind.LittleShadow:
+                case ProceduralEnemyKind.TaigaLynx:
+                case ProceduralEnemyKind.SnowWolf:
                 {
                     // Hinokura's biters: the jaw gapes on the windup and the tail sways; the blade fish's fins row in the steam, the
                     // ember coral's fronds stir slowly as it drifts.
@@ -952,7 +968,21 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                 case ProceduralEnemyKind.Guayota:
                 case ProceduralEnemyKind.WrongKnot:
                 case ProceduralEnemyKind.DarkWingedEagle:
+                case ProceduralEnemyKind.SmokeKing:
+                case ProceduralEnemyKind.DevouringLioness:
+                case ProceduralEnemyKind.BlackTailFish:
+                case ProceduralEnemyKind.DeepDragon:
+                case ProceduralEnemyKind.NoveloGuardian:
                 case ProceduralEnemyKind.SailShadow:
+                case ProceduralEnemyKind.LostRower:
+                case ProceduralEnemyKind.WheelArchon:
+                case ProceduralEnemyKind.LastStepArchon:
+                case ProceduralEnemyKind.GreatCrack:
+                case ProceduralEnemyKind.ReedHippo:
+                case ProceduralEnemyKind.LakeGuardian:
+                case ProceduralEnemyKind.LostInstant:
+                case ProceduralEnemyKind.Hobabish:
+                case ProceduralEnemyKind.Ullikummi:
                 case ProceduralEnemyKind.MireMother:
                 case ProceduralEnemyKind.CrownedChief:
                 case ProceduralEnemyKind.DarkBellows:

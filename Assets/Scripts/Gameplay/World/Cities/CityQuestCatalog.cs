@@ -333,30 +333,30 @@ namespace Rapadura.Gameplay.World.Cities
                 new[] { new RegionRewardSpec("item_lamparina_runica", 1), new RegionRewardSpec("item_pedra_alma", 2), new RegionRewardSpec("item_gold", 170) })),
 
             // -- Acampamento de Soslan: Soslan, then Satana. The wolf stands in for the Lobo da Estepe Apagado of the ficha
-            // (Docs/Mapas100.md 47) and the crested hawk for the Águia-Dourada Apagada. --
+            // (Docs/Mapas100.md 47); the Águia-Dourada Apagada is its own beast now (LentRoleBeastRecipes). --
             new CityQuestSpec(CityCatalog.AcampamentoSoslan, "soslan", new RegionQuestSpec(SoslanWolves, BiomeType.Forest, null, 2000,
                 new[] { new RegionObjectiveSpec("chase_the_wolves", QuestObjectiveType.KillEnemyType, "enemy_forest_wolf", 8) },
                 new[] { new RegionRewardSpec("item_health_potion", 5), new RegionRewardSpec("item_mana_potion", 5), new RegionRewardSpec("item_gold", 170) })),
             new CityQuestSpec(CityCatalog.AcampamentoSoslan, "satana", new RegionQuestSpec(SoslanEagles, BiomeType.Forest, SoslanWolves, 2100,
-                new[] { new RegionObjectiveSpec("chase_the_eagles", QuestObjectiveType.KillEnemyType, "enemy_mountain_crested_hawk", 6) },
+                new[] { new RegionObjectiveSpec("chase_the_eagles", QuestObjectiveType.KillEnemyType, "enemy_mountain_dimmed_golden_eagle", 6) },
                 new[] { new RegionRewardSpec("item_lamparina_runica", 1), new RegionRewardSpec("item_gold", 170) })),
 
-            // -- Fortim dos Gigantes: Baraqel, then Virogdad. The peccary stands in for the Javali da Colina of the ficha
-            // (Docs/Mapas100.md 49) and the dark crow for the Corvo-Mensageiro de Fumaça. --
+            // -- Fortim dos Gigantes: Baraqel, then Virogdad. The Javali da Colina and the Corvo-Mensageiro de Fumaça of the ficha
+            // (Docs/Mapas100.md 49) are their own beasts now (LentRoleBeastRecipes). --
             new CityQuestSpec(CityCatalog.Fortim, "baraqel", new RegionQuestSpec(FortimBoars, BiomeType.Forest, null, 2200,
-                new[] { new RegionObjectiveSpec("chase_the_boars", QuestObjectiveType.KillEnemyType, "enemy_forest_peccary", 7) },
+                new[] { new RegionObjectiveSpec("chase_the_boars", QuestObjectiveType.KillEnemyType, "enemy_forest_hill_boar", 7) },
                 new[] { new RegionRewardSpec("item_health_potion", 5), new RegionRewardSpec("item_mana_potion", 5), new RegionRewardSpec("item_gold", 180) })),
             new CityQuestSpec(CityCatalog.Fortim, "virogdad", new RegionQuestSpec(FortimCrows, BiomeType.Forest, FortimBoars, 2300,
-                new[] { new RegionObjectiveSpec("chase_the_crows", QuestObjectiveType.KillEnemyType, "enemy_cave_dark_crow", 6) },
+                new[] { new RegionObjectiveSpec("chase_the_crows", QuestObjectiveType.KillEnemyType, "enemy_cave_smoke_messenger", 6) },
                 new[] { new RegionRewardSpec("item_grampos_escalada", 1), new RegionRewardSpec("item_gold", 180) })),
 
             // -- Arvoredo de Haripushpa: Haripushpa, then Aryaman Puhr. The spider stands in for the Besouro-Casca of the ficha
-            // (Docs/Mapas100.md 50) and the potoo for the Pica-Pau de Fumaça. --
+            // (Docs/Mapas100.md 50); the Pica-Pau de Fumaça is its own beast now (LentRoleBeastRecipes). --
             new CityQuestSpec(CityCatalog.Arvoredo, "haripushpa", new RegionQuestSpec(ArvoredoBarkEaters, BiomeType.Forest, null, 2400,
                 new[] { new RegionObjectiveSpec("clear_the_bark", QuestObjectiveType.KillEnemyType, "enemy_forest_spider", 7) },
                 new[] { new RegionRewardSpec("item_health_potion", 5), new RegionRewardSpec("item_mana_potion", 5), new RegionRewardSpec("item_gold", 190) })),
             new CityQuestSpec(CityCatalog.Arvoredo, "aryaman", new RegionQuestSpec(ArvoredoSmokeBirds, BiomeType.Forest, ArvoredoBarkEaters, 2500,
-                new[] { new RegionObjectiveSpec("chase_the_smoke_birds", QuestObjectiveType.KillEnemyType, "enemy_mountain_potoo", 6) },
+                new[] { new RegionObjectiveSpec("chase_the_smoke_birds", QuestObjectiveType.KillEnemyType, "enemy_mountain_smoke_woodpecker", 6) },
                 new[] { new RegionRewardSpec("item_runa_cura", 3), new RegionRewardSpec("item_gold", 190) })),
 
             // -- Vale dos Sátiros: Midas, then Gordias. The firefly swarm stands in for the Abelha Dourada of the ficha

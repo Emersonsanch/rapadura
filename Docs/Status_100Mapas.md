@@ -49,7 +49,7 @@
     um comum do nível (`28b8f39`). O Lodo-que-Engole só surge com as 5 Fontes acesas (`f0991e3`).
     - Regiões 5–9: Hedammu (30), Lodo-que-Engole (35), Aydahar (40), Quatro Gulosos (46) e Ohya (52).
     - Regiões 10–16: Rei-Vendaval, Velho Kul, Glutão de Brasa, Apep, Sonho da Destruição, A Grande Treva (solo) e Āz.
-- **Chefes de mapa:** 54 feitos, de 68 pedidos pelas fichas (5 antigos e 49 em `RegionBossRules.MapSpawns`; 13 entraram em `70a3a73`). Faltam 14, todos nas Regiões 13–16.
+- **Chefes de mapa:** os 68 das fichas feitos (5 antigos e 63 em `RegionBossRules.MapSpawns`; os últimos 14, das Regiões 13–16, entraram em 2026-11-13).
   - 5 antigos: Kök-Böri (02), O Grande Ushabti (08), Hahya (14) e Tages (20), lutados pelo mapa-múndi, e o Colosso de
     Crânios no Ossuário (24b).
   - 6 novos no mundo contínuo (`5b6dcb7`, `RegionBossRules.MapSpawns`, Nv 160–264), com golpe próprio, arena na trilha,
@@ -287,7 +287,7 @@ de uma ficha feito por um bicho de outra região ou do bioma.
 | Mecânicas feitas | Horas da barca com 12 píeres e hora de 3 min (71); jangadas de junco nos canais (72, `RioRaftRules`, `075b4ef`: 864 m em ~62 s em vez de ~2 km pelas estradas); anel de Mehen que gira (74); fogo que escolhe (75); defender a barca encalhada enquanto os remadores a desencalham (76, `RioBarqueDefenseRules`) |
 | Mecânicas faltantes | Evento A Barca Atrasou e noite permanente (71); puxar o trenó (73) |
 | Chefe do mundo | Apep (76), que recua até a noite seguinte. Loot próprio e troféu (Barca de luz vencendo Apep). Falta a Pedra da Mistura |
-| Chefe de mapa | Feitos 2: A Grande Serpente do Areal (73) e O Nó Errado (74). Faltam 2: O Hipopótamo-de-Junco Gigante (72) e O Guardião do Lago (75). O Nó Errado (74, feito: Nv 296, duas alças dos lados atravessadas na linha até o herói; ficar na linha é seguro, desviar não); falta o evento A Barca Atrasou (71) |
+| Chefe de mapa | Feitos 4: O Hipopótamo-de-Junco Gigante (72, Nv 276: a onda para na distância do herói), A Grande Serpente do Areal (73), O Nó Errado (74) e O Guardião do Lago (75, Nv 306: a sombra do lado oposto ao braço aceso). O Nó Errado (74, feito: Nv 296, duas alças dos lados atravessadas na linha até o herói; ficar na linha é seguro, desviar não); o evento A Barca Atrasou (71, toda hora às :30, com noite permanente na região) também está feito |
 | Montaria | Íbis Real de Mesektet (71, voadora). Falta a Barquinha de Luz (76) |
 | Conjunto | Cais do Papiro (2 peças, por drop) e Escamas de Mehen (o de Mehen da ficha 74: Couraça de Escamas de Mehen e Elmo da Serpente Enrolada, Defesa 31/17; Anel de Mehen: ao ser atingido, 18% de curar 35% do golpe). Drop do Filho de Apep, da Areia Movediça e do Ganso Ladrão, 1 em 50 (`ArmorSetRules.MehenScale`) |
 | Móveis | Móveis do Cais do Papiro e Móveis do Campo de Juncos (o da ficha 72; 8 peças cada, no Khunanup) |
@@ -302,7 +302,7 @@ de uma ficha feito por um bicho de outra região ou do bioma.
 | Mecânicas feitas | Bolhas de tempo (78); acender o piche (79); o ombro que respira (81) |
 | Mecânicas faltantes | Degraus do zigurate e evento da Cheia (77); ataques acelerados nas bolhas (78); os sete mantos (80); Ullikummi crescendo (81); acordar/sonhar (82) |
 | Chefe do mundo | O Sonho da Destruição (82). Faltam Hahya e Ohya juntos e a versão sonho do mapa |
-| Chefe de mapa | Feito 1: O Rei do Piche (79). Faltam 3: O Instante Perdido (78), Hobabish (80), Ullikummi (81); e o evento Cheia (77) |
+| Chefe de mapa | Feitos 4: O Instante Perdido (78, Nv 316: só o lugar do aviso anterior é seguro), O Rei do Piche (79), Hobabish (80, Nv 336: até 7 mantos no chão) e Ullikummi (81, Nv 346: cada batida alcança mais longe). O evento Cheia (77, toda hora às :13, com os degraus do zigurate) está feito |
 | Montaria | Mušḫuššu Manso (77), Alce da Taiga (80), Carneiro Gigante da Colina (82) |
 | Conjunto | Tijolo Azul (2 peças, por drop) e Gigantes (o conjunto antigo da ficha 82: Couraça das Tábuas do Sonho e Elmo de Ohya, Defesa 34/19; Tremor dos Gigantes: ao ser atingido, 15% de atingir até 4 inimigos a 4,5 m com 30% do golpe). Drop do Homem-Escorpião, do Lince do Cedro e da Abelha-Resina, 1 em 50 (`ArmorSetRules.Giants`) |
 | Móveis | Móveis de Tijolo Azul e Móveis do Relógio de Sol (o da ficha 78; 8 peças cada, no Atrahasis) |
@@ -317,7 +317,7 @@ de uma ficha feito por um bicho de outra região ou do bioma.
 | Mecânicas feitas | Rede de 12 lâmpadas com a Maré de Treva (83); vento limpa a fumaça (84); chão que acende (85); limite comum de dano que nunca mata (`ProfundoHazardRules`); os 5 portões das covas na muralha da Fortaleza, que abrem ao chegar à lâmpada de cada cova (83, `ProfundoGateRules`, `ProfundoGateMechanicsDriver`). Desde `075b4ef` (`ProfundoPathsMechanicsDriver`): correntes de ar do poço (86, sobem 340–410 m em 13–16 s), comportas da coluna (87, atravessar a água funda perdendo vida ou baixar a água o dia todo pela alavanca) e a ponte do Novelo (89, 9 gaiolas acendem os lances para sempre) |
 | Mecânicas faltantes | Dano no escuro (88); a raide de 5 grupos (90, precisa de servidor) |
 | Chefe do mundo | A Grande Treva, versão solo (90). Falta a raide (precisa de servidor) |
-| Chefe de mapa | Feito 1 (86). Faltam 5, os chefes das covas e da ponte: O Rei da Fumaça (84), A Leoa do Fogo Devorador (85), A Águia de Asas de Treva (86, feita: Nv 388, a sombra das asas cai em duas faixas largas no ponto do herói e uma batida adiante; entrar debaixo dela é seguro), O Peixe de Cauda Negra (87), O Dragão do Fundo (88), O Guardião do Novelo (89); e o evento Maré de Treva (83) |
+| Chefe de mapa | Feitos os 6 das covas e da ponte: O Rei da Fumaça (84, Nv 362), A Leoa do Fogo Devorador (85, Nv 374), A Águia de Asas de Treva (86, feita: Nv 388, a sombra das asas cai em duas faixas largas no ponto do herói e uma batida adiante; entrar debaixo dela é seguro), O Peixe de Cauda Negra (87, Nv 402), O Dragão do Fundo (88, Nv 416: só uma lâmpada fica acesa) e O Guardião do Novelo (89, Nv 428: abrigo atrás dele). A Maré de Treva (83) agora paga ouro por anel de pé |
 | Montaria | Nenhuma. A Raposa-Joia e o Cavalo-Estrela (precisa de servidor) faltam |
 | Conjunto | Selo dos Artífices (2 peças, por drop até existir a raide) e Cinco Luzes (a armadura do Homem Primordial: Couraça das Cinco Luzes e Elmo do Homem Primordial, Defesa 38/21; Luz que Volta: ao matar, 20% de curar 4% da vida e devolver 4% da mana). Drop do Touro de Cinza, do Morcego-Lâmina e da Enguia Grande, 1 em 50 (`ArmorSetRules.FiveLights`) |
 | Móveis | Móveis das Mil Lâmpadas e Móveis do Novelo (o da ficha 89; 8 peças cada, na Tehat) |
@@ -332,7 +332,7 @@ de uma ficha feito por um bicho de outra região ou do bioma.
 | Mecânicas feitas | Correnteza do Rio de Luz entre boias acesas (92, `CeuRiverRules`); Barca da Lua só à noite (93); segurar o céu nas 5 rachaduras (99); sentar ao lado da cadeira do Vô Jorge, uma história por dia (100) |
 | Mecânicas faltantes | Pouca gravidade e Chegada da Caravana (91); andar livre sobre a luz e as sombras mexendo no percurso (92); lua crescendo e lanternas (93); jarras e esferas que giram (94–95); plantar luz (96); carregar lanternas entre as barcas (97); faíscas escoltadas; pilares em grupo (99, online); pose sentada e história do dia no save (100) |
 | Chefe do mundo | Āz, a Capitã Cobiçosa (96). A Arca nunca mata (tira no máximo vida − 1). Loot próprio (Semente de Luz de Āz) e troféu (Estátua de Āz devolvendo a arca). Falta a Arca Resgatada +5. Falta a revanche de Saklas e Namrael na forma do céu (95) |
-| Chefe de mapa | Feitos 2: O Clandestino Grande (93) e A Sombra da Vela (97). Faltam 4: O Remador Perdido (92), O Arconte da Roda (94), O Último Arconte do Degrau (98), A Rachadura Grande (99). A Sombra da Vela (97, feita: Nv 486, a retranca varre um lado do mastro, estibordo e bombordo alternando; colado no mastro, além da ponta ou do outro lado é seguro); falta o evento Chegada da Caravana (91) |
+| Chefe de mapa | Feitos 6: O Remador Perdido (92, Nv 440), O Clandestino Grande (93), O Arconte da Roda (94, Nv 460), A Sombra da Vela (97), O Último Arconte do Degrau (98, Nv 492) e A Rachadura Grande (99, Nv 498). A Sombra da Vela (97, feita: Nv 486, a retranca varre um lado do mastro, estibordo e bombordo alternando; colado no mastro, além da ponta ou do outro lado é seguro); o evento Chegada da Caravana (91, :57 a :02, com pouca gravidade no mapa) está feito |
 | Montaria | Nenhuma (o Cavalo-Estrela da ficha é de temporada e online) |
 | Conjunto | Cais de Luz (2 peças, por drop) e Coluna da Glória (a da ficha 98: Manto da Coluna da Glória e Coroa do Homem Perfeito, Defesa 42/24; Subida da Coluna: no crítico, 20% de curar 5% da vida). Drop da Gota de Treva, da Faísca Confusa e da Corda de Fumaça, 1 em 50 (`ArmorSetRules.GloryColumn`) |
 | Móveis | Móveis do Cais de Luz e Móveis da Barca da Lua (o da ficha 93; 8 peças cada, no Ammo) |
@@ -403,12 +403,12 @@ Revisto em 2026-11-12 (código até `7381c7f`). Saíram da lista, porque ficaram
    - Ela passou inteira em `8422885` (22/22). Depois disso entraram 16 mecânicas, 6 chefes de mapa, 12 bichos e os
      conjuntos das Regiões 1–4, e só a fumaça das regiões (`RegionMechanicsSmokeTests`, 3/3 em `7381c7f`) rodou na PlayMode.
      A suíte inteira fica protegida do falso vermelho pelo `PlayModeReloadLock`.
-4. **Chefes de mapa das fichas: faltam 14.**
-   - Por quê: cada ficha promete um chefe que "se liberta", e hoje há 54 (a lista abaixo é a dos primeiros 29: Kök-Böri, Grande Ushabti, Hahya, Tages, o
+4. **Chefes de mapa das fichas: todos feitos (68).**
+   - Por quê: cada ficha promete um chefe que "se liberta", e hoje há 68 (a lista abaixo é a dos primeiros 29: Kök-Böri, Grande Ushabti, Hahya, Tages, o
      Colosso e os 24 de `RegionBossRules.MapSpawns`: 6 de `5b6dcb7` nas Regiões 10–12, 6 da história do meio de `27e4b96`,
      6 de `f5073f8` em 04, 09, 15, 34, 45 e 48 e 6 de `07a4770` em 05, 10, 22, 33, 39 e 42). É só reusar o sistema.
-   - Em `bca7acd` e `70a3a73` entraram 25; as Regiões 1–12 estão completas. Faltam 14, nas Regiões 13–16: 72, 75,
-     78, 80, 81, as covas do Profundo (84, 85, 87–89) e o Céu (92, 94, 98, 99).
+   - Em `bca7acd` e `70a3a73` entraram 25 e por último os 14 das Regiões 13–16: 72, 75, 78, 80, 81 (`RiverMapBossTests`), as
+     covas do Profundo 84, 85, 87–89 (`DeepMapBossTests`) e o Céu 92, 94, 98, 99 (`SkyMapBossTests`).
 5. **Mecânicas que ainda mudam o percurso.**
    - Na estrada das Regiões 1–8: escolta da caravana (07), andar no fundo do recife (28), escola de barco e monção (31), os
      7 terraços (36), 9 anéis e portões por hora (41), as 4 eclusas (43).
@@ -453,8 +453,7 @@ Revisto em 2026-11-12 (código até `7381c7f`). Saíram da lista, porque ficaram
       - música e efeitos reais (`Docs/Audio.md`);
       - rig da Maithe (Meshy ou Mixamo).
 
-Fora da lista, ainda faltando: os eventos de cidade A Barca Atrasou (71), Cheia (77) e Chegada da Caravana (91) (Maré de Lodo,
-Avalanche e Festa das Lanternas entraram em `bca7acd`; Vendaval, Noite Polar e Grande Tremor em `70a3a73`), a entrada direta no Ossuário e as
+Fora da lista, ainda faltando: a entrada direta no Ossuário e as
 montarias de chefe.
 
 ### Só o dono decide (resumo)

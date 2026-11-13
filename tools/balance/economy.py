@@ -803,7 +803,9 @@ def boss_xp_ranks() -> tuple:
 def load_map_bosses() -> list:
     """RegionBossRules.MapSpawns (enemy id, level), the six map bosses of the fichas."""
     src = _read(MAP_BOSS_CS)
-    ids = dict(re.findall(r'const string (\w+Id) = "(enemy_\w+)"', src))
+    # The later levas keep their ids in their own partials (RegionBossRules.RiverBosses.cs and the like).
+    partials = glob.glob(os.path.join(os.path.dirname(MAP_BOSS_CS), "RegionBossRules*.cs"))
+    ids = dict(re.findall(r'const string (\w+Id) = "(enemy_\w+)"', "\n".join(_read(p) for p in partials)))
     return [(ids[name], int(level)) for name, level in
             re.findall(r"new RegionBossSpawn\((\w+Id),[^;]*?,\s*(\d+),\s*EnemyProjectileKind", src)]
 

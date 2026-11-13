@@ -76,7 +76,7 @@ namespace Rapadura.Gameplay.World.Cities.Town
             }
             else if (ServiceLocator.TryGet(out TimeOfDayManager time) && time != null)
             {
-                daylight = time.DaylightFactor;
+                daylight = Rapadura.Gameplay.Environment.EnvironmentOverrides.HeldDaylight(time);
             }
 
             daylight = Mathf.Min(daylight, 1f - Mathf.Clamp01(MinimumNight));

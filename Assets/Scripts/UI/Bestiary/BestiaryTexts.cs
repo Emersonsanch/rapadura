@@ -290,6 +290,9 @@ namespace Rapadura.UI.Bestiary
             // -- Papéis das Regiões 7–16 que ainda usavam bicho de outra região (own file too) --
             BorrowedRoleBestiaryTexts.AddPages(entries);
 
+            // -- Papéis da Estepe dos Nartes que ainda usavam bicho de outra região (own file too) --
+            LentRoleBestiaryTexts.AddPages(entries);
+
             // -- Guardiões do Ossuário dos Artífices (Docs/Dungeons.md, own file) --
             RegionBossTexts.AddPages(entries);
 

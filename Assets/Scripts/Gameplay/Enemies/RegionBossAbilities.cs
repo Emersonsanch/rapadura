@@ -181,6 +181,9 @@ namespace Rapadura.Gameplay.Enemies
             _wakeTimer = 0f;
             _tarSeconds = 0f;
             ResetUpperMapBosses();
+            ResetDeepMapBosses();
+            ResetSkyMapBosses();
+            ResetRiverMapBosses();
             _tosses = 0;
             _breaths = 0;
             _rises = 0;
@@ -654,6 +657,9 @@ namespace Rapadura.Gameplay.Enemies
             }
 
             WarnUpperMapBoss(signature, ref warning);
+            WarnDeepMapBoss(signature, ref warning);
+            WarnSkyMapBoss(signature, ref warning);
+            WarnRiverMapBoss(signature, ref warning);
             DungeonShockwave.Spawn(MarksTheHeroSpot(signature) ? _signatureImpact : transform.position, null, _controller.gameObject, 0f, 0f);
             DungeonFx.Warn(transform.position + Vector3.up * 4f, Text(warning));
         }
@@ -693,7 +699,17 @@ namespace Rapadura.Gameplay.Enemies
             }
 
             Vector2 heroFlat = new Vector2(hero.position.x, hero.position.z);
-            if (ResolveUpperMapBoss(heroFlat, victim))
+            if (ResolveDeepMapBoss(heroFlat, victim))
+            {
+                return;
+            }
+
+            if (ResolveUpperMapBoss(heroFlat, victim) || ResolveSkyMapBoss(heroFlat, victim))
+            {
+                return;
+            }
+
+            if (ResolveRiverMapBoss(heroFlat, victim))
             {
                 return;
             }

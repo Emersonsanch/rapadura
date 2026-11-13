@@ -384,8 +384,25 @@ namespace Rapadura.Gameplay.Content
             EnemyName("enemy_mountain_trapped_aurora", "The Trapped Aurora", "A Aurora Presa"),
             EnemyName("enemy_mountain_guayota", "Guayota", "Guayota"),
             EnemyName("enemy_mountain_wrong_knot", "The Wrong Knot", "O Nó Errado"),
+            // Five map bosses of the Rio das Doze Horas and the Margens da Mistura (Docs/Mapas100.md 72, 75, 78, 80, 81; RegionBossRules.RiverBosses.cs).
+            EnemyName("enemy_mountain_reed_hippo", "The Giant Reed Hippo", "O Hipopótamo-de-Junco Gigante"),
+            EnemyName("enemy_mountain_lake_guardian", "The Guardian of the Lake", "O Guardião do Lago"),
+            EnemyName("enemy_mountain_lost_instant", "The Lost Instant", "O Instante Perdido"),
+            EnemyName("enemy_mountain_hobabish", "Hobabish, Guardian of the Cedar", "Hobabish, o Guardião do Cedro"),
+            EnemyName("enemy_mountain_ullikummi", "Ullikummi, the One Who Grows", "Ullikummi, o Que Cresce"),
             EnemyName("enemy_mountain_dark_winged_eagle", "The Eagle of Dark Wings", "A Águia de Asas de Treva"),
+            // The other pits of the Limiar Profundo and the bridge (Docs/Mapas100.md 84, 85, 87, 88, 89; RegionBossRules.MapSpawns).
+            EnemyName("enemy_mountain_smoke_king", "The Smoke King", "O Rei da Fumaça"),
+            EnemyName("enemy_mountain_devouring_lioness", "The Lioness of the Devouring Fire", "A Leoa do Fogo Devorador"),
+            EnemyName("enemy_mountain_black_tail_fish", "The Black-Tailed Fish", "O Peixe de Cauda Negra"),
+            EnemyName("enemy_mountain_deep_dragon", "The Dragon of the Deep", "O Dragão do Fundo"),
+            EnemyName("enemy_mountain_novelo_guardian", "The Guardian of the Novelo", "O Guardião do Novelo"),
             EnemyName("enemy_mountain_sail_shadow", "The Shadow of the Sail", "A Sombra da Vela"),
+            // The last four map bosses of the Reinos do Céu (Docs/Mapas100.md 92, 94, 98, 99; RegionBossRules.SkyBosses.cs).
+            EnemyName("enemy_mountain_lost_rower", "The Lost Rower", "O Remador Perdido"),
+            EnemyName("enemy_mountain_wheel_archon", "The Archon of the Wheel", "O Arconte da Roda"),
+            EnemyName("enemy_mountain_last_step_archon", "The Last Archon of the Step", "O Último Arconte do Degrau"),
+            EnemyName("enemy_mountain_great_crack", "The Great Crack", "A Rachadura Grande"),
             // Six more map bosses of Regions 1–9 (Docs/Mapas100.md 03, 11, 17, 21, 27, 47; RegionBossRules.MapSpawns).
             EnemyName("enemy_mountain_mire_mother", "Mother Mire", "Mãe-Lodo"),
             EnemyName("enemy_mountain_crowned_chief", "The Crowned Chief", "O Chefe Coroado"),
@@ -529,6 +546,19 @@ namespace Rapadura.Gameplay.Content
             EnemyName("enemy_forest_stowaway_shadow", "Stowaway Shadow", "Sombra Clandestina"),
             EnemyName("enemy_mountain_sky_crack", "Sky Crack", "Rachadura do Céu"),
             EnemyName("enemy_cave_living_crevasse", "Living Crevasse", "Fenda Viva"),
+            // Seventeenth pass (LentRoleBeastRecipes): the roles of the Estepe dos Nartes that still borrowed another region's beast.
+            EnemyName("enemy_mountain_dimmed_golden_eagle", "Dimmed Golden Eagle", "Águia-Dourada Apagada"),
+            EnemyName("enemy_desert_golden_stag", "Dimmed Golden Stag", "Cervo de Ouro Apagado"),
+            EnemyName("enemy_desert_giant_ibex", "Giant Ibex", "Cabra-Montês Gigante"),
+            EnemyName("enemy_forest_hill_boar", "Hill Boar", "Javali da Colina"),
+            EnemyName("enemy_cave_smoke_messenger", "Smoke Messenger Crow", "Corvo-Mensageiro de Fumaça"),
+            EnemyName("enemy_mountain_smoke_woodpecker", "Smoke Woodpecker", "Pica-Pau de Fumaça"),
+            EnemyName("enemy_cave_dimmed_fungus", "Dimmed Fungus", "Fungo Apagado"),
+            EnemyName("enemy_forest_taiga_lynx", "Taiga Lynx", "Lince da Taiga"),
+            EnemyName("enemy_forest_dimmed_stallion", "Dimmed Stallion", "Garanhão Apagado"),
+            EnemyName("enemy_mountain_iron_eagle", "Iron Eagle", "Águia de Ferro"),
+            EnemyName("enemy_mountain_caucasus_bear", "Dimmed Caucasus Bear", "Urso do Cáucaso Apagado"),
+            EnemyName("enemy_forest_snow_wolf", "Snow Wolf", "Lobo de Neve"),
 
             // -- Recipes (Resources/Recipes) --
             RecipeName("recipe_health_potion", "Health Potion", "Poção de Vida"),

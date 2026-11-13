@@ -102,7 +102,7 @@ namespace Rapadura.Gameplay.Environment
                 ServiceLocator.TryGet(out _weather);
             }
 
-            float t = _time.NormalizedTime;
+            float t = Mathf.Repeat(EnvironmentOverrides.HeldNormalizedTime(_time.NormalizedTime), 1f);
             float weatherDim = _weather != null ? _weather.SunIntensityMultiplier : 1f;
 
             if (_sun == null)
@@ -129,7 +129,7 @@ namespace Rapadura.Gameplay.Environment
 
                 // "Menos visão à noite": a little darker at night, softened in already-dark places and by
                 // "Noite mais clara" (NightVisibilityRules; never below its floor, never pitch black).
-                ambient *= Rapadura.Gameplay.Night.NightVisibility.AmbientMultiplier(_time.DaylightFactor);
+                ambient *= Rapadura.Gameplay.Night.NightVisibility.AmbientMultiplier(EnvironmentOverrides.HeldDaylight(_time));
 
                 ApplyAmbient(ambient);
             }

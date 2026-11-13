@@ -228,7 +228,7 @@ namespace Rapadura.Gameplay.Environment
             float progress = _weather.TransitionProgress;
 
             // Night fog in the arena (NightVisibilityRules): thickens the clear-weather baseline so the far arena fades out.
-            float nightFog = _time != null ? Rapadura.Gameplay.Night.NightVisibility.ExtraFogDensity(_time.DaylightFactor) : 0f;
+            float nightFog = _time != null ? Rapadura.Gameplay.Night.NightVisibility.ExtraFogDensity(EnvironmentOverrides.HeldDaylight(_time)) : 0f;
             if (nightFog > 0f)
             {
                 clearDensity += nightFog;
@@ -248,7 +248,7 @@ namespace Rapadura.Gameplay.Environment
 
             if (_time != null)
             {
-                color *= Color.Lerp(_nightFogTint, Color.white, _time.DaylightFactor);
+                color *= Color.Lerp(_nightFogTint, Color.white, EnvironmentOverrides.HeldDaylight(_time));
             }
 
             bool weatherFog = density > clearDensity + 0.0001f;

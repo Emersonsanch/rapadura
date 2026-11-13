@@ -43,6 +43,18 @@ namespace Rapadura.Gameplay.World.Map.Overworld
 
         /// <summary>A Sombra da Vela's arena (97, map boss): the stone ring on the deck under the sail of the Sun Ship, by the trail.</summary>
         public static readonly Vector2 SombraDaVelaArena = new Vector2(736f, 2504f);
+
+        /// <summary>O Remador Perdido's arena (92, map boss): a stone ring on the north bank of the Ilhas de Nuvem, by the west road over the river.</summary>
+        public static readonly Vector2 RemadorPerdidoArena = new Vector2(-468f, 590f);
+
+        /// <summary>O Arconte da Roda's arena (94, map boss): a stone ring inside the rim of the Wheel, west of the Eixo da Roda, by the lane through the hub.</summary>
+        public static readonly Vector2 ArconteDaRodaArena = new Vector2(-62f, 1478f);
+
+        /// <summary>O Último Arconte do Degrau's arena (98, map boss): a stone ring on the steps above the Degrau Um, by the trunk up to the Coluna.</summary>
+        public static readonly Vector2 UltimoArconteArena = new Vector2(-12f, 3030f);
+
+        /// <summary>A Rachadura Grande's arena (99, map boss): a stone ring under the great crack, east of the Mão Aberta, by the lane to the Varanda.</summary>
+        public static readonly Vector2 RachaduraGrandeArena = new Vector2(660f, 2888f);
         public const string BarcaDoSolMapId = "map_097_barca_do_sol";
         public const string PesDaColunaMapId = "map_098_pes_da_coluna";
         public const string MiranteCeuMapId = "map_099_mirante_do_ceu";
@@ -369,6 +381,10 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             Landmark(w, MapLandmarkKind.StoneRing, CapitaAzArena.x, CapitaAzArena.y, 0f, 1.1f);
             Landmark(w, MapLandmarkKind.StoneRing, ClandestinoGrandeArena.x, ClandestinoGrandeArena.y, 0f, 1.1f);
             Landmark(w, MapLandmarkKind.StoneRing, SombraDaVelaArena.x, SombraDaVelaArena.y, 0f, 1.1f);
+            Landmark(w, MapLandmarkKind.StoneRing, RemadorPerdidoArena.x, RemadorPerdidoArena.y, 0f, 1.1f);
+            Landmark(w, MapLandmarkKind.StoneRing, ArconteDaRodaArena.x, ArconteDaRodaArena.y, 0f, 1.1f);
+            Landmark(w, MapLandmarkKind.StoneRing, UltimoArconteArena.x, UltimoArconteArena.y, 0f, 1.1f);
+            Landmark(w, MapLandmarkKind.StoneRing, RachaduraGrandeArena.x, RachaduraGrandeArena.y, 0f, 1.1f);
 
             // ---------------- Finishing ----------------
             SplitPaths(w.World);

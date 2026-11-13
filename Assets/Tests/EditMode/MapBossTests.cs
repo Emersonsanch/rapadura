@@ -78,6 +78,10 @@ namespace Rapadura.Tests
             RegionBossRules.TabletNightmareId, RegionBossRules.AzSawId, RegionBossRules.GreyStallionId,
             RegionBossRules.AysKingId, RegionBossRules.TrappedAuroraId, RegionBossRules.GuayotaId,
             RegionBossRules.WrongKnotId, RegionBossRules.DarkWingedEagleId, RegionBossRules.SailShadowId,
+            RegionBossRules.ReedHippoId, RegionBossRules.LakeGuardianId, RegionBossRules.LostInstantId, RegionBossRules.HobabishId,
+            RegionBossRules.UllikummiId, RegionBossRules.SmokeKingId, RegionBossRules.DevouringLionessId, RegionBossRules.BlackTailFishId,
+            RegionBossRules.DeepDragonId, RegionBossRules.NoveloGuardianId, RegionBossRules.LostRowerId, RegionBossRules.WheelArchonId,
+            RegionBossRules.LastStepArchonId, RegionBossRules.GreatCrackId,
         };
 
         /// <summary>The maps the story walks through in the 150–300 band (LateStoryCatalog) that have a boss in their ficha.</summary>
@@ -139,7 +143,18 @@ namespace Rapadura.Tests
             OverworldLayouts.AneisMehenMapId, OverworldLayouts.CovaVentoMapId, OverworldLayouts.BarcaDoSolMapId,
         };
 
-        private static readonly string[] StoryMaps = LateStoryMaps.Concat(MidStoryMaps).Concat(FirstMaps).Concat(MoreMaps).Concat(HighMaps).Concat(RestMaps).Concat(LastMaps).Concat(UpperMaps).ToArray();
+        /// <summary>The last fourteen, closing every ficha's boss: Regions 13–14 (72, 75, 78, 80, 81; RiverMapBossTests), the covas of
+        /// the Profundo (84, 85, 87, 88, 89; DeepMapBossTests) and the Céu (92, 94, 98, 99; SkyMapBossTests).</summary>
+        private static readonly string[] FinalMaps =
+        {
+            OverworldLayouts.CamposJuncosMapId, OverworldLayouts.LagoDeFogoMapId, OverworldLayouts.DesertoRelogioMapId,
+            OverworldLayouts.CedralHobabishMapId, OverworldLayouts.OmbroUpelluriMapId, OverworldLayouts.CovaFumacaMapId,
+            OverworldLayouts.CovaFogoMapId, OverworldLayouts.CovaLodoMapId, OverworldLayouts.CovaTrevaMapId,
+            OverworldLayouts.PonteNoveloMapId, OverworldLayouts.RioDeLuzMapId, OverworldLayouts.RodaCelesteMapId,
+            OverworldLayouts.PesDaColunaMapId, OverworldLayouts.MiranteCeuMapId,
+        };
+
+        private static readonly string[] StoryMaps = LateStoryMaps.Concat(MidStoryMaps).Concat(FirstMaps).Concat(MoreMaps).Concat(HighMaps).Concat(RestMaps).Concat(LastMaps).Concat(UpperMaps).Concat(FinalMaps).ToArray();
 
         private const float WalkableDegrees = 45f;
 

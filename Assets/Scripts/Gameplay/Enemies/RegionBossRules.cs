@@ -159,6 +159,37 @@ namespace Rapadura.Gameplay.Enemies
         /// <summary>A Sombra da Vela swings the boom to one side of the mast (starboard, then port): on that side, between the mast and the boom's end, is hit.</summary>
         BoomSwing = 65,
 
+        // Five of the Rio das Doze Horas and the Margens da Mistura (Docs/Mapas100.md 72, 75, 78, 80, 81; RegionBossRules.RiverBosses.cs), numbered from 90.
+
+        /// <summary>O Hipopótamo-de-Junco Gigante goes under: the ripple stops at the distance the hero stood at; a step closer or farther is safe, going round him is not.</summary>
+        RippleRing = 90,
+
+        /// <summary>O Guardião do Lago stands in the way of the lobe that flares (north, east, south in turn): his shadow falls behind him, away from it; the lit side and aside are safe.</summary>
+        LakeShadow = 91,
+
+        /// <summary>O Instante Perdido breaks every moment round it but the one it stole: the hero's spot when it last warned (now, the first time) is the only safe place near it.</summary>
+        LostInstant = 92,
+
+        /// <summary>Hobabish throws a mantle on the hero's spot each time; every mantle on the ground (seven at most) flares with it; off all of them is safe.</summary>
+        SevenMantles = 93,
+
+        /// <summary>Ullikummi slams farther each time it grows (four growths, more at night, then it cracks and starts over); hugging its foot or beyond the reach is safe.</summary>
+        GrowingStone = 94,
+
+        // The last four of the Reinos do Céu (Docs/Mapas100.md 92, 94, 98, 99; RegionBossRules.SkyBosses.cs), numbered from 100.
+
+        /// <summary>O Remador Perdido rows a wake from the hero's spot downstream (east, with the Rio de Luz): upstream of the mark or aside of the wake is safe.</summary>
+        DownstreamWake = 100,
+
+        /// <summary>O Arconte da Roda locks the wheel and every jar round him spills but one, the hero's own a quarter on; that jar and the hub under him are safe.</summary>
+        TurningJars = 101,
+
+        /// <summary>O Último Arconte do Degrau throws down everyone on his step or above it (towards the Coluna); a step below him is safe.</summary>
+        HeldStep = 102,
+
+        /// <summary>A Rachadura Grande drips along a crack through herself that opens wider each drip (then closes and starts over); aside of the crack is safe.</summary>
+        WideningCrack = 103,
+
         // Six more of Regions 1–9 (Docs/Mapas100.md 03, 11, 17, 21, 27, 47).
 
         /// <summary>A Mãe-Lodo shoots her tongue at whoever walks into her mouth: coming closer during the warning (or standing at her lips) is caught; keeping your distance is safe.</summary>
@@ -201,6 +232,23 @@ namespace Rapadura.Gameplay.Enemies
 
         /// <summary>O Garanhão Cinzento leads the herd one way (it turns clockwise each time): only those who ran with the herd during the warning are not trampled.</summary>
         HerdRun = 76,
+
+        // The pits of the Limiar Profundo and the bridge (Docs/Mapas100.md 84, 85, 87, 88, 89; RegionBossRules.DeepBosses.cs), numbered from 95.
+
+        /// <summary>O Rei da Fumaça raises a smoke copy of the hero on their spot: whoever is nearer the copy than the king is choked; nearer him (or behind him) is safe.</summary>
+        SmokeCopy = 95,
+
+        /// <summary>A Leoa do Fogo Devorador lights every other stripe of the floor from the hero's (north–south, then east–west); the dark stripes are safe.</summary>
+        BurningStripes = 96,
+
+        /// <summary>O Peixe de Cauda Negra sweeps his tail over the side of him the hero stood on; the other side, or out of its reach, is safe.</summary>
+        TailSweep = 97,
+
+        /// <summary>O Dragão do Fundo breathes the dark round himself; one lamp stays lit beside the line to the hero (left, then right), and only its light is safe.</summary>
+        LampHaven = 98,
+
+        /// <summary>O Guardião do Novelo braces as a wave rolls out of the Novelo (from the east); only his shelter, close behind him on the west, is safe.</summary>
+        NoveloWave = 99,
     }
 
     /// <summary>The four appetites of the Cidadela (46), one a week in turn (<see cref="RegionBossRules.AppetiteFor"/>).</summary>
@@ -622,6 +670,23 @@ namespace Rapadura.Gameplay.Enemies
                 case RegionBossSignature.WingSpan:
                 case RegionBossSignature.BoomSwing:
                     return UpperMapBossInterval(signature);
+                case RegionBossSignature.SmokeCopy:
+                case RegionBossSignature.BurningStripes:
+                case RegionBossSignature.TailSweep:
+                case RegionBossSignature.LampHaven:
+                case RegionBossSignature.NoveloWave:
+                    return DeepMapBossInterval(signature);
+                case RegionBossSignature.DownstreamWake:
+                case RegionBossSignature.TurningJars:
+                case RegionBossSignature.HeldStep:
+                case RegionBossSignature.WideningCrack:
+                    return SkyMapBossInterval(signature);
+                case RegionBossSignature.RippleRing:
+                case RegionBossSignature.LakeShadow:
+                case RegionBossSignature.LostInstant:
+                case RegionBossSignature.SevenMantles:
+                case RegionBossSignature.GrowingStone:
+                    return RiverMapBossInterval(signature);
                 case RegionBossSignature.RopeCut:
                 case RegionBossSignature.EchoToll:
                 case RegionBossSignature.BellyFlop:
@@ -689,6 +754,23 @@ namespace Rapadura.Gameplay.Enemies
                 case RegionBossSignature.WingSpan:
                 case RegionBossSignature.BoomSwing:
                     return UpperMapBossWindup(signature);
+                case RegionBossSignature.SmokeCopy:
+                case RegionBossSignature.BurningStripes:
+                case RegionBossSignature.TailSweep:
+                case RegionBossSignature.LampHaven:
+                case RegionBossSignature.NoveloWave:
+                    return DeepMapBossWindup(signature);
+                case RegionBossSignature.DownstreamWake:
+                case RegionBossSignature.TurningJars:
+                case RegionBossSignature.HeldStep:
+                case RegionBossSignature.WideningCrack:
+                    return SkyMapBossWindup(signature);
+                case RegionBossSignature.RippleRing:
+                case RegionBossSignature.LakeShadow:
+                case RegionBossSignature.LostInstant:
+                case RegionBossSignature.SevenMantles:
+                case RegionBossSignature.GrowingStone:
+                    return RiverMapBossWindup(signature);
                 case RegionBossSignature.RopeCut:
                 case RegionBossSignature.EchoToll:
                 case RegionBossSignature.BellyFlop:

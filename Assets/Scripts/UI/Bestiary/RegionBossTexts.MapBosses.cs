@@ -59,6 +59,9 @@ namespace Rapadura.UI.Bestiary
             AddMoreMapBossPages(entries);
             AddHighMapBossPages(entries);
             AddUpperMapBossPages(entries);
+            AddDeepMapBossPages(entries);
+            AddSkyMapBossPages(entries);
+            AddRiverMapBossPages(entries);
             AddLastFirstMapBossPages(entries);
             AddLastMapBossPages(entries);
 

@@ -175,6 +175,9 @@ namespace Rapadura.Gameplay.Items.Sets
         {
             "enemy_mountain_young_griffin", "enemy_mountain_saiga", "enemy_mountain_bronze_wolf", "enemy_mountain_sleepwalker_giant",
             "enemy_mountain_bark_beetle", "enemy_mountain_ochokochi", "enemy_mountain_felt_swan",
+            // Five of the seventeenth pass (LentRoleBeastRecipes), the steppe's own beasts in the roles it had lent: with 19 own species
+            // the 7 alone took 1600 kills to farm the set, over the budget, and a set takes at most 12.
+            "enemy_desert_golden_stag", "enemy_desert_giant_ibex", "enemy_forest_hill_boar", "enemy_forest_taiga_lynx", "enemy_forest_snow_wolf",
         });
 
         // ---- Regions 10–12, the high north before the Rio: Rare sets between the middle and the far ones, from the 12 own beasts of

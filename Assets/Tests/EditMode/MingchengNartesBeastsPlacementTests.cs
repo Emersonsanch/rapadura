@@ -148,8 +148,7 @@ namespace Rapadura.Tests
             new Placement(Nart, Ochokochi, "vale_das_torres_svan", "corvos_das_torres", Joins, Baboon),
             new Placement(Nart, Ochokochi, "torre_de_vigia", "aguias_de_ferro", Joins, Baboon),
 
-            new Placement(Nart, Bear, "torre_de_vigia", "ursos_do_caucaso", Leads, Werewolf),
-            new Placement(Nart, Bear, "cume_de_ohya", "lobos_de_neve", Joins, Werewolf),
+            // The Pamir's brown bear stood in for the Urso do Cáucaso until it got its own body (LentRoleBeastsPlacementTests).
         };
 
         private static IEnumerable<Placement> All() => Placements;

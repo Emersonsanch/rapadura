@@ -119,7 +119,7 @@ namespace Rapadura.Tests
         [TestCase(Ming, "espantalhos_apagados", BrokenLantern)]
         [TestCase(Ming, "arqueiros_de_terracota", BrokenLantern)]
         [TestCase(Ming, "ibis_de_luz", Hawk)]
-        [TestCase(Nart, "linces_da_taiga", Wolf)]
+        [TestCase(Nart, "lobos_cinzentos", Wolf)]
         [TestCase(Nart, "neblinas_do_rio", Mist)]
         public void TheSheetsThatSharedTheConstant_KeepTheirStandIn(string region, string group, string standIn)
         {

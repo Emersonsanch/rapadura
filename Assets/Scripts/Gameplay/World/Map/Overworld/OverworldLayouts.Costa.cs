@@ -138,6 +138,27 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             public const string SkyCrack = Ceu.SkyCrackBeast;
         }
 
+        /// <summary>
+        /// The seventeenth pass of beasts (bible §3.2.1, <c>LentRoleBeastRecipes</c>): the roles of the Estepe dos Nartes (Docs/Mapas100.md 47–52)
+        /// that the continuous world still played with another region's beast, placed in the groups of their sheets in the Nartes layout. Each
+        /// keeps its stand-in's biome and numbers.
+        /// </summary>
+        public static class LentBeasts
+        {
+            public const string DimmedGoldenEagle = Nart.GoldenEagle;
+            public const string GoldenStag = Nart.GoldenStag;
+            public const string GiantIbex = Nart.Ibex;
+            public const string HillBoar = Nart.HillBoar;
+            public const string SmokeMessenger = Nart.SmokeCrow;
+            public const string SmokeWoodpecker = Nart.Woodpecker;
+            public const string DimmedFungus = Nart.DimmedFungus;
+            public const string TaigaLynx = Nart.Lynx;
+            public const string DimmedStallion = Nart.Stallion;
+            public const string IronEagle = Nart.IronEagle;
+            public const string CaucasusBear = Nart.CaucasusBear;
+            public const string SnowWolf = Nart.SnowWolf;
+        }
+
         private static class Coast
         {
             public const string Gull = "enemy_forest_thief_gull";

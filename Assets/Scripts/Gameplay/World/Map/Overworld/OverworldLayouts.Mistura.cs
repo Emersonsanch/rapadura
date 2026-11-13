@@ -47,6 +47,15 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         /// <summary>O Rei do Piche's arena (79, map boss): the stone ring among the Poços de Betume, by the trail, off the tar pools.</summary>
         public static readonly Vector2 ReiDoPicheArena = new Vector2(96f, -968f);
 
+        /// <summary>O Instante Perdido's arena (78, map boss): the stone ring inside the dial of the twelve gnomons, west of the Gnômon Caído, by the east road, off the bubbles of time.</summary>
+        public static readonly Vector2 InstantePerdidoArena = new Vector2(530f, 30f);
+
+        /// <summary>Hobabish's arena (80, map boss): the stone ring inside the ring of resin lanterns, west of the Clareira do Lenhador, by the trail to the Beira do Cedral.</summary>
+        public static readonly Vector2 HobabishArena = new Vector2(60f, 930f);
+
+        /// <summary>Ullikummi's arena (81, map boss): the stone ring in the Dobras de Pedra, by the trail down the shoulder towards the growing diorite.</summary>
+        public static readonly Vector2 UllikummiArena = new Vector2(1070f, -450f);
+
         /// <summary>The region's rectangle (region coordinates): where <see cref="Mechanics.MisturaMechanicsDriver"/> runs.</summary>
         public static readonly Rect MisturaBounds = Rect.MinMaxRect(-600f, -1200f, 1800f, 1200f);
 
@@ -356,6 +365,9 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             Landmark(w, MapLandmarkKind.Campfire, 1400f, -440f, 0f, 1f);
             Landmark(w, MapLandmarkKind.StoneRing, SonhoDaDestruicaoArena.x, SonhoDaDestruicaoArena.y, 0f, 1f);
             Landmark(w, MapLandmarkKind.StoneRing, ReiDoPicheArena.x, ReiDoPicheArena.y, 0f, 1.1f);
+            Landmark(w, MapLandmarkKind.StoneRing, InstantePerdidoArena.x, InstantePerdidoArena.y, 0f, 1.1f);
+            Landmark(w, MapLandmarkKind.StoneRing, HobabishArena.x, HobabishArena.y, 0f, 1.1f);
+            Landmark(w, MapLandmarkKind.StoneRing, UllikummiArena.x, UllikummiArena.y, 0f, 1.1f);
 
             // ---------------- Finishing ----------------
             SplitPaths(w.World);

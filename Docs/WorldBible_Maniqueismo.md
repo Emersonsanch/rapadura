@@ -741,6 +741,32 @@ Meio-Dia no Céu, a Rachadura e a Raiz-Gelo do Mar Gelado, o Polvo de Obsidiana 
 | `enemy_mountain_wrong_current` | **Corrente Errada** / *Wrong Current* | 92 Rio de Luz, Foz Leste, Margens (era a Neblina do Vento Ruim) | [controle], voa | um fio do Rio de Luz que corre ao contrário, de volta para baixo, enrolado no nó onde virou. |
 | `enemy_mountain_sky_crack` | **Rachadura do Céu** / *Sky Crack* | 99 Rachaduras do Oeste e Varanda (era a Neblina do Vento Ruim) | [controle], voa | as rachaduras pequenas do céu que se soltaram com as beiradas douradas e andam pelo mirante querendo deixar entrar mais sombra. |
 
+**Décima sétima leva (2026-11-13): os papéis da Estepe dos Nartes (Região 9) que ainda usavam bicho de outra região (Mapas100 47–52).**
+Mesmo contrato da décima sexta. Modelos em `LentRoleBeastRecipes` (`ProceduralEnemyKind` 360–371), Caderno em `LentRoleBestiaryTexts`.
+**Bioma e números:** cada um fica no bioma do substituto e copia vida, dano, recarga, XP e loot base dele, para a economia da faixa 100–150
+(`tools/balance`) não mudar. As duas águias, o pica-pau e o corvo de fumaça atiram a pena do gavião e do corvo que trocaram (os outros batem).
+Os ids ficam como texto nas constantes do `Nart` e `OverworldLayouts.LentBeasts` aponta para elas. Na estepe não sai mais de dia o gavião,
+o chacal, o corvo, o lodo, a queixada nem o urso do Pamir (a manada de queixadas segue à noite nos javalis). Missões que apontavam para o
+substituto agora apontam para o bicho: Soslan "chase_the_eagles" (Águia-Dourada; era o gavião), Fortim "chase_the_boars" (Javali da Colina;
+era a queixada) e "chase_the_crows" (Corvo-Mensageiro; era o Corvo-da-Treva), Arvoredo "chase_the_smoke_birds" (Pica-Pau de Fumaça; era a
+mãe-da-lua). Seguem com substituto: o Lobo-Cinzento (51, o lobo) e o Grifo Guardião (48, o grifo jovem). Testes: `LentRoleBeastsTests` e
+`LentRoleBeastsPlacementTests`.
+
+| `id` | pt / en | Ficha (Mapas100) | Tipo | Fonte / lore |
+|---|---|---|---|---|
+| `enemy_mountain_dimmed_golden_eagle` | **Águia-Dourada Apagada** / *Dimmed Golden Eagle* | 47 Acampamento e Estepe dos Ventos (era o Gavião-de-Penacho) | [distância], voa | as águias de punho dos cavaleiros de Soslan; a sombra assentou no dourado da nuca como cinza e elas mergulham nos cavaleiros. |
+| `enemy_desert_golden_stag` | **Cervo de Ouro Apagado** / *Dimmed Golden Stag* | 48 Kurgans de Ouro (era o Chacal Apagado) | [rápido] | os cervos de ouro do estilo animal enterrados nos kurgans, galhada em espiral; a sombra entrou nas covas e alguns levantaram e correm, frios e foscos. |
+| `enemy_desert_giant_ibex` | **Cabra-Montês Gigante** / *Giant Ibex* | 49 Pastos dos Gigantes (era o Chacal Apagado) | [rápido] | as cabras do tamanho das casas redondas que os gigantes ordenham em panelas de pedra; saíram dos cercados dando chifrada em tudo menor que gigante. |
+| `enemy_forest_hill_boar` | **Javali da Colina** / *Hill Boar* | 49 Pastos e Fortim (era a Queixada) | [tanque] | fuçavam as bolotas que os gigantes deixavam; desde a sombra descem de noite e comem a despensa do Fortim, panela e tudo. |
+| `enemy_cave_smoke_messenger` | **Corvo-Mensageiro de Fumaça** / *Smoke Messenger Crow* | 49 Fortim, Tábuas, e 52 Torres Svan (era o Corvo-da-Treva) | [distância], voa | como os gigantes do *Livro dos Gigantes* que levam os sonhos para serem lidos, os corvos levavam os sonhos pequenos numa tabuinha; viraram fumaça e trazem os ruins. |
+| `enemy_mountain_smoke_woodpecker` | **Pica-Pau de Fumaça** / *Smoke Woodpecker* | 50 Arvoredo de Haripushpa (era o Gavião-de-Penacho) | [distância], voa | tiravam os besouros da casca do povo-tronco; desde a sombra o batuque faz a casca fumegar e eles batucam nos viajantes. |
+| `enemy_cave_dimmed_fungus` | **Fungo Apagado** / *Dimmed Fungus* | 50 Arvoredo, Taiga e Lago de Degelo (era o Lodo de Gruta) | [controle], pesado | o fungo que devolve a madeira morta em terra; a sombra deu fome de árvore viva e ele anda no toco e solta esporos que pesam as pernas. |
+| `enemy_forest_taiga_lynx` | **Lince da Taiga** / *Taiga Lynx* | 50 Taiga de Lariços e Lago de Degelo (era o Lobo do Tugai) | [rápido] | velhos e quietos como os lariços; a sombra não deu barulho, deu fome, e eles esperam o povo-tronco na beira das trilhas de casca. |
+| `enemy_forest_dimmed_stallion` | **Garanhão Apagado** / *Dimmed Stallion* | 51 Pradaria dos Mil Cavalos (era o Lobo do Tugai) | [rápido] | os garanhões que guiam as manadas até a taça dos Nartes; a crina virou fumaça e eles levam o rebanho para longe do poço. |
+| `enemy_mountain_iron_eagle` | **Águia de Ferro** / *Iron Eagle* | 52 Torre de Vigia, Corrente e Cume (era o Gavião-de-Penacho) | [distância], voa | fazem ninho na corrente do herói acorrentado e forram com a ferrugem dela; a sombra fez da ferrugem pena, com um elo na perna. |
+| `enemy_mountain_caucasus_bear` | **Urso do Cáucaso Apagado** / *Dimmed Caucasus Bear* | 52 Torre de Vigia e Cume de Ohya (era o Urso-Pardo do Pamir) | [tanque], pesado | dormem o inverno debaixo da corrente e ganham mel das torres svan; a sombra acordou um cedo e bravo, com um elo quebrado no pescoço. |
+| `enemy_forest_snow_wolf` | **Lobo de Neve** / *Snow Wolf* | 52 Cume de Ohya (era o Lobo do Tugai) | [rápido] | só desciam das torres svan nos piores invernos; com a sombra e Ohya no cume todo inverno é o pior, e eles caçam no branco quem sobe a corrente. |
+
 ### 3.3 Chefes de região (apagados, nunca vilões)
 
 | Antigo (`id`) | Novo | O que era antes da sombra | Fonte |

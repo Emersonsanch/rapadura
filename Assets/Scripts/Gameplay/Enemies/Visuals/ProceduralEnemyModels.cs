@@ -317,6 +317,19 @@ namespace Rapadura.Gameplay.Enemies.Visuals
             { "enemy_forest_stowaway_shadow", ProceduralEnemyKind.StowawayShadow },
             { "enemy_mountain_sky_crack", ProceduralEnemyKind.SkyCrack },
             { "enemy_cave_living_crevasse", ProceduralEnemyKind.LivingCrevasse },
+            // Seventeenth pass (LentRoleBeastRecipes): the roles of the Estepe dos Nartes that still borrowed another region's beast.
+            { "enemy_mountain_dimmed_golden_eagle", ProceduralEnemyKind.DimmedGoldenEagle },
+            { "enemy_desert_golden_stag", ProceduralEnemyKind.GoldenStag },
+            { "enemy_desert_giant_ibex", ProceduralEnemyKind.GiantIbex },
+            { "enemy_forest_hill_boar", ProceduralEnemyKind.HillBoar },
+            { "enemy_cave_smoke_messenger", ProceduralEnemyKind.SmokeMessenger },
+            { "enemy_mountain_smoke_woodpecker", ProceduralEnemyKind.SmokeWoodpecker },
+            { "enemy_cave_dimmed_fungus", ProceduralEnemyKind.DimmedFungus },
+            { "enemy_forest_taiga_lynx", ProceduralEnemyKind.TaigaLynx },
+            { "enemy_forest_dimmed_stallion", ProceduralEnemyKind.DimmedStallion },
+            { "enemy_mountain_iron_eagle", ProceduralEnemyKind.IronEagle },
+            { "enemy_mountain_caucasus_bear", ProceduralEnemyKind.CaucasusBear },
+            { "enemy_forest_snow_wolf", ProceduralEnemyKind.SnowWolf },
             // The world bosses of Regions 10–12 (Docs/Mapas100.md 58, 64, 70), at their arenas.
             { RegionBossRules.WindKingId, ProceduralEnemyKind.WindKing },
             { RegionBossRules.OldKulId, ProceduralEnemyKind.OldKul },
@@ -372,7 +385,24 @@ namespace Rapadura.Gameplay.Enemies.Visuals
             { RegionBossRules.GuayotaId, ProceduralEnemyKind.Guayota },
             { RegionBossRules.WrongKnotId, ProceduralEnemyKind.WrongKnot },
             { RegionBossRules.DarkWingedEagleId, ProceduralEnemyKind.DarkWingedEagle },
+            // The other pits of the Limiar Profundo and the bridge (Docs/Mapas100.md 84, 85, 87, 88, 89).
+            { RegionBossRules.SmokeKingId, ProceduralEnemyKind.SmokeKing },
+            { RegionBossRules.DevouringLionessId, ProceduralEnemyKind.DevouringLioness },
+            { RegionBossRules.BlackTailFishId, ProceduralEnemyKind.BlackTailFish },
+            { RegionBossRules.DeepDragonId, ProceduralEnemyKind.DeepDragon },
+            { RegionBossRules.NoveloGuardianId, ProceduralEnemyKind.NoveloGuardian },
             { RegionBossRules.SailShadowId, ProceduralEnemyKind.SailShadow },
+            // The last four map bosses of the Reinos do Céu (Docs/Mapas100.md 92, 94, 98, 99).
+            { RegionBossRules.LostRowerId, ProceduralEnemyKind.LostRower },
+            { RegionBossRules.WheelArchonId, ProceduralEnemyKind.WheelArchon },
+            { RegionBossRules.LastStepArchonId, ProceduralEnemyKind.LastStepArchon },
+            { RegionBossRules.GreatCrackId, ProceduralEnemyKind.GreatCrack },
+            // Five map bosses of the Rio das Doze Horas and the Margens da Mistura (Docs/Mapas100.md 72, 75, 78, 80, 81).
+            { RegionBossRules.ReedHippoId, ProceduralEnemyKind.ReedHippo },
+            { RegionBossRules.LakeGuardianId, ProceduralEnemyKind.LakeGuardian },
+            { RegionBossRules.LostInstantId, ProceduralEnemyKind.LostInstant },
+            { RegionBossRules.HobabishId, ProceduralEnemyKind.Hobabish },
+            { RegionBossRules.UllikummiId, ProceduralEnemyKind.Ullikummi },
             // Six more map bosses of Regions 1–9 (Docs/Mapas100.md 03, 11, 17, 21, 27, 47).
             { RegionBossRules.MireMotherId, ProceduralEnemyKind.MireMother },
             { RegionBossRules.CrownedChiefId, ProceduralEnemyKind.CrownedChief },
@@ -449,6 +479,8 @@ namespace Rapadura.Gameplay.Enemies.Visuals
             ProceduralEnemyKind.BrokenMirror, ProceduralEnemyKind.PaperCrane, ProceduralEnemyKind.SmokeLocust, ProceduralEnemyKind.CoralUshabti, ProceduralEnemyKind.ConfusedSpark, ProceduralEnemyKind.DarkDrop,
             ProceduralEnemyKind.FlyingPumice, ProceduralEnemyKind.GlassUrchin, ProceduralEnemyKind.IceMole, ProceduralEnemyKind.InstantLizard, ProceduralEnemyKind.BlackCatfish, ProceduralEnemyKind.Tremor,
             ProceduralEnemyKind.ErasingWater, ProceduralEnemyKind.WrongCurrent, ProceduralEnemyKind.SwimmingShadow, ProceduralEnemyKind.StowawayShadow, ProceduralEnemyKind.SkyCrack, ProceduralEnemyKind.LivingCrevasse,
+            ProceduralEnemyKind.DimmedGoldenEagle, ProceduralEnemyKind.GoldenStag, ProceduralEnemyKind.GiantIbex, ProceduralEnemyKind.HillBoar, ProceduralEnemyKind.SmokeMessenger, ProceduralEnemyKind.SmokeWoodpecker,
+            ProceduralEnemyKind.DimmedFungus, ProceduralEnemyKind.TaigaLynx, ProceduralEnemyKind.DimmedStallion, ProceduralEnemyKind.IronEagle, ProceduralEnemyKind.CaucasusBear, ProceduralEnemyKind.SnowWolf,
             ProceduralEnemyKind.WindKing, ProceduralEnemyKind.OldKul, ProceduralEnemyKind.EmberGlutton,
             ProceduralEnemyKind.Apep, ProceduralEnemyKind.DreamOfDestruction, ProceduralEnemyKind.GreatDark, ProceduralEnemyKind.AzCaptain,
             ProceduralEnemyKind.Hedammu, ProceduralEnemyKind.SwallowingMire, ProceduralEnemyKind.Aydahar, ProceduralEnemyKind.FourGluttons, ProceduralEnemyKind.Ohya,
@@ -464,6 +496,11 @@ namespace Rapadura.Gameplay.Enemies.Visuals
             ProceduralEnemyKind.PitchKing, ProceduralEnemyKind.GreatStowaway,
             ProceduralEnemyKind.AysKing, ProceduralEnemyKind.TrappedAurora, ProceduralEnemyKind.Guayota, ProceduralEnemyKind.WrongKnot,
             ProceduralEnemyKind.DarkWingedEagle, ProceduralEnemyKind.SailShadow,
+            ProceduralEnemyKind.SmokeKing, ProceduralEnemyKind.DevouringLioness, ProceduralEnemyKind.BlackTailFish, ProceduralEnemyKind.DeepDragon,
+            ProceduralEnemyKind.NoveloGuardian,
+            ProceduralEnemyKind.LostRower, ProceduralEnemyKind.WheelArchon, ProceduralEnemyKind.LastStepArchon, ProceduralEnemyKind.GreatCrack,
+            ProceduralEnemyKind.ReedHippo, ProceduralEnemyKind.LakeGuardian, ProceduralEnemyKind.LostInstant, ProceduralEnemyKind.Hobabish,
+            ProceduralEnemyKind.Ullikummi,
             ProceduralEnemyKind.MireMother, ProceduralEnemyKind.CrownedChief, ProceduralEnemyKind.DarkBellows, ProceduralEnemyKind.SleepingVishap,
             ProceduralEnemyKind.ReliefLion, ProceduralEnemyKind.SmokeStallion,
             ProceduralEnemyKind.MazanMason, ProceduralEnemyKind.GreyMoray, ProceduralEnemyKind.PalaceCrab, ProceduralEnemyKind.GoldenScarecrow,
@@ -499,6 +536,9 @@ namespace Rapadura.Gameplay.Enemies.Visuals
         public static bool IsMapBoss(ProceduralEnemyKind kind) =>
             (kind >= ProceduralEnemyKind.RopeCutter && kind <= ProceduralEnemyKind.FurnaceMaster)
             || (kind >= ProceduralEnemyKind.AysKing && kind <= ProceduralEnemyKind.SailShadow)
+            || (kind >= ProceduralEnemyKind.SmokeKing && kind <= ProceduralEnemyKind.NoveloGuardian)
+            || (kind >= ProceduralEnemyKind.LostRower && kind <= ProceduralEnemyKind.GreatCrack)
+            || (kind >= ProceduralEnemyKind.ReedHippo && kind <= ProceduralEnemyKind.Ullikummi)
             || (kind >= ProceduralEnemyKind.MonsoonOctopus && kind <= ProceduralEnemyKind.SmokeStallion)
             || (kind >= ProceduralEnemyKind.MazanMason && kind <= ProceduralEnemyKind.GreyStallion);
 
@@ -552,7 +592,21 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                 case ProceduralEnemyKind.Guayota: return RegionBossRules.GuayotaId;
                 case ProceduralEnemyKind.WrongKnot: return RegionBossRules.WrongKnotId;
                 case ProceduralEnemyKind.DarkWingedEagle: return RegionBossRules.DarkWingedEagleId;
+                case ProceduralEnemyKind.SmokeKing: return RegionBossRules.SmokeKingId;
+                case ProceduralEnemyKind.DevouringLioness: return RegionBossRules.DevouringLionessId;
+                case ProceduralEnemyKind.BlackTailFish: return RegionBossRules.BlackTailFishId;
+                case ProceduralEnemyKind.DeepDragon: return RegionBossRules.DeepDragonId;
+                case ProceduralEnemyKind.NoveloGuardian: return RegionBossRules.NoveloGuardianId;
                 case ProceduralEnemyKind.SailShadow: return RegionBossRules.SailShadowId;
+                case ProceduralEnemyKind.LostRower: return RegionBossRules.LostRowerId;
+                case ProceduralEnemyKind.WheelArchon: return RegionBossRules.WheelArchonId;
+                case ProceduralEnemyKind.LastStepArchon: return RegionBossRules.LastStepArchonId;
+                case ProceduralEnemyKind.GreatCrack: return RegionBossRules.GreatCrackId;
+                case ProceduralEnemyKind.ReedHippo: return RegionBossRules.ReedHippoId;
+                case ProceduralEnemyKind.LakeGuardian: return RegionBossRules.LakeGuardianId;
+                case ProceduralEnemyKind.LostInstant: return RegionBossRules.LostInstantId;
+                case ProceduralEnemyKind.Hobabish: return RegionBossRules.HobabishId;
+                case ProceduralEnemyKind.Ullikummi: return RegionBossRules.UllikummiId;
                 case ProceduralEnemyKind.MireMother: return RegionBossRules.MireMotherId;
                 case ProceduralEnemyKind.CrownedChief: return RegionBossRules.CrownedChiefId;
                 case ProceduralEnemyKind.DarkBellows: return RegionBossRules.DarkBellowsId;
@@ -1220,6 +1274,42 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                 case ProceduralEnemyKind.LivingCrevasse:
                     BorrowedRoleBeastRecipes.BuildLivingCrevasse(blueprint);
                     break;
+                case ProceduralEnemyKind.DimmedGoldenEagle:
+                    LentRoleBeastRecipes.BuildDimmedGoldenEagle(blueprint);
+                    break;
+                case ProceduralEnemyKind.GoldenStag:
+                    LentRoleBeastRecipes.BuildGoldenStag(blueprint);
+                    break;
+                case ProceduralEnemyKind.GiantIbex:
+                    LentRoleBeastRecipes.BuildGiantIbex(blueprint);
+                    break;
+                case ProceduralEnemyKind.HillBoar:
+                    LentRoleBeastRecipes.BuildHillBoar(blueprint);
+                    break;
+                case ProceduralEnemyKind.SmokeMessenger:
+                    LentRoleBeastRecipes.BuildSmokeMessenger(blueprint);
+                    break;
+                case ProceduralEnemyKind.SmokeWoodpecker:
+                    LentRoleBeastRecipes.BuildSmokeWoodpecker(blueprint);
+                    break;
+                case ProceduralEnemyKind.DimmedFungus:
+                    LentRoleBeastRecipes.BuildDimmedFungus(blueprint);
+                    break;
+                case ProceduralEnemyKind.TaigaLynx:
+                    LentRoleBeastRecipes.BuildTaigaLynx(blueprint);
+                    break;
+                case ProceduralEnemyKind.DimmedStallion:
+                    LentRoleBeastRecipes.BuildDimmedStallion(blueprint);
+                    break;
+                case ProceduralEnemyKind.IronEagle:
+                    LentRoleBeastRecipes.BuildIronEagle(blueprint);
+                    break;
+                case ProceduralEnemyKind.CaucasusBear:
+                    LentRoleBeastRecipes.BuildCaucasusBear(blueprint);
+                    break;
+                case ProceduralEnemyKind.SnowWolf:
+                    LentRoleBeastRecipes.BuildSnowWolf(blueprint);
+                    break;
                 case ProceduralEnemyKind.SkyStone:
                     CeuBeastRecipes.BuildSkyStone(blueprint);
                     break;
@@ -1364,8 +1454,50 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                 case ProceduralEnemyKind.DarkWingedEagle:
                     MapBossRecipes.BuildDarkWingedEagle(blueprint);
                     break;
+                case ProceduralEnemyKind.SmokeKing:
+                    MapBossRecipes.BuildSmokeKing(blueprint);
+                    break;
+                case ProceduralEnemyKind.DevouringLioness:
+                    MapBossRecipes.BuildDevouringLioness(blueprint);
+                    break;
+                case ProceduralEnemyKind.BlackTailFish:
+                    MapBossRecipes.BuildBlackTailFish(blueprint);
+                    break;
+                case ProceduralEnemyKind.DeepDragon:
+                    MapBossRecipes.BuildDeepDragon(blueprint);
+                    break;
+                case ProceduralEnemyKind.NoveloGuardian:
+                    MapBossRecipes.BuildNoveloGuardian(blueprint);
+                    break;
                 case ProceduralEnemyKind.SailShadow:
                     MapBossRecipes.BuildSailShadow(blueprint);
+                    break;
+                case ProceduralEnemyKind.LostRower:
+                    MapBossRecipes.BuildLostRower(blueprint);
+                    break;
+                case ProceduralEnemyKind.WheelArchon:
+                    MapBossRecipes.BuildWheelArchon(blueprint);
+                    break;
+                case ProceduralEnemyKind.LastStepArchon:
+                    MapBossRecipes.BuildLastStepArchon(blueprint);
+                    break;
+                case ProceduralEnemyKind.GreatCrack:
+                    MapBossRecipes.BuildGreatCrack(blueprint);
+                    break;
+                case ProceduralEnemyKind.ReedHippo:
+                    MapBossRecipes.BuildReedHippo(blueprint);
+                    break;
+                case ProceduralEnemyKind.LakeGuardian:
+                    MapBossRecipes.BuildLakeGuardian(blueprint);
+                    break;
+                case ProceduralEnemyKind.LostInstant:
+                    MapBossRecipes.BuildLostInstant(blueprint);
+                    break;
+                case ProceduralEnemyKind.Hobabish:
+                    MapBossRecipes.BuildHobabish(blueprint);
+                    break;
+                case ProceduralEnemyKind.Ullikummi:
+                    MapBossRecipes.BuildUllikummi(blueprint);
                     break;
                 case ProceduralEnemyKind.MireMother:
                     MapBossRecipes.BuildMireMother(blueprint);

@@ -53,6 +53,12 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         /// <summary>O Nó Errado's arena (74, map boss): the stone ring in the Nó Errado of the Anéis de Mehen, by the trail, where the coils tied themselves wrong.</summary>
         public static readonly Vector2 NoErradoArena = new Vector2(-936f, 852f);
 
+        /// <summary>O Hipopótamo-de-Junco Gigante's arena (72, map boss): the stone ring in the Campos de Juncos, by the road to the reed beds, north of the south canal he trampled.</summary>
+        public static readonly Vector2 HipopotamoDeJuncoArena = new Vector2(-120f, 560f);
+
+        /// <summary>O Guardião do Lago's arena (75, map boss): the stone ring on the Lake of Fire north of the Ilha das Palmeiras, between the three lobes, by the trail to the isle.</summary>
+        public static readonly Vector2 GuardiaoDoLagoArena = new Vector2(770f, 1120f);
+
         public static readonly Vector2 CaisMesektetOffset = Vector2.zero;
         public static readonly Vector2 CasaDeJuncoOffset = new Vector2(0f, 600f);
         public static readonly Vector2 TrenoDeAreiaOffset = new Vector2(-960f, 120f);
@@ -378,6 +384,8 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             Landmark(w, MapLandmarkKind.StoneRing, ApepArena.x, ApepArena.y, 0f, 1.1f);
             Landmark(w, MapLandmarkKind.StoneRing, GrandeSerpenteDoArealArena.x, GrandeSerpenteDoArealArena.y, 0f, 1.1f);
             Landmark(w, MapLandmarkKind.StoneRing, NoErradoArena.x, NoErradoArena.y, 0f, 1.1f);
+            Landmark(w, MapLandmarkKind.StoneRing, HipopotamoDeJuncoArena.x, HipopotamoDeJuncoArena.y, 0f, 1.1f);
+            Landmark(w, MapLandmarkKind.StoneRing, GuardiaoDoLagoArena.x, GuardiaoDoLagoArena.y, 0f, 1.1f);
 
             // ---------------- Finishing ----------------
             SplitPaths(w.World);

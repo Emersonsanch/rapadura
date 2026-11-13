@@ -78,6 +78,11 @@ namespace Rapadura.Tests
             ("enemy_desert_steppe_vulture", BiomeType.Desert, EnemyProjectileKind.Feather, ProceduralEnemyKind.SteppeVulture),
             ("enemy_mountain_paper_crane", BiomeType.Mountain, EnemyProjectileKind.Feather, ProceduralEnemyKind.PaperCrane),
             ("enemy_desert_broken_mirror", BiomeType.Desert, EnemyProjectileKind.LanternBolt, ProceduralEnemyKind.BrokenMirror),
+            // The seventeenth pass, the Estepe dos Nartes (LentRoleBeastsTests): the eagles', the woodpecker's and the smoke crow's feathers, as the hawk and the crow they replace.
+            ("enemy_mountain_dimmed_golden_eagle", BiomeType.Mountain, EnemyProjectileKind.Feather, ProceduralEnemyKind.DimmedGoldenEagle),
+            ("enemy_mountain_smoke_woodpecker", BiomeType.Mountain, EnemyProjectileKind.Feather, ProceduralEnemyKind.SmokeWoodpecker),
+            ("enemy_mountain_iron_eagle", BiomeType.Mountain, EnemyProjectileKind.Feather, ProceduralEnemyKind.IronEagle),
+            ("enemy_cave_smoke_messenger", BiomeType.Caves, EnemyProjectileKind.Feather, ProceduralEnemyKind.SmokeMessenger),
         };
 
         /// <summary>Map → the [distância] enemies its clearings must spawn (by day).</summary>

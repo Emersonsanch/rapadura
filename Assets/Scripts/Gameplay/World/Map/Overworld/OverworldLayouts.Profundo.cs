@@ -333,6 +333,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             Landmark(w, MapLandmarkKind.Campfire, 1410f, -860f, 0f, 1f);
             Landmark(w, MapLandmarkKind.StoneRing, 1400f, 1000f, 0f, 1f);
             Landmark(w, MapLandmarkKind.StoneRing, AguiaDeAsasDeTrevaArena.x, AguiaDeAsasDeTrevaArena.y, 0f, 1.1f);
+            AddDeepBossRings(w);
 
             // ---------------- Finishing ----------------
             SplitPaths(w.World);
@@ -355,6 +356,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
                 KeepClearingsOff(w, bank.Vent, 2f);
             }
 
+            KeepClearingsOffDeepBossArenas(w);
             TrimSteepClearings(w);
             return w;
         }

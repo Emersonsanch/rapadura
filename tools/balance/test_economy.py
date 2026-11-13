@@ -184,7 +184,7 @@ def test_gold_has_destinations_above_100(eco, world):
 def test_bosses_pay_their_xp_per_hour(eco, world):
     """Sugestão 4 (Docs/Balanco100a500.md §5.3): camping a world boss (RegionBossRules.WorldBossKillXpMultiplier) pays 1.1-1.5x the
     XP per hour of farming the commons of its level; a map boss of the fichas (MapBossKillXpMultiplier) 0.8-1.2x."""
-    assert len(world.bosses) == 12 and len(ec.load_map_bosses()) == 49
+    assert len(world.bosses) == 12 and len(ec.load_map_bosses()) == 63
     assert ec.boss_camp_problems(eco, world.bosses) == []
     world_rank, map_rank = ec.boss_xp_ranks()
     assert world_rank > map_rank > eco.kill_xp.ranks["MapBoss"]

@@ -500,6 +500,32 @@ namespace Rapadura.Gameplay.Enemies.Visuals
         /// <summary>Fenda Viva (38): a crevasse of the glacier that opens and shuts; squashes on the windup and the blue deep flares.</summary>
         LivingCrevasse = 335,
 
+        // The seventeenth pass of beasts (bible §3.2.1): roles of Região 9, the Estepe dos Nartes, still played by stand-ins (LentRoleBeastRecipes).
+        /// <summary>Águia-Dourada Apagada (47): a golden eagle with ash in its nape; wings, beak opens on the windup.</summary>
+        DimmedGoldenEagle = 360,
+        /// <summary>Cervo de Ouro Apagado (48): a Scythian gold stag with spiral antlers; the head drops on the windup.</summary>
+        GoldenStag = 361,
+        /// <summary>Cabra-Montês Gigante (49): a hill giants' ibex with swept-back horns; the head drops on the windup.</summary>
+        GiantIbex = 362,
+        /// <summary>Javali da Colina (49): a big dark boar with tusks; the head drops on the windup.</summary>
+        HillBoar = 363,
+        /// <summary>Corvo-Mensageiro de Fumaça (49): a crow of smoke carrying a dream tablet; wings, beak opens on the windup.</summary>
+        SmokeMessenger = 364,
+        /// <summary>Pica-Pau de Fumaça (50): a red-crested woodpecker trailing smoke; wings, beak opens on the windup.</summary>
+        SmokeWoodpecker = 365,
+        /// <summary>Fungo Apagado (50): shelf fungus on a larch stump; squashes on the windup and the spores flare.</summary>
+        DimmedFungus = 366,
+        /// <summary>Lince da Taiga (50): a grey lynx with ear tufts and ruff; jaw and tail.</summary>
+        TaigaLynx = 367,
+        /// <summary>Garanhão Apagado (51): a grey stallion with a mane of smoke; the head drops on the windup.</summary>
+        DimmedStallion = 368,
+        /// <summary>Águia de Ferro (52): an eagle with iron plates for feathers; wings, beak opens on the windup.</summary>
+        IronEagle = 369,
+        /// <summary>Urso do Cáucaso Apagado (52): a dark mountain bear with a broken chain link for a collar; the jaw gapes on the windup.</summary>
+        CaucasusBear = 370,
+        /// <summary>Lobo de Neve (52): a white wolf of Ohya's crest; jaw and tail.</summary>
+        SnowWolf = 371,
+
         // The map bosses of the fichas (RegionBossRules.MapSpawns, MapBossRecipes): one per map the story walks through in the 150–300 band.
         /// <summary>O Cortador de Cordas (55): a shadow bird with blade-edged wings and a frayed rope in its beak; map boss of the Pontes de Vento.</summary>
         RopeCutter = 204,
@@ -583,6 +609,40 @@ namespace Rapadura.Gameplay.Enemies.Visuals
         DarkWingedEagle = 284,
         /// <summary>A Sombra da Vela (97): a shadow hanging from a lateen sail and its boom, a scrap of the noon sun in it; map boss of the Barca do Sol.</summary>
         SailShadow = 285,
+
+        // The other pits of the Limiar Profundo and the bridge (Docs/Mapas100.md 84, 85, 87, 88, 89; MapBossRecipes.DeepBosses.cs), from 345 on.
+        /// <summary>O Rei da Fumaça (84): a two-legged figure of grey smoke with no face of its own, a crown of wisps, an amber spark in it; map boss of the Cova da Fumaça.</summary>
+        SmokeKing = 345,
+        /// <summary>A Leoa do Fogo Devorador (85): a great lioness of black rock and embers, a mane of flames; map boss of the Cova do Fogo Devorador.</summary>
+        DevouringLioness = 346,
+        /// <summary>O Peixe de Cauda Negra (87): a big fish reared up out of the black water on its fins, a black tail curled behind, a lure of light on its brow; map boss of the Cova do Lodo.</summary>
+        BlackTailFish = 347,
+        /// <summary>O Dragão do Fundo (88): a long dark dragon on four short legs, neck raised, a little lizard of light in its chest; map boss of the Cova da Treva.</summary>
+        DeepDragon = 348,
+        /// <summary>O Guardião do Novelo (89): a tall old ushabti of ivory and copper, the dark globe of the Novelo strapped on his back, a hoe in his hands; map boss of the Ponte do Novelo.</summary>
+        NoveloGuardian = 349,
+
+        // The last four map bosses of the Reinos do Céu (Docs/Mapas100.md 92, 94, 98, 99; MapBossRecipes.SkyBosses.cs), from 350 on.
+        /// <summary>O Remador Perdido (92): a tall rower of light gone grey, a long oar in his hands, a little hull of light round his waist; map boss of the Rio de Luz.</summary>
+        LostRower = 350,
+        /// <summary>O Arconte da Roda (94): a squat bronze archon with a spoked wheel on his back and two jars for hands; map boss of the Roda Celeste.</summary>
+        WheelArchon = 351,
+        /// <summary>O Último Arconte do Degrau (98): a heavy archon of grey stone sitting on a block of cloud-step, arms braced on his knees; map boss of the Pés da Coluna.</summary>
+        LastStepArchon = 352,
+        /// <summary>A Rachadura Grande (99): a tall jagged slit of night with shadow running down it like tar, gold edges of sky round it; map boss of the Mirante.</summary>
+        GreatCrack = 353,
+
+        // Five map bosses of the Rio das Doze Horas and the Margens da Mistura (Docs/Mapas100.md 72, 75, 78, 80, 81; MapBossRecipes.RiverBosses.cs), from 340 on.
+        /// <summary>O Hipopótamo-de-Junco Gigante (72): a huge river hippo caked in canal mud, reeds growing from his back; map boss of the Campos de Juncos.</summary>
+        ReedHippo = 340,
+        /// <summary>O Guardião do Lago (75): a giant blue-faience ushabti, arms crossed with two hoes, glowing glyphs; map boss of the Lago de Fogo.</summary>
+        LakeGuardian = 341,
+        /// <summary>O Instante Perdido (78): an hourglass of sand in a bronze frame under a broken sundial, clock hands for arms; map boss of the Deserto do Relógio.</summary>
+        LostInstant = 342,
+        /// <summary>Hobabish, o Guardião do Cedro (80): a giant of cedar bark with a mane of boughs and seven dimmed mantles; map boss of the Cedral de Hobabish.</summary>
+        Hobabish = 343,
+        /// <summary>Ullikummi, o Que Cresce (81): a column of speckled diorite rooted in the shoulder, crystals growing from it; map boss of the Ombro de Upelluri.</summary>
+        Ullikummi = 344,
 
         // Six more map bosses of Regions 1–9 (Docs/Mapas100.md 03, 11, 17, 21, 27, 47).
         /// <summary>Mãe-Lodo (03): a giant dark toad sitting up in the mud, throat swollen with the spring she swallowed; map boss of the Brejo do Lodo Escuro.</summary>
