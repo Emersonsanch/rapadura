@@ -49,7 +49,7 @@
     um comum do nível (`28b8f39`). O Lodo-que-Engole só surge com as 5 Fontes acesas (`f0991e3`).
     - Regiões 5–9: Hedammu (30), Lodo-que-Engole (35), Aydahar (40), Quatro Gulosos (46) e Ohya (52).
     - Regiões 10–16: Rei-Vendaval, Velho Kul, Glutão de Brasa, Apep, Sonho da Destruição, A Grande Treva (solo) e Āz.
-- **Chefes de mapa:** 29 feitos, de cerca de 68 pedidos pelas fichas (5 antigos e 24 em `RegionBossRules.MapSpawns`).
+- **Chefes de mapa:** 49 feitos, de cerca de 68 pedidos pelas fichas (5 antigos e 44 em `RegionBossRules.MapSpawns`; 13 entraram em `70a3a73`).
   - 5 antigos: Kök-Böri (02), O Grande Ushabti (08), Hahya (14) e Tages (20), lutados pelo mapa-múndi, e o Colosso de
     Crânios no Ossuário (24b).
   - 6 novos no mundo contínuo (`5b6dcb7`, `RegionBossRules.MapSpawns`, Nv 160–264), com golpe próprio, arena na trilha,
@@ -137,7 +137,7 @@ de uma ficha feito por um bicho de outra região ou do bioma.
 | Mecânicas feitas | Ventos da serra (13–14) e pontes de corda que gastam fôlego dobrado, que a Maithe ignora (`KaggenWindRules`); ar fino no platô do Cume, fôlego volta 30% mais devagar, a Maithe não sente (18, `MazanThinAirRules`) |
 | Mecânicas faltantes | Curvar projéteis (13); neve no chão (14); balanço visual das pontes; gravar 1 runa por dia e as 5 etapas da Grande Forja (17) |
 | Chefe do mundo | Mazan, o Gigante da Serra (evento com horário) |
-| Chefe de mapa | Feitos: Hahya (14, pelo mapa-múndi) e O Grande Borrão (15, Nv 32: a cor que sobrou). Faltam 2: O Pedreiro Mazan (16), O Fole Apagado (17) |
+| Chefe de mapa | Feitos: Hahya (14, pelo mapa-múndi) e O Grande Borrão (15, Nv 32: a cor que sobrou). e O Pedreiro Mazan (16, `70a3a73`). Falta 1: O Fole Apagado (17) |
 | Montaria | Catálogo-base. Faltam as da ficha: Eland (15), Carneiro de Bronze (17) |
 | Conjunto | Pedra Seca (Couraça de Pedra Seca e Elmo de Granito em Espinha; Rajada do Kaggen: no crítico, 10% de atingir até 2 inimigos a 3 m com 20% do golpe). Drop dos 9 bichos próprios, 1 em 200 abates (`ArmorSetRules.Drystone`, `07a4770`) |
 | Móveis | Móveis do Rondavel (8 peças, 18–320 de ouro, na Forja do Mestre Mihr; Épica: Estela com janelinhas entalhadas; `07a4770`). Mais Picos de Litema |
@@ -167,7 +167,7 @@ de uma ficha feito por um bicho de outra região ou do bioma.
 | Mecânicas feitas | Maré do recife de 8 min com 6 baixios e baú (25, `CostaTideRules`); fogo baixo na Savana dos Auroques: 4 faixas de capim que se revezam, na cinza o herói anda ×1,2 e os bichos ficam lentos (26, `SavannaFireRules`) |
 | Mecânicas faltantes | Corrida de Shulgi e Lira do Touro (26); câmera em corte, andar no fundo e reacender o coral (28); 27, 29 e 30 sem mecânica própria |
 | Chefe do mundo | Hedammu (30, Nv 72): mordida em cone, vida ×1,2 (`068253c`). Loot próprio (Escama de Hedammu) e troféu de casa |
-| Chefe de mapa | Feitos 2 (`27e4b96`): O Polvo das Monções (25, Nv 50) e O Touro de Fumaça (26, Nv 55). Faltam 3: O Leão dos Relevos (27), A Moreia do Coral Cinza (28), O Caranguejo-Palácio (29) |
+| Chefe de mapa | Feitos 4: O Polvo das Monções (25, Nv 50) e O Touro de Fumaça (26, Nv 55), de `27e4b96`; A Moreia do Coral Cinza (28) e O Caranguejo-Palácio (29), de `70a3a73`. Falta 1: O Leão dos Relevos (27) |
 | Montaria | Dhow-Tartaruga (25, épica, aquática; missão Garras no Mangue de Taa Pwani), `MountMidRegionCatalog`. Faltam Auroque de Aratta e Elefante de Musawwarat |
 | Conjunto | Coral de Kilwa (2 peças: Couraça de Pedra de Coral e Elmo de Madrepérola, Defesa 17/10; Coral que Fecha: ao ser atingido, 15% de curar 30% do golpe). Drop dos 9 bichos próprios da região, 1% por abate (`ArmorSetRules.Coral`, `7d36b1f`) |
 | Móveis | Móveis da Porta Suaíli (8 peças, 22–360 de ouro, no Bazar de Pérolas da Mwana; Épica: Painel da porta entalhada de Taa Pwani, especial da semana; 2026-11-11) |
@@ -212,7 +212,7 @@ de uma ficha feito por um bicho de outra região ou do bioma.
 | Mecânicas feitas | Muralha andável com faróis e corredor de luz (45); mundo do reflexo nos arrozais (44) |
 | Mecânicas faltantes | 9 anéis e portões por hora (41); Relógio de Espelhos (42); 4 eclusas (43); palácios e o que cada um come (46) |
 | Chefe do mundo | Quatro Gulosos (46, Nv 140): um apetite por semana e outro à noite. Taotie derrama oferendas de moedas e avisa antes de engolir; Qiongqi inverte os passos por 3 s (`HeroControlMirror`, teto de 4 s). Loot próprio (Bronze Antigo dos Vasos) e troféu |
-| Chefe de mapa | Feitos 3: O Pequeno Eclipse (42, Nv 102, `07a4770`: a fatia que cresce), A Carpa que Não Pulou (43, Nv 110, `27e4b96`) e Nian, a Fera do Ano (45, Nv 125: o barulho espanta). Falta 1: O Espantalho de Palha Dourada (44); e o evento Festa das Lanternas (41) |
+| Chefe de mapa | Feitos 3: O Pequeno Eclipse (42, Nv 102, `07a4770`: a fatia que cresce), A Carpa que Não Pulou (43, Nv 110, `27e4b96`) e Nian, a Fera do Ano (45, Nv 125: o barulho espanta). O Espantalho de Palha Dourada (44) entrou em `70a3a73` |
 | Montaria | Cervo de Luz Branca (42, épico; missão As Íbis Apagadas das Torres Brancas), `MountMidRegionCatalog`. Faltam Cavalo de Terracota Desperto e Qilin de Jade (cosmético) |
 | Conjunto | Vasos de Bronze (o conjunto antigo da ficha 46: Couraça de Bronze Antigo e Elmo do Vaso Ritual, Defesa 21/12; Gongo de Bronze: ao ser atingido, 10% de atingir até 3 inimigos a 4 m com 20% do golpe). Drop dos 8 bichos próprios, 1% por abate (`ArmorSetRules.Bronze`, 2026-11-11). Arrozal e Torre Branca só nas fichas |
 | Móveis | Móveis do Pátio dos Nove Anéis (o conjunto da ficha 41: 8 peças, 24–410 de ouro, nas Lanternas do Mestre Mōzak; Épica: Biombo laqueado dos nove anéis; 2026-11-11). A Festa das Lanternas é sazonal |
@@ -227,7 +227,7 @@ de uma ficha feito por um bicho de outra região ou do bioma.
 | Mecânicas feitas | Corrida de estepe (47), Ouros do Céu (48, só a Lavine levanta), subida da Corrente de Amirani (52) |
 | Mecânicas faltantes | A cidade que anda (47); escala gigante e sonhos com baús (49); tempo lento (50); 51 sem mecânica própria |
 | Chefe do mundo | Ohya (52, Nv 150): corrente girando. Loot próprio (Elo de Ferro Antigo de Ohya) e troféu |
-| Chefe de mapa | Feito 1: O Grifo Velho do Kurgan (48, Nv 114: o tesouro). Faltam 4: O Cavalo de Fumaça (47), O Pesadelo da Tábua (49), A Serra de Āz (50), O Garanhão Cinzento (51) |
+| Chefe de mapa | Feitos 4: O Grifo Velho do Kurgan (48, Nv 114: o tesouro); O Pesadelo da Tábua (49), A Serra de Āz (50) e O Garanhão Cinzento (51), de `70a3a73`. Falta 1: O Cavalo de Fumaça (47) |
 | Montaria | Cavalo Dourado da Estepe (47, raro; missão das águias do Acampamento de Soslan), `MountMidRegionCatalog`. Carneiro Gigante da Colina e Alce da Taiga (fichas 49/50) existem, mas vendidos em Dur-Jarras (R14). Falta o Cavalo de Fumaça |
 | Conjunto | Ouro dos Kurgans (Couraça de Escamas de Ouro e Elmo de Feltro e Ouro, Defesa 21/12; Galope dos Nartes: no crítico, 10% de atingir até 3 inimigos a 4 m com 30% do crítico). Drop dos 7 bichos próprios, 1% por abate (`ArmorSetRules.Kurgan`, 2026-11-11) |
 | Móveis | Móveis da Tenda de Feltro (o conjunto da ficha 47: 8 peças, 24–420 de ouro, na Selaria Nômade do Acampamento de Soslan; Épica: Tenda de feltro dos Nartes; 2026-11-11) |
@@ -242,7 +242,7 @@ de uma ficha feito por um bicho de outra região ou do bioma.
 | Mecânicas feitas | Rajadas nas pontes e na Garganta (55, 57); cestos de corda (54–57); medidor de silêncio nas Ermidas, barulho chama o Eco (56, `FarnkeshSilenceRules`); correntes de planar às ilhas de nuvem (58) |
 | Mecânicas faltantes | Dourado e Baile do Vale (53); pináculos em alturas de verdade (54); os Ecos como bichos e o medidor na UI (56); vento contra ×0,7 e pedras-abrigo (57); chão de nuvem e ajuda da Huma (58); pontes sem chão |
 | Chefe do mundo | O Rei-Vendaval (58) |
-| Chefe de mapa | Feitos 4: O Cortador de Cordas (55, Nv 160) e O Sino que Não Para (56, Nv 168, badalada com eco), no mundo contínuo desde `5b6dcb7`; O Ouro de Midas (53); e O Rei dos Ays (57, Nv 180: a rajada corre pela linha da garganta a partir dele, subindo numa vez e descendo na outra; atrás dele ou de lado é seguro). Falta o evento Vendaval (54) |
+| Chefe de mapa | Feitos 4: O Cortador de Cordas (55, Nv 160) e O Sino que Não Para (56, Nv 168, badalada com eco), no mundo contínuo desde `5b6dcb7`; O Ouro de Midas (53); e O Rei dos Ays (57, Nv 180: a rajada corre pela linha da garganta a partir dele, subindo numa vez e descendo na outra; atrás dele ou de lado é seguro); o evento Vendaval (54, `70a3a73`) roda de hora em hora, aos :50 |
 | Montaria | Bode Dourado de Gordias (53). Falta o Filhote de Huma |
 | Conjunto | Nenhum (Ninho de Pedra só na ficha) |
 | Móveis | Nenhum |
@@ -255,9 +255,9 @@ de uma ficha feito por um bicho de outra região ou do bioma.
 | Mundo contínuo | Feito, ao norte de Mingcheng (`OverworldLayouts.MarGelado.cs`) |
 | Bichos próprios | 14 (12 e mais Gelo Flutuante (63) e Kul Pequeno (64), `07a4770`). Ainda emprestados, 7: Enguia-Lanterna, Rachadura, Raiz-Gelo, Peixe-Bruxa, Mosquito da Tundra, Toupeira-Gelo, Cristal Vivo |
 | Mecânicas feitas | Canais que mudam com a fase da lua (59); gelo fino (60); pesca no gelo (64) |
-| Mecânicas faltantes | Lojas que mudam com a lua e Noite Polar (59); espessura do gelo no mapa da UI (60); estação na tundra (61); túneis que mudam (62); placas que se movem e rota da aurora (63); iscas para chamar o chefe (64) |
+| Mecânicas faltantes | Lojas que mudam com a lua; espessura do gelo no mapa da UI (60); estação na tundra (61); túneis que mudam (62); placas que se movem e rota da aurora (63); iscas para chamar o chefe (64) |
 | Chefe do mundo | O Velho Kul (64), que ainda não vem à isca |
-| Chefe de mapa | Feitos 4: A Morsa-Rainha (60) e O Mamute Avô (62, Nv 214, o teto cai em cruz), desde `5b6dcb7`; O Primeiro Desajeitado (61); e A Aurora Presa (63, Nv 226: o gelo racha em volta dela, menos no caminho que ela acende, que gira 120° a cada dança). Falta o evento Noite Polar (59) |
+| Chefe de mapa | Feitos 4: A Morsa-Rainha (60) e O Mamute Avô (62, Nv 214, o teto cai em cruz), desde `5b6dcb7`; O Primeiro Desajeitado (61); e A Aurora Presa (63, Nv 226: o gelo racha em volta dela, menos no caminho que ela acende, que gira 120° a cada dança); o evento Noite Polar (59, `70a3a73`) cai nos dias de lua escura |
 | Montaria | Rena da Aurora (59) |
 | Conjunto | Nenhum de equipamento |
 | Móveis | Móveis da Casa da Lua Branca (8 peças) |
@@ -272,7 +272,7 @@ de uma ficha feito por um bicho de outra região ou do bioma.
 | Mecânicas feitas | Comportas e Tremor com 3 forjas (65/69); erupção do Echeyde (67); medidor de calor da Caldeira (70) |
 | Mecânicas faltantes | Bônus de refino da forja do dia e G4 do Ícaro (65); cascalho rastelado (66); resfriar a lava em ponte (68); temperatura das fornalhas (69); chão quente para a Cabra anular |
 | Chefe do mundo | O Glutão de Brasa (70), com loot próprio e troféu. Falta a montaria do chefe |
-| Chefe de mapa | Feitos 4: O Rei Shisa do Telhado (66, Nv 236, as duas bocas) e O Mestre das Nove Fornalhas (69, Nv 264, mais forte à noite), desde `5b6dcb7`; A Tartaruga-Vulcão (68); e Guayota (67, Nv 246: lava em quadrado sim, quadrado não, de 4 m, e o tabuleiro vira a cada erupção; mais forte à noite). Falta o evento Tremor (65) |
+| Chefe de mapa | Feitos 4: O Rei Shisa do Telhado (66, Nv 236, as duas bocas) e O Mestre das Nove Fornalhas (69, Nv 264, mais forte à noite), desde `5b6dcb7`; A Tartaruga-Vulcão (68); e Guayota (67, Nv 246: lava em quadrado sim, quadrado não, de 4 m, e o tabuleiro vira a cada erupção; mais forte à noite); o evento Grande Tremor (65, `70a3a73`) roda de hora em hora, aos :05 |
 | Montaria | Leão-Guardião de Laca (65), Cabra-dos-Pastores do Vulcão (67) |
 | Conjunto | Nenhum (Kurdalægon e Palácio de Laca só nas fichas) |
 | Móveis | Nenhum |
@@ -287,7 +287,7 @@ de uma ficha feito por um bicho de outra região ou do bioma.
 | Mecânicas feitas | Horas da barca com 12 píeres e hora de 3 min (71); jangadas de junco nos canais (72, `RioRaftRules`, `075b4ef`: 864 m em ~62 s em vez de ~2 km pelas estradas); anel de Mehen que gira (74); fogo que escolhe (75); defender a barca encalhada enquanto os remadores a desencalham (76, `RioBarqueDefenseRules`) |
 | Mecânicas faltantes | Evento A Barca Atrasou e noite permanente (71); puxar o trenó (73) |
 | Chefe do mundo | Apep (76), que recua até a noite seguinte. Loot próprio e troféu (Barca de luz vencendo Apep). Falta a Pedra da Mistura |
-| Chefe de mapa | Nenhum feito. Faltam 4: O Hipopótamo-de-Junco Gigante (72), A Grande Serpente do Areal (73), O Nó Errado (74, feito: Nv 296, duas alças dos lados atravessadas na linha até o herói; ficar na linha é seguro, desviar não), O Guardião do Lago (75); e o evento A Barca Atrasou (71) |
+| Chefe de mapa | Feito 1 (74). Faltam 3: O Hipopótamo-de-Junco Gigante (72), A Grande Serpente do Areal (73), O Nó Errado (74, feito: Nv 296, duas alças dos lados atravessadas na linha até o herói; ficar na linha é seguro, desviar não), O Guardião do Lago (75); e o evento A Barca Atrasou (71) |
 | Montaria | Íbis Real de Mesektet (71, voadora). Falta a Barquinha de Luz (76) |
 | Conjunto | Cais do Papiro (2 peças, por drop) e Escamas de Mehen (o de Mehen da ficha 74: Couraça de Escamas de Mehen e Elmo da Serpente Enrolada, Defesa 31/17; Anel de Mehen: ao ser atingido, 18% de curar 35% do golpe). Drop do Filho de Apep, da Areia Movediça e do Ganso Ladrão, 1 em 50 (`ArmorSetRules.MehenScale`) |
 | Móveis | Móveis do Cais do Papiro e Móveis do Campo de Juncos (o da ficha 72; 8 peças cada, no Khunanup) |
@@ -317,7 +317,7 @@ de uma ficha feito por um bicho de outra região ou do bioma.
 | Mecânicas feitas | Rede de 12 lâmpadas com a Maré de Treva (83); vento limpa a fumaça (84); chão que acende (85); limite comum de dano que nunca mata (`ProfundoHazardRules`); os 5 portões das covas na muralha da Fortaleza, que abrem ao chegar à lâmpada de cada cova (83, `ProfundoGateRules`, `ProfundoGateMechanicsDriver`). Desde `075b4ef` (`ProfundoPathsMechanicsDriver`): correntes de ar do poço (86, sobem 340–410 m em 13–16 s), comportas da coluna (87, atravessar a água funda perdendo vida ou baixar a água o dia todo pela alavanca) e a ponte do Novelo (89, 9 gaiolas acendem os lances para sempre) |
 | Mecânicas faltantes | Dano no escuro (88); a raide de 5 grupos (90, precisa de servidor) |
 | Chefe do mundo | A Grande Treva, versão solo (90). Falta a raide (precisa de servidor) |
-| Chefe de mapa | Nenhum feito. Faltam 6, os chefes das covas e da ponte: O Rei da Fumaça (84), A Leoa do Fogo Devorador (85), A Águia de Asas de Treva (86, feita: Nv 388, a sombra das asas cai em duas faixas largas no ponto do herói e uma batida adiante; entrar debaixo dela é seguro), O Peixe de Cauda Negra (87), O Dragão do Fundo (88), O Guardião do Novelo (89); e o evento Maré de Treva (83) |
+| Chefe de mapa | Feito 1 (86). Faltam 5, os chefes das covas e da ponte: O Rei da Fumaça (84), A Leoa do Fogo Devorador (85), A Águia de Asas de Treva (86, feita: Nv 388, a sombra das asas cai em duas faixas largas no ponto do herói e uma batida adiante; entrar debaixo dela é seguro), O Peixe de Cauda Negra (87), O Dragão do Fundo (88), O Guardião do Novelo (89); e o evento Maré de Treva (83) |
 | Montaria | Nenhuma. A Raposa-Joia e o Cavalo-Estrela (precisa de servidor) faltam |
 | Conjunto | Selo dos Artífices (2 peças, por drop até existir a raide) e Cinco Luzes (a armadura do Homem Primordial: Couraça das Cinco Luzes e Elmo do Homem Primordial, Defesa 38/21; Luz que Volta: ao matar, 20% de curar 4% da vida e devolver 4% da mana). Drop do Touro de Cinza, do Morcego-Lâmina e da Enguia Grande, 1 em 50 (`ArmorSetRules.FiveLights`) |
 | Móveis | Móveis das Mil Lâmpadas e Móveis do Novelo (o da ficha 89; 8 peças cada, na Tehat) |
@@ -332,7 +332,7 @@ de uma ficha feito por um bicho de outra região ou do bioma.
 | Mecânicas feitas | Correnteza do Rio de Luz entre boias acesas (92, `CeuRiverRules`); Barca da Lua só à noite (93); segurar o céu nas 5 rachaduras (99); sentar ao lado da cadeira do Vô Jorge, uma história por dia (100) |
 | Mecânicas faltantes | Pouca gravidade e Chegada da Caravana (91); andar livre sobre a luz e as sombras mexendo no percurso (92); lua crescendo e lanternas (93); jarras e esferas que giram (94–95); plantar luz (96); carregar lanternas entre as barcas (97); faíscas escoltadas; pilares em grupo (99, online); pose sentada e história do dia no save (100) |
 | Chefe do mundo | Āz, a Capitã Cobiçosa (96). A Arca nunca mata (tira no máximo vida − 1). Loot próprio (Semente de Luz de Āz) e troféu (Estátua de Āz devolvendo a arca). Falta a Arca Resgatada +5. Falta a revanche de Saklas e Namrael na forma do céu (95) |
-| Chefe de mapa | Nenhum feito. Faltam 6: O Remador Perdido (92), O Clandestino Grande (93), O Arconte da Roda (94), A Sombra da Vela (97, feita: Nv 486, a retranca varre um lado do mastro, estibordo e bombordo alternando; colado no mastro, além da ponta ou do outro lado é seguro), O Último Arconte do Degrau (98), A Rachadura Grande (99); e o evento Chegada da Caravana (91) |
+| Chefe de mapa | Feito 1 (97). Faltam 5: O Remador Perdido (92), O Clandestino Grande (93), O Arconte da Roda (94), A Sombra da Vela (97, feita: Nv 486, a retranca varre um lado do mastro, estibordo e bombordo alternando; colado no mastro, além da ponta ou do outro lado é seguro), O Último Arconte do Degrau (98), A Rachadura Grande (99); e o evento Chegada da Caravana (91) |
 | Montaria | Nenhuma (o Cavalo-Estrela da ficha é de temporada e online) |
 | Conjunto | Cais de Luz (2 peças, por drop) e Coluna da Glória (a da ficha 98: Manto da Coluna da Glória e Coroa do Homem Perfeito, Defesa 42/24; Subida da Coluna: no crítico, 20% de curar 5% da vida). Drop da Gota de Treva, da Faísca Confusa e da Corda de Fumaça, 1 em 50 (`ArmorSetRules.GloryColumn`) |
 | Móveis | Móveis do Cais de Luz e Móveis da Barca da Lua (o da ficha 93; 8 peças cada, no Ammo) |
@@ -403,14 +403,13 @@ Revisto em 2026-11-12 (código até `7381c7f`). Saíram da lista, porque ficaram
    - Ela passou inteira em `8422885` (22/22). Depois disso entraram 16 mecânicas, 6 chefes de mapa, 12 bichos e os
      conjuntos das Regiões 1–4, e só a fumaça das regiões (`RegionMechanicsSmokeTests`, 3/3 em `7381c7f`) rodou na PlayMode.
      A suíte inteira fica protegida do falso vermelho pelo `PlayModeReloadLock`.
-4. **Chefes de mapa das fichas: faltam 39.**
-   - Por quê: cada ficha promete um chefe que "se liberta", e hoje há 29 (Kök-Böri, Grande Ushabti, Hahya, Tages, o
+4. **Chefes de mapa das fichas: faltam 23.**
+   - Por quê: cada ficha promete um chefe que "se liberta", e hoje há 49 (a lista abaixo é a dos primeiros 29: Kök-Böri, Grande Ushabti, Hahya, Tages, o
      Colosso e os 24 de `RegionBossRules.MapSpawns`: 6 de `5b6dcb7` nas Regiões 10–12, 6 da história do meio de `27e4b96`,
      6 de `f5073f8` em 04, 09, 15, 34, 45 e 48 e 6 de `07a4770` em 05, 10, 22, 33, 39 e 42). É só reusar o sistema.
-   - Nas Regiões 1–9 faltam 13: Mãe-Lodo (03), Chefe Coroado (11), Pedreiro Mazan (16), Fole Apagado (17), Vishap Adormecido
-     (21), Leão dos Relevos (27), Moreia do Coral Cinza (28), Caranguejo-Palácio (29), Espantalho de Palha Dourada (44),
-     Cavalo de Fumaça (47), Pesadelo da Tábua (49), Serra de Āz (50) e Garanhão Cinzento (51).
-     Depois os 6 das covas do Profundo (84–89) e os 6 do Céu.
+   - Em `bca7acd` e `70a3a73` entraram 25 (agora 49). Nas Regiões 1–9 faltam 6: Mãe-Lodo (03), Chefe Coroado (11),
+     Fole Apagado (17), Vishap Adormecido (21), Leão dos Relevos (27) e Cavalo de Fumaça (47).
+     Nas Regiões 13–16 faltam 17: 72, 73, 75, 78–81, as covas do Profundo (84, 85, 87–89) e o Céu (92–94, 98, 99).
 5. **Mecânicas que ainda mudam o percurso.**
    - Na estrada das Regiões 1–8: escolta da caravana (07), andar no fundo do recife (28), escola de barco e monção (31), os
      7 terraços (36), 9 anéis e portões por hora (41), as 4 eclusas (43).
