@@ -83,6 +83,14 @@ namespace Rapadura.Gameplay.Mounts
         RoofYak = 32,
         WhiteLightStag = 33,
         GoldenSteppeHorse = 34,
+
+        // The map-sheet mounts of the Regions 1–4, 5 and 7 (MountSheetCatalog, MountSheetRecipes). Appended only.
+        MarshHeron = 35,
+        OchreWarWolf = 36,
+        TallGrassEland = 37,
+        LanternOlm = 38,
+        ArattaAurochs = 39,
+        WhiteBactrian = 40,
     }
 
     /// <summary>The effect family of a mount ability (§12.2). M1 implements Dash, LootMagnet and Fear; M3 wave 1 the walkers' kinds (MountWaveAbilities).</summary>
@@ -133,6 +141,14 @@ namespace Rapadura.Gameplay.Mounts
         WarmFleece,
         LightTrail,
         SecondWind,
+
+        // The map-sheet mounts of the Regions 1–4, 5 and 7 (MountSheetAbilities). Appended only: assets store the int.
+        ShallowsWade,
+        DrumHowl,
+        LongBound,
+        GlowSpit,
+        AurochsStomp,
+        StormHide,
     }
 
     /// <summary>Where the hero is, as far as riding goes (§2.1, §2.5).</summary>

@@ -247,6 +247,7 @@ namespace Rapadura.Gameplay.Mounts
             entries.AddRange(MountSkyTexts.Entries); // The flyers: Grifo da Coluna da Glória, Voo da Coluna, "Asas da Coluna".
             entries.AddRange(MountFarRegionTexts.Entries); // Regions 10–16: the eight mounts of the map sheets.
             entries.AddRange(MountMidRegionTexts.Entries); // Regions 5–9: one mount of each region's map sheets.
+            entries.AddRange(MountSheetTexts.Entries); // Regions 1–4, 5 and 7: six more mounts of the map sheets.
             foreach (var m in Mounts)
             {
                 entries.Add(new LocalizationEntry("mount." + m.Id + ".name", m.NameEn, m.NamePt));

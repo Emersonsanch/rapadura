@@ -28,7 +28,9 @@ namespace Rapadura.Gameplay.World.Map.Overworld
     /// water that blocks (dark), crossed at bridges and at fords — the baixios, marked by striped posts — while the reef
     /// flat, the shoals and the atoll ring are walkable shallows (turquoise ground). Monsters: the Gaivota Ladra and the
     /// Caranguejo-dos-Coqueiros with the desert and forest beasts that fit (jackal, sand snake, scorpion, spider, wolf,
-    /// peccary, ushabti, ember vulture, hawk, lodo, crow, lantern fish) and the night species; no boss.
+    /// peccary, ushabti, ember vulture, hawk, lodo, crow, lantern fish) and the night species; no boss. Since the nineteenth pass
+    /// (CoastOwnBeasts) Meroë's ushabtis, young scorpion kings and black jackals, Kirta's mud jellyfish and lionfish, Kilwa's thief octopuses
+    /// and Liyongo's kongamatos are their own beasts.
     /// </summary>
     public static partial class OverworldLayouts
     {
@@ -159,6 +161,27 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             public const string SnowWolf = Nart.SnowWolf;
         }
 
+        /// <summary>
+        /// The nineteenth pass of beasts (bible §3.2.1, <c>CoastOwnBeastRecipes</c>): roles of the Costa das Monções (Docs/Mapas100.md 27–30) and the
+        /// Delta de Jhilpur (32–35) that the continuous world still played with another region's beast, placed in the groups of their sheets in the
+        /// Costa and Delta layouts. Each keeps its stand-in's biome and numbers.
+        /// </summary>
+        public static class CoastOwnBeasts
+        {
+            public const string KushiteUshabti = Coast.KushiteUshabti;
+            public const string YoungScorpionKing = Coast.YoungScorpionKing;
+            public const string BlackSandJackal = Coast.BlackSandJackal;
+            public const string MudJellyfish = Coast.MudJellyfish;
+            public const string DimmedLionfish = Coast.DimmedLionfish;
+            public const string Kongamato = Coast.Kongamato;
+            public const string ThiefOctopus = Coast.ThiefOctopus;
+            public const string SnareRoot = Delta.SnareRoot;
+            public const string GhostHeron = Delta.GhostHeron;
+            public const string SmokeDragonfly = Delta.SmokeDragonfly;
+            public const string SmokeBubble = Delta.SmokeBubble;
+            public const string MudChild = Delta.MudChild;
+        }
+
         private static class Coast
         {
             public const string Gull = "enemy_forest_thief_gull";
@@ -184,6 +207,15 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             public const string Crocodile = "enemy_forest_mangrove_crocodile";
             public const string Lion = "enemy_forest_grass_lion";
             public const string Rhino = "enemy_forest_dust_rhino";
+            // The nineteenth pass (CoastOwnBeastRecipes, OverworldLayouts.CoastOwnBeasts): the roles of the sheets that still borrowed another
+            // region's beast (the golem, the scorpion, the jackal, the ooze, the lantern fish and the crow).
+            public const string KushiteUshabti = "enemy_mountain_kushite_ushabti";
+            public const string YoungScorpionKing = "enemy_desert_young_scorpion_king";
+            public const string BlackSandJackal = "enemy_desert_black_sand_jackal";
+            public const string MudJellyfish = "enemy_cave_mud_jellyfish";
+            public const string DimmedLionfish = "enemy_cave_dimmed_lionfish";
+            public const string Kongamato = "enemy_cave_kongamato";
+            public const string ThiefOctopus = "enemy_cave_thief_octopus";
         }
 
         private static OverworldLayout Costa()
@@ -559,10 +591,10 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             falesias.Fauna.Add(Fauna("pedras_da_falesia", "[controle] [tanque]", T(N(Coast.RollingStone, 2), N(Coast.Ushabti, 1)), T(V(Coast.RollingStone, 2), V(Coast.Ushabti, 1)), 3, null, 30f));
 
             // Pirâmides Altas de Meroé (27): the Ushabti de Bronze Kushita [tanque], the Escorpião-Rei Jovem [rápido], the
-            // Chacal de Areia Negra [enxame], the broken lanterns of the chapels.
-            meroe.Fauna.Add(Fauna("ushabtis_kushitas", "[tanque]", T(N(Coast.Ushabti, 3), N(Coast.Lantern, 1)), T(V(Coast.Ushabti, 2), V(Coast.Lantern, 1)), 3, null, 30f));
-            meroe.Fauna.Add(Fauna("escorpioes_rei", "[rápido]", T(N(Coast.Scorpion, 3), N(Coast.Jackal, 1)), T(V(Coast.Scorpion, 2), S(plankton, 1)), 4));
-            meroe.Fauna.Add(Fauna("chacais_de_areia_negra", "[enxame]", T(N(Coast.Jackal, 3), N(Coast.SandSnake, 1)), T(V(Coast.Jackal, 2), S(mngwa, 1)), 5));
+            // Chacal de Areia Negra [enxame] (the three their own beasts now, CoastOwnBeasts), the broken lanterns of the chapels.
+            meroe.Fauna.Add(Fauna("ushabtis_kushitas", "[tanque]", T(N(CoastOwnBeasts.KushiteUshabti, 3), N(Coast.Lantern, 1)), T(V(CoastOwnBeasts.KushiteUshabti, 2), V(Coast.Lantern, 1)), 3, null, 30f));
+            meroe.Fauna.Add(Fauna("escorpioes_rei", "[rápido]", T(N(CoastOwnBeasts.YoungScorpionKing, 3), N(CoastOwnBeasts.BlackSandJackal, 1)), T(V(CoastOwnBeasts.YoungScorpionKing, 2), S(plankton, 1)), 4));
+            meroe.Fauna.Add(Fauna("chacais_de_areia_negra", "[enxame]", T(N(CoastOwnBeasts.BlackSandJackal, 3), N(Coast.SandSnake, 1)), T(V(CoastOwnBeasts.BlackSandJackal, 2), S(mngwa, 1)), 5));
 
             // Falésias do Norte: hawks and baboons on the headland, the rolling stones.
             falesiasNorte.Fauna.Add(Fauna("gavioes_do_norte", "[distância]", T(N(Coast.Hawk, 3), N(Coast.Gull, 1)), T(V(Coast.Hawk, 2), S(NightVariantRules.MaeDaLua, 1)), 3));
@@ -572,28 +604,28 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             gedi.Fauna.Add(Fauna("ushabtis_de_coral", "[tanque]", T(N(Coast.CoralUshabti, 3), N(Coast.Crow, 1)), T(V(Coast.CoralUshabti, 2), V(Coast.Crow, 1)), 3, null, 30f));
             gedi.Fauna.Add(Fauna("corvos_de_gedi", "[distância]", T(N(Coast.Crow, 3), N(Coast.Bats, 1)), T(V(Coast.Crow, 2), S(kongamato, 1)), 4));
 
-            // Atol de Kirta (28): the Caranguejo-Aranha [tanque], the Peixe-Leão Apagado [distância] (lantern fish), the
-            // Água-Viva de Lodo [controle].
-            atol.Fauna.Add(Fauna("caranguejos_aranha", "[tanque]", T(N(Coast.Crab, 3), N(Coast.LanternFish, 1)), T(V(Coast.Crab, 2), V(Coast.LanternFish, 1)), 3, null, 28f));
-            atol.Fauna.Add(Fauna("peixes_leao", "[distância]", T(N(Coast.LanternFish, 3), N(Coast.Gull, 1)), T(V(Coast.LanternFish, 2), S(plankton, 1)), 4));
-            atol.Fauna.Add(Fauna("aguas_vivas_de_lodo", "[controle]", T(N(Coast.Ooze, 3), N(Coast.Crab, 1)), T(V(Coast.Ooze, 2), V(Coast.Crab, 1)), 4));
+            // Atol de Kirta (28): the Caranguejo-Aranha [tanque], the Peixe-Leão Apagado [distância] and the Água-Viva de Lodo [controle]
+            // (the last two their own beasts now, CoastOwnBeasts).
+            atol.Fauna.Add(Fauna("caranguejos_aranha", "[tanque]", T(N(Coast.Crab, 3), N(CoastOwnBeasts.DimmedLionfish, 1)), T(V(Coast.Crab, 2), V(CoastOwnBeasts.DimmedLionfish, 1)), 3, null, 28f));
+            atol.Fauna.Add(Fauna("peixes_leao", "[distância]", T(N(CoastOwnBeasts.DimmedLionfish, 3), N(Coast.Gull, 1)), T(V(CoastOwnBeasts.DimmedLionfish, 2), S(plankton, 1)), 4));
+            atol.Fauna.Add(Fauna("aguas_vivas_de_lodo", "[controle]", T(N(CoastOwnBeasts.MudJellyfish, 3), N(Coast.Crab, 1)), T(V(CoastOwnBeasts.MudJellyfish, 2), V(Coast.Crab, 1)), 4));
 
-            // Jardins de Alga (28): jellyfish of mud in the kelp, the Tubarão-de-Lodo [rápido] (the sand snake's body).
-            algas.Fauna.Add(Fauna("aguas_vivas_da_alga", "[controle]", T(N(Coast.Ooze, 3), N(Coast.LanternFish, 1)), T(V(Coast.Ooze, 2), S(plankton, 1)), 4));
-            algas.Fauna.Add(Fauna("tubaroes_de_lodo", "[rápido]", T(N(Coast.SandSnake, 3), N(Coast.LanternFish, 1)), T(V(Coast.SandSnake, 2), V(Coast.LanternFish, 1)), 4));
+            // Jardins de Alga (28): the Água-Viva de Lodo in the kelp, the Tubarão-de-Lodo [rápido] (the sand snake's body), lionfish.
+            algas.Fauna.Add(Fauna("aguas_vivas_da_alga", "[controle]", T(N(CoastOwnBeasts.MudJellyfish, 3), N(CoastOwnBeasts.DimmedLionfish, 1)), T(V(CoastOwnBeasts.MudJellyfish, 2), S(plankton, 1)), 4));
+            algas.Fauna.Add(Fauna("tubaroes_de_lodo", "[rápido]", T(N(Coast.SandSnake, 3), N(CoastOwnBeasts.DimmedLionfish, 1)), T(V(Coast.SandSnake, 2), V(CoastOwnBeasts.DimmedLionfish, 1)), 4));
 
-            // Ilhotas de Coral: gulls and crabs on the islets, jellyfish in the channels.
+            // Ilhotas de Coral: gulls and crabs on the islets, mud jellyfish in the channels.
             ilhotas.Fauna.Add(Fauna("gaivotas_das_ilhotas", "[rápido]", T(N(Coast.Gull, 3), N(Coast.Crab, 1)), T(V(Coast.Gull, 2), S(plankton, 1)), 4, null, 22f));
-            ilhotas.Fauna.Add(Fauna("caranguejos_das_ilhotas", "[tanque] [controle]", T(N(Coast.Crab, 3), N(Coast.Ooze, 1)), T(V(Coast.Crab, 2), V(Coast.Ooze, 1)), 4));
+            ilhotas.Fauna.Add(Fauna("caranguejos_das_ilhotas", "[tanque] [controle]", T(N(Coast.Crab, 3), N(CoastOwnBeasts.MudJellyfish, 1)), T(V(Coast.Crab, 2), V(CoastOwnBeasts.MudJellyfish, 1)), 4));
 
             // Lagoa Grande: the lodo, crows over the water, crabs and gulls on the banks.
             lagoaGrande.Fauna.Add(Fauna("lodo_da_lagoa_grande", "[controle]", T(N(Coast.Ooze, 3), N(Coast.Crow, 1)), T(V(Coast.Ooze, 2), S(plankton, 1)), 4));
             lagoaGrande.Fauna.Add(Fauna("margens_da_lagoa", "[tanque] [rápido]", T(N(Coast.Crab, 2), N(Coast.Gull, 2)), T(V(Coast.Crab, 1), V(Coast.Gull, 2)), 4));
 
-            // Kilwa Afundada (29): the Ushabti de Coral [tanque] (its own beast now, WideBeasts), the Polvo Ladrão [controle] (the lodo), the Raia de Fumaça [rápido]
-            // (lantern fish); the dingonek prowls at night (the werewolf's body).
-            kilwa.Fauna.Add(Fauna("ushabtis_de_kilwa", "[tanque]", T(N(Coast.CoralUshabti, 3), N(Coast.Ooze, 1)), T(V(Coast.CoralUshabti, 2), V(Coast.Ooze, 1)), 3, null, 30f));
-            kilwa.Fauna.Add(Fauna("polvos_ladroes", "[controle]", T(N(Coast.Ooze, 3), N(Coast.Crab, 1)), T(V(Coast.Ooze, 2), S(plankton, 1)), 4));
+            // Kilwa Afundada (29): the Ushabti de Coral [tanque] (its own beast now, WideBeasts), the Polvo Ladrão [controle] (its own beast now,
+            // CoastOwnBeasts), the Raia de Fumaça [rápido] (lantern fish); the dingonek prowls at night (the werewolf's body).
+            kilwa.Fauna.Add(Fauna("ushabtis_de_kilwa", "[tanque]", T(N(Coast.CoralUshabti, 3), N(CoastOwnBeasts.ThiefOctopus, 1)), T(V(Coast.CoralUshabti, 2), V(CoastOwnBeasts.ThiefOctopus, 1)), 3, null, 30f));
+            kilwa.Fauna.Add(Fauna("polvos_ladroes", "[controle]", T(N(CoastOwnBeasts.ThiefOctopus, 3), N(Coast.Crab, 1)), T(V(CoastOwnBeasts.ThiefOctopus, 2), S(plankton, 1)), 4));
             kilwa.Fauna.Add(Fauna("raias_de_fumaca", "[rápido]", T(N(Coast.LanternFish, 3), N(Coast.Gull, 1)), T(V(Coast.LanternFish, 2), S(mngwa, 1)), 4));
 
             // Palácio de Husuni (29): coral ushabtis, crows on the arches, the hermit crabs (the coconut crab) round the
@@ -606,12 +638,12 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             mangueRaso.Fauna.Add(Fauna("crocodilos_do_mangue", "[tanque]", T(N(Coast.Crocodile, 3), N(Coast.Crab, 1)), T(V(Coast.Crocodile, 2), S(plankton, 1)), 3, null, 28f));
             mangueRaso.Fauna.Add(Fauna("caranguejos_violinistas", "[enxame]", T(N(MidBeasts.FiddlerCrab, 3), N(Coast.Crab, 1)), T(V(MidBeasts.FiddlerCrab, 2), V(Coast.Crab, 1), S(plankton, 1)), 5));
 
-            // Canais e Mangues de Liyongo (30): the Kongamato [distância] (the crow, the vampire bat at night: it doubles), the
-            // Garça Apagada [rápido] (the gull's body), the crocodiles, the fiddler crabs; fireflies in the mangroves at night.
-            canais.Fauna.Add(Fauna("kongamatos", "[distância]", T(N(Coast.Crow, 3), N(Coast.Bats, 1)), T(V(Coast.Crow, 2), S(kongamato, 2)), 4));
-            canais.Fauna.Add(Fauna("garcas_apagadas", "[rápido]", T(N(Coast.Gull, 3), N(Coast.Crow, 1)), T(V(Coast.Gull, 2), S(plankton, 1)), 4, null, 22f));
+            // Canais e Mangues de Liyongo (30): the Kongamato [distância] (its own beast now, CoastOwnBeasts; the vampire bat joins it at night),
+            // the Garça Apagada [rápido] (the gull's body), the crocodiles, the fiddler crabs; fireflies in the mangroves at night.
+            canais.Fauna.Add(Fauna("kongamatos", "[distância]", T(N(CoastOwnBeasts.Kongamato, 3), N(Coast.Bats, 1)), T(V(CoastOwnBeasts.Kongamato, 2), S(kongamato, 2)), 4));
+            canais.Fauna.Add(Fauna("garcas_apagadas", "[rápido]", T(N(Coast.Gull, 3), N(CoastOwnBeasts.Kongamato, 1)), T(V(Coast.Gull, 2), S(plankton, 1)), 4, null, 22f));
             canais.Fauna.Add(Fauna("crocodilos_dos_canais", "[tanque]", T(N(Coast.Crocodile, 3), N(Coast.Ooze, 1)), T(V(Coast.Crocodile, 2), V(Coast.Ooze, 1)), 3, null, 30f));
-            mangues.Fauna.Add(Fauna("kongamatos_de_liyongo", "[distância]", T(N(Coast.Crow, 3), N(Coast.Bats, 1)), T(V(Coast.Crow, 2), S(kongamato, 2)), 4));
+            mangues.Fauna.Add(Fauna("kongamatos_de_liyongo", "[distância]", T(N(CoastOwnBeasts.Kongamato, 3), N(Coast.Bats, 1)), T(V(CoastOwnBeasts.Kongamato, 2), S(kongamato, 2)), 4));
             mangues.Fauna.Add(Fauna("violinistas_de_liyongo", "[enxame] [tanque]", T(N(MidBeasts.FiddlerCrab, 3), N(Coast.Ooze, 1)), T(V(MidBeasts.FiddlerCrab, 2), S(plankton, 1)), 5));
             mangues.Fauna.Add(Fauna("crocodilos_de_liyongo", "[tanque] [elite]", T(N(Coast.Crocodile, 3), N(Coast.Spider, 1)), T(V(Coast.Crocodile, 2), V(Coast.Spider, 1)), 3, null, 32f));
         }

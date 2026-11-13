@@ -160,6 +160,13 @@ namespace Rapadura.Gameplay.Inventory
             { "mount_roof_yak", 350f }, // the caravan yak of the passes: a pack animal, under the Asno, the mammoth and the Ijapa
             { "mount_white_light_stag", 150f },
             { "mount_golden_steppe_horse", 160f },
+            // Regiões 1–4, 5 e 7: as das fichas (Mounts.md §3.12)
+            { "mount_marsh_heron", 80f }, // a wader: light frame, carries little
+            { "mount_ochre_war_wolf", 120f },
+            { "mount_eland", 200f },
+            { "mount_lantern_olm", 110f },
+            { "mount_aratta_aurochs", 260f },
+            { "mount_white_bactrian", 320f }, // the caravan camel of the passes: second only to the yak among the newer mounts
         };
 
         // ------------------------------------------------------------------

@@ -134,7 +134,8 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
                 return;
             }
 
-            if (AreiasStormRules.IsSheltered(local, OverworldLayouts.AreiasStormShelters))
+            // Walking beside Ammo's escorted caravan is a moving shelter (07, RouteMechanicsDriver.Caravan.cs).
+            if (AreiasStormRules.IsSheltered(local, OverworldLayouts.AreiasStormShelters) || RouteMechanicsDriver.HeroBesideCaravan)
             {
                 if (_sheltered != index)
                 {

@@ -30,7 +30,7 @@ namespace Rapadura.Gameplay.Mounts
     }
 
     /// <summary>
-    /// The "Caderno de Montarias" (Docs/Mounts.md §7, phase M2): all 44 species of §3 (30 + the Grifo da Coluna, §3.8, + the 8 of §3.9 + the 5 of §3.10), in catalog order. Owned ones show
+    /// The "Caderno de Montarias" (Docs/Mounts.md §7, phase M2): all 50 species of §3 (30 + the Grifo da Coluna, §3.8, + the 8 of §3.9 + the 5 of §3.10 + the 6 of §3.12), in catalog order. Owned ones show
     /// their name and stats, seen-but-not-owned ones their name, the rest a "???" silhouette with the hint of where they
     /// appear. The species in <see cref="MountCatalog"/> (3 starters + M3 wave 1 + the first flyer) are playable, the rest only listed; their names and
     /// hints live in <see cref="MountTexts"/>, the others here.
@@ -89,6 +89,14 @@ namespace Rapadura.Gameplay.Mounts
             (MountMidRegionCatalog.GoldenSteppeHorse, ItemRarity.Rare, BiomeType.Mountain, "Golden Steppe Horse", "Cavalo Dourado da Estepe", "Help Satana with the eagles over Soslan's Camp.", "Ajude a Satana com as águias sobre o Acampamento de Soslan."),
             (MountMidRegionCatalog.DhowTurtle, ItemRarity.Epic, BiomeType.Desert, "Dhow Turtle", "Dhow-Tartaruga", "Help Zawadi with the claws in the mangrove of Taa Pwani.", "Ajude o Zawadi com as garras no mangue de Taa Pwani."),
             (MountMidRegionCatalog.WhiteLightStag, ItemRarity.Epic, BiomeType.Caves, "White Light Stag", "Cervo de Luz Branca", "Help Shanakdakhete with the dimmed ibises of the White Spires.", "Ajude a Shanakdakhete com as íbis apagadas das Torres Brancas."),
+
+            // The map sheets of the Regions 1–4, 5 and 7 (MountSheetCatalog, Docs/Mounts.md §3.12).
+            (MountSheetCatalog.MarshHeron, ItemRarity.Uncommon, BiomeType.Forest, "Marsh Heron", "Garça do Brejo", "Dácil's herb shop, in the Garajonay Canopy.", "A Ervaria da Dácil, nas Copas de Garajonay."),
+            (MountSheetCatalog.OchreWarWolf, ItemRarity.Rare, BiomeType.Desert, "Ochre War Wolf", "Lobo de Guerra Ocre", "Help Kessi with the ember hawks of the Red Drum.", "Ajude o Kessi com os gaviões de brasa do Tambor Rubro."),
+            (MountSheetCatalog.TallGrassEland, ItemRarity.Rare, BiomeType.Mountain, "Tall-Grass Eland", "Eland do Capim Alto", "Help Shilhak with the ember bats in the Bronze Halls.", "Ajude o Shilhak com os morcegos de brasa nos Salões de Bronze."),
+            (MountSheetCatalog.LanternOlm, ItemRarity.Rare, BiomeType.Caves, "Threshold Lantern Olm", "Proteu-Lanterna do Limiar", "Help Farnkhund clear the rails of the Tunnel Market.", "Ajude o Farnkhund a liberar os trilhos do Mercado dos Túneis."),
+            (MountSheetCatalog.ArattaAurochs, ItemRarity.Rare, BiomeType.Desert, "Aratta Aurochs", "Auroque de Aratta", "Help Shulgi clear the course of Aratta.", "Ajude o Shulgi a liberar o percurso de Aratta."),
+            (MountSheetCatalog.WhiteBactrian, ItemRarity.Rare, BiomeType.Mountain, "White Bactrian Camel", "Camelo-Bactriano Branco", "Help Kustai with the mist on the caravan board of Sangkent.", "Ajude o Kustai com a neblina no quadro das caravanas de Sangkent."),
         };
 
         public static readonly IReadOnlyList<MountCodexEntry> Entries = Rows.Select(r => new MountCodexEntry(r.Id, r.Rarity, r.Region)).ToList();

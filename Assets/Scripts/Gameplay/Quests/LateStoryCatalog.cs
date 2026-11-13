@@ -148,7 +148,7 @@ namespace Rapadura.Gameplay.Quests
             // -- Região 16, Reinos do Céu: Adda sends them up, step by step, to the Coluna and the Varanda --
             Step(16, CityCatalog.CaisDaColuna, "adda_roda", "rio_de_luz", "map_092_rio_de_luz", 426, SkyRiver, DeepBrink, 4200, "enemy_forest_dimmed_light_fish", 7,
                 Reward("item_health_potion", 5), Reward("item_mana_potion", 5), Reward("item_gold", 280)),
-            Step(16, CityCatalog.CaisDaColuna, "adda_roda", "pes_da_coluna", "map_098_pes_da_coluna", 482, SkyColumn, SkyRiver, 4400, "enemy_forest_creeping_dark", 8,
+            Step(16, CityCatalog.CaisDaColuna, "adda_roda", "pes_da_coluna", "map_098_pes_da_coluna", 482, SkyColumn, SkyRiver, 4400, "enemy_forest_last_shadow", 8,
                 Reward("item_capa_tempestade", 1), Reward("item_gold", 290)),
             Step(16, CityCatalog.CaisDaColuna, "adda_roda", "varanda_do_tempo_de_depois", "map_100_varanda", 495, SkyPorch, SkyColumn, 4600, null, 0,
                 Reward("item_health_potion", 5), Reward("item_mana_potion", 5), Reward("item_gold", 300)),

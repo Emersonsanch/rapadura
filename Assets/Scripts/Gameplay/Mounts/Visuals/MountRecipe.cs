@@ -72,6 +72,17 @@ namespace Rapadura.Gameplay.Mounts.Visuals
         /// <summary>A dhow's lateen sail on the back, behind the saddle (the Dhow-Tartaruga, MountMidRegionRecipes).</summary>
         public bool Sail;
 
+        // ---- Map-sheet mounts (MountSheetRecipes draws them) ----
+
+        /// <summary>A long straight wader's bill on the head (the Garça do Brejo), in <see cref="Accent"/>.</summary>
+        public bool Bill;
+
+        /// <summary>Two humps on the back, one before and one behind the saddle (the Camelo-Bactriano Branco), in <see cref="Mane"/>.</summary>
+        public bool Humps;
+
+        /// <summary>A loose dewlap under the neck (the eland), in <see cref="Coat"/>.</summary>
+        public bool Dewlap;
+
         // ---- Flyers (MountSkyRecipes) ----
 
         /// <summary>Two big jointed wings that flap (<see cref="MountParts.WingLeft"/>...), not the folded <see cref="Wings"/> of the rheas.</summary>
@@ -170,6 +181,11 @@ namespace Rapadura.Gameplay.Mounts.Visuals
                         return mid;
                     }
 
+                    if (MountSheetRecipes.TryShape(recipe, out QuadrupedShape sheet))
+                    {
+                        return sheet;
+                    }
+
                     return new QuadrupedShape
                     {
                         LegLength = 0.6f, BodyLength = 1.12f, BodyThickness = 0.44f, BodyWidth = 0.4f,
@@ -248,6 +264,9 @@ namespace Rapadura.Gameplay.Mounts.Visuals
 
             // Flapping wings and beak of the flyers.
             MountSkyRecipes.Decorate(bp, s, body, head);
+
+            // Bill, humps and dewlap of the map-sheet mounts.
+            MountSheetRecipes.Decorate(bp, s, body, head);
         }
 
         // ------------------------------------------------------------------

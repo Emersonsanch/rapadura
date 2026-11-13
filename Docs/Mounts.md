@@ -18,6 +18,7 @@
 **+1 (2026-11-03):** o **Grifo da Coluna da Glória** (§3.8), a primeira voadora no código; o Caderno lista 31.
 **+8 (2026-11-09):** as montarias das fichas das Regiões 10–16 (§3.9); o Caderno lista 39.
 **+5 (2026-11-11):** uma montaria própria para cada uma das Regiões 5–9 (§3.10); o Caderno lista 44.
+**+6 (2026-11-13):** mais seis das fichas: uma para cada Região 1–4 e mais duas para as Regiões 5 e 7 (§3.12); o Caderno lista 50.
 
 | Raridade (`ItemRarity`) | Montarias | Como se consegue |
 |---|---|---|
@@ -369,12 +370,11 @@ a maré alta do recife não morde (`CostaTideRules.Drenches`) e o lodo das ilhas
   vento de verdade no mapa.
 - **Testes:** `MountMidRegionTests`.
 
-### 3.11 Regiões 1–4: já têm montaria própria (conferido em 2026-11-12)
+### 3.11 Regiões 1–4: as montarias do catálogo-base (conferido em 2026-11-12)
 
-As Regiões 5–9 e 10–16 ganharam montarias próprias porque não tinham nenhuma. As Regiões 1–4 não precisam: as 30 montarias do
-catálogo-base (§3.1–3.5) e o Grifo (§3.8) já são todas delas, cada região com montaria de loja na vila-sede, de bicho, de chefe
-e de missão. Nenhuma montaria nova foi feita para elas; as propostas das fichas (Garça do Brejo, Lagarto-do-Louro, Lobo de
-Guerra Ocre, Eland do Capim Alto, Carneiro de Bronze) seguem só no `Mapas100.md` §6.
+As 30 montarias do catálogo-base (§3.1–3.5) e o Grifo (§3.8) são todas das Regiões 1–4, cada região com montaria de loja na
+vila-sede, de bicho, de chefe e de missão (muitas ainda só listadas no Caderno). Em 2026-11-13 cada uma das quatro ganhou
+também uma montaria das fichas (§3.12); o Lagarto-do-Louro e o Carneiro de Bronze seguem só no `Mapas100.md` §6.
 
 | Região | Montarias próprias (id) | Na loja da vila-sede |
 |---|---|---|
@@ -382,6 +382,47 @@ Guerra Ocre, Eland do Capim Alto, Carneiro de Bronze) seguem só no `Mapas100.md
 | 2 Areias Flamejantes | `mount_pack_donkey`, `mount_rhea`, `mount_enchanted_donkey`, `mount_golden_scarab`, `mount_griffin`, `mount_fire_rhea`, `mount_dragon_hatchling` | Selaria do Vandak (Avestruz) |
 | 3 Serra de Kaggen | `mount_mountain_goat`, `mount_snow_tiger`, `mount_woolly_mammoth`, `mount_hippogriff`, `mount_pegasus` | Forja do Mestre Mihr (Íbex) |
 | 4 Grutas do Limiar | `mount_giant_armadillo`, `mount_giant_anteater`, `mount_carbuncle`, `mount_kirin`, `mount_sertao_phoenix`, `mount_column_griffin` | Lamparinas da Parthenos (Porco-Formigueiro) |
+
+### 3.12 Montarias das fichas: Regiões 1–4, 5 e 7 (no código, 2026-11-13)
+
+Seis das propostas do `Docs/Mapas100.md` §6, em `MountSheetCatalog`, cada uma exata no orçamento do §2.4: uma para cada Região
+1–4 (Garça do Brejo, ficha 03; Lobo de Guerra Ocre, 11; Eland do Capim Alto, 15; e o **Proteu-Lanterna do Limiar**, novo,
+fichas 19/22, porque a Região 4 não tinha proposta) e mais duas para as Regiões 5 e 7 (Auroque de Aratta, 26; Camelo-Bactriano
+Branco, 40). Mesmas regras do §3.9/§3.10: a Incomum é apito à venda na cidade da região (preço = valor do item, §5.1); as Raras
+nunca se vendem e vêm da **2ª missão da cidade da região** (`MountSourceHooks`, uma vez só). Nenhuma voa e nenhuma é aquática:
+as exigências de barco e de sela continuam com a Dhow-Tartaruga e o Sapo-Gigante.
+
+| Id | Nome | Região (ficha) | Tipo | Raridade | Vel. | Def. | Vida | Fôlego | Pts | Carga | Habilidade | Como consegue | Favorito |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| `mount_marsh_heron` | Garça do Brejo / *Marsh Heron* | 1 Zarafshan (03) | terrestre, duas patas | Incomum | 1,55 | +1% | 125 | 150 | 12 | 80 | **Passo de Pernalta:** 10 s sem lentidão, e os primos a até 6 m perdem a lentidão na hora. Recarga 30 s | Apito, 140 de ouro, Ervaria da Dácil (Copas de Garajonay) | — |
+| `mount_ochre_war_wolf` | Lobo de Guerra Ocre / *Ochre War Wolf* | 2 Areias (11) | terrestre, guerra | Raro | 1,65 | +4% | 150 | 130 | 16 | 120 | **Uivo do Tambor Rubro:** bichos comuns a até 8 m fogem 2 s e voltam 25% mais lentos por mais 3 s; chefe não. Recarga 35 s | Missão `quest_city_tambor_rubro_ember_hawks` (Kessi, Tambor Rubro) | Ícaro |
+| `mount_eland` | Eland do Capim Alto / *Tall-Grass Eland* | 3 Kaggen (15) | terrestre, grande | Raro | 1,60 | +3% | 175 | 140 | 16 | 200 | **Salto do Capim Alto:** salto de 14 m (3 m de altura); bichos comuns a até 6 m da largada perdem o primo de vista por 2 s. Recarga 20 s | Missão `quest_city_saloes_de_bronze_ember_bats` (Shilhak, Salões de Bronze) | Maithe |
+| `mount_lantern_olm` | Proteu-Lanterna do Limiar / *Threshold Lantern Olm* | 4 Grutas (19, 22) | terrestre | Raro | 1,40 | +5% | 200 | 150 | 16 | 110 | **Cuspe de Luz:** bola de luz fria no bicho mais perto à frente (até 10 m); quem está a até 3 m bate 25% mais fraco por 4 s (chefe 2 s), e o proteu clareia 10 m por 8 s. Recarga 30 s | Missão `quest_city_mercado_dos_tuneis_stones_on_the_rails` (Farnkhund, Mercado dos Túneis) | Lavine |
+| `mount_aratta_aurochs` | Auroque de Aratta / *Aratta Aurochs* | 5 Costa (26) | terrestre, grande, guerra | Raro | 1,50 | +7% | 200 | 110 | 16 | 260 | **Pisão de Aratta:** bichos a até 6 m ficam 40% mais lentos por 3 s (chefe 1,5 s) e os comuns são empurrados 2 m. Recarga 25 s | Missão `quest_city_aratta_shulgi_course` (Shulgi, Aratta) | Joaquim |
+| `mount_white_bactrian` | Camelo-Bactriano Branco / *White Bactrian Camel* | 7 Teto (40) | terrestre, grande | Raro | 1,40 | +4% | 200 | 160 | 16 | 320 | **Couro de Tempestade:** tira os efeitos ruins do primo e não deixa voltar por 10 s, nada deixa o primo lento nesse tempo, e o grupo a até 6 m perde a lentidão. Recarga 40 s | Missão `quest_city_sangkent_mist_on_the_board` (Kustai, Sangkent) | — |
+
+- **Decisões:** a Garça é a única Incomum (como na ficha) e fica na Ervaria da Dácil, a loja da cidade da Região 1 (as garças da
+  Dácil pescam no Brejo, mapa 03), a 140, o piso da faixa, por ser a mais cedo das lojas de montaria Incomum. As outras cinco
+  são Raras (como nas fichas) e pagam a 2ª missão da cidade de cada região, que ainda não dava montaria: assim a recompensa
+  fica no nível da cidade (Tambor Rubro 24–32 até Sangkent 70–76) e nenhuma entra na economia de ouro. O Eland vem dos
+  Salões de Bronze, a cidade da Região 3 (os anões cuidam de uma manada dos Abrigos Pintados). A Região 4 não tinha proposta
+  no §6: o Proteu-Lanterna (salamandra-cega gigante, bicho de caverna de verdade, maior aqui) é novo, do Lago do Limiar, e
+  puxa os vagonetes do Farnkhund. Ficaram só nas fichas: Lagarto-do-Louro, Carneiro de Bronze, Elefante de Musawwarat,
+  Búfalo-d'Água, Ninki Nanka Mansa, Cavalo de Terracota Desperto e o Qilin de Jade.
+- **Efeitos novos** (`MountSheetAbilities`, regras puras em `MountSheetRules`): `ShallowsWade`, `DrumHowl`, `LongBound`,
+  `GlowSpit`, `AurochsStomp` e `StormHide`, acrescentados ao fim de `MountAbilityKind`: continua um efeito por espécie (§3.7).
+  O `MountMidRegionAbilities` passa adiante os tipos que não conhece. Peças usadas: lentidão (`BuffController`), medo
+  (`MountFearDriver`), empurrão (`MountPushDriver`), `HoldAggro`, salto (`StartHop` + `StartLunge`), `StartLamp` com cor,
+  `SlowImmuneRemaining` e `CleanseRemaining`. Nada de dano (§2.2): o Cuspe de Luz e o Uivo enfraquecem ou atrasam o bicho.
+- **Modelos:** `MountSheetRecipes`, no mesmo sistema (`MountVisualRecipe` 35–40, enum próprio das montarias). Três peças
+  novas em `QuadrupedShape`: `Bill` (bico reto da garça, que anda em duas patas com as asas dobradas da avestruz), `Humps`
+  (as duas corcovas do camelo) e `Dewlap` (a papada do eland).
+- **Carga (§2.7):** em `EncumbranceRules.MountBaseCapacity`; o Camelo é o carregador delas (320), abaixo do Iaque (350).
+- **Som:** usa os de `MountAudio` (garça `mount.wingbeat`, uivo `mount.bray`, camelo `mount.cowbell`); nenhum som novo.
+- **Limites:** a Garça e o Camelo não mexem nas regras dos mapas (o vau do Tugai, o medidor de frio e a tempestade de areia
+  continuam iguais para eles; o efeito é só a habilidade). O "!" do bicho que perdeu o primo de vista não aparece; o Cuspe de
+  Luz não tem projétil visível, só a luz em volta do proteu.
+- **Testes:** `MountSheetTests`.
 
 ### 3.7 Checagem de unicidade
 

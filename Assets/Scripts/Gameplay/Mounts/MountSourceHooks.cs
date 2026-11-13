@@ -79,6 +79,13 @@ namespace Rapadura.Gameplay.Mounts
             new MountSourceHook(MountMidRegionCatalog.DhowTurtle, MountSourceKind.Quest, CityQuestCatalog.TaaPwaniClaws),
             new MountSourceHook(MountMidRegionCatalog.WhiteLightStag, MountSourceKind.Quest, CityQuestCatalog.TorresIbises),
             new MountSourceHook(MountMidRegionCatalog.GoldenSteppeHorse, MountSourceKind.Quest, CityQuestCatalog.SoslanEagles),
+
+            // The map-sheet mounts (MountSheetCatalog): the Rare ones reward the second city quest of their region's city.
+            new MountSourceHook(MountSheetCatalog.OchreWarWolf, MountSourceKind.Quest, CityQuestCatalog.TamborRubroHawks),
+            new MountSourceHook(MountSheetCatalog.TallGrassEland, MountSourceKind.Quest, CityQuestCatalog.SaloesBats),
+            new MountSourceHook(MountSheetCatalog.LanternOlm, MountSourceKind.Quest, CityQuestCatalog.MercadoRails),
+            new MountSourceHook(MountSheetCatalog.ArattaAurochs, MountSourceKind.Quest, CityQuestCatalog.ArattaRace),
+            new MountSourceHook(MountSheetCatalog.WhiteBactrian, MountSourceKind.Quest, CityQuestCatalog.SangkentBoard),
         };
 
         public static IEnumerable<MountSourceHook> Matching(MountSourceKind kind, string hookId)

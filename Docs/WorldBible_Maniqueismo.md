@@ -767,6 +767,88 @@ mãe-da-lua). Seguem com substituto: o Lobo-Cinzento (51, o lobo) e o Grifo Guar
 | `enemy_mountain_caucasus_bear` | **Urso do Cáucaso Apagado** / *Dimmed Caucasus Bear* | 52 Torre de Vigia e Cume de Ohya (era o Urso-Pardo do Pamir) | [tanque], pesado | dormem o inverno debaixo da corrente e ganham mel das torres svan; a sombra acordou um cedo e bravo, com um elo quebrado no pescoço. |
 | `enemy_forest_snow_wolf` | **Lobo de Neve** / *Snow Wolf* | 52 Cume de Ohya (era o Lobo do Tugai) | [rápido] | só desciam das torres svan nos piores invernos; com a sombra e Ohya no cume todo inverno é o pior, e eles caçam no branco quem sobe a corrente. |
 
+**Décima oitava leva (2026-11-13): os papéis dos Reinos do Céu (Região 16) que ainda usavam bicho de outra região (Mapas100 91–99).**
+Mesmo contrato da décima sétima. Modelos em `SkyOwnBeastRecipes` (`ProceduralEnemyKind` 380–389), Caderno em `SkyOwnBestiaryTexts`.
+**Bioma e números:** cada um fica no bioma do substituto e copia vida, dano, recarga, XP e loot base dele (nenhum atira, como nenhum
+substituto atirava), para a economia da faixa 420–500 (`tools/balance`) não mudar. Os ids ficam como texto nas constantes do `Ceu` e
+`OverworldLayouts.SkyOwnBeasts` aponta para elas. No céu não sai mais o Manto de Brilho, o Bode de Fumaça, o Jardim-Sombra, o Cedro Raivoso, o
+Lobo de Bronze, a Sombra Atrasada, a Treva Rastejante nem a Harpia de Fumaça; o Arconte Menor do Limiar fica só como o Arconte Menor dos
+degraus (98, mesmo nome da ficha). O Vento do Alto [rápido] do Mirante (99) segue o Vento de Órbita (bicho da própria região, do 95). Conjuntos:
+a Faísca Teimosa entra no Cais de Luz e a Última Sombra e o Vento do Alto na Coluna da Glória (98), porque as dez espécies novas diluíam a pesca
+dos dois até o limite do orçamento. Nenhuma missão apontava para os substitutos. Testes: `SkyOwnBeastsTests` e `SkyOwnBeastsPlacementTests`.
+
+| `id` | pt / en | Ficha (Mapas100) | Tipo | Fonte / lore |
+|---|---|---|---|---|
+| `enemy_forest_runaway_archon` | **Arconte Fujão Menor** / *Lesser Runaway Archon* | 91 Beira Oeste, Píer do Sol, Fresta (era o Arconte Menor do Limiar) | [elite] | os arcontezinhos do Limiar que subiram as passagens atrás da luz quando o Portão abriu; coroa torta, uma trouxinha de faíscas debaixo do braço, não lembram o caminho de volta. |
+| `enemy_forest_stubborn_spark` | **Faísca Teimosa** / *Stubborn Spark* | 93 Mastro, Convés e Popa da Lua (era o Manto de Brilho) | [especial] | a faísca que subiu até o fim e não quer entrar na barca da Lua: pés fincados no convés, braços cruzados. |
+| `enemy_forest_sphere_smoke` | **Fumaça de Esfera** / *Sphere Smoke* | 95 Órbitas do Oeste e do Leste (era o Bode de Fumaça) | [controle], pesado | o emburramento dos arcontes presos nas esferas (Teodoro bar Konai), que vaza pelas rachaduras de um caco de cristal e pesa nas pernas. |
+| `enemy_forest_flower_treader` | **Sombra que Pisa as Flores** / *Shadow That Treads the Flowers* | 96 Jardim das Flores, Pomar, Pérgola (era o Jardim-Sombra) | [rápido] | a sombra de pernas compridas que atravessa o jardim de Mihrshah em vez de passar em volta; toda flor que ela pisa para de cantar. |
+| `enemy_forest_smoke_thorn` | **Espinho de Fumaça** / *Smoke Thorn* | 96 Jardim das Flores e Pomar (era o Cedro Raivoso) | [controle], pesado | fumaça que endureceu numa sebe do jardim em espinho preto e segura uma flor de luz no meio. |
+| `enemy_mountain_ember_stowaway` | **Clandestino de Brasa** / *Ember Stowaway* | 97 Convés do Sol (era o Lobo de Bronze) | [rápido] | o escuro que se escondeu na barca do Sol do lado do braseiro e saiu quente, rachado de brasa, com um carvão na boca e passagem chamuscada. |
+| `enemy_forest_noon_shadow` | **Sombra do Meio-Dia** / *Noon Shadow* | 97 Sob a Vela do Sol (era a Sombra Atrasada) | [controle], voa | ao meio-dia a sombra não tem pra onde ir; esta se espremeu debaixo da vela com um retalho da lona na cabeça e passa rasteira em quem atravessa a sombra dela. |
+| `enemy_forest_last_shadow` | **Última Sombra** / *Last Shadow* | 98 Degraus e Pés da Coluna (era a Treva Rastejante) | [rápido] | as últimas sombras, magras da subida, que sobem os degraus da Coluna da Glória atrás da luz com os braços esticados pro degrau de cima. |
+| `enemy_mountain_high_wind` | **Vento do Alto** / *High Wind* | 98 Degraus e Pés da Coluna (era a Harpia de Fumaça) | [controle], voa | o vento que sobe com a luz e, batendo numa rachadura do céu, torce pro lado errado e desce em forma de passarinho, com um redemoinho que deixa um pé no chão. |
+| `enemy_forest_fled_archon` | **Arconte Fugido** / *Fled Archon* | 99 Mirante (era o Arconte Menor do Limiar) | [elite] | um dos arcontes que o Espírito Vivo prendeu nas esferas; quebrou a esfera por dentro e saiu com os cacos nos ombros e a algema quebrada no pulso. |
+
+**Vigésima leva (2026-11-13): os papéis do Teto do Mundo (Região 7) que ainda usavam bicho de outra região (Mapas100 36–40), e dois da Planície de Mingcheng (42 e 45).**
+Mesmo contrato da décima sétima. Modelos em `HighlandOwnBeastRecipes` (`ProceduralEnemyKind` 420–431), Caderno em `HighlandOwnBestiaryTexts`.
+**Bioma e números:** cada um fica no bioma do substituto e copia vida, dano, recarga, XP e loot base dele, para a economia da faixa 70–123
+(`tools/balance`) não mudar. A pipa e o arqueiro de terracota atiram o raio de lanterna da Lanterna Quebrada, o gavião-real, a gralha das
+neves e a íbis a pena do gavião e do corvo que trocaram (os outros batem). Os ids ficam como texto nas constantes do `Teto` e do `Ming`, e
+`OverworldLayouts.HighlandBeasts` aponta para elas. No Teto não sai mais de dia a Pedra que Rola, o Ushabti de Pedra, a Neblina do Vento Ruim
+da Serra, a Lanterna Quebrada, o Gavião-de-Penacho, o Enxame de Morcegos, o Orc Coroado nem o Corvo-da-Treva (o iaque segue nas manadas dele;
+os argalis guardam a manada de queixadas à noite); em Mingcheng não sai mais de dia o gavião. Quatro entram no conjunto Lã de Iaque (Argali,
+Bandoleiro, Pedra-Rolante e Ushabti de Calha), que com 23 espécies na região estava na beira do orçamento de pesca. Missões que apontavam
+para o substituto agora apontam para o bicho: Sangkent "clear_the_chutes" (Pedra-Rolante da Morena; era a Pedra que Rola) e "clear_the_board"
+(Neblina das Cristas; era a Neblina do Vento Ruim), Torres Brancas "chase_the_ibises" (Íbis de Luz Apagada; era o Corvo-da-Treva). Seguem com
+substituto: os lobos dos zimbros, das pastagens e da neve (o Lobo do Tugai), e em Mingcheng o Espantalho Apagado e o grou das vilas (a
+Lanterna Quebrada). Testes: `HighlandOwnBeastsTests` e `HighlandOwnBeastsPlacementTests`.
+
+| `id` | pt / en | Ficha (Mapas100) | Tipo | Fonte / lore |
+|---|---|---|---|---|
+| `enemy_mountain_moraine_roller` | **Pedra-Rolante da Morena** / *Moraine Roller* | 36 Terraços, Degelo, 37 Calhas, 38 Morenas (era a Pedra que Rola) | [controle], pesado | as pedras que a geleira desce um dedo por ano e deixa nas morenas para os iaques se coçarem; a sombra entrou no gelo das rachaduras e elas rolam de propósito nos terraços. |
+| `enemy_mountain_chute_ushabti` | **Ushabti de Calha** / *Chute Ushabti* | 37 Calhas de Pedra e Estação da Calha Alta (era o Ushabti de Pedra) | [tanque], pesado | as figuras que respondem que os Artífices puseram no alto das calhas para encher os carrinhos de minério; a sombra chamou também e elas responderam. |
+| `enemy_mountain_crest_mist` | **Neblina das Cristas** / *Crest Mist* | 37 Estação, Degelo, Lago Turquesa e 39 Cristas do Vento Ruim (era a Neblina do Vento Ruim da Serra) | [controle], voa | o pedaço do vento ruim das cristas que ficou para trás em vez de descer do outro lado; guarda um brilho de geada de uma lanterna. |
+| `enemy_desert_smoke_kite` | **Pipa de Fumaça** / *Smoke Kite* | 39 Forte e Desfiladeiro dos Ventos (era a Lanterna Quebrada) | [distância], voa | as pipas de papel das crianças das caravanas, com uma fita de cada uma das cinco luzes; desceram sem as crianças, cinzentas, com a lamparina ainda amarrada. |
+| `enemy_mountain_dimmed_royal_hawk` | **Gavião-Real Apagado** / *Dimmed Royal Hawk* | 39 Desfiladeiro, Cata-Ventos, 36 Estepe Alta (era o Gavião-de-Penacho) | [rápido], voa, atira | os falcões de penacho dos falcoeiros do forte que espantavam os abutres das mulas; pararam de voltar para a luva e mergulham nas caravanas. |
+| `enemy_cave_wind_bat` | **Morcego do Vento** / *Wind Bat* | 39 Forte e Torres de Cata-Vento (era o Enxame de Morcegos) | [enxame], voa | os morcegos claros que dormem dentro dos sinos de vento das torres; desde a sombra os sinos tocam a noite inteira e eles saem em nuvem. |
+| `enemy_mountain_stone_guard_ushabti` | **Guarda de Pedra Ushabti** / *Stone Guard Ushabti* | 39 Forte e Cristas, 40 Ninho (era o Ushabti de Pedra) | [tanque], pesado | a guarda de figuras caiadas que os Artífices deixaram nas ameias; acordou na hora errada e guarda o desfiladeiro contra todos. |
+| `enemy_desert_az_bandit` | **Bandoleiro de Āz** / *Bandit of Āz* | 40 Passo, Alto do Wakhan e Ninho (era o Orc Coroado de Āz) | [elite], pesado | os ladrões da ganância (Āz) que esperam na neve do passo e amarram as fitas das caravanas no cinto para contar. |
+| `enemy_mountain_dimmed_argali` | **Argali Apagado** / *Dimmed Argali* | 36 Estepe Alta, 40 Vale e Passo de Wakhan (era o Iaque Selvagem Apagado) | [tanque], pesado | as sentinelas do passo que derrubavam pedrinhas para avisar da neve; a sombra as virou e elas derrubam as pedras na estrada. |
+| `enemy_cave_snow_chough` | **Gralha das Neves** / *Snow Chough* | 40 Passo de Wakhan (e acompanhante em todo o Teto; era o Corvo-da-Treva) | [distância], voa | as gralhas que voavam na frente das caravanas na neve mostrando a estrada; agora tiram as caravanas da estrada. |
+| `enemy_desert_terracotta_archer` | **Arqueiro de Terracota** / *Terracotta Archer* | 45 Vale dos Guerreiros, Muralha, Portão do Nian (era a Lanterna Quebrada) | [distância], voa | os arqueiros ajoelhados do exército de barro dos fossos; os joelhos racharam no frio e a sombra encheu a rachadura de fumaça, e eles flutuam e atiram das torres. |
+| `enemy_mountain_dimmed_light_ibis` | **Íbis de Luz Apagada** / *Dimmed Light Ibis* | 42 Jardins em Terraço e Colinas dos Espelhos (era o Gavião-de-Penacho) | [rápido], voa, atira | as íbis das torres brancas que levam a luz da manhã de espelho em espelho; a sombra apagou o brilho da testa e elas levam a luz ao contrário. |
+
+**Décima nona leva (2026-11-13): papéis da Costa das Monções (Região 5, Mapas100 27–30) e do Delta de Jhilpur (Região 6, 32–35) que ainda usavam bicho de outra região.**
+Mesmo contrato da décima sétima. Modelos em `CoastOwnBeastRecipes` (`ProceduralEnemyKind` 400–411), Caderno em `CoastOwnBestiaryTexts`.
+**Bioma e números:** cada um fica no bioma do substituto e copia vida, dano, recarga, XP e loot base dele, para a economia da faixa 45–88
+(`tools/balance`) não mudar. O peixe-leão atira o glóbulo de luz do Peixe-Lanterna e o kongamato a pena do Corvo-da-Treva (os outros batem).
+Os ids ficam como texto nas constantes do `Coast` e do `Delta`, e `OverworldLayouts.CoastOwnBeasts` aponta para elas. Nas áreas das fichas não sai
+mais de dia o substituto (Meroé: Ushabti de Pedra, escorpião e chacal; Kirta: lodo e peixe-lanterna; Kilwa: lodo; Liyongo: corvo; Ilhas de Junco
+e Tarchon: gaivota; Ninki Nanka: morcegos; Coração, Olho e Raízes Afogadas: lodo e Neblina do Vento Ruim; Bancos de Lama: lodo), e a aranha saiu
+do Delta inteiro (a Raiz-Laço anda com as pítons e as sanguessugas). Três entram no Coral de Kilwa (polvo, água-viva e peixe-leão) e três na Seda
+de Lótus (Raiz-Laço, Garça-Fantasma e Libélula), que com 19 espécies no Delta estava na beira do orçamento de pesca. Missões que apontavam para o
+substituto agora apontam para o bicho: Kirta "scrape_the_ooze" (Água-Viva de Lodo; era o Lodo de Gruta) e "free_the_divers" (Peixe-Leão; era o
+Peixe-Lanterna), Tarchon "chase_the_herons" (Garça-Fantasma; era a Coruja-de-Fumaça). Seguem com substituto: o Tubarão-de-Lodo e a Raia de Fumaça
+(28, 29), a Garça Apagada (30, a gaivota), o Ninki Nanka Filhote, o Gavial-Sombra e o Crocodilo de Musgo (o crocodilo da Costa), a Raiz Podre
+(35, o corvo) e a missão do Salmaios em Jhilpur (o lodo, que ainda sobe os ghats perto da cidade). Testes: `CoastOwnBeastsTests` e
+`CoastOwnBeastsPlacementTests`.
+
+| `id` | pt / en | Ficha (Mapas100) | Tipo | Fonte / lore |
+|---|---|---|---|---|
+| `enemy_mountain_kushite_ushabti` | **Ushabti de Bronze Kushita** / *Kushite Bronze Ushabti* | 27 Pirâmides Altas de Meroé (era o Ushabti de Pedra) | [tanque], pesado | as figuras de bronze enterradas com os reis de Meroé para trabalhar os campos do outro mundo; a sombra acordou sem dizer qual campo, e elas trabalham em quem passa. |
+| `enemy_desert_young_scorpion_king` | **Escorpião-Rei Jovem** / *Young Scorpion King* | 27 Pirâmides de Meroé (era o Escorpião das Areias Flamejantes) | [rápido] | o primeiro rei do rio tinha nome de escorpião, e os jovens de Meroé andam de coroinha como se tivessem herdado; desde a sombra mandam na areia das capelas. |
+| `enemy_desert_black_sand_jackal` | **Chacal de Areia Negra** / *Black Sand Jackal* | 27 Pirâmides de Meroé (era o Chacal Apagado) | [enxame] | os chacais das portas das capelas, de coleira de contas, que mostravam o caminho entre as pirâmides; ainda guiam, mas o caminho não dá em nada. |
+| `enemy_cave_mud_jellyfish` | **Água-Viva de Lodo** / *Mud Jellyfish* | 28 Atol de Kirta, Jardins de Alga e Ilhotas (era o Lodo de Gruta) | [controle], pesado | levavam a luz do coral de uma cabeça a outra; o Lodo as deixou marrons e pesadas, e elas andam no recife nos tentáculos. |
+| `enemy_cave_dimmed_lionfish` | **Peixe-Leão Apagado** / *Dimmed Lionfish* | 28 Atol de Kirta e Jardins de Alga (era o Peixe-Lanterna Apagado) | [distância], voa | os guardas vermelhos e brancos do coral que nunca precisavam brigar; a sombra acinzentou as listras e eles jogam a luz da ponta dos espinhos. |
+| `enemy_cave_thief_octopus` | **Polvo Ladrão** / *Thief Octopus* | 29 Kilwa Afundada (era o Lodo de Gruta) | [controle], pesado | moravam nos jarros das casas afundadas e deixavam tudo arrumado; desde a sombra guardam lamparinas, contas e pinos de latão das portas, um em cada braço. |
+| `enemy_cave_kongamato` | **Kongamato** / *Kongamato* | 30 Canais e Mangues de Liyongo (era o Corvo-da-Treva) | [distância], voa | o bicho de asa de couro que só virava a canoa de quem remava rápido demais; a sombra fez ele virar todo barco e jogar as penas duras no canal. |
+| `enemy_forest_snare_root` | **Raiz-Laço** / *Snare Root* | 32 Figueiral, Pontes de Raiz Viva, Gargantas, Cascatas e Floresta de Chuva (era a Aranha-Tecelã Apagada) | [controle] | as raízes do ar das figueiras que amarram as pontes de Jhilpur; a sombra ensinou algumas a dar nó sozinhas, e elas andam nas raizinhas atrás de um tornozelo. |
+| `enemy_forest_ghost_heron` | **Garça-Fantasma** / *Ghost Heron* | 33 Ilhas de Junco e Palafitas de Tarchon (era a Gaivota Ladra) | [distância] no papel, bate | pescavam do lado dos remendadores e pegavam o que caía das redes; ficaram paradas na névoa lilás da sombra e saíram pálidas e finas, e agora tiram das redes. |
+| `enemy_cave_smoke_dragonfly` | **Libélula de Fumaça** / *Smoke Dragonfly* | 34 Charco do Ninki Nanka, Ilhota das Lanternas e Toca da Dragoa (era o Enxame de Morcegos) | [enxame], voa | caçavam os mosquitos dos barqueiros; voaram no bafo de fumaça do sono azedo da dragoa e viraram fumaça também. |
+| `enemy_mountain_smoke_bubble` | **Bolha de Fumaça** / *Smoke Bubble* | 35 Raízes Afogadas, Olho e Coração do Lodo (era a Neblina do Vento Ruim) | [controle], voa | cada respiração da lama preta do coração sobe como uma bolha de fumaça; as que a sombra segura inteiras saem boiando e estouram em quem encontram. |
+| `enemy_cave_mud_child` | **Filho do Lodo** / *Child of the Lodo* | 35 Coração e Olho do Lodo, Raízes Afogadas e Bancos de Lama (era o Lodo de Gruta) | [enxame], pesado | pedaços do Lodo-que-Engole que aprenderam a nadar; sobem os ghats na Maré de Lodo e tentam engolir água limpa, e alguns já engoliram uma gota da Água Viva. |
+
 ### 3.3 Chefes de região (apagados, nunca vilões)
 
 | Antigo (`id`) | Novo | O que era antes da sombra | Fonte |

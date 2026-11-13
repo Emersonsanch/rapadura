@@ -115,10 +115,8 @@ namespace Rapadura.Tests
         public void EachBeast_SpawnsInItsGroupsClearings_AtTheAreasLevels([ValueSource(nameof(All))] Placement placement) =>
             checks.EachBeast_SpawnsInItsGroupsClearings_AtTheAreasLevels(placement);
 
-        [TestCase(Costa, "ushabtis_kushitas", Golem)]
+        // The Ushabti de Bronze Kushita of Meroë (27) has its own body now (CoastOwnBeastsPlacementTests).
         [TestCase(Ming, "espantalhos_apagados", BrokenLantern)]
-        [TestCase(Ming, "arqueiros_de_terracota", BrokenLantern)]
-        [TestCase(Ming, "ibis_de_luz", Hawk)]
         [TestCase(Nart, "lobos_cinzentos", Wolf)]
         [TestCase(Nart, "neblinas_do_rio", Mist)]
         public void TheSheetsThatSharedTheConstant_KeepTheirStandIn(string region, string group, string standIn)

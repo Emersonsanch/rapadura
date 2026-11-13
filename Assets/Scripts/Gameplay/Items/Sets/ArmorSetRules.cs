@@ -147,6 +147,9 @@ namespace Rapadura.Gameplay.Items.Sets
             "enemy_forest_thief_gull", "enemy_forest_coconut_crab", "enemy_forest_mangrove_crocodile", "enemy_forest_grass_lion",
             "enemy_forest_dust_rhino", "enemy_forest_dimmed_moray", "enemy_forest_smoke_urchin", "enemy_forest_lightning_bird",
             "enemy_forest_fiddler_crab",
+            // Three of the nineteenth pass (CoastOwnBeastRecipes), the reef's own beasts in the roles it had lent (Kirta and Kilwa, where the
+            // coral is); Meroë's three and the kongamato stay out, since a set takes at most 12.
+            "enemy_cave_thief_octopus", "enemy_cave_mud_jellyfish", "enemy_cave_dimmed_lionfish",
         });
 
         /// <summary>Seda de Lótus (Região 6, Delta de Jhilpur).</summary>
@@ -154,6 +157,9 @@ namespace Rapadura.Gameplay.Items.Sets
         {
             "enemy_forest_thief_monkey", "enemy_forest_thief_otter", "enemy_forest_dimmed_python", "enemy_forest_dimmed_troll",
             "enemy_forest_spear_heron", "enemy_forest_mire_leech",
+            // Three of the nineteenth pass (CoastOwnBeastRecipes), the Delta's own beasts in the roles it had lent: the heron and the leech
+            // are listed in the Costa's file, so tools/balance counted 4 own of 19 species and the farm went up to 1425 kills (budget 1500).
+            "enemy_forest_snare_root", "enemy_forest_ghost_heron", "enemy_cave_smoke_dragonfly",
         });
 
         /// <summary>Lã de Iaque (Região 7, Teto do Mundo).</summary>
@@ -161,6 +167,9 @@ namespace Rapadura.Gameplay.Items.Sets
         {
             "enemy_mountain_brown_bear", "enemy_mountain_wild_yak", "enemy_mountain_irbis", "enemy_mountain_almas",
             "enemy_mountain_giant_marmot", "enemy_mountain_red_billed_chough", "enemy_mountain_bearded_vulture", "enemy_mountain_ice_wolf",
+            // Four of the twentieth pass (HighlandOwnBeastRecipes), the Teto's own beasts in the roles it had lent: with 23 species in the
+            // region the 8 alone took ~1380 kills to farm the set, at the edge of the budget, and a set takes at most 12.
+            "enemy_mountain_dimmed_argali", "enemy_desert_az_bandit", "enemy_mountain_moraine_roller", "enemy_mountain_chute_ushabti",
         });
 
         /// <summary>Vasos de Bronze (Região 8, Planície de Mingcheng): the "conjunto antigo" of the sheet of map 46.</summary>
@@ -246,6 +255,8 @@ namespace Rapadura.Gameplay.Items.Sets
             "enemy_forest_hold_shadow", "enemy_forest_living_rope", "enemy_forest_sky_stone", "enemy_forest_toy_archon",
             // The fourteenth pass: the Lanterna Fugitiva (92) and the Vento de Órbita (95, 99, 100).
             "enemy_forest_runaway_lantern", "enemy_forest_orbit_wind",
+            // The eighteenth pass (SkyOwnBeastRecipes): the Faísca Teimosa (93), so the ten new species of the Sky do not dilute the farm past the budget.
+            "enemy_forest_stubborn_spark",
         });
 
         // ---- Regions 13–16, the second set of each: the old sets of the fichas (74, 82, the Primal Man's armour of the Cinco Covas, 98), from
@@ -273,6 +284,8 @@ namespace Rapadura.Gameplay.Items.Sets
         public static readonly ArmorSetDefinition GloryColumn = new ArmorSetDefinition("coluna_da_gloria", GloryColumnChestId, GloryColumnHelmId, AncientDropChance, new[]
         {
             "enemy_cave_dark_drop", "enemy_desert_confused_spark", "enemy_forest_smoke_rope",
+            // The eighteenth pass: the Última Sombra and the Vento do Alto of the Pés da Coluna (98), the set's own map.
+            "enemy_forest_last_shadow", "enemy_mountain_high_wind",
         });
 
         /// <summary>The four sets of Regions 1–4, in region order.</summary>

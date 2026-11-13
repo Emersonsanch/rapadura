@@ -330,6 +330,43 @@ namespace Rapadura.Gameplay.Enemies.Visuals
             { "enemy_mountain_iron_eagle", ProceduralEnemyKind.IronEagle },
             { "enemy_mountain_caucasus_bear", ProceduralEnemyKind.CaucasusBear },
             { "enemy_forest_snow_wolf", ProceduralEnemyKind.SnowWolf },
+            // Twentieth pass (HighlandOwnBeastRecipes): the roles of the Teto do Mundo (and two of Mingcheng) that still borrowed another region's beast.
+            { "enemy_mountain_moraine_roller", ProceduralEnemyKind.MoraineRoller },
+            { "enemy_mountain_chute_ushabti", ProceduralEnemyKind.ChuteUshabti },
+            { "enemy_mountain_crest_mist", ProceduralEnemyKind.CrestMist },
+            { "enemy_desert_smoke_kite", ProceduralEnemyKind.SmokeKite },
+            { "enemy_mountain_dimmed_royal_hawk", ProceduralEnemyKind.DimmedRoyalHawk },
+            { "enemy_cave_wind_bat", ProceduralEnemyKind.WindBat },
+            { "enemy_mountain_stone_guard_ushabti", ProceduralEnemyKind.StoneGuardUshabti },
+            { "enemy_desert_az_bandit", ProceduralEnemyKind.AzBandit },
+            { "enemy_mountain_dimmed_argali", ProceduralEnemyKind.DimmedArgali },
+            { "enemy_cave_snow_chough", ProceduralEnemyKind.SnowChough },
+            { "enemy_desert_terracotta_archer", ProceduralEnemyKind.TerracottaArcher },
+            { "enemy_mountain_dimmed_light_ibis", ProceduralEnemyKind.LightIbis },
+            // Eighteenth pass (SkyOwnBeastRecipes): the roles of the Reinos do Céu that still borrowed another region's beast.
+            { "enemy_forest_runaway_archon", ProceduralEnemyKind.RunawayArchon },
+            { "enemy_forest_stubborn_spark", ProceduralEnemyKind.StubbornSpark },
+            { "enemy_forest_sphere_smoke", ProceduralEnemyKind.SphereSmoke },
+            { "enemy_forest_flower_treader", ProceduralEnemyKind.FlowerTreader },
+            { "enemy_forest_smoke_thorn", ProceduralEnemyKind.SmokeThorn },
+            { "enemy_mountain_ember_stowaway", ProceduralEnemyKind.EmberStowaway },
+            { "enemy_forest_noon_shadow", ProceduralEnemyKind.NoonShadow },
+            { "enemy_forest_last_shadow", ProceduralEnemyKind.LastShadow },
+            { "enemy_mountain_high_wind", ProceduralEnemyKind.HighWind },
+            { "enemy_forest_fled_archon", ProceduralEnemyKind.FledArchon },
+            // Nineteenth pass (CoastOwnBeastRecipes): the roles of the Costa das Monções and the Delta de Jhilpur that still borrowed another region's beast.
+            { "enemy_mountain_kushite_ushabti", ProceduralEnemyKind.KushiteUshabti },
+            { "enemy_desert_young_scorpion_king", ProceduralEnemyKind.YoungScorpionKing },
+            { "enemy_desert_black_sand_jackal", ProceduralEnemyKind.BlackSandJackal },
+            { "enemy_cave_mud_jellyfish", ProceduralEnemyKind.MudJellyfish },
+            { "enemy_cave_dimmed_lionfish", ProceduralEnemyKind.DimmedLionfish },
+            { "enemy_cave_kongamato", ProceduralEnemyKind.Kongamato },
+            { "enemy_cave_thief_octopus", ProceduralEnemyKind.ThiefOctopus },
+            { "enemy_forest_snare_root", ProceduralEnemyKind.SnareRoot },
+            { "enemy_forest_ghost_heron", ProceduralEnemyKind.GhostHeron },
+            { "enemy_cave_smoke_dragonfly", ProceduralEnemyKind.SmokeDragonfly },
+            { "enemy_mountain_smoke_bubble", ProceduralEnemyKind.SmokeBubble },
+            { "enemy_cave_mud_child", ProceduralEnemyKind.MudChild },
             // The world bosses of Regions 10–12 (Docs/Mapas100.md 58, 64, 70), at their arenas.
             { RegionBossRules.WindKingId, ProceduralEnemyKind.WindKing },
             { RegionBossRules.OldKulId, ProceduralEnemyKind.OldKul },
@@ -481,6 +518,12 @@ namespace Rapadura.Gameplay.Enemies.Visuals
             ProceduralEnemyKind.ErasingWater, ProceduralEnemyKind.WrongCurrent, ProceduralEnemyKind.SwimmingShadow, ProceduralEnemyKind.StowawayShadow, ProceduralEnemyKind.SkyCrack, ProceduralEnemyKind.LivingCrevasse,
             ProceduralEnemyKind.DimmedGoldenEagle, ProceduralEnemyKind.GoldenStag, ProceduralEnemyKind.GiantIbex, ProceduralEnemyKind.HillBoar, ProceduralEnemyKind.SmokeMessenger, ProceduralEnemyKind.SmokeWoodpecker,
             ProceduralEnemyKind.DimmedFungus, ProceduralEnemyKind.TaigaLynx, ProceduralEnemyKind.DimmedStallion, ProceduralEnemyKind.IronEagle, ProceduralEnemyKind.CaucasusBear, ProceduralEnemyKind.SnowWolf,
+            ProceduralEnemyKind.MoraineRoller, ProceduralEnemyKind.ChuteUshabti, ProceduralEnemyKind.CrestMist, ProceduralEnemyKind.SmokeKite, ProceduralEnemyKind.DimmedRoyalHawk, ProceduralEnemyKind.WindBat,
+            ProceduralEnemyKind.StoneGuardUshabti, ProceduralEnemyKind.AzBandit, ProceduralEnemyKind.DimmedArgali, ProceduralEnemyKind.SnowChough, ProceduralEnemyKind.TerracottaArcher, ProceduralEnemyKind.LightIbis,
+            ProceduralEnemyKind.RunawayArchon, ProceduralEnemyKind.StubbornSpark, ProceduralEnemyKind.SphereSmoke, ProceduralEnemyKind.FlowerTreader, ProceduralEnemyKind.SmokeThorn,
+            ProceduralEnemyKind.EmberStowaway, ProceduralEnemyKind.NoonShadow, ProceduralEnemyKind.LastShadow, ProceduralEnemyKind.HighWind, ProceduralEnemyKind.FledArchon,
+            ProceduralEnemyKind.KushiteUshabti, ProceduralEnemyKind.YoungScorpionKing, ProceduralEnemyKind.BlackSandJackal, ProceduralEnemyKind.MudJellyfish, ProceduralEnemyKind.DimmedLionfish, ProceduralEnemyKind.Kongamato,
+            ProceduralEnemyKind.ThiefOctopus, ProceduralEnemyKind.SnareRoot, ProceduralEnemyKind.GhostHeron, ProceduralEnemyKind.SmokeDragonfly, ProceduralEnemyKind.SmokeBubble, ProceduralEnemyKind.MudChild,
             ProceduralEnemyKind.WindKing, ProceduralEnemyKind.OldKul, ProceduralEnemyKind.EmberGlutton,
             ProceduralEnemyKind.Apep, ProceduralEnemyKind.DreamOfDestruction, ProceduralEnemyKind.GreatDark, ProceduralEnemyKind.AzCaptain,
             ProceduralEnemyKind.Hedammu, ProceduralEnemyKind.SwallowingMire, ProceduralEnemyKind.Aydahar, ProceduralEnemyKind.FourGluttons, ProceduralEnemyKind.Ohya,
@@ -1309,6 +1352,108 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                     break;
                 case ProceduralEnemyKind.SnowWolf:
                     LentRoleBeastRecipes.BuildSnowWolf(blueprint);
+                    break;
+                case ProceduralEnemyKind.MoraineRoller:
+                    HighlandOwnBeastRecipes.BuildMoraineRoller(blueprint);
+                    break;
+                case ProceduralEnemyKind.ChuteUshabti:
+                    HighlandOwnBeastRecipes.BuildChuteUshabti(blueprint);
+                    break;
+                case ProceduralEnemyKind.CrestMist:
+                    HighlandOwnBeastRecipes.BuildCrestMist(blueprint);
+                    break;
+                case ProceduralEnemyKind.SmokeKite:
+                    HighlandOwnBeastRecipes.BuildSmokeKite(blueprint);
+                    break;
+                case ProceduralEnemyKind.DimmedRoyalHawk:
+                    HighlandOwnBeastRecipes.BuildDimmedRoyalHawk(blueprint);
+                    break;
+                case ProceduralEnemyKind.WindBat:
+                    HighlandOwnBeastRecipes.BuildWindBat(blueprint);
+                    break;
+                case ProceduralEnemyKind.StoneGuardUshabti:
+                    HighlandOwnBeastRecipes.BuildStoneGuardUshabti(blueprint);
+                    break;
+                case ProceduralEnemyKind.AzBandit:
+                    HighlandOwnBeastRecipes.BuildAzBandit(blueprint);
+                    break;
+                case ProceduralEnemyKind.DimmedArgali:
+                    HighlandOwnBeastRecipes.BuildDimmedArgali(blueprint);
+                    break;
+                case ProceduralEnemyKind.SnowChough:
+                    HighlandOwnBeastRecipes.BuildSnowChough(blueprint);
+                    break;
+                case ProceduralEnemyKind.TerracottaArcher:
+                    HighlandOwnBeastRecipes.BuildTerracottaArcher(blueprint);
+                    break;
+                case ProceduralEnemyKind.LightIbis:
+                    HighlandOwnBeastRecipes.BuildLightIbis(blueprint);
+                    break;
+                case ProceduralEnemyKind.RunawayArchon:
+                    SkyOwnBeastRecipes.BuildRunawayArchon(blueprint);
+                    break;
+                case ProceduralEnemyKind.StubbornSpark:
+                    SkyOwnBeastRecipes.BuildStubbornSpark(blueprint);
+                    break;
+                case ProceduralEnemyKind.SphereSmoke:
+                    SkyOwnBeastRecipes.BuildSphereSmoke(blueprint);
+                    break;
+                case ProceduralEnemyKind.FlowerTreader:
+                    SkyOwnBeastRecipes.BuildFlowerTreader(blueprint);
+                    break;
+                case ProceduralEnemyKind.SmokeThorn:
+                    SkyOwnBeastRecipes.BuildSmokeThorn(blueprint);
+                    break;
+                case ProceduralEnemyKind.EmberStowaway:
+                    SkyOwnBeastRecipes.BuildEmberStowaway(blueprint);
+                    break;
+                case ProceduralEnemyKind.NoonShadow:
+                    SkyOwnBeastRecipes.BuildNoonShadow(blueprint);
+                    break;
+                case ProceduralEnemyKind.LastShadow:
+                    SkyOwnBeastRecipes.BuildLastShadow(blueprint);
+                    break;
+                case ProceduralEnemyKind.HighWind:
+                    SkyOwnBeastRecipes.BuildHighWind(blueprint);
+                    break;
+                case ProceduralEnemyKind.FledArchon:
+                    SkyOwnBeastRecipes.BuildFledArchon(blueprint);
+                    break;
+                case ProceduralEnemyKind.KushiteUshabti:
+                    CoastOwnBeastRecipes.BuildKushiteUshabti(blueprint);
+                    break;
+                case ProceduralEnemyKind.YoungScorpionKing:
+                    CoastOwnBeastRecipes.BuildYoungScorpionKing(blueprint);
+                    break;
+                case ProceduralEnemyKind.BlackSandJackal:
+                    CoastOwnBeastRecipes.BuildBlackSandJackal(blueprint);
+                    break;
+                case ProceduralEnemyKind.MudJellyfish:
+                    CoastOwnBeastRecipes.BuildMudJellyfish(blueprint);
+                    break;
+                case ProceduralEnemyKind.DimmedLionfish:
+                    CoastOwnBeastRecipes.BuildDimmedLionfish(blueprint);
+                    break;
+                case ProceduralEnemyKind.Kongamato:
+                    CoastOwnBeastRecipes.BuildKongamato(blueprint);
+                    break;
+                case ProceduralEnemyKind.ThiefOctopus:
+                    CoastOwnBeastRecipes.BuildThiefOctopus(blueprint);
+                    break;
+                case ProceduralEnemyKind.SnareRoot:
+                    CoastOwnBeastRecipes.BuildSnareRoot(blueprint);
+                    break;
+                case ProceduralEnemyKind.GhostHeron:
+                    CoastOwnBeastRecipes.BuildGhostHeron(blueprint);
+                    break;
+                case ProceduralEnemyKind.SmokeDragonfly:
+                    CoastOwnBeastRecipes.BuildSmokeDragonfly(blueprint);
+                    break;
+                case ProceduralEnemyKind.SmokeBubble:
+                    CoastOwnBeastRecipes.BuildSmokeBubble(blueprint);
+                    break;
+                case ProceduralEnemyKind.MudChild:
+                    CoastOwnBeastRecipes.BuildMudChild(blueprint);
                     break;
                 case ProceduralEnemyKind.SkyStone:
                     CeuBeastRecipes.BuildSkyStone(blueprint);

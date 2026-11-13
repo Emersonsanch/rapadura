@@ -385,7 +385,7 @@ namespace Rapadura.Gameplay.Quests
                 T("The Coluna da Glória stands in front of them at last, and the very last of the dark has crept up after the cousins and is climbing the steps. Grandpa Jorge wrote: it will follow you up, because that is what it does, and that is why you do not go alone.",
                   "A Coluna da Glória está na frente deles, afinal, e o último resto do escuro subiu atrás dos primos e está pisando nos degraus. O Vô Jorge escreveu: ela vai subir atrás de vocês, porque é o que ela faz, e é por isso que não se vai sozinho."),
                 T("Reach the Foot of the Column of Glory", "Chegar aos Pés da Coluna da Glória"),
-                T("Free the last of the creeping dark on the steps", "Libertar o que resta do escuro rastejante nos degraus"),
+                T("Free the Last Shadows on the steps", "Libertar as Últimas Sombras nos degraus"),
                 T("We told Grandma Edna we were at the foot of the Column. She said: I know, I can see it from the porch. She meant her porch. She meant the one at home. We asked what it looks like from there, and she said: like him, showing off.",
                   "A gente contou para a Vó Edna que chegou nos pés da Coluna. Ela disse: eu sei, estou vendo daqui da varanda. Era a varanda dela. Era a de casa. A gente perguntou como é de lá, e ela disse: parece ele, se exibindo."),
                 T("It only climbs while someone is climbing. Do not stop on the steps. Do not hurry either.",

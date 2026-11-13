@@ -105,7 +105,7 @@ abaixo do herói não larga equipamento. O drop mora em `ArmorSetBonuses` e não
   - Escamas de Mehen: Filho de Apep, Areia Movediça, Ganso Ladrão.
   - Gigantes: Homem-Escorpião, Lince do Cedro, Abelha-Resina.
   - Cinco Luzes: Touro de Cinza, Morcego-Lâmina, Enguia Grande.
-  - Coluna da Glória: Gota de Treva, Faísca Confusa, Corda de Fumaça.
+  - Coluna da Glória: Gota de Treva, Faísca Confusa, Corda de Fumaça, Última Sombra e Vento do Alto (desde a décima oitava leva de bichos, 2026-11-13: as dez espécies novas do Céu levavam o par a 1 500 abates; com cinco, 900). O Cais de Luz ganhou a Faísca Teimosa pelo mesmo motivo (1 385 abates).
 - **Regiões 10–12:** os 12 bichos próprios de cada região, **0,75%** por abate (`HighDropChance`), ~133 abates por peça. Têm 12
   próprios como o norte, mas no meio de 17–32 espécies (os Picos de Farnkesh são os que mais emprestam): a 0,5% o Sino de Vento
   passaria dos 1 500 abates do orçamento (1 600); a 0,75% fica em 570–1 070 caçando a região.

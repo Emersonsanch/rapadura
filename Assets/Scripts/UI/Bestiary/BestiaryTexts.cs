@@ -293,6 +293,15 @@ namespace Rapadura.UI.Bestiary
             // -- Papéis da Estepe dos Nartes que ainda usavam bicho de outra região (own file too) --
             LentRoleBestiaryTexts.AddPages(entries);
 
+            // -- Papéis da Costa das Monções e do Delta de Jhilpur que ainda usavam bicho de outra região (own file too) --
+            CoastOwnBestiaryTexts.AddPages(entries);
+
+            // -- Papéis do Teto do Mundo (e dois de Mingcheng) que ainda usavam bicho de outra região (own file too) --
+            HighlandOwnBestiaryTexts.AddPages(entries);
+
+            // -- Papéis dos Reinos do Céu que ainda usavam bicho de outra região (own file too) --
+            SkyOwnBestiaryTexts.AddPages(entries);
+
             // -- Guardiões do Ossuário dos Artífices (Docs/Dungeons.md, own file) --
             RegionBossTexts.AddPages(entries);
 

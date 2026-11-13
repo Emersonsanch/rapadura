@@ -278,13 +278,13 @@ namespace Rapadura.Gameplay.World.Cities
                 new[] { new RegionObjectiveSpec("clear_the_course", QuestObjectiveType.KillEnemyType, "enemy_mountain_baboon", 5) },
                 new[] { new RegionRewardSpec("item_odre_agua", 2), new RegionRewardSpec("item_gold", 90) })),
 
-            // -- Kirta: King Kirta, then Pughat. The cave ooze stands in for the Água-Viva de Lodo and the lantern fish for the
-            // Peixe-Leão Apagado (Docs/Mapas100.md 28). --
+            // -- Kirta: King Kirta, then Pughat. The Água-Viva de Lodo and the Peixe-Leão Apagado of the ficha (Docs/Mapas100.md 28)
+            // are their own beasts now (CoastOwnBeastRecipes). --
             new CityQuestSpec(CityCatalog.Kirta, "kirta", new RegionQuestSpec(KirtaOoze, BiomeType.Forest, null, 1040,
-                new[] { new RegionObjectiveSpec("scrape_the_ooze", QuestObjectiveType.KillEnemyType, "enemy_cave_ooze", 6) },
+                new[] { new RegionObjectiveSpec("scrape_the_ooze", QuestObjectiveType.KillEnemyType, "enemy_cave_mud_jellyfish", 6) },
                 new[] { new RegionRewardSpec("item_health_potion", 4), new RegionRewardSpec("item_mana_potion", 4), new RegionRewardSpec("item_gold", 90) })),
             new CityQuestSpec(CityCatalog.Kirta, "pughat", new RegionQuestSpec(KirtaRescue, BiomeType.Forest, KirtaOoze, 1120,
-                new[] { new RegionObjectiveSpec("free_the_divers", QuestObjectiveType.KillEnemyType, "enemy_cave_lantern_fish", 5) },
+                new[] { new RegionObjectiveSpec("free_the_divers", QuestObjectiveType.KillEnemyType, "enemy_cave_dimmed_lionfish", 5) },
                 new[] { new RegionRewardSpec("item_bolha_ar", 1), new RegionRewardSpec("item_gold", 100) })),
 
             // -- Jhilpur: old Salmaios, then Abiesous. The cave ooze stands in for the Filhos do Lodo that climb the ghats (the
@@ -297,21 +297,22 @@ namespace Rapadura.Gameplay.World.Cities
                 new[] { new RegionRewardSpec("item_fruta_purificadora", 1), new RegionRewardSpec("item_gold", 120) })),
 
             // -- Palafitas de Tarchon: old Tarchon, then Vel. The Fogos-Fátuos Presos (the swarm of Docs/Mapas100.md 33) are their own beast
-            // now (WideStandInBeastRecipes); the shroud owl still stands in for the Garça-Fantasma that steals from the nets (its ranged bird). --
+            // now (WideStandInBeastRecipes), and so is the Garça-Fantasma that steals from the nets (CoastOwnBeastRecipes; the shroud owl goes with it at night). --
             new CityQuestSpec(CityCatalog.PalafitasTarchon, "tarchon", new RegionQuestSpec(TarchonWisps, BiomeType.Forest, null, 1350,
                 new[] { new RegionObjectiveSpec("free_the_wisps", QuestObjectiveType.KillEnemyType, "enemy_forest_marsh_wisp", 8) },
                 new[] { new RegionRewardSpec("item_health_potion", 5), new RegionRewardSpec("item_mana_potion", 5), new RegionRewardSpec("item_gold", 120) })),
             new CityQuestSpec(CityCatalog.PalafitasTarchon, "vel", new RegionQuestSpec(TarchonNets, BiomeType.Forest, TarchonWisps, 1450,
-                new[] { new RegionObjectiveSpec("chase_the_herons", QuestObjectiveType.KillEnemyType, "enemy_forest_shroud_owl", 6) },
+                new[] { new RegionObjectiveSpec("chase_the_herons", QuestObjectiveType.KillEnemyType, "enemy_forest_ghost_heron", 6) },
                 new[] { new RegionRewardSpec("item_amuleto_antiveneno", 1), new RegionRewardSpec("item_gold", 130) })),
 
-            // -- Sangkent: Abā, then Kustai. The rolling stone is the Pedra-Rolante of the ficha (Docs/Mapas100.md 36) and the
-            // ill-wind mist the Neblina do Vento Ruim of the Calhas de Pedra (37), which blurs the notices of the caravans. --
+            // -- Sangkent: Abā, then Kustai. The Pedra-Rolante of the ficha (Docs/Mapas100.md 36) and the Neblina do Vento Ruim of the
+            // Calhas de Pedra (37), which blurs the notices of the caravans, are their own beasts now (HighlandOwnBeastRecipes: the
+            // Pedra-Rolante da Morena and the Neblina das Cristas). --
             new CityQuestSpec(CityCatalog.Sangkent, "aba", new RegionQuestSpec(SangkentChutes, BiomeType.Forest, null, 1500,
-                new[] { new RegionObjectiveSpec("clear_the_chutes", QuestObjectiveType.KillEnemyType, "enemy_mountain_rolling_stone", 7) },
+                new[] { new RegionObjectiveSpec("clear_the_chutes", QuestObjectiveType.KillEnemyType, "enemy_mountain_moraine_roller", 7) },
                 new[] { new RegionRewardSpec("item_health_potion", 5), new RegionRewardSpec("item_mana_potion", 5), new RegionRewardSpec("item_gold", 130) })),
             new CityQuestSpec(CityCatalog.Sangkent, "kustai", new RegionQuestSpec(SangkentBoard, BiomeType.Forest, SangkentChutes, 1600,
-                new[] { new RegionObjectiveSpec("clear_the_board", QuestObjectiveType.KillEnemyType, "enemy_mountain_ill_wind_mist", 6) },
+                new[] { new RegionObjectiveSpec("clear_the_board", QuestObjectiveType.KillEnemyType, "enemy_mountain_crest_mist", 6) },
                 new[] { new RegionRewardSpec("item_capa_tempestade", 1), new RegionRewardSpec("item_gold", 140) })),
 
             // -- Mingcheng: Bögü, then Lin Deng. The stone golem stands in for the Leão de Pedra Apagado of the ficha (Docs/Mapas100.md
@@ -324,12 +325,12 @@ namespace Rapadura.Gameplay.World.Cities
                 new[] { new RegionRewardSpec("item_selo_sol", 1), new RegionRewardSpec("item_gold", 150) })),
 
             // -- Torres Brancas: Amanirenas, then Shanakdakhete. The Espelho Quebrado of the ficha (Docs/Mapas100.md 42) is its own beast now
-            // (WideStandInBeastRecipes); the dark crow still stands in for the Íbis de Luz Apagada. --
+            // (WideStandInBeastRecipes), and the Íbis de Luz Apagada too (HighlandOwnBeastRecipes). --
             new CityQuestSpec(CityCatalog.TorresBrancas, "amanirenas", new RegionQuestSpec(TorresMirrors, BiomeType.Forest, null, 1850,
                 new[] { new RegionObjectiveSpec("break_the_mirrors", QuestObjectiveType.KillEnemyType, "enemy_desert_broken_mirror", 7) },
                 new[] { new RegionRewardSpec("item_health_potion", 5), new RegionRewardSpec("item_mana_potion", 5), new RegionRewardSpec("item_gold", 160) })),
             new CityQuestSpec(CityCatalog.TorresBrancas, "shanakdakhete", new RegionQuestSpec(TorresIbises, BiomeType.Forest, TorresMirrors, 1950,
-                new[] { new RegionObjectiveSpec("chase_the_ibises", QuestObjectiveType.KillEnemyType, "enemy_cave_dark_crow", 6) },
+                new[] { new RegionObjectiveSpec("chase_the_ibises", QuestObjectiveType.KillEnemyType, "enemy_mountain_dimmed_light_ibis", 6) },
                 new[] { new RegionRewardSpec("item_lamparina_runica", 1), new RegionRewardSpec("item_pedra_alma", 2), new RegionRewardSpec("item_gold", 170) })),
 
             // -- Acampamento de Soslan: Soslan, then Satana. The wolf stands in for the Lobo da Estepe Apagado of the ficha

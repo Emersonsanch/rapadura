@@ -123,6 +123,10 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             public const string Vulture = "enemy_desert_ember_vulture";
             public const string Stone = "enemy_mountain_rolling_stone";
             public const string Potoo = NightVariantRules.PotooEnemyId;
+            // The twentieth pass (HighlandOwnBeastRecipes, OverworldLayouts.HighlandBeasts): the Arqueiro de Terracota (45, was the broken
+            // lantern) and the Íbis de Luz Apagada (42, was the hawk).
+            public const string TerracottaArcher = "enemy_desert_terracotta_archer";
+            public const string LightIbis = "enemy_mountain_dimmed_light_ibis";
         }
 
         private static OverworldLayout MingchengRegion()
@@ -340,6 +344,8 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             }
 
             TrimSteepClearings(w);
+            // The lock gates' posts (43, OverworldLayouts.RouteMechanics.cs), after the clearings so none of them moves.
+            AddCanalLockPosts(w);
             return w;
         }
 
@@ -427,22 +433,22 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             cha.Fauna.Add(Fauna("gafanhotos_do_cha", "[enxame]", T(N(Ming.Locusts, 3), N(Ming.PaperCrane, 1)), T(V(Ming.Locusts, 2), S(fireflies, 1)), 5));
 
             // Fossos de Terracota (41) and Vale dos Guerreiros (45): the Soldado de Terracota [tanque], the
-            // Cavalo de Terracota [rápido] (the wolf's body), lions and paper kites.
+            // Cavalo de Terracota [rápido] (the wolf's body), lions and the terracotta archers (their own beast now, HighlandBeasts).
             fossos.Fauna.Add(Fauna("soldados_de_terracota", "[tanque]", T(N(Ming.Terracotta, 3), N(Ming.Lion, 1)), T(V(Ming.Terracotta, 2), S(werewolf, 1)), 3, null, 30f));
             fossos.Fauna.Add(Fauna("cavalos_de_terracota", "[rápido]", T(N(MidBeasts.TerracottaHorse, 3), N(Ming.Terracotta, 1)), T(V(MidBeasts.TerracottaHorse, 2), S(werewolf, 1)), 4));
             guerreiros.Fauna.Add(Fauna("guerreiros_de_terracota", "[tanque]", T(N(Ming.Terracotta, 3), N(Ming.Horse, 1)), T(V(Ming.Terracotta, 2), S(werewolf, 1)), 3, null, 30f));
-            guerreiros.Fauna.Add(Fauna("arqueiros_de_papel", "[distância]", T(N(Ming.Kite, 3), N(Ming.Terracotta, 1)), T(V(Ming.Kite, 2), S(owl, 1)), 4));
+            guerreiros.Fauna.Add(Fauna("arqueiros_de_papel", "[distância]", T(N(Ming.TerracottaArcher, 3), N(Ming.Terracotta, 1)), T(V(Ming.TerracottaArcher, 2), S(owl, 1)), 4));
             guerreiros.Fauna.Add(Fauna("cavalos_do_vale", "[rápido]", T(N(MidBeasts.TerracottaHorse, 3), N(Ming.Lion, 1)), T(V(MidBeasts.TerracottaHorse, 2), S(werewolf, 1)), 4));
 
             // Jardins em Terraço and Torres Brancas (42): the Espelho Quebrado [distância] (its own beast now), the Íbis de Luz
-            // Apagada [rápido] (the hawk), the Guardião de Cal [tanque] (the golem), the Raio Torto [controle] (the ill-wind mist).
-            jardins.Fauna.Add(Fauna("ibis_de_luz", "[rápido]", T(N(Ming.Crane, 3), N(Ming.Mirror, 1)), T(V(Ming.Crane, 2), S(moon, 1)), 4));
-            jardins.Fauna.Add(Fauna("espelhos_quebrados", "[distância]", T(N(Ming.Mirror, 3), N(Ming.Crane, 1)), T(V(Ming.Mirror, 2), S(owl, 1)), 4));
+            // Apagada [rápido] (its own beast now, HighlandBeasts; it throws like the hawk it replaced), the Guardião de Cal [tanque] (the golem), the Raio Torto [controle] (the ill-wind mist).
+            jardins.Fauna.Add(Fauna("ibis_de_luz", "[rápido]", T(N(Ming.LightIbis, 3), N(Ming.Mirror, 1)), T(V(Ming.LightIbis, 2), S(moon, 1)), 4));
+            jardins.Fauna.Add(Fauna("espelhos_quebrados", "[distância]", T(N(Ming.Mirror, 3), N(Ming.LightIbis, 1)), T(V(Ming.Mirror, 2), S(owl, 1)), 4));
             torres.Fauna.Add(Fauna("guardioes_de_cal", "[tanque]", T(N(Ming.Lion, 3), N(Ming.Smoke, 1)), T(V(Ming.Lion, 2), V(Ming.Smoke, 1)), 3, null, 30f));
             torres.Fauna.Add(Fauna("raios_tortos", "[controle]", T(N(Ming.Smoke, 3), N(Ming.Mirror, 1)), T(V(Ming.Smoke, 2), S(owl, 1)), 4));
             torres.Fauna.Add(Fauna("espelhos_das_torres", "[distância]", T(N(Ming.Mirror, 3), N(Ming.Lion, 1)), T(V(Ming.Mirror, 2), S(bats, 1)), 4));
             espelhos.Fauna.Add(Fauna("espelhos_do_atalho", "[distância]", T(N(Ming.Mirror, 3), N(Ming.Smoke, 1)), T(V(Ming.Mirror, 2), S(owl, 1)), 4));
-            espelhos.Fauna.Add(Fauna("guardioes_das_colinas", "[tanque]", T(N(Ming.Lion, 3), N(Ming.Crane, 1)), T(V(Ming.Lion, 2), S(bats, 1)), 3, null, 30f));
+            espelhos.Fauna.Add(Fauna("guardioes_das_colinas", "[tanque]", T(N(Ming.Lion, 3), N(Ming.LightIbis, 1)), T(V(Ming.Lion, 2), S(bats, 1)), 3, null, 30f));
 
             // Ravinas de Loess: scorpions in the yellow earth, vultures, sand snakes.
             loess.Fauna.Add(Fauna("escorpioes_do_loess", "[controle]", T(N(Ming.Scorpion, 3), N(Ming.Carp, 1)), T(V(Ming.Scorpion, 2), S(owl, 1)), 4));
@@ -460,16 +466,16 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             nevoa.Fauna.Add(Fauna("neblinas_do_vale", "[controle]", T(N(Ming.Smoke, 3), N(Ming.Crow, 1)), T(V(Ming.Smoke, 2), S(owl, 1)), 4));
             nevoa.Fauna.Add(Fauna("macacos_da_nevoa", "[rápido]", T(N(Ming.Monkey, 3), N(Ming.Horse, 1)), T(V(Ming.Monkey, 2), S(werewolf, 1)), 3, null, 28f));
 
-            // Muralha das Mil Torres (45): the Soldado de Terracota [tanque], the Arqueiro de Terracota [distância] (paper kites),
+            // Muralha das Mil Torres (45): the Soldado de Terracota [tanque], the Arqueiro de Terracota [distância] (its own beast now, HighlandBeasts),
             // the Cavalo de Terracota [rápido] (the wolf), the Filhote de Nian [elite] (the baboon); bats in the towers.
-            muralha.Fauna.Add(Fauna("soldados_da_muralha", "[tanque]", T(N(Ming.Terracotta, 3), N(Ming.Kite, 1)), T(V(Ming.Terracotta, 2), S(werewolf, 1)), 3, null, 30f));
-            muralha.Fauna.Add(Fauna("arqueiros_de_terracota", "[distância]", T(N(Ming.Kite, 3), N(Ming.Terracotta, 1)), T(V(Ming.Kite, 2), S(bats, 1)), 4));
+            muralha.Fauna.Add(Fauna("soldados_da_muralha", "[tanque]", T(N(Ming.Terracotta, 3), N(Ming.TerracottaArcher, 1)), T(V(Ming.Terracotta, 2), S(werewolf, 1)), 3, null, 30f));
+            muralha.Fauna.Add(Fauna("arqueiros_de_terracota", "[distância]", T(N(Ming.TerracottaArcher, 3), N(Ming.Terracotta, 1)), T(V(Ming.TerracottaArcher, 2), S(bats, 1)), 4));
             quinhentos.Fauna.Add(Fauna("cavalos_da_muralha", "[rápido]", T(N(MidBeasts.TerracottaHorse, 3), N(Ming.Terracotta, 1)), T(V(MidBeasts.TerracottaHorse, 2), S(werewolf, 1)), 4));
-            quinhentos.Fauna.Add(Fauna("morcegos_das_torres_de_vigia", "[enxame]", T(N(Ming.Bats, 3), N(Ming.Kite, 1)), T(V(Ming.Bats, 2), S(bats, 2)), 5));
+            quinhentos.Fauna.Add(Fauna("morcegos_das_torres_de_vigia", "[enxame]", T(N(Ming.Bats, 3), N(Ming.TerracottaArcher, 1)), T(V(Ming.Bats, 2), S(bats, 2)), 5));
             muralhaOeste.Fauna.Add(Fauna("soldados_do_oeste", "[tanque]", T(N(Ming.Terracotta, 3), N(Ming.Horse, 1)), T(V(Ming.Terracotta, 2), S(werewolf, 1)), 3, null, 30f));
             muralhaOeste.Fauna.Add(Fauna("pedras_da_muralha", "[controle]", T(N(Ming.Stone, 3), N(Ming.Crow, 1)), T(V(Ming.Stone, 2), S(bats, 1)), 3, null, 28f));
             portao.Fauna.Add(Fauna("filhotes_do_portao", "[elite]", T(N(Ming.Nian, 3), N(Ming.Terracotta, 1)), T(V(Ming.Nian, 3), S(werewolf, 1)), 3, null, 32f));
-            portao.Fauna.Add(Fauna("arqueiros_do_portao", "[distância]", T(N(Ming.Kite, 3), N(Ming.Horse, 1)), T(V(Ming.Kite, 2), S(bats, 1)), 4));
+            portao.Fauna.Add(Fauna("arqueiros_do_portao", "[distância]", T(N(Ming.TerracottaArcher, 3), N(Ming.Horse, 1)), T(V(Ming.TerracottaArcher, 2), S(bats, 1)), 4));
 
             // Cidadela dos Quatro Gulosos (46): the Servos de Taotie [tanque] (the terracotta soldier), the Bolhas de Hundun [controle]
             // (the ill-wind mist), the Filhotes de Qiongqi [rápido] (the wolf), the Guarda de Taowu [elite] (the stone lion); no boss yet.

@@ -83,6 +83,16 @@ namespace Rapadura.Tests
             ("enemy_mountain_smoke_woodpecker", BiomeType.Mountain, EnemyProjectileKind.Feather, ProceduralEnemyKind.SmokeWoodpecker),
             ("enemy_mountain_iron_eagle", BiomeType.Mountain, EnemyProjectileKind.Feather, ProceduralEnemyKind.IronEagle),
             ("enemy_cave_smoke_messenger", BiomeType.Caves, EnemyProjectileKind.Feather, ProceduralEnemyKind.SmokeMessenger),
+            // The twentieth pass, the Teto do Mundo and Mingcheng (HighlandOwnBeastsTests): the kite's and the archer's lantern bolts, the
+            // royal hawk's, the snow chough's and the light ibis's feathers, as the broken lantern, the hawk and the crow they replace.
+            ("enemy_desert_smoke_kite", BiomeType.Desert, EnemyProjectileKind.LanternBolt, ProceduralEnemyKind.SmokeKite),
+            ("enemy_mountain_dimmed_royal_hawk", BiomeType.Mountain, EnemyProjectileKind.Feather, ProceduralEnemyKind.DimmedRoyalHawk),
+            ("enemy_cave_snow_chough", BiomeType.Caves, EnemyProjectileKind.Feather, ProceduralEnemyKind.SnowChough),
+            ("enemy_desert_terracotta_archer", BiomeType.Desert, EnemyProjectileKind.LanternBolt, ProceduralEnemyKind.TerracottaArcher),
+            ("enemy_mountain_dimmed_light_ibis", BiomeType.Mountain, EnemyProjectileKind.Feather, ProceduralEnemyKind.LightIbis),
+            // The nineteenth pass, the Costa das Monções (CoastOwnBeastsTests): the lionfish's glob of light and the kongamato's feathers, as the lantern fish and the crow they replace.
+            ("enemy_cave_dimmed_lionfish", BiomeType.Caves, EnemyProjectileKind.LureGlob, ProceduralEnemyKind.DimmedLionfish),
+            ("enemy_cave_kongamato", BiomeType.Caves, EnemyProjectileKind.Feather, ProceduralEnemyKind.Kongamato),
         };
 
         /// <summary>Map → the [distância] enemies its clearings must spawn (by day).</summary>

@@ -114,9 +114,7 @@ namespace Rapadura.Tests
         public void EachBeast_SpawnsInItsGroupsClearings_AtTheAreasLevels([ValueSource(nameof(All))] Placement placement) =>
             checks.EachBeast_SpawnsInItsGroupsClearings_AtTheAreasLevels(placement);
 
-        [TestCase(Ceu, "sombras_das_flores", GardenShadow)]
-        [TestCase(Ceu, "sombras_da_pergola", GardenShadow)]
-        [TestCase(Ceu, "sombras_do_meio_dia", LateShadow)]
+        // The Sky's garden and noon shadows have their own beasts since the eighteenth pass (SkyOwnBeastsPlacementTests).
         [TestCase(Gelo, "rachaduras", Ooze)]
         [TestCase(Gelo, "raizes_gelo", Ooze)]
         [TestCase(Fogo, "polvos_de_obsidiana", Ooze)]

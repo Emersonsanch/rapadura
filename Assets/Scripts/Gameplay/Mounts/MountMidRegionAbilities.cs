@@ -65,7 +65,8 @@ namespace Rapadura.Gameplay.Mounts
                     return Breath(ability, ctx, at);
             }
 
-            return null;
+            // The map-sheet mounts of the Regions 1–4, 5 and 7 (MountSheetCatalog).
+            return MountSheetAbilities.Execute(ability, ctx, effects);
         }
 
         private static string SailGust(MountAbilityDefinition ability, MountAbilityContext ctx, Vector3 at)

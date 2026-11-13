@@ -12,8 +12,8 @@ namespace Rapadura.Tests
     /// The tenth pass of beasts (<see cref="CeuBeastsTests"/>: Reinos do Céu) now stand where their stand-ins stood (Docs/Mapas100.md 91–100),
     /// same idea as <see cref="ProfundoBeastsPlacementTests"/>: each one is in the day table of every group of its map where it leads or comes
     /// along, its night form in the same group's night table where the beast leads it, the stand-in left those groups' day tables, and every
-    /// case is checked on the clearings the group really got, at that area's levels. The three small archons of the sheets (91, 98, 99) are the
-    /// Arconte Menor of the Limiar Profundo. The Corda de Fumaça (97) has its own beast (LateStandInBeastsTests), the Sky Stone also walks the Porch (100: "outside the
+    /// case is checked on the clearings the group really got, at that area's levels. The small archon of the steps (98) is the
+    /// Arconte Menor of the Limiar Profundo (91 and 99 have their own since the eighteenth pass). The Corda de Fumaça (97) has its own beast (LateStandInBeastsTests), the Sky Stone also walks the Porch (100: "outside the
     /// orchard, the beasts of 99"), the sheets the pass does not cover keep their stand-ins, and each new beast stays out of the maps its sheet
     /// does not name.
     /// </summary>
@@ -146,12 +146,9 @@ namespace Rapadura.Tests
             P(SkyStone, "mirante_do_ceu", "ventos_do_mirante", Joins, RollingStone),
             P(SkyStone, "varanda_do_tempo_de_depois", "ventos_do_pomar", Joins, RollingStone),
 
-            P(LesserArchon, "beira_oeste", "arcontes_da_beira", Leads, CrownedOrc),
-            P(LesserArchon, "pier_do_sol", "arcontes_do_sol", Leads, CrownedOrc),
+            // The Arconte Fujão Menor (91) and the Arconte Fugido (99) have their own bodies since the eighteenth pass (SkyOwnBeastsPlacementTests);
+            // the Arconte Menor of the Limiar stays the Arconte Menor of the steps (98).
             P(LesserArchon, "pes_da_coluna", "arcontes_do_degrau", Leads, CrownedOrc),
-            P(LesserArchon, "mirante_do_ceu", "arcontes_fugidos", Leads, CrownedOrc),
-            P(LesserArchon, "pier_do_sol", "faiscas_do_sol", Joins, CrownedOrc),
-            P(LesserArchon, "fresta_das_luzinhas", "aves_da_fresta", Joins, CrownedOrc),
         };
 
         private static IEnumerable<Placement> All() => Placements;
@@ -179,25 +176,8 @@ namespace Rapadura.Tests
         private static OverworldFauna Group(string id) =>
             OverworldLayouts.Get(CeuId).Zones.SelectMany(z => z.Fauna).First(f => f.Id == id);
 
-        [TestCase("sombras_das_flores", GardenShadow)]
-        [TestCase("sombras_da_pergola", GardenShadow)]
-        [TestCase("sombras_do_meio_dia", LateShadow)]
-        [TestCase("faiscas_teimosas", GlowMantle)]
-        [TestCase("faiscas_do_conves", GlowMantle)]
-        [TestCase("fumacas_de_esfera", SmokeGoat)]
-        [TestCase("fumacas_do_leste", SmokeGoat)]
-        [TestCase("espinhos_das_flores", AngryCedar)]
-        [TestCase("espinhos_do_pomar", AngryCedar)]
-        [TestCase("clandestinos_de_brasa", BronzeWolf)]
-        [TestCase("ultimas_sombras", CreepingDark)]
-        [TestCase("sombras_dos_pes", CreepingDark)]
-        [TestCase("ventos_do_alto", SmokeHarpy)]
-        public void TheOtherSheets_KeepTheirStandIn(string group, string standIn)
-        {
-            OverworldFauna fauna = Group(group);
-            Assert.IsTrue(fauna.Day.Any(e => e.EnemyId == standIn), $"{group}: still {standIn} by day");
-            Assert.IsTrue(fauna.Night.Any(e => e.EnemyId == standIn), $"{group}: still {standIn} at night");
-        }
+        // The sheets this pass left to stand-ins (the Faísca Teimosa, the Fumaça de Esfera, the garden, the Sun's deck and the steps) have their
+        // own beasts since the eighteenth pass: SkyOwnBeastsPlacementTests.
 
         [Test]
         public void TheSmokeRope_IsTheCompanionOfTheNoonShadows()

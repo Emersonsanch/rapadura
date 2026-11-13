@@ -98,9 +98,7 @@ namespace Rapadura.Tests
             new Placement(Teto, Bear, "campos_de_neve_de_sangkent", "ursos_das_neves", Werewolf),
             new Placement(Teto, Yak, "pastagens_dos_iaques", "iaques_selvagens", Peccary),
             new Placement(Teto, Yak, "geleira_do_teto_do_mundo", "iaques_da_geleira", Peccary),
-            new Placement(Teto, Yak, "estepe_alta", "argalis_da_estepe", Peccary),
-            new Placement(Teto, Yak, "vale_do_wakhan", "argalis_do_vale", Peccary),
-            new Placement(Teto, Yak, "passo_de_wakhan", "argalis_apagados", Peccary),
+            // The wild yak stood in for the Argali Apagado until it got its own body (HighlandOwnBeastsPlacementTests).
             new Placement(Teto, Irbis, "alto_do_wakhan", "irbis_apagados", Wolf),
             new Placement(Teto, Irbis, "ninho_de_aydahar", "irbis_do_ninho", Wolf),
             new Placement(Teto, Almas, "geleira_do_teto_do_mundo", "almas", Baboon),

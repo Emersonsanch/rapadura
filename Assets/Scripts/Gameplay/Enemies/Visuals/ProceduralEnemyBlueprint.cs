@@ -526,6 +526,81 @@ namespace Rapadura.Gameplay.Enemies.Visuals
         /// <summary>Lobo de Neve (52): a white wolf of Ohya's crest; jaw and tail.</summary>
         SnowWolf = 371,
 
+        // The twentieth pass of beasts (bible §3.2.1): roles of Região 7, the Teto do Mundo, and two of Região 8 still played by stand-ins (HighlandOwnBeastRecipes).
+        /// <summary>Pedra-Rolante da Morena (36): a moraine boulder with snow on top and ice in its cracks; squashes on the windup and the ice flares.</summary>
+        MoraineRoller = 420,
+        /// <summary>Ushabti de Calha (37): a stone answering figure with a pick and an ore basket; both arms go up on the windup.</summary>
+        ChuteUshabti = 421,
+        /// <summary>Neblina das Cristas (37): a cold cloud off the crests with a frost glint inside; squashes on the windup and the glint flares.</summary>
+        CrestMist = 422,
+        /// <summary>Pipa de Fumaça (39): a grey caravan kite with five ribbons and its lamp at the cross; leans back on the windup and the lamp flares.</summary>
+        SmokeKite = 423,
+        /// <summary>Gavião-Real Apagado (39): the fort's big crested falcon; wings, beak opens on the windup.</summary>
+        DimmedRoyalHawk = 424,
+        /// <summary>Morcego do Vento (39): a pale bat of the wind-bell towers with a bell at its throat; wings, jaw opens on the windup.</summary>
+        WindBat = 425,
+        /// <summary>Guarda de Pedra Ushabti (39): a lime-white answering figure with shield and spear; both arms go up on the windup.</summary>
+        StoneGuardUshabti = 426,
+        /// <summary>Bandoleiro de Āz (40): a pass robber in a sheepskin coat with caravan ribbons on his belt; both arms go up on the windup.</summary>
+        AzBandit = 427,
+        /// <summary>Argali Apagado (40): a wild sheep of the pass with spiral horns; the head drops on the windup.</summary>
+        DimmedArgali = 428,
+        /// <summary>Gralha das Neves (40): a black chough with frost on its wings; wings, beak opens on the windup.</summary>
+        SnowChough = 429,
+        /// <summary>Arqueiro de Terracota (45): a kneeling clay archer floating on its own smoke; both arms go up on the windup.</summary>
+        TerracottaArcher = 430,
+        /// <summary>Íbis de Luz Apagada (42): a white ibis with a little mirror on its brow; wings, beak opens on the windup.</summary>
+        LightIbis = 431,
+
+        // The eighteenth pass of beasts (bible §3.2.1): roles of Região 16, the Reinos do Céu, still played by another region's beast (SkyOwnBeastRecipes).
+        /// <summary>Arconte Fujão Menor (91): a small archon in a travelling cloak with a bundle of stolen sparks; both arms go up on the windup.</summary>
+        RunawayArchon = 380,
+        /// <summary>Faísca Teimosa (93): a round spark with its feet planted and arms crossed; squashes on the windup and its light flares.</summary>
+        StubbornSpark = 381,
+        /// <summary>Fumaça de Esfera (95): smoke billowing out of a broken shard of sphere; squashes on the windup and the glare flares.</summary>
+        SphereSmoke = 382,
+        /// <summary>Sombra que Pisa as Flores (96): a shadow on four long thin legs, petals stuck to it; jaw and tail.</summary>
+        FlowerTreader = 383,
+        /// <summary>Espinho de Fumaça (96): a bramble of smoke-black thorns holding a flower of light; squashes on the windup and the flower flares.</summary>
+        SmokeThorn = 384,
+        /// <summary>Clandestino de Brasa (97): a low stowaway of embers with a coal in its mouth; jaw and tail.</summary>
+        EmberStowaway = 385,
+        /// <summary>Sombra do Meio-Dia (97): a squat shadow under a scrap of sail, its hem spread on the deck; jaw and tail.</summary>
+        NoonShadow = 386,
+        /// <summary>Última Sombra (98): a tall thin shadow reaching for the step above; both arms go up on the windup.</summary>
+        LastShadow = 387,
+        /// <summary>Vento do Alto (98, 99): a gust shaped like a bird over a little whirl; wings, beak opens on the windup.</summary>
+        HighWind = 388,
+        /// <summary>Arconte Fugido (99): an archon who broke out of his sphere, shards on his shoulders; both arms go up on the windup.</summary>
+        FledArchon = 389,
+
+        // The nineteenth pass of beasts (bible §3.2.1): roles of Regions 5 and 6, the Costa das Monções and the Delta de Jhilpur, still played by
+        // another region's beast (CoastOwnBeastRecipes).
+        /// <summary>Ushabti de Bronze Kushita (27): a bronze tomb figure of Meroë with a ram's-head amulet and a hoe; arms come down on the windup.</summary>
+        KushiteUshabti = 400,
+        /// <summary>Escorpião-Rei Jovem (27): a young scorpion with a little crown on its carapace; claws open and the sting draws back.</summary>
+        YoungScorpionKing = 401,
+        /// <summary>Chacal de Areia Negra (27): a lean black jackal of the pyramid fields; jaw and tail.</summary>
+        BlackSandJackal = 402,
+        /// <summary>Água-Viva de Lodo (28): a jellyfish of mud drifting over the reef on its tentacles; squashes on the windup and its light flares.</summary>
+        MudJellyfish = 403,
+        /// <summary>Peixe-Leão Apagado (28): a dimmed lionfish with a mane of venom spines; jaw, fins and tail.</summary>
+        DimmedLionfish = 404,
+        /// <summary>Kongamato (30): a leathery-winged flyer of the mangrove channels, beak full of teeth; wings, beak opens on the windup.</summary>
+        Kongamato = 405,
+        /// <summary>Polvo Ladrão (29): an octopus of Kilwa's drowned streets clutching stolen things; squashes on the windup and the stolen lamp flares.</summary>
+        ThiefOctopus = 406,
+        /// <summary>Raiz-Laço (32): an aerial root of the banyans knotted into a noose that walks on its rootlets; the noose snaps on the windup.</summary>
+        SnareRoot = 407,
+        /// <summary>Garça-Fantasma (33): a pale heron gone half shadow over the reeds of Tarchon; wings, beak opens on the windup.</summary>
+        GhostHeron = 408,
+        /// <summary>Libélula de Fumaça (34): a big dragonfly of smoke over the Ninki Nanka's marsh; wings blur and the tail curls in on the windup.</summary>
+        SmokeDragonfly = 409,
+        /// <summary>Bolha de Fumaça (35): a bubble of the Lodo's smoke that rises and bursts; squashes on the windup and the smoke inside flares.</summary>
+        SmokeBubble = 410,
+        /// <summary>Filho do Lodo (35): a little swimmer of the Lodo, a lump of mud with arms; squashes on the windup and the swallowed light flares.</summary>
+        MudChild = 411,
+
         // The map bosses of the fichas (RegionBossRules.MapSpawns, MapBossRecipes): one per map the story walks through in the 150–300 band.
         /// <summary>O Cortador de Cordas (55): a shadow bird with blade-edged wings and a frayed rope in its beak; map boss of the Pontes de Vento.</summary>
         RopeCutter = 204,

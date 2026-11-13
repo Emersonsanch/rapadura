@@ -473,6 +473,8 @@ namespace Rapadura.Gameplay.World.Cities
                 // Map gates (MapRequirementRules): the rope of the canopy (05) and a copy of the Garden Key (06).
                 new CityShopEntry("item_corda_escalada", 36, 3),
                 new CityShopEntry("item_chave_jardim", 60, 1, unlock: ShopUnlock.Cleared(BiomeType.Forest)),
+                // Garça do Brejo (Docs/Mounts.md §3.12): the herons Dácil keeps, that fish the Brejo do Lodo Escuro (03) at dawn.
+                new CityShopEntry("item_whistle_mount_marsh_heron", 140, -1),
                 // The rotation: mist potions, laurel wood and fibre, mount feed (the Lagarto-do-Louro eats it too), Jonay's bows.
                 new CityShopEntry("item_mana_potion", 14, 4, rotating: true),
                 new CityShopEntry("item_fiber", 1, 20, rotating: true),

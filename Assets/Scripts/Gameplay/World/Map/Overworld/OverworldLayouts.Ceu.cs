@@ -149,6 +149,10 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         private static class Ceu
         {
             public const string LesserArchon = "enemy_forest_lesser_archon";
+            // The eighteenth pass (SkyOwnBeastRecipes, OverworldLayouts.SkyOwnBeasts): the roles of the sheets that still borrowed another
+            // region's beast (the Profundo's small archon at 91 and 99, the Margins' glow mantle, garden shadow, angry cedar and late shadow,
+            // Farnkesh's smoke goat and smoke harpy, the kurgans' bronze wolf, the creeping dark). The Arconte Menor (98) is the Limiar's own.
+            public const string RunawayArchon = "enemy_forest_runaway_archon";
             public const string ConfusedSpark = "enemy_desert_confused_spark";
             public const string CloudBird = "enemy_forest_dimmed_cloud_bird";
             public const string StowawayShadow = "enemy_forest_stowaway_shadow";
@@ -157,27 +161,27 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             public const string WrongCurrent = "enemy_mountain_wrong_current";
             public const string RunawayLantern = FarBeasts.RunawayLantern;
             public const string DarkStowaway = "enemy_forest_dark_stowaway";
-            public const string StubbornSpark = "enemy_forest_glow_mantle";
+            public const string StubbornSpark = "enemy_forest_stubborn_spark";
             public const string HoldShadow = "enemy_forest_hold_shadow";
             public const string LivingRope = "enemy_forest_living_rope";
             public const string ToyArchon = "enemy_forest_toy_archon";
             public const string CrackedJar = "enemy_forest_cracked_jar";
             public const string DarkDrop = "enemy_cave_dark_drop";
             public const string ChainedArchon = "enemy_forest_chained_archon";
-            public const string SphereSmoke = "enemy_forest_smoke_goat";
+            public const string SphereSmoke = "enemy_forest_sphere_smoke";
             public const string OrbitWind = FarBeasts.OrbitWind;
             public const string BalloonGiant = "enemy_forest_balloon_giant";
-            public const string FlowerShadow = "enemy_forest_garden_shadow";
+            public const string FlowerShadow = "enemy_forest_flower_treader";
             public const string AzThief = "enemy_forest_az_thief";
-            public const string SmokeThorn = "enemy_forest_angry_cedar";
-            public const string EmberStowaway = "enemy_mountain_bronze_wolf";
-            public const string NoonShadow = "enemy_forest_late_shadow";
+            public const string SmokeThorn = "enemy_forest_smoke_thorn";
+            public const string EmberStowaway = "enemy_mountain_ember_stowaway";
+            public const string NoonShadow = "enemy_forest_noon_shadow";
             public const string SmokeRope = "enemy_forest_smoke_rope";
             public const string DimmedGull = "enemy_forest_dimmed_light_gull";
-            public const string LastShadow = "enemy_forest_creeping_dark";
-            public const string HighWind = "enemy_mountain_smoke_harpy";
+            public const string LastShadow = "enemy_forest_last_shadow";
+            public const string HighWind = "enemy_mountain_high_wind";
             public const string SkyCrackBeast = "enemy_mountain_sky_crack";
-            public const string FledArchon = "enemy_forest_lesser_archon";
+            public const string FledArchon = "enemy_forest_fled_archon";
             public const string SkyStone = "enemy_forest_sky_stone";
         }
 
@@ -460,17 +464,17 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             NightSpecies sparks = NightVariantRules.VagaLume;
             NightSpecies werewolf = NightVariantRules.Lobisomem;
 
-            // The edges of the Cais (91): the Arconte Fujão Menor [elite], the Faísca Confusa [enxame] (its own beast now, WideBeasts), the Ave de Nuvem Apagada [rápido],
+            // The edges of the Cais (91): the Arconte Fujão Menor [elite] (its own beast now, SkyOwnBeasts), the Faísca Confusa [enxame] (its own beast now, WideBeasts), the Ave de Nuvem Apagada [rápido],
             // the Sombra Clandestina [controle] (its own beast now, BorrowedBeasts).
-            CeuGroup(beira, "arcontes_da_beira", "[elite]", Ceu.LesserArchon, Ceu.CloudBird, moon, 3, 32f);
+            CeuGroup(beira, "arcontes_da_beira", "[elite]", Ceu.RunawayArchon, Ceu.CloudBird, moon, 3, 32f);
             CeuGroup(beira, "faiscas_da_beira", "[enxame]", Ceu.ConfusedSpark, Ceu.StowawayShadow, sparks, 5);
             CeuGroup(pierLua, "aves_da_lua", "[rápido]", Ceu.CloudBird, Ceu.ConfusedSpark, moon);
             CeuGroup(pierLua, "sombras_clandestinas", "[controle]", Ceu.StowawayShadow, Ceu.CloudBird, owl);
             CeuGroup(cais, "faiscas_do_cais", "[enxame]", Ceu.ConfusedSpark, Ceu.CloudBird, sparks, 5);
             CeuGroup(cais, "aves_do_cais", "[rápido]", Ceu.CloudBird, Ceu.StowawayShadow, moon);
-            CeuGroup(pierSol, "faiscas_do_sol", "[enxame]", Ceu.ConfusedSpark, Ceu.LesserArchon, sparks, 5);
-            CeuGroup(pierSol, "arcontes_do_sol", "[elite]", Ceu.LesserArchon, Ceu.ConfusedSpark, werewolf, 3, 32f);
-            CeuGroup(fresta, "aves_da_fresta", "[rápido]", Ceu.CloudBird, Ceu.LesserArchon, owl);
+            CeuGroup(pierSol, "faiscas_do_sol", "[enxame]", Ceu.ConfusedSpark, Ceu.RunawayArchon, sparks, 5);
+            CeuGroup(pierSol, "arcontes_do_sol", "[elite]", Ceu.RunawayArchon, Ceu.ConfusedSpark, werewolf, 3, 32f);
+            CeuGroup(fresta, "aves_da_fresta", "[rápido]", Ceu.CloudBird, Ceu.RunawayArchon, owl);
             CeuGroup(fresta, "sombras_da_fresta", "[controle]", Ceu.StowawayShadow, Ceu.ConfusedSpark, bats);
 
             // The Rio de Luz (92): the Peixe de Luz Apagado [rápido], the Sombra Nadadora [controle] and the Corrente Errada [controle] (their own beasts now, BorrowedBeasts),
@@ -486,7 +490,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             CeuGroup(fozLeste, "correntes_da_foz", "[controle]", Ceu.WrongCurrent, Ceu.RunawayLantern, moon);
             CeuGroup(fozLeste, "lanternas_da_foz", "[enxame]", Ceu.RunawayLantern, Ceu.LightFish, bats, 5);
 
-            // The Barca da Lua (93): the Clandestino de Treva [rápido], the Faísca Teimosa [especial] (the glow mantle), the Sombra do Porão [tanque],
+            // The Barca da Lua (93): the Clandestino de Treva [rápido], the Faísca Teimosa [especial] (its own beast now, SkyOwnBeasts), the Sombra do Porão [tanque],
             // the Corda Viva [controle].
             CeuGroup(proa, "clandestinos_da_proa", "[rápido]", Ceu.DarkStowaway, Ceu.LivingRope, bats);
             CeuGroup(proa, "cordas_da_proa", "[controle]", Ceu.LivingRope, Ceu.DarkStowaway, moon);
@@ -511,7 +515,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             CeuGroup(gearsE, "gotas_do_leste", "[rápido]", Ceu.DarkDrop, Ceu.CrackedJar, bats);
             CeuGroup(gearsE, "jarras_rachadas_leste", "[distância]", Ceu.CrackedJar, Ceu.ToyArchon, moon);
 
-            // The Spheres (95): the Arconte Acorrentado Menor [tanque], the Fumaça de Esfera [controle] (the smoke goat), the Vento de Órbita [rápido] (its own beast now, FarBeasts),
+            // The Spheres (95): the Arconte Acorrentado Menor [tanque], the Fumaça de Esfera [controle] (its own beast now, SkyOwnBeasts), the Vento de Órbita [rápido] (its own beast now, FarBeasts),
             // the Gigante-Balão [elite].
             CeuGroup(vazioW, "ventos_de_orbita_oeste", "[rápido]", Ceu.OrbitWind, Ceu.SphereSmoke, owl);
             CeuGroup(vazioW, "gigantes_balao_oeste", "[elite]", Ceu.BalloonGiant, Ceu.OrbitWind, werewolf, 3, 32f);
@@ -524,7 +528,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             CeuGroup(vazioE, "ventos_de_orbita", "[rápido]", Ceu.OrbitWind, Ceu.BalloonGiant, owl);
             CeuGroup(vazioE, "arcontes_do_leste", "[tanque]", Ceu.ChainedArchon, Ceu.OrbitWind, moon, 3, 30f);
 
-            // The Garden of Light (96): the Sombra que Pisa as Flores [rápido] (the garden shadow), the Ladrões de Āz [elite], the Espinho de Fumaça [controle] (the angry cedar).
+            // The Garden of Light (96): the Sombra que Pisa as Flores [rápido], the Ladrões de Āz [elite], the Espinho de Fumaça [controle] (the first and the last their own beasts now, SkyOwnBeasts).
             CeuGroup(flores, "sombras_das_flores", "[rápido]", Ceu.FlowerShadow, Ceu.SmokeThorn, sparks, 3);
             CeuGroup(flores, "espinhos_das_flores", "[controle]", Ceu.SmokeThorn, Ceu.AzThief, moon, 3);
             CeuGroup(pomar, "ladroes_do_pomar", "[elite]", Ceu.AzThief, Ceu.FlowerShadow, owl, 3, 32f);
@@ -532,20 +536,20 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             CeuGroup(pergola, "sombras_da_pergola", "[rápido]", Ceu.FlowerShadow, Ceu.AzThief, moon, 3);
             CeuGroup(pergola, "ladroes_da_pergola", "[elite]", Ceu.AzThief, Ceu.SmokeThorn, owl, 3, 32f);
 
-            // The Barca do Sol (97): the Clandestino de Brasa [rápido] (the bronze wolf), the Sombra do Meio-Dia [controle] (the late shadow), the Gaivota de Luz Apagada [distância],
-            // the Corda de Fumaça [controle] (the reed snare).
+            // The Barca do Sol (97): the Clandestino de Brasa [rápido] and the Sombra do Meio-Dia [controle] (their own beasts now, SkyOwnBeasts), the Gaivota de Luz Apagada [distância],
+            // the Corda de Fumaça [controle] (its own beast, LateStandInBeasts).
             CeuGroup(convesSol, "clandestinos_de_brasa", "[rápido]", Ceu.EmberStowaway, Ceu.DimmedGull, sparks);
             CeuGroup(convesSol, "gaivotas_de_luz", "[distância]", Ceu.DimmedGull, Ceu.EmberStowaway, moon);
             CeuGroup(vela, "sombras_do_meio_dia", "[controle]", Ceu.NoonShadow, Ceu.SmokeRope, moon);
             CeuGroup(vela, "cordas_de_fumaca", "[controle]", Ceu.SmokeRope, Ceu.DimmedGull, bats);
 
-            // The Foot of the Column (98): the Última Sombra [rápido] (the creeping dark), the Arconte Menor [elite], the Vento do Alto [controle] (the smoke harpy).
+            // The Foot of the Column (98): the Última Sombra [rápido] and the Vento do Alto [controle] (their own beasts now, SkyOwnBeasts), the Arconte Menor [elite] (the Limiar's).
             CeuGroup(degraus, "ultimas_sombras", "[rápido]", Ceu.LastShadow, Ceu.HighWind, moon);
             CeuGroup(degraus, "ventos_do_alto", "[controle]", Ceu.HighWind, Ceu.LastShadow, owl);
             CeuGroup(pes, "arcontes_do_degrau", "[elite]", Ceu.LesserArchon, Ceu.LastShadow, werewolf, 3, 32f);
             CeuGroup(pes, "sombras_dos_pes", "[rápido]", Ceu.LastShadow, Ceu.HighWind, bats);
 
-            // The Lookout (99): the Rachadura do Céu [controle] (its own beast now, BorrowedBeasts), the Arconte Fugido [elite], the Vento do Alto [rápido] (the storm eagle), the Pedra do Céu [tanque].
+            // The Lookout (99): the Rachadura do Céu [controle] (its own beast now, BorrowedBeasts), the Arconte Fugido [elite] (its own beast now, SkyOwnBeasts), the Vento do Alto [rápido] (the Vento de Órbita of 95), the Pedra do Céu [tanque].
             CeuGroup(rachaduras, "rachaduras_do_ceu", "[controle]", Ceu.SkyCrackBeast, Ceu.SkyStone, moon);
             CeuGroup(rachaduras, "pedras_do_ceu", "[tanque]", Ceu.SkyStone, Ceu.SkyCrackBeast, owl, 3, 30f);
             CeuGroup(mirante, "arcontes_fugidos", "[elite]", Ceu.FledArchon, Ceu.OrbitWind, werewolf, 3, 32f);
