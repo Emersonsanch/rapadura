@@ -2,7 +2,8 @@ import re,os,subprocess,sys
 S=sys.argv[1]; D='Library/Bee/artifacts/1900b0aE.dag/'
 DOTNET=r'C:\Program Files\Unity\Hub\Editor\6000.3.22f1\Editor\Data\NetCoreRuntime\dotnet.exe'
 CSC=r'C:\Program Files\Unity\Hub\Editor\6000.3.22f1\Editor\Data\DotNetSdkRoslyn\csc.dll'
-new=subprocess.run(['git','ls-files','--others','--exclude-standard','*.cs'],capture_output=True,text=True).stdout.split()
+new=subprocess.run(['git','ls-files','--cached','--others','--exclude-standard','*.cs'],capture_output=True,text=True).stdout.split()
+new=[f for f in new if os.path.exists(f)]
 def build(name,prefixes,extra_sub={}):
     lines=open(D+name+'.rsp',encoding='utf8').read().splitlines()
     out=[]
