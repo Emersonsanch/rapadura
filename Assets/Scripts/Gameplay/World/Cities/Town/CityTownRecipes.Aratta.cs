@@ -28,6 +28,9 @@ namespace Rapadura.Gameplay.World.Cities.Town
         /// <summary>Every collider, lot and gate of the town stays inside this radius from the plaza centre.</summary>
         public const float ArattaSolidRadius = 22f;
 
+        /// <summary>Where the Lira do Touro stands in the plaza ([E] there plays the song of the day, <c>CityServiceRules</c>).</summary>
+        public static readonly Vector2 ArattaBullLyre = new Vector2(-3.2f, 4.4f);
+
         public static CityTownRecipe Aratta()
         {
             var r = new CityTownRecipe
@@ -77,7 +80,7 @@ namespace Rapadura.Gameplay.World.Cities.Town
             r.Lots.Add(Street("casa_s1", CityLotKind.House, CityArm.South, CityArm.West, 12f, 6f, 4.8f, 1.2f, null, null, ReedSpec(TownShopDressing.None, wallHeight: 2.7f)));
 
             // ---- The plaza: the Lira do Touro, the low fire of the Fogo Vivo, horn posts and lamps ----
-            r.PlazaProps.Add(At(CityPropKind.BullLyre, -3.2f, 4.4f));
+            r.PlazaProps.Add(At(CityPropKind.BullLyre, ArattaBullLyre.x, ArattaBullLyre.y));
             r.PlazaProps.Add(At(CityPropKind.Bonfire, 3.6f, 3.8f, 0f, 0.8f));
             foreach (float angle in new[] { 30f, 150f, 210f, 330f })
             {

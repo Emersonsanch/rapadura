@@ -29,11 +29,13 @@
   sem trocar de cena.
 - **Cidades:** as 27 cidades do `Docs/Mapas100.md` §1 estão no `CityCatalog`: 4 hubs, 12 de raça e 11 de região tardia.
   Todas ficam dentro do mundo contínuo e usam a própria receita (`CityTownRecipes.*`). Os postos são `K.Outpost`, sem respawn.
-- **Bichos próprios:** 166, todos com asset em `Resources/Enemies`: os 130 das tabelas da bíblia §3.2.1, mais 12 das Regiões 1–4
+- **Bichos próprios:** 218, todos com asset em `Resources/Enemies`: os 130 das tabelas da bíblia §3.2.1, mais 12 das Regiões 1–4
   (`068253c`, `EarlyStandInBeastRecipes`), 12 das Regiões 5–9, na estrada da história do meio (`8ad5046`,
   `MidStandInBeastRecipes`), e 12 das Regiões 10–16 (`07a4770`, `FarStandInBeastRecipes`), no lugar dos emprestados mais
-  vistos. Somam-se a eles os 19 bichos de base dos 4 biomas. Ainda há cerca de 125 papéis de ficha feitos por bicho
-  emprestado (contagem por região abaixo).
+  vistos, e mais 52 no lugar de papéis ainda emprestados (2026-11-16): 12 `NorthOwnBeastRecipes`, 12 `DeepOwnBeastRecipes`, 11
+  `EarlyOwnBeastRecipes`, 12 `WestOwnBeastRecipes` e 5 `EarlyOwn2BeastRecipes` (a Águia da Tempestade do 18 é a do Farnkesh). A leva
+  `DeepOwn2` (Regiões 13–15) ainda está sendo feita e vai somar aqui. Somam-se a eles os 19 bichos de base dos 4 biomas. Ainda há papéis de ficha feitos por bicho
+  emprestado (eram cerca de 125 antes destas 5 levas; contagem por região abaixo).
 - **Mecânicas:** 132 arquivos em `Gameplay/World/Map/Mechanics/`, todos commitados, com pelo menos uma mecânica por região.
   São regras puras com driver por região, e o estado vai salvo por slot em `WorldMapProgress`. O `MechanicsDriverHub` liga só
   o driver da região do herói. O botão de toque **Usar** do HUD acende quando há uma interação [E] ao alcance. Depois de
@@ -103,7 +105,7 @@ de uma ficha feito por um bicho de outra região ou do bioma.
 |---|---|
 | Cidade | Vila da Vó Edna (hub, 01) e Copas de Garajonay (raça, 05), dentro do mundo |
 | Mundo contínuo | Feito, 2400 × 2400 m, 18 áreas (`OverworldLayouts.Zarafshan.cs`). Falta conferir no Play: bordas, densidade, sombras e custo no celular |
-| Bichos próprios | 6 de base da Floresta (lobo, aranha, queixada, coruja, lobisomem e Kök-Böri) e mais 7 (`068253c`): Cegonha Apagada (02), Sapo-Bolha e Mosquito de Fumaça (03), Mariposa de Seda (04), Pombo-do-Louro e Lagarto-Gigante do Louro (05), Pavão de Fumaça (06); e mais 6 (2026-11-16, `EarlyOwnBeastRecipes`): Enguia de Lama (03), Lagarta-Casulo e Gralha Ladra de Fio (04), Névoa Pegajosa (05), Roseira-Espinho Apagada e Lobo de Cinzas (06), também nas clareiras dos mapas feitos à mão e nas trilhas. Ainda emprestado: o lobo no lugar do Lagarto-Gigante nas clareiras do mapa 05 (o Lagarto já existe; falta trocar e mudar a missão `calm_mist_lizards`) |
+| Bichos próprios | 6 de base da Floresta (lobo, aranha, queixada, coruja, lobisomem e Kök-Böri) e mais 7 (`068253c`): Cegonha Apagada (02), Sapo-Bolha e Mosquito de Fumaça (03), Mariposa de Seda (04), Pombo-do-Louro e Lagarto-Gigante do Louro (05), Pavão de Fumaça (06); e mais 6 (2026-11-16, `EarlyOwnBeastRecipes`): Enguia de Lama (03), Lagarta-Casulo e Gralha Ladra de Fio (04), Névoa Pegajosa (05), Roseira-Espinho Apagada e Lobo de Cinzas (06), também nas clareiras dos mapas feitos à mão e nas trilhas. O Lagarto-Gigante do Louro também tomou o lugar do lobo nas clareiras do mapa 05, e a missão `calm_mist_lizards` da Gara pede o lagarto (2026-11-16, `EarlyOwn2BeastsPlacementTests`) |
 | Mecânicas feitas | Colheita diária no Pomar (01); vaus de Água Viva que curam até 70% (02); lama ×0,7 fora das passarelas, com poças limpas pelas skills do Joaquim (03, `ZarafshanMireRules`); teias que prendem 1,5 s ou são cortadas por skill (04, `ZarafshanWebRules`); névoa a cada 3 min que esconde os bichos a mais de 8 m no chão, com orvalho a cada névoa (05, `GarajonayFogRules`); as 4 faíscas libertadas enchem os canais e viram pontos de cura (06, `ZarafshanGardenRules`) |
 | Mecânicas faltantes | Item de damasco próprio (01); a poção de Água Viva limpar poça (03); andar nas plataformas de verdade, Coletor de Névoa e Gota de Névoa própria (05); abrir o pavilhão e Pétala de Luz (06) |
 | Chefe do mundo | Saklas, o Lobo de Cinzas (evento com horário, arena do mapa-múndi) |
@@ -118,7 +120,7 @@ de uma ficha feito por um bicho de outra região ou do bioma.
 |---|---|
 | Cidade | Oásis de Qocho (hub) e Tambor Rubro (raça, 11, estilo `WarCamp`), as duas dentro do mundo com a própria receita |
 | Mundo contínuo | Feito, 2400 × 2400 m (`OverworldLayouts.Areias.cs`). Os 4 postos de 09–12 estão no mapa |
-| Bichos próprios | 9: 5 de base do Deserto e mais Chacal, Cobra-de-Areia, Orc Coroado de Āz e Lagarto-Espinho (10, `068253c`), e mais Rato-do-Karez Gigante e Escorpião-d'Água Apagado (09, 2026-11-16, `EarlyOwnBeastRecipes`). Os outros papéis das fichas 09–12 ainda usam bichos existentes (Raiz Sedenta, Serpente de Sal, Escorpião-Cristal…; sem contagem por papel) |
+| Bichos próprios | 9: 5 de base do Deserto e mais Chacal, Cobra-de-Areia, Orc Coroado de Āz e Lagarto-Espinho (10, `068253c`), e mais Rato-do-Karez Gigante e Escorpião-d'Água Apagado (09, 2026-11-16, `EarlyOwnBeastRecipes`) e Raiz Sedenta (09), Escorpião-Cristal e Serpente de Sal (12) (2026-11-16, `EarlyOwn2BeastRecipes`). Os outros papéis das fichas 09–12 ainda usam bichos existentes (Guarda de Namrael, Espelho de Sal, Ushabti Cavador…; sem contagem por papel) |
 | Mecânicas feitas | Tempestade de areia em toda a região, com abrigos (`AreiasStormRules`), e nela só se veem bichos a 6 m (07); fachos de sol nas Galerias do Karez: mana ×2,5 no facho e ×0,5 no escuro, bichos ofuscados (09, `KarezSunbeamRules`); descer a duna correndo atordoa os bichos a 14 m (10, `DuneSongRules`); das 11h às 14h, fora da sombra das torres, só se veem bichos a 10 m (12, `NamraelGlareRules`) |
 | Mecânicas faltantes | Escolta da caravana (07); leitura das inscrições (08); os 3 andares do Karez (09); clarão na tela e Espelho de Sal (12); Ritmo do Tambor e Têmpera do Tambor (11); Tambor Rubro numa mesa |
 | Chefe do mundo | Namrael, o Escorpião-Rei (evento com horário) |
@@ -133,7 +135,7 @@ de uma ficha feito por um bicho de outra região ou do bioma.
 |---|---|
 | Cidade | Vila de Litema (hub) e Salões de Bronze (raça, 17), dentro do mundo |
 | Mundo contínuo | Feito, 2400 × 2400 m (`OverworldLayouts.Kaggen.cs`). Liga com as Areias sem portão no mundo costurado |
-| Bichos próprios | 10: 4 de base da Montanha e mais Pedra que Rola, Neblina do Vento Ruim, Babuíno, Lince Apagado (14), Borrão (15) e Gralha de Pedra (16) (os 3 últimos de `068253c`) e Lagarto-de-Pedra (16, 2026-11-16, `EarlyOwnBeastRecipes`). Os outros papéis de 15–18 ainda usam bichos existentes (Águia-Preta, Salamandra Fria, Águia da Tempestade…; sem contagem por papel) |
+| Bichos próprios | 10: 4 de base da Montanha e mais Pedra que Rola, Neblina do Vento Ruim, Babuíno, Lince Apagado (14), Borrão (15) e Gralha de Pedra (16) (os 3 últimos de `068253c`) e Lagarto-de-Pedra (16, 2026-11-16, `EarlyOwnBeastRecipes`), Águia-Preta Apagada (15) e Salamandra Fria (17) (2026-11-16, `EarlyOwn2BeastRecipes`); no 18 a Águia da Tempestade é a do Farnkesh. Os outros papéis de 15–18 ainda usam bichos existentes (Golem de Escória, Morcego de Brasa, Runa Errada, Ushabti de Gelo…; sem contagem por papel) |
 | Mecânicas feitas | Ventos da serra (13–14) e pontes de corda que gastam fôlego dobrado, que a Maithe ignora (`KaggenWindRules`); ar fino no platô do Cume, fôlego volta 30% mais devagar, a Maithe não sente (18, `MazanThinAirRules`) |
 | Mecânicas faltantes | Curvar projéteis (13); neve no chão (14); balanço visual das pontes; gravar 1 runa por dia e as 5 etapas da Grande Forja (17) |
 | Chefe do mundo | Mazan, o Gigante da Serra (evento com horário) |
@@ -450,7 +452,7 @@ Revisto em 2026-11-12 (código até `7381c7f`). Saíram da lista, porque ficaram
    Por quê: essas decisões definem o que é "o fim". A raide da Grande Treva, os pilares em grupo do 99, o ranking do
    carrinho do 37 e o Cavalo-Estrela só existem com servidor, e o save, a pausa e os eventos mudam de forma.
 10. **Arte e áudio finais no lugar dos placeholders procedurais.**
-    - Por quê: quem joga do começo ao fim vê centenas de modelos (agora 166 bichos próprios e 29 chefes de mapa) e ouve
+    - Por quê: quem joga do começo ao fim vê centenas de modelos (agora 218 bichos próprios e 29 chefes de mapa) e ouve
       sons sintetizados.
     - 🙋 Depende do dono:
       - créditos do Meshy e licença comercial do plano;

@@ -81,7 +81,7 @@ namespace Rapadura.Tests
                 .Concat(HinokuraBestiaryTexts.EnemyIds).Concat(RioBestiaryTexts.EnemyIds).Concat(MisturaBestiaryTexts.EnemyIds).Concat(ProfundoBestiaryTexts.EnemyIds)
                 .Concat(CeuBestiaryTexts.EnemyIds).Concat(LateStandInBestiaryTexts.EnemyIds).Concat(EarlyStandInBestiaryTexts.EnemyIds).Concat(MidStandInBestiaryTexts.EnemyIds)
                 .Concat(FarStandInBestiaryTexts.EnemyIds).Concat(WideStandInBestiaryTexts.EnemyIds).Concat(BorrowedRoleBestiaryTexts.EnemyIds).Concat(LentRoleBestiaryTexts.EnemyIds).Concat(SkyOwnBestiaryTexts.EnemyIds).Concat(CoastOwnBestiaryTexts.EnemyIds).Concat(HighlandOwnBestiaryTexts.EnemyIds)
-                .Concat(NorthOwnBestiaryTexts.EnemyIds));
+                .Concat(NorthOwnBestiaryTexts.EnemyIds).Concat(EarlyOwnBestiaryTexts.EnemyIds).Concat(EarlyOwn2BestiaryTexts.EnemyIds).Concat(WestOwnBestiaryTexts.EnemyIds));
             BiomeDefinition home = BiomeRegistry.Get(biome);
             Assert.IsNotNull(home, biome.ToString());
             return home.Enemies.Where(e => e?.Enemy != null && !e.Enemy.IsBoss && !newer.Contains(e.Enemy.name)).Select(e => e.Enemy).ToList();

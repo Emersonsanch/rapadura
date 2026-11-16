@@ -25,6 +25,10 @@ namespace Rapadura.Gameplay.World.Cities.Town
         /// <summary>Where the drum tower stands (behind Ashmunikal's house): the city's guardian lamp is on its peak.</summary>
         public static readonly Vector2 TamborRubroDrumTower = new Vector2(12.5f, 13.8f);
 
+        /// <summary>The war drum at the west corner of the Salão Grande, on Tushratta's side: [E] there while the drums play tempers the
+        /// weapon (the Têmpera do Tambor, <c>CityServiceRules</c>).</summary>
+        public static readonly Vector2 TamborRubroTemperDrum = new Vector2(-7.4f, 9f);
+
         public static CityTownRecipe TamborRubro()
         {
             var r = new CityTownRecipe
@@ -53,7 +57,7 @@ namespace Rapadura.Gameplay.World.Cities.Town
                 Id = "salao_grande", Kind = CityLotKind.House, Free = true, Center = new Vector2(0f, 15f), Front = Vector2.down,
                 Width = 12f, Depth = 6.5f, Porch = 2f, Spec = salao, ResidentId = "gurparanzah",
             });
-            r.PlazaProps.Add(At(CityPropKind.WarDrum, -7.4f, 9f, 0f, 1f));
+            r.PlazaProps.Add(At(CityPropKind.WarDrum, TamborRubroTemperDrum.x, TamborRubroTemperDrum.y, 0f, 1f));
             r.PlazaProps.Add(At(CityPropKind.WarDrum, 7.4f, 9f, 0f, 1f));
 
             // ---- West street: Tushratta's Forja de Tambor (the city's shop), the Cais da Barca ----

@@ -26,6 +26,10 @@ namespace Rapadura.Gameplay.World.Cities.Town
         /// <summary>Where the cold Grande Forja stands (south-east hall), its front to the camera.</summary>
         public static readonly Vector2 BronzeHallsGreatForge = new Vector2(13.5f, -10f);
 
+        /// <summary>The rune pillar of the plaza on Puzur's side (the one at 125°): [E] there takes the rune Puzur engraves free each day
+        /// (<c>CityServiceRules</c>).</summary>
+        public static Vector2 BronzeHallsRuneStone => Polar(125f, 7.8f);
+
         public static CityTownRecipe BronzeHalls()
         {
             var r = new CityTownRecipe
