@@ -318,10 +318,10 @@ namespace Rapadura.Gameplay.Quests
             // ================= Região 15, Limiar Profundo =================
             Step(all, "late_story_r15_rampart",
                 T("The Last Lamps", "As Últimas Lâmpadas"),
-                T("Grandpa Jorge's letter from the Limiar arrived in Pamour's hands before anyone else was awake. It asks for the rampart lamps to be kept burning for the five of them. Lacquer ushabtis, marching the wall at night and forgetting why, are putting them out.",
-                  "A carta do Vô Jorge do Limiar chegou às mãos do Pamour antes de qualquer um acordar. Pede que as lâmpadas da muralha fiquem acesas para os cinco. Ushabtis de laca, marchando na muralha à noite sem lembrar por quê, estão apagando elas."),
+                T("Grandpa Jorge's letter from the Limiar arrived in Pamour's hands before anyone else was awake. It asks for the rampart lamps to be kept burning for the five of them. The rampart's own dimmed ushabtis, marching the wall at night and forgetting why, are putting them out.",
+                  "A carta do Vô Jorge do Limiar chegou às mãos do Pamour antes de qualquer um acordar. Pede que as lâmpadas da muralha fiquem acesas para os cinco. Os ushabtis apagados da própria muralha, marchando à noite sem lembrar por quê, estão apagando elas."),
                 T("Reach the Arched Rampart", "Chegar à Muralha em Arco"),
-                T("Free the lacquer ushabtis of the rampart", "Libertar os ushabtis de laca da muralha"),
+                T("Free the dimmed ushabtis of the rampart", "Libertar os ushabtis apagados da muralha"),
                 T("Grandma Edna does not trust the Limiar and said so, at length, and then asked Pamour on the radio whether the lamps were burning. They were. She said: good. Then: tell the children to eat. Then she didn't hang up.",
                   "A Vó Edna não confia no Limiar e disse isso, bastante, e perguntou ao Pamour pelo rádio se as lâmpadas estavam acesas. Estavam. Ela disse: bom. Depois: fala para as crianças comerem. E não desligou."),
                 T("Every lamp they put out, I light again. I am getting slower. They are not.",
@@ -332,8 +332,8 @@ namespace Rapadura.Gameplay.Quests
                   "Maria, eu cuido de uma lâmpada, e ela está acesa por você desde que chegou a carta do seu avô. Pode olhar. Depois vai mostrar a seis ushabtis ao que eles foram feitos para responder."),
                 T("Maithe, there is no wind along this wall, none at all, and it is the only wall I know of where that's frightening. Six ushabtis. Count me, too, when you've finished.",
                   "Maithe, não tem vento nenhum nesta muralha, e é a única muralha que eu conheço em que isso dá medo. Seis ushabtis. Me conta também, quando terminar."),
-                T("Ícaro, these ushabtis were lacquered, then fitted, then told something. I would give a lot to know what. Six of them, and bring me the part behind the ear.",
-                  "Ícaro, esses ushabtis foram laqueados, depois montados, depois alguém contou algo para eles. Eu daria muito para saber o quê. Seis deles, e me traz a peça de trás da orelha."),
+                T("Ícaro, these ushabtis were carved, then fitted, then told something. I would give a lot to know what. Six of them, and bring me the part behind the ear.",
+                  "Ícaro, esses ushabtis foram esculpidos, depois montados, depois alguém contou algo para eles. Eu daria muito para saber o quê. Seis deles, e me traz a peça de trás da orelha."),
                 T("Lavine, this is the most frightening place in the world and you are standing in it with your arms crossed. I've run out of things to tell you. Six ushabtis.",
                   "Lavine, este é o lugar mais assustador do mundo e você está nele de braços cruzados. Acabou o que eu tinha para falar. Seis ushabtis."));
 

@@ -28,7 +28,7 @@ namespace Rapadura.Gameplay.Enemies.Visuals
         // Shared: the answering figures (ushabtis), scaled by s
         // ------------------------------------------------------------------
 
-        private static void BuildFigure(ProceduralEnemyBlueprint bp, string key, float s, EnemySwatch stone, EnemySwatch dark,
+        internal static void BuildFigure(ProceduralEnemyBlueprint bp, string key, float s, EnemySwatch stone, EnemySwatch dark,
             Action<EnemyMeshBuilder> bodyExtra, Action<EnemyMeshBuilder> headExtra, Action<EnemyMeshBuilder, float> rightHand)
         {
             int body = bp.Mesh(ProceduralEnemyParts.Body, -1, new Vector3(0f, 0.62f * s, 0f), b =>
@@ -64,7 +64,7 @@ namespace Rapadura.Gameplay.Enemies.Visuals
         }
 
         /// <summary>The hoe the figures carry to work the fields of the other world.</summary>
-        private static void DrawHoe(EnemyMeshBuilder b, float s, EnemySwatch blade)
+        internal static void DrawHoe(EnemyMeshBuilder b, float s, EnemySwatch blade)
         {
             b.Segment(new Vector3(0.02f * s, -0.62f * s, 0.3f * s), new Vector3(0.02f * s, -0.08f * s, 0.34f * s), 0.025f * s, 0.025f * s, 5, EnemySwatch.Bark);
             b.Box(new Vector3(0.02f * s, -0.66f * s, 0.4f * s), new Vector3(0.14f * s, 0.04f * s, 0.18f * s), blade, Quaternion.Euler(20f, 0f, 0f));
@@ -190,7 +190,7 @@ namespace Rapadura.Gameplay.Enemies.Visuals
         }
 
         /// <summary>Jointed legs splayed out from the body: <c>Leg_L0</c> → <c>Shin_L0</c> → <c>Foot_L0</c>, the foot on the ground.</summary>
-        private static void AddSplayedLegs(ProceduralEnemyBlueprint bp, float hipY, float hipX, float[] hipZ, float[] splay, Vector3 knee, float tipX,
+        internal static void AddSplayedLegs(ProceduralEnemyBlueprint bp, float hipY, float hipX, float[] hipZ, float[] splay, Vector3 knee, float tipX,
             EnemySwatch upper, EnemySwatch lower, string meshKey)
         {
             Vector3 tip = new Vector3(tipX, -(hipY + knee.y - 0.01f), 0f);

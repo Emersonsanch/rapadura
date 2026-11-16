@@ -144,12 +144,13 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         private static class Profundo
         {
             public const string SmallShadow = FarBeasts.LittleShadow;
-            public const string LampSmoke = "enemy_mountain_ill_wind_mist";
+            public const string LampSmoke = "enemy_mountain_gate_smoke";
             public const string DarkBat = FarBeasts.DarkBat;
-            public const string DimUshabti = "enemy_mountain_lacquer_ushabti";
+            public const string DimUshabti = "enemy_mountain_rampart_ushabti";
             public const string CopyShadow = "enemy_forest_copy_shadow";
             public const string SmokeGiant = "enemy_forest_smoke_giant";
-            // The twenty-second pass (DeepOwnBeastRecipes, OverworldLayouts.DeepBeasts): the roles of the sheets that still borrowed
+            // The twenty-second pass (DeepOwnBeastRecipes, OverworldLayouts.DeepBeasts; the Fumaça, the Ushabti Apagado, the Redemoinho and the
+            // Rastejante in its second half, DeepOwn2BeastRecipes, OverworldLayouts.DeepBeasts2): the roles of the sheets that still borrowed
             // another region's beast have their own now, with the stand-in's numbers.
             public const string ChokeSmoke = "enemy_forest_choking_smoke";
             public const string SmokeArcher = "enemy_forest_smoke_archer";
@@ -160,14 +161,14 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             public const string BlackEagle = "enemy_forest_black_eagle";
             public const string BladeBat = "enemy_forest_blade_bat";
             public const string WindHarpy = "enemy_forest_wind_harpy";
-            public const string Whirlwind = "enemy_mountain_ill_wind_mist";
+            public const string Whirlwind = "enemy_mountain_ruin_whirlwind";
             public const string DarkFish = "enemy_forest_dark_fish";
             public const string GreatEel = "enemy_forest_great_eel";
             public const string MudOctopus = "enemy_forest_mud_octopus";
             public const string DarkShoal = "enemy_cave_dark_shoal";
             public const string BlindSerpent = "enemy_forest_blind_serpent";
             public const string ShadowLizard = "enemy_forest_shadow_lizard";
-            public const string Creeper = "enemy_forest_creeping_dark";
+            public const string Creeper = "enemy_forest_dark_crawler";
             public const string LesserDragon = "enemy_forest_lesser_shadow_dragon";
             public const string LesserArchon = "enemy_forest_lesser_archon";
             public const string GiantUshabti = "enemy_mountain_giant_dimmed_ushabti";
@@ -407,8 +408,8 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             NightSpecies sparks = NightVariantRules.VagaLume;
             NightSpecies werewolf = NightVariantRules.Lobisomem;
 
-            // Outside the gates of the fortress (83): the Sombra Pequena [rápido] (its own beast now, FarBeasts), the Fumaça [controle] (the ill-wind mist), the
-            // Morcego da Treva [enxame] (its own beast too), the Ushabti Apagado [tanque] (the lacquer ushabti).
+            // Outside the gates of the fortress (83): the Sombra Pequena [rápido] (its own beast now, FarBeasts), the Fumaça [controle] (the gate smoke), the
+            // Morcego da Treva [enxame] (its own beast too), the Ushabti Apagado [tanque] (the rampart ushabti); both their own beasts now (DeepBeasts2).
             ProfundoGroup(fortaleza, "sombras_da_muralha", "[rápido]", Profundo.SmallShadow, Profundo.DarkBat, moon);
             ProfundoGroup(fortaleza, "morcegos_da_muralha", "[enxame]", Profundo.DarkBat, Profundo.SmallShadow, bats, 5);
             ProfundoGroup(muralha, "ushabtis_da_muralha", "[tanque]", Profundo.DimUshabti, Profundo.SmallShadow, moon, 3, 30f);
@@ -441,7 +442,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             ProfundoGroup(cinzaQuente, "lobos_da_cinza", "[rápido]", Profundo.EmberWolf, Profundo.AshBull, owl);
 
             // The Pit of Ruinous Wind (86): the Águia Negra [rápido], the Morcego-Lâmina [enxame] (the candle bat), the Harpia de Vento [distância], the
-            // Redemoinho [controle] (the ill-wind mist).
+            // Redemoinho [controle] (its own beast now, DeepBeasts2).
             ProfundoGroup(vento, "aguias_negras", "[rápido]", Profundo.BlackEagle, Profundo.BladeBat, owl);
             ProfundoGroup(vento, "morcegos_lamina", "[enxame]", Profundo.BladeBat, Profundo.BlackEagle, bats, 5);
             ProfundoGroup(plataformas, "harpias_de_vento", "[distância]", Profundo.WindHarpy, Profundo.Whirlwind, moon);
@@ -458,7 +459,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             ProfundoGroup(comportas, "polvos_das_comportas", "[tanque]", Profundo.MudOctopus, Profundo.GreatEel, moon, 3, 30f);
             ProfundoGroup(comportas, "peixes_das_comportas", "[rápido]", Profundo.DarkFish, Profundo.MudOctopus, owl);
 
-            // The Pit of Darkness (88): the Serpente Cega [rápido] (the dimmed python), the Lagarto-Sombra [tanque], the Rastejante [enxame] (the creeping
+            // The Pit of Darkness (88): the Serpente Cega [rápido] (the dimmed python), the Lagarto-Sombra [tanque], the Rastejante [enxame] (its own crawler now, DeepBeasts2; was the creeping
             // dark), the Dragão-Sombra Menor [elite].
             ProfundoGroup(treva, "serpentes_cegas", "[rápido]", Profundo.BlindSerpent, Profundo.Creeper, bats);
             ProfundoGroup(treva, "lagartos_sombra", "[tanque]", Profundo.ShadowLizard, Profundo.BlindSerpent, moon, 3, 30f);

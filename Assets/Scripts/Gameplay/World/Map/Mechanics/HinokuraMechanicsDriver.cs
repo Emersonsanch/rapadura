@@ -94,7 +94,11 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             _areas = new[] { MechanicsDriverHub.WorldArea(OverworldLayouts.HinokuraBounds, _origin) };
         }
 
-        private void OnDisable() => HideFeedback();
+        private void OnDisable()
+        {
+            HideFeedback();
+            UnhookWaterBomb();
+        }
 
         private void OnDestroy()
         {
@@ -111,6 +115,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
                 return;
             }
 
+            TickWaterBomb();
             Vector2 local = new Vector2(_player.position.x, _player.position.z) - _origin;
             if (!OverworldLayouts.HinokuraBounds.Contains(local))
             {
@@ -349,7 +354,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             }
 
             float distance = RioFireRules.DistanceToFire(OverworldLayouts.CaldeiraLake, local);
-            bool onStone = OnColdStone(local);
+            bool onStone = OnColdStone(local) || SplashHolds(local);
             float before = _heat;
             _heat = HinokuraHeatRules.Step(_heat, distance, onStone, TeaActive(), Time.deltaTime);
             if (onStone && before >= HinokuraHeatRules.WarmAt)
@@ -455,7 +460,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             _eruptionTick = 0f;
             bool inRoute = HinokuraEruptionRules.InRoute(OverworldLayouts.EruptionRoutes, route, local);
             float damage = HinokuraEruptionRules.DamageAmount(phase, inRoute, _stats.CurrentHealth, _stats.MaxHealth, seconds);
-            if (damage > 0f && GoatHoovesHold())
+            if (damage > 0f && (GoatHoovesHold() || SplashHolds(local)))
             {
                 damage = 0f;
             }

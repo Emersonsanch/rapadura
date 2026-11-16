@@ -382,6 +382,11 @@ namespace Rapadura.Gameplay.Enemies.Visuals
             { "enemy_cave_dark_shoal", ProceduralEnemyKind.DarkShoal },
             { "enemy_forest_blind_serpent", ProceduralEnemyKind.BlindSerpent },
             { "enemy_mountain_giant_dimmed_ushabti", ProceduralEnemyKind.GiantDimmedUshabti },
+            // Twenty-second pass, second half (DeepOwn2BeastRecipes): the last borrowed roles of the Limiar Profundo.
+            { "enemy_mountain_rampart_ushabti", ProceduralEnemyKind.RampartUshabti },
+            { "enemy_mountain_gate_smoke", ProceduralEnemyKind.GateSmoke },
+            { "enemy_mountain_ruin_whirlwind", ProceduralEnemyKind.RuinWhirlwind },
+            { "enemy_forest_dark_crawler", ProceduralEnemyKind.DarkCrawler },
             // Twenty-third pass (EarlyOwnBeastRecipes): the roles of Regions 1–4 that still borrowed another beast after the twelfth pass.
             { "enemy_forest_mud_eel", ProceduralEnemyKind.MudEel },
             { "enemy_forest_cocoon_caterpillar", ProceduralEnemyKind.CocoonCaterpillar },
@@ -394,6 +399,12 @@ namespace Rapadura.Gameplay.Enemies.Visuals
             { "enemy_forest_stone_lizard", ProceduralEnemyKind.StoneLizard },
             { "enemy_cave_karez_rat", ProceduralEnemyKind.KarezRat },
             { "enemy_desert_water_scorpion", ProceduralEnemyKind.WaterScorpion },
+            // Twenty-sixth pass (EarlyOwn2BeastRecipes): the roles of Regions 2 and 3 that still borrowed another beast after the twenty-third.
+            { "enemy_desert_thirsty_root", ProceduralEnemyKind.ThirstyRoot },
+            { "enemy_desert_crystal_scorpion", ProceduralEnemyKind.CrystalScorpion },
+            { "enemy_desert_salt_serpent", ProceduralEnemyKind.SaltSerpent },
+            { "enemy_mountain_dimmed_black_eagle", ProceduralEnemyKind.DimmedBlackEagle },
+            { "enemy_cave_cold_salamander", ProceduralEnemyKind.ColdSalamander },
             // Eighteenth pass (SkyOwnBeastRecipes): the roles of the Reinos do Céu that still borrowed another region's beast.
             { "enemy_forest_runaway_archon", ProceduralEnemyKind.RunawayArchon },
             { "enemy_forest_stubborn_spark", ProceduralEnemyKind.StubbornSpark },
@@ -577,8 +588,10 @@ namespace Rapadura.Gameplay.Enemies.Visuals
             ProceduralEnemyKind.DimmedNarwhal, ProceduralEnemyKind.StormGull, ProceduralEnemyKind.WitchFish, ProceduralEnemyKind.ObsidianOctopus, ProceduralEnemyKind.RagingSpark, ProceduralEnemyKind.LivingAsh,
             ProceduralEnemyKind.ShadowSalamander, ProceduralEnemyKind.CoilScorpion, ProceduralEnemyKind.DimmedUshabti, ProceduralEnemyKind.BoiledShadow, ProceduralEnemyKind.MudCrocodile, ProceduralEnemyKind.CrackedUshabti,
             ProceduralEnemyKind.ClockUshabti, ProceduralEnemyKind.PitchSmoke, ProceduralEnemyKind.ChokingSmoke, ProceduralEnemyKind.DarkShoal, ProceduralEnemyKind.BlindSerpent, ProceduralEnemyKind.GiantDimmedUshabti,
+            ProceduralEnemyKind.RampartUshabti, ProceduralEnemyKind.GateSmoke, ProceduralEnemyKind.RuinWhirlwind, ProceduralEnemyKind.DarkCrawler,
             ProceduralEnemyKind.MudEel, ProceduralEnemyKind.CocoonCaterpillar, ProceduralEnemyKind.ThreadJackdaw, ProceduralEnemyKind.StickyMist, ProceduralEnemyKind.DimmedThornRose, ProceduralEnemyKind.AshWolf,
             ProceduralEnemyKind.GrottoSpider, ProceduralEnemyKind.BladeStone, ProceduralEnemyKind.StoneLizard, ProceduralEnemyKind.KarezRat, ProceduralEnemyKind.WaterScorpion,
+            ProceduralEnemyKind.ThirstyRoot, ProceduralEnemyKind.CrystalScorpion, ProceduralEnemyKind.SaltSerpent, ProceduralEnemyKind.DimmedBlackEagle, ProceduralEnemyKind.ColdSalamander,
             ProceduralEnemyKind.RunawayArchon, ProceduralEnemyKind.StubbornSpark, ProceduralEnemyKind.SphereSmoke, ProceduralEnemyKind.FlowerTreader, ProceduralEnemyKind.SmokeThorn,
             ProceduralEnemyKind.EmberStowaway, ProceduralEnemyKind.NoonShadow, ProceduralEnemyKind.LastShadow, ProceduralEnemyKind.HighWind, ProceduralEnemyKind.FledArchon,
             ProceduralEnemyKind.KushiteUshabti, ProceduralEnemyKind.YoungScorpionKing, ProceduralEnemyKind.BlackSandJackal, ProceduralEnemyKind.MudJellyfish, ProceduralEnemyKind.DimmedLionfish, ProceduralEnemyKind.Kongamato,
@@ -1556,6 +1569,18 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                 case ProceduralEnemyKind.GiantDimmedUshabti:
                     DeepOwnBeastRecipes.BuildGiantDimmedUshabti(blueprint);
                     break;
+                case ProceduralEnemyKind.RampartUshabti:
+                    DeepOwn2BeastRecipes.BuildRampartUshabti(blueprint);
+                    break;
+                case ProceduralEnemyKind.GateSmoke:
+                    DeepOwn2BeastRecipes.BuildGateSmoke(blueprint);
+                    break;
+                case ProceduralEnemyKind.RuinWhirlwind:
+                    DeepOwn2BeastRecipes.BuildRuinWhirlwind(blueprint);
+                    break;
+                case ProceduralEnemyKind.DarkCrawler:
+                    DeepOwn2BeastRecipes.BuildDarkCrawler(blueprint);
+                    break;
                 case ProceduralEnemyKind.MudEel:
                     EarlyOwnBeastRecipes.BuildMudEel(blueprint);
                     break;
@@ -1588,6 +1613,21 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                     break;
                 case ProceduralEnemyKind.WaterScorpion:
                     EarlyOwnBeastRecipes.BuildWaterScorpion(blueprint);
+                    break;
+                case ProceduralEnemyKind.ThirstyRoot:
+                    EarlyOwn2BeastRecipes.BuildThirstyRoot(blueprint);
+                    break;
+                case ProceduralEnemyKind.CrystalScorpion:
+                    EarlyOwn2BeastRecipes.BuildCrystalScorpion(blueprint);
+                    break;
+                case ProceduralEnemyKind.SaltSerpent:
+                    EarlyOwn2BeastRecipes.BuildSaltSerpent(blueprint);
+                    break;
+                case ProceduralEnemyKind.DimmedBlackEagle:
+                    EarlyOwn2BeastRecipes.BuildDimmedBlackEagle(blueprint);
+                    break;
+                case ProceduralEnemyKind.ColdSalamander:
+                    EarlyOwn2BeastRecipes.BuildColdSalamander(blueprint);
                     break;
                 case ProceduralEnemyKind.RunawayArchon:
                     SkyOwnBeastRecipes.BuildRunawayArchon(blueprint);

@@ -682,7 +682,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             meroe.Fauna.Add(Fauna("morcegos_das_capelas", "[enxame]", T(N(morcegos, 3)), T(N(morcegos, 2), S(ubir, 1)), 5, null, 22f));
 
             // 09 · Galerias do Karez: the karez bats [enxame] (Ubır down the shafts at night), scorpions by the water, ushabti diggers.
-            galerias.Fauna.Add(Fauna("morcegos_do_karez", "[enxame]", T(N(EarlyOwnBeasts.KarezRat, 3), N(esc, 1)), T(V(EarlyOwnBeasts.KarezRat, 2), S(ubir, 1)), 5, null, 22f));
+            galerias.Fauna.Add(Fauna("morcegos_do_karez", "[enxame]", T(N(EarlyOwnBeasts.KarezRat, 3), N(EarlyOwn2Beasts.ThirstyRoot, 1)), T(V(EarlyOwnBeasts.KarezRat, 2), V(EarlyOwn2Beasts.ThirstyRoot, 1), S(ubir, 1)), 5, null, 22f));
             galerias.Fauna.Add(Fauna("escorpioes_dagua", "[rápido] [tanque]", T(N(EarlyOwnBeasts.WaterScorpion, 3), N(chacal, 1)), T(V(EarlyOwnBeasts.WaterScorpion, 3), S(ubir, 1)), 4));
             galerias.Fauna.Add(Fauna("ushabtis_cavadores_fundos", "[tanque]", T(N(ushabti, 3)), T(V(ushabti, 3), N(morcegos, 1)), 3, null, 30f));
 
@@ -698,9 +698,10 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             tambor.Fauna.Add(Fauna("pedras_rolantes", "[controle] [elite]", T(N(pedra, 3)), T(V(pedra, 2), S(mardagayl, 1)), 3, null, 32f));
             tambor.Fauna.Add(Fauna("cla_coroado", "[elite]", T(N(orc, 3), N(esc, 1)), T(V(orc, 2), S(mardagayl, 1)), 3, null, 32f));
 
+            // (2026-11-16) The Raiz Sedenta (09), the Escorpião-Cristal and the Serpente de Sal (12) are their own beasts now (EarlyOwn2Beasts).
             // 12 · Trono de Namrael: crystal scorpions, Namrael's guards (night variants), the salt mirrors (lanterns), Ubır in the towers.
-            namrael.Fauna.Add(Fauna("escorpioes_cristal", "[tanque] [elite]", T(N(esc, 4)), T(V(esc, 4), S(ubir, 1)), 4, null, 28f));
-            namrael.Fauna.Add(Fauna("espelhos_de_sal", "[distância]", T(N(lanterna, 3), N(esc, 1)), T(V(lanterna, 2), S(ubir, 1)), 3, null, 28f));
+            namrael.Fauna.Add(Fauna("escorpioes_cristal", "[tanque] [elite]", T(N(EarlyOwn2Beasts.CrystalScorpion, 4)), T(V(EarlyOwn2Beasts.CrystalScorpion, 4), S(ubir, 1)), 4, null, 28f));
+            namrael.Fauna.Add(Fauna("espelhos_de_sal", "[distância]", T(N(lanterna, 3), N(EarlyOwn2Beasts.SaltSerpent, 1)), T(V(lanterna, 2), V(EarlyOwn2Beasts.SaltSerpent, 1), S(ubir, 1)), 3, null, 28f));
             namrael.Fauna.Add(Fauna("guardas_de_namrael", "[elite] [rápido]", T(N(esc, 2), N(gaviao, 2)), T(V(esc, 2), V(gaviao, 1), S(faiscas, 1)), 4, null, 30f));
         }
     }

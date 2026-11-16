@@ -308,11 +308,17 @@ namespace Rapadura.UI.Bestiary
             // -- Papéis do Rio, da Mistura e do Limiar Profundo que ainda usavam bicho emprestado (own file too) --
             DeepOwnBestiaryTexts.AddPages(entries);
 
+            // -- Os últimos papéis do Limiar Profundo que ainda usavam bicho emprestado (own file too) --
+            DeepOwn2BestiaryTexts.AddPages(entries);
+
             // -- Papéis dos Reinos do Céu que ainda usavam bicho de outra região (own file too) --
             SkyOwnBestiaryTexts.AddPages(entries);
 
             // -- Papéis das Regiões 1–4 que ainda usavam bicho emprestado depois da 12ª leva (own file too) --
             EarlyOwnBestiaryTexts.AddPages(entries);
+
+            // -- Papéis das Regiões 2 e 3 que ainda usavam bicho emprestado depois da 23ª leva (own file too) --
+            EarlyOwn2BestiaryTexts.AddPages(entries);
 
             // -- Guardiões do Ossuário dos Artífices (Docs/Dungeons.md, own file) --
             RegionBossTexts.AddPages(entries);

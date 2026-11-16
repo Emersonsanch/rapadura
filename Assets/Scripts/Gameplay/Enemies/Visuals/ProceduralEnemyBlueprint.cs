@@ -633,6 +633,16 @@ namespace Rapadura.Gameplay.Enemies.Visuals
         /// <summary>Ushabti Apagado Gigante (90): the huge answering figure before the Gate of Darkness; both arms go up on the windup.</summary>
         GiantDimmedUshabti = 481,
 
+        // The twenty-second pass, second half (DeepOwn2BeastRecipes): the last roles of the Limiar Profundo still played by another beast.
+        /// <summary>Ushabti Apagado da Muralha (83): a basalt figure of the Arched Rampart with a cold lamp on its head; both arms go up on the windup.</summary>
+        RampartUshabti = 540,
+        /// <summary>Fumaça do Portão (83): the pits' smoke seeping under the sealed gates; squashes on the windup and the wick it holds flares.</summary>
+        GateSmoke = 541,
+        /// <summary>Redemoinho (86): a funnel of the Ruinous Wind with a stolen spark in its eye; squashes on the windup and the spark flares.</summary>
+        RuinWhirlwind = 542,
+        /// <summary>Rastejante (88, 89): a low six-legged crawler of the Pit of Darkness; the jaw drops on the windup and the tail sways.</summary>
+        DarkCrawler = 543,
+
         // The twenty-third pass of beasts (bible §3.2.1): roles of Regions 1–4 still played by another beast after the twelfth pass (EarlyOwnBeastRecipes).
         /// <summary>Enguia de Lama (03): a mud eel reared out of its puddle; the jaw drops on the windup and the loops in the mud sway.</summary>
         MudEel = 490,
@@ -656,6 +666,18 @@ namespace Rapadura.Gameplay.Enemies.Visuals
         KarezRat = 499,
         /// <summary>Escorpião-d'Água Apagado (09): a flat water scorpion, forelegs raised; the beak drops on the windup, the breathing tube sways.</summary>
         WaterScorpion = 500,
+
+        // The twenty-sixth pass of beasts (bible §3.2.1): roles of Regions 2 and 3 still played by another beast after the twenty-third (EarlyOwn2BeastRecipes).
+        /// <summary>Raiz Sedenta (09): a knot of dimmed vine root on its tendrils, a swallowed drop lit inside; squashes on the windup and the drop flares.</summary>
+        ThirstyRoot = 560,
+        /// <summary>Escorpião-Cristal (12): a scorpion of red salt crystal; the mouthparts open on the windup, the crystal tail sways.</summary>
+        CrystalScorpion = 561,
+        /// <summary>Serpente de Sal (12): a salt-white serpent with red crystals down its back; the jaw drops on the windup, the tail sways.</summary>
+        SaltSerpent = 562,
+        /// <summary>Águia-Preta Apagada (15): the black eagle of the painted cliffs, white V on the back; wings, beak opens on the windup.</summary>
+        DimmedBlackEagle = 563,
+        /// <summary>Salamandra Fria (17): a fire salamander gone out, ash-grey spots and one ember; jaw and tail, four legs.</summary>
+        ColdSalamander = 564,
 
         // The eighteenth pass of beasts (bible §3.2.1): roles of Região 16, the Reinos do Céu, still played by another region's beast (SkyOwnBeastRecipes).
         /// <summary>Arconte Fujão Menor (91): a small archon in a travelling cloak with a bundle of stolen sparks; both arms go up on the windup.</summary>

@@ -430,14 +430,15 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             passos.Fauna.Add(Fauna("lince", "[rápido] [controle]", T(N(EarlyBeasts.DimmedLynx, 3), N(KaggenMist, 1)), T(V(EarlyBeasts.DimmedLynx, 2), V(KaggenMist, 1), S(NightVariantRules.MorcegoVampiro, 1)), 4,
                 T(N(Wolf, 2), N(KaggenMist, 2))));
 
+            // (2026-11-16) The Águia-Preta (15), the Salamandra Fria (17) and the Águia da Tempestade (18, the Farnkesh's) are their own beasts now (EarlyOwn2Beasts).
             // Escarpas de Arenito: sandstone ushabtis, the black eagles (hawks) on the steps.
             escarpas.Fauna.Add(Fauna("arenito", "[tanque]", T(N(Golem, 3), N(Potoo, 1)), T(V(Golem, 2), S(NightVariantRules.RasgaMortalha, 1)), 3, null, 30f));
-            escarpas.Fauna.Add(Fauna("aguias_pretas", "[distância]", T(N(KaggenHawk, 3), N(Potoo, 1)), T(V(KaggenHawk, 2), S(aveGraveto, 1)), 3));
+            escarpas.Fauna.Add(Fauna("aguias_pretas", "[distância]", T(N(EarlyOwn2Beasts.BlackEagle, 3), N(Potoo, 1)), T(V(EarlyOwn2Beasts.BlackEagle, 2), S(aveGraveto, 1)), 3));
 
             // Abrigos Pintados (15): the Borrão [rápido] (the wolf of shadow) and the Babuínos Apagados, thieves [enxame]; the
             // Ushabti de Arenito [tanque]; the black eagle [distância].
             abrigos.Fauna.Add(Fauna("borroes", "[rápido] [enxame]", T(N(EarlyBeasts.Smudge, 3), N(KaggenBaboon, 2)), T(V(EarlyBeasts.Smudge, 2), V(KaggenBaboon, 1), S(NightVariantRules.Lobisomem, 1)), 5));
-            abrigos.Fauna.Add(Fauna("ushabti_de_arenito", "[tanque] [distância]", T(N(Golem, 3), N(KaggenHawk, 1)), T(V(Golem, 2), S(aveGraveto, 1)), 4, null, 30f));
+            abrigos.Fauna.Add(Fauna("ushabti_de_arenito", "[tanque] [distância]", T(N(Golem, 3), N(EarlyOwn2Beasts.BlackEagle, 1)), T(V(Golem, 2), S(aveGraveto, 1)), 4, null, 30f));
 
             // Muralhas de Pedra Seca (16): the granite ushabtis [tanque] (and the lesser Mazan at night), the stone crows [distância].
             pedraSeca.Fauna.Add(Fauna("muralhas", "[tanque] [elite]", T(N(Golem, 3)), T(V(Golem, 3), S(NightVariantRules.Lobisomem, 1)), 4, null, 32f));
@@ -449,7 +450,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             neve.Fauna.Add(Fauna("neblina", "[controle] [distância]", T(N(KaggenMist, 2), N(KaggenHawk, 2)), T(V(KaggenMist, 1), S(aveGraveto, 2), V(KaggenHawk, 1)), 4));
 
             // Salões de Bronze (17): slag golems [tanque], ember bats [enxame].
-            saloes.Fauna.Add(Fauna("escoria", "[tanque]", T(N(Golem, 3), N(Bats, 1)), T(V(Golem, 2), S(NightVariantRules.MorcegoVampiro, 1)), 4, null, 30f));
+            saloes.Fauna.Add(Fauna("escoria", "[tanque] [rápido]", T(N(Golem, 3), N(EarlyOwn2Beasts.ColdSalamander, 1)), T(V(Golem, 2), V(EarlyOwn2Beasts.ColdSalamander, 1), S(NightVariantRules.MorcegoVampiro, 1)), 4, null, 30f));
             saloes.Fauna.Add(Fauna("morcegos_de_brasa", "[enxame]", T(N(Bats, 3), N(Golem, 1)), T(V(Bats, 2), S(NightVariantRules.MorcegoVampiro, 1)), 5, null, 22f));
 
             // Estela Alta and the Cume dos Mazans (18): ice ushabtis and the lesser Mazans [elite] [tanque], the storm eagles
@@ -457,8 +458,8 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             estela.Fauna.Add(Fauna("pastores_perdidos", "[rápido]", T(N(Wolf, 3), N(KaggenHawk, 1)), T(V(Wolf, 2), S(NightVariantRules.Lobisomem, 1)), 4));
             estela.Fauna.Add(Fauna("ushabti_de_gelo", "[tanque]", T(N(Golem, 3)), T(V(Golem, 2), S(aveGraveto, 1)), 3, null, 32f));
             cume.Fauna.Add(Fauna("mazans", "[elite] [tanque]", T(N(Golem, 3)), T(V(Golem, 3), S(NightVariantRules.Lobisomem, 1)), 3, null, 34f));
-            cume.Fauna.Add(Fauna("aguias_da_tempestade", "[distância]", T(N(KaggenHawk, 3), N(Potoo, 1)), T(V(KaggenHawk, 3), S(aveGraveto, 1)), 4));
-            cume.Fauna.Add(Fauna("neblina_do_cume", "[controle] [distância]", T(N(KaggenMist, 3), N(KaggenHawk, 1)), T(V(KaggenMist, 2), S(aveGraveto, 1)), 4, null, 26f));
+            cume.Fauna.Add(Fauna("aguias_da_tempestade", "[distância]", T(N(EarlyOwn2Beasts.StormEagle, 3), N(Potoo, 1)), T(V(EarlyOwn2Beasts.StormEagle, 3), S(aveGraveto, 1)), 4));
+            cume.Fauna.Add(Fauna("neblina_do_cume", "[controle] [distância]", T(N(KaggenMist, 3), N(EarlyOwn2Beasts.StormEagle, 1)), T(V(KaggenMist, 2), S(aveGraveto, 1)), 4, null, 26f));
         }
     }
 }

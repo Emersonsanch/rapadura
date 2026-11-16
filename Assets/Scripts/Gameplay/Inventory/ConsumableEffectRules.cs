@@ -29,6 +29,8 @@ namespace Rapadura.Gameplay.Inventory
     /// <code>
     /// Garrafa de Ar Sereno (Mercado dos Túneis, 22; Docs/Mapas100.md §3.3 "limpa lentidão e dá +20% de fôlego por 60 s"): removes every slow
     ///   (MoveSpeed debuff) on the hero when opened; an area that keeps slowing (mud, still water) slows again on its next refresh
+    /// Bomba de Água (Ferro Preto do Kurogane, Hinokura; Docs/Mapas100.md 68 "resfriar: bombas de água"): restores nothing; it bursts at the
+    ///   hero's feet and the map reacts to the <see cref="ItemConsumedEvent"/> (WaterBombRules: the lava inside the splash hardens for 20 s)
     /// </code>
     /// </summary>
     public static class ConsumableEffectRules
@@ -37,5 +39,10 @@ namespace Rapadura.Gameplay.Inventory
 
         /// <summary>Whether using <paramref name="itemId"/> removes the hero's slows.</summary>
         public static bool CleansSlows(string itemId) => itemId == PureAirBottle;
+
+        public const string WaterBomb = "item_bomba_agua";
+
+        /// <summary>Whether using <paramref name="itemId"/> bursts a splash of water at the hero's feet (the map's driver applies it).</summary>
+        public static bool ThrowsWater(string itemId) => itemId == WaterBomb;
     }
 }

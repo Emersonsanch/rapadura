@@ -53,13 +53,21 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         private readonly bool _greatHole;
         private float _timer;
 
-        public IceFishingSession(int seed, bool night, bool greatHole)
+        public IceFishingSession(int seed, bool night, bool greatHole, IceBait bait = IceBait.None)
         {
             _random = new System.Random(seed);
             _night = night;
             _greatHole = greatHole;
-            _timer = MinBiteDelay + (float)_random.NextDouble() * (MaxBiteDelay - MinBiteDelay);
+            Bait = bait;
+            float minDelay = IceBaitRules.MinBiteDelay(bait);
+            _timer = minDelay + (float)_random.NextDouble() * (IceBaitRules.MaxBiteDelay(bait) - minDelay);
         }
+
+        /// <summary>What is on the hook (<see cref="IceBaitRules"/>).</summary>
+        public IceBait Bait { get; }
+
+        /// <summary>The cast was at the Buraco Grande.</summary>
+        public bool GreatHole => _greatHole;
 
         public IceFishingState State { get; private set; } = IceFishingState.Waiting;
 
@@ -102,7 +110,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             }
             else if (State == IceFishingState.Bite)
             {
-                Fish = IceFishingRules.Roll(_random.NextDouble(), _night, _greatHole);
+                Fish = IceFishingRules.Roll(_random.NextDouble(), _night, _greatHole, Bait);
                 float kg = Fish.MinKg + (float)_random.NextDouble() * (Fish.MaxKg - Fish.MinKg);
                 Grams = Mathf.RoundToInt(kg * 1000f);
                 State = IceFishingState.Caught;
@@ -147,11 +155,15 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         }
 
         /// <summary>The species for a roll in [0, 1).</summary>
-        public static FishSpec Roll(double roll, bool night, bool greatHole)
+        public static FishSpec Roll(double roll, bool night, bool greatHole) => Roll(roll, night, greatHole, IceBait.None);
+
+        /// <summary>The species for a roll in [0, 1) with <paramref name="bait"/> on the hook (<see cref="IceBaitRules"/>).</summary>
+        public static FishSpec Roll(double roll, bool night, bool greatHole, IceBait bait)
         {
-            float rare = RareWeight * (night ? NightRareFactor : 1f) * (greatHole ? GreatHoleRareFactor : 1f);
-            float legendary = LegendaryWeight * (greatHole ? GreatHoleLegendaryFactor : 1f);
-            float total = CommonWeight + UncommonWeight + rare + legendary;
+            float uncommon = UncommonWeight * IceBaitRules.UncommonFactor(bait);
+            float rare = RareWeight * (night ? NightRareFactor : 1f) * (greatHole ? GreatHoleRareFactor : 1f) * IceBaitRules.RareFactor(bait);
+            float legendary = LegendaryWeight * (greatHole ? GreatHoleLegendaryFactor : 1f) * IceBaitRules.LegendaryFactor(bait);
+            float total = CommonWeight + uncommon + rare + legendary;
             float at = (float)Math.Max(0d, Math.Min(0.999999d, roll)) * total;
             if (at < CommonWeight)
             {
@@ -159,12 +171,12 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             }
 
             at -= CommonWeight;
-            if (at < UncommonWeight)
+            if (at < uncommon)
             {
-                return FishCatalog.Get(Uncommon[at < UncommonWeight * 0.5f ? 0 : 1]);
+                return FishCatalog.Get(Uncommon[at < uncommon * 0.5f ? 0 : 1]);
             }
 
-            at -= UncommonWeight;
+            at -= uncommon;
             return FishCatalog.Get(at < rare ? Rare : Legendary);
         }
     }

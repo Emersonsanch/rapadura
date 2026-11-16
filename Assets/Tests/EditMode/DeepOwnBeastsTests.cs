@@ -16,21 +16,24 @@ namespace Rapadura.Tests
     /// The twenty-second pass of beasts (bible §3.2.1): the roles of the Rio das Doze Horas (Região 13, Docs/Mapas100.md 74–76), the Margens
     /// da Mistura (Região 14, 78–79) and the Limiar Profundo (Região 15, 84–90) that the overworld still played with another region's beast.
     /// Same contract as <see cref="HighlandOwnBeastsTests"/>: each one keeps its stand-in's biome (the prefix) and numbers, so the economy of
-    /// the region does not move. The Cardume Escuro spits the lantern fish's lure glob, the one shot among the stand-ins.
+    /// the region does not move. The Sombra Fervida spits a glob of hot shadow and the Ushabti de Relógio throws its dial's sunlight (their sheets' [distância]
+    /// attacks; they hover like every other shooter); the Cardume Escuro bites in a pack instead ([enxame]: melee, five to a group).
     /// </summary>
     public class DeepOwnBeastsTests
     {
         private const string DarkShoal = "enemy_cave_dark_shoal";
+        private const string BoiledShadow = "enemy_cave_boiled_shadow";
+        private const string ClockUshabti = "enemy_mountain_clock_ushabti";
 
         private static readonly OverworldBeastsTests.Beast[] Beasts =
         {
             new OverworldBeastsTests.Beast("enemy_desert_coil_scorpion", BiomeType.Desert, EnemyMotionArchetype.Arthropod, ProceduralEnemyKind.CoilScorpion, 284, 296, "enemy_desert_scorpion"),
             new OverworldBeastsTests.Beast("enemy_mountain_dimmed_ushabti", BiomeType.Mountain, EnemyMotionArchetype.Heavy, ProceduralEnemyKind.DimmedUshabti, 284, 296, "enemy_mountain_rope_ushabti"),
             new OverworldBeastsTests.Beast("enemy_desert_shadow_salamander", BiomeType.Desert, EnemyMotionArchetype.Quadruped, ProceduralEnemyKind.ShadowSalamander, 292, 306, "enemy_desert_sand_snake"),
-            new OverworldBeastsTests.Beast("enemy_cave_boiled_shadow", BiomeType.Caves, EnemyMotionArchetype.Heavy, ProceduralEnemyKind.BoiledShadow, 292, 306, "enemy_cave_ooze"),
+            new OverworldBeastsTests.Beast(BoiledShadow, BiomeType.Caves, EnemyMotionArchetype.Flyer, ProceduralEnemyKind.BoiledShadow, 292, 306, "enemy_cave_ooze"),
             new OverworldBeastsTests.Beast("enemy_forest_cracked_ushabti", BiomeType.Forest, EnemyMotionArchetype.Heavy, ProceduralEnemyKind.CrackedUshabti, 292, 306, "enemy_forest_terracotta_soldier"),
             new OverworldBeastsTests.Beast("enemy_forest_mud_crocodile", BiomeType.Forest, EnemyMotionArchetype.Heavy, ProceduralEnemyKind.MudCrocodile, 304, 320, "enemy_forest_mangrove_crocodile"),
-            new OverworldBeastsTests.Beast("enemy_mountain_clock_ushabti", BiomeType.Mountain, EnemyMotionArchetype.Heavy, ProceduralEnemyKind.ClockUshabti, 306, 316, "enemy_mountain_lacquer_ushabti"),
+            new OverworldBeastsTests.Beast(ClockUshabti, BiomeType.Mountain, EnemyMotionArchetype.Flyer, ProceduralEnemyKind.ClockUshabti, 306, 316, "enemy_mountain_lacquer_ushabti"),
             new OverworldBeastsTests.Beast("enemy_mountain_pitch_smoke", BiomeType.Mountain, EnemyMotionArchetype.Flyer, ProceduralEnemyKind.PitchSmoke, 314, 326, "enemy_mountain_smoke_harpy"),
             new OverworldBeastsTests.Beast("enemy_forest_choking_smoke", BiomeType.Forest, EnemyMotionArchetype.Flyer, ProceduralEnemyKind.ChokingSmoke, 348, 362, "enemy_forest_smoke_goat"),
             new OverworldBeastsTests.Beast(DarkShoal, BiomeType.Caves, EnemyMotionArchetype.Flyer, ProceduralEnemyKind.DarkShoal, 386, 402, "enemy_cave_lantern_fish"),
@@ -40,7 +43,8 @@ namespace Rapadura.Tests
 
         private static readonly Dictionary<string, EnemyProjectileKind> Shooters = new Dictionary<string, EnemyProjectileKind>
         {
-            { DarkShoal, EnemyProjectileKind.LureGlob },
+            { BoiledShadow, EnemyProjectileKind.LureGlob },
+            { ClockUshabti, EnemyProjectileKind.LanternBolt },
         };
 
         private static IEnumerable<OverworldBeastsTests.Beast> All() => Beasts;
@@ -163,7 +167,7 @@ namespace Rapadura.Tests
             if (shoots)
             {
                 Assert.AreEqual(projectile, definition.Projectile, beast.Id);
-                Assert.AreEqual(Load(beast.StandIn).Projectile, definition.Projectile, $"{beast.Id}: the shot of the stand-in it replaces");
+                Assert.AreEqual(EnemyProjectileKind.None, Load(beast.StandIn).Projectile, $"{beast.Id}: the shot is its sheet's own, the stand-in only swung");
                 Assert.AreEqual(EnemyMotionArchetype.Flyer, definition.MotionArchetype, $"{beast.Id}: hovers like the other shooters");
                 Assert.That(definition.AttackRange, Is.InRange(6f, 10f), $"{beast.Id}: readable on the isometric camera");
                 Assert.Greater(definition.LoseTargetRadius, definition.AttackRange, $"{beast.Id}: does not lose the hero while shooting");
@@ -248,6 +252,17 @@ namespace Rapadura.Tests
         public void TheModels_AreNotTheStandInsModels([ValueSource(nameof(All))] OverworldBeastsTests.Beast beast)
         {
             Assert.AreNotEqual(ProceduralEnemyModels.KindFor(beast.StandIn), beast.Model, $"{beast.Id}: its own body, not {beast.StandIn}'s");
+        }
+
+        [Test]
+        public void TheDarkShoal_BitesInAPack_InsteadOfShooting()
+        {
+            EnemyDefinition shoal = Load(DarkShoal);
+            Assert.IsFalse(shoal.IsRanged, "[enxame]: it bites, it no longer spits the lantern fish's glob");
+            Assert.AreEqual(EnemyStrikeKind.Swing, EnemyRangedAttack.StrikeKindOf(shoal.IsRanged, false));
+            Assert.IsTrue(Load("enemy_cave_lantern_fish").IsRanged, "the stand-in it replaced did shoot");
+            BestiaryCatalog.Invalidate();
+            Assert.IsFalse(BestiaryCatalog.Get(DarkShoal).Tips.Any(t => t.Kind == BestiaryTipKind.Ranged), "no [distância] tip");
         }
 
         [TestCase(ProceduralEnemyKind.ShadowSalamander)]

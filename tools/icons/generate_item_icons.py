@@ -1405,6 +1405,35 @@ def r_chefe_semente_luz(ic):
     ic.poly([(54, 56), (60, 50), (58, 70)], (255, 255, 255), shade=False, outline=False)
 
 
+def r_isca_larva_gelo(ic):
+    # Isca de Larva do Gelo (64): larva branca enrolada num anzol de ferro.
+    ic.stroke([(78, 18), (78, 84), (70, 100), (56, 102), (48, 92)], 4, IRON)
+    ic.poly([(46, 92), (52, 86), (50, 98)], STEEL)
+    for i, (x, y) in enumerate(((60, 40), (68, 52), (62, 64), (70, 76), (62, 86))):
+        ic.ngon(x, y, 10 - i, 8, (236, 232, 214) if i % 2 == 0 else (210, 214, 200))
+    ic.dot(58, 37, 2, NIGHT)
+
+
+def r_isca_prata_kul(ic):
+    # Isca de Prata do Kul (64): peixinho de prata batida com anzol, brilho frio.
+    ic.glow(64, 62, 40, (200, 225, 240), 120)
+    ic.poly([(24, 62), (50, 42), (86, 50), (100, 62), (86, 74), (50, 82)], (206, 214, 222))
+    ic.poly([(100, 62), (118, 46), (114, 62), (118, 78)], STEEL)
+    ic.stroke([(40, 62), (90, 62)], 2, IRON_DARK)
+    ic.dot(36, 58, 3, NIGHT)
+    ic.stroke([(64, 82), (64, 104), (56, 112), (48, 106)], 3, IRON)
+
+
+def r_bomba_agua(ic):
+    # Bomba de Água (68): cabaça de barro lacrada com cera, gotas de água fria.
+    ic.ngon(64, 76, 34, 10, CLAY_RED)
+    ic.ngon(64, 40, 16, 8, mix(CLAY_RED, BROWN, 0.3))
+    ic.rect(56, 18, 72, 30, (214, 180, 96))
+    ic.stroke([(36, 74), (92, 74)], 3, (235, 210, 160))
+    for (x, y, r) in ((26, 34, 6), (102, 30, 5), (104, 96, 6)):
+        ic.ngon(x, y, r, 6, WATER, rot=30)
+
+
 RECIPES = {
     # exigências de mapa (MapRequirementRules)
     "item_corda_escalada": r_corda_escalada,
@@ -1431,6 +1460,9 @@ RECIPES = {
     "item_selo_sol": r_selo_sol,
     "item_asas_lona_takhsich": r_asas_lona_takhsich,
     "item_garrafa_ar_sereno": r_garrafa_ar_sereno,
+    "item_isca_larva_gelo": r_isca_larva_gelo,
+    "item_isca_prata_kul": r_isca_prata_kul,
+    "item_bomba_agua": r_bomba_agua,
     # Ossuário dos Artífices
     "armor_bone_chest": r_armor_bone_chest,
     "armor_bone_helm": r_armor_bone_helm,

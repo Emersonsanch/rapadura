@@ -148,21 +148,8 @@ namespace Rapadura.Tests
         private static OverworldFauna Group(string id) =>
             OverworldLayouts.Get(ProfundoId).Zones.SelectMany(z => z.Fauna).First(f => f.Id == id);
 
-        [TestCase("fumacas_dos_nichos", Mist)]
-        [TestCase("fumacas_dos_varais", Mist)]
-        [TestCase("ushabtis_da_muralha", LacquerUshabti)]
-        [TestCase("ushabtis_das_cisternas", LacquerUshabti)]
-        [TestCase("ushabtis_dos_varais", LacquerUshabti)]
-        [TestCase("redemoinhos", Mist)]
-        [TestCase("redemoinhos_das_correntes", Mist)]
-        [TestCase("rastejantes", CreepingDark)]
-        [TestCase("filhos_da_treva", CreepingDark)]
-        public void TheOtherSheets_KeepTheirStandIn(string group, string standIn)
-        {
-            OverworldFauna fauna = Group(group);
-            Assert.IsTrue(fauna.Day.Any(e => e.EnemyId == standIn), $"{group}: still {standIn} by day");
-            Assert.IsTrue(fauna.Night.Any(e => e.EnemyId == standIn), $"{group}: still {standIn} at night");
-        }
+        // The Fumaça, the Ushabti Apagado, the Redemoinho and the Rastejante that kept their stand-ins here have their own beasts now
+        // (DeepOwn2BeastsPlacementTests checks that the mist, the lacquer ushabti and the creeping dark left those groups).
 
         [TestCase(OverworldLayouts.FortalezaUltimaLampadaMapId, CopyShadow)]
         [TestCase(OverworldLayouts.CovaFogoMapId, CopyShadow)]

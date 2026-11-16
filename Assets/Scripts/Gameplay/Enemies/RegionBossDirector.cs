@@ -23,7 +23,7 @@ namespace Rapadura.Gameplay.Enemies
     /// It lives across scenes (DontDestroyOnLoad) but its timers belong to one game: a new game (<see cref="NewSessionResetEvent"/>) or a save
     /// read from disk (<see cref="GameLoadedEvent"/> not from carried state) puts every boss back at its arena, so nothing leaks between slots.
     /// </summary>
-    public sealed class RegionBossDirector : MonoBehaviour
+    public sealed partial class RegionBossDirector : MonoBehaviour
     {
         private const string PlayerTag = "Player";
         private const float TickSeconds = 1f;

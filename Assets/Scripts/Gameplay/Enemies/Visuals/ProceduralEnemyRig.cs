@@ -503,12 +503,15 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                 case ProceduralEnemyKind.PitchSmoke:
                 case ProceduralEnemyKind.ChokingSmoke:
                 case ProceduralEnemyKind.DarkShoal:
+                case ProceduralEnemyKind.GateSmoke:
+                case ProceduralEnemyKind.RuinWhirlwind:
                 case ProceduralEnemyKind.RottenRoot:
                 case ProceduralEnemyKind.CrookedRay:
                 case ProceduralEnemyKind.CocoonCaterpillar:
                 case ProceduralEnemyKind.StickyMist:
                 case ProceduralEnemyKind.DimmedThornRose:
                 case ProceduralEnemyKind.BladeStone:
+                case ProceduralEnemyKind.ThirstyRoot:
                 {
                     // Squash and stretch; it flattens on the windup and the swallowed lights flare.
                     float r = StepAttack(deltaTime, 4f, 2.5f);
@@ -709,6 +712,7 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                 case ProceduralEnemyKind.DimmedHeron:
                 case ProceduralEnemyKind.MandarinDuck:
                 case ProceduralEnemyKind.ThreadJackdaw:
+                case ProceduralEnemyKind.DimmedBlackEagle:
                 {
                     // The birds of the peaks: the eagle soars on long glides, the chough and the flute bird beat quicker; the wings
                     // hold still and the beak opens on the windup (the flute bird's note, the chough's and the harpy's screech).
@@ -793,6 +797,9 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                 case ProceduralEnemyKind.StoneLizard:
                 case ProceduralEnemyKind.KarezRat:
                 case ProceduralEnemyKind.WaterScorpion:
+                case ProceduralEnemyKind.CrystalScorpion:
+                case ProceduralEnemyKind.SaltSerpent:
+                case ProceduralEnemyKind.ColdSalamander:
                 {
                     // Hinokura's biters: the jaw gapes on the windup and the tail sways; the blade fish's fins row in the steam, the
                     // ember coral's fronds stir slowly as it drifts.
@@ -834,6 +841,7 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                 case ProceduralEnemyKind.NoonShadow:
                 case ProceduralEnemyKind.ShadowSalamander:
                 case ProceduralEnemyKind.MudCrocodile:
+                case ProceduralEnemyKind.DarkCrawler:
                 {
                     // The river's biters and the Margins': the jaw gapes on the windup and the tail sways; what drifts (the reed snare's root, the
                     // late shadow's trail, the mantle's hem) drags slowly and its nooses or sleeves stir.
@@ -903,6 +911,7 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                 case ProceduralEnemyKind.ClockUshabti:
                 case ProceduralEnemyKind.GiantDimmedUshabti:
                 case ProceduralEnemyKind.SmokeBoatman:
+                case ProceduralEnemyKind.RampartUshabti:
                 {
                     // Waits with its hoe; both arms go up and the hoe comes down like on the fields of the other world (Hinokura: the
                     // lacquer ushabti's tongs, the furnace ogre's hammer, the slag giant's fists).

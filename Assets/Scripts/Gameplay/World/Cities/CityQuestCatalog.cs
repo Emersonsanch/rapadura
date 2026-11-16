@@ -224,9 +224,10 @@ namespace Rapadura.Gameplay.World.Cities
         /// </summary>
         public static readonly IReadOnlyList<CityQuestSpec> Quests = AtCityLevel(new List<CityQuestSpec>
         {
-            // -- Copas de Garajonay: Gara, guardiã das copas, then Tinguaro, the tracker --
+            // -- Copas de Garajonay: Gara, guardiã das copas, then Tinguaro, the tracker. Gara's lizards are the Lagarto-Gigante do Louro
+            // (2026-11-16; the Lobo stood in for them before). --
             new CityQuestSpec(CityCatalog.CopasGarajonay, "gara", new RegionQuestSpec(GarajonayMist, BiomeType.Forest, null, 320,
-                new[] { new RegionObjectiveSpec("calm_mist_lizards", QuestObjectiveType.KillEnemyType, "enemy_forest_wolf", 6) },
+                new[] { new RegionObjectiveSpec("calm_mist_lizards", QuestObjectiveType.KillEnemyType, "enemy_forest_laurel_lizard", 6) },
                 new[] { new RegionRewardSpec("item_health_potion", 3), new RegionRewardSpec("item_mana_potion", 2) })),
             new CityQuestSpec(CityCatalog.CopasGarajonay, "tinguaro", new RegionQuestSpec(GarajonayMoss, BiomeType.Forest, GarajonayMist, 380,
                 new[] { new RegionObjectiveSpec("follow_moss_boars", QuestObjectiveType.KillEnemyType, "enemy_forest_peccary", 5) },

@@ -140,7 +140,7 @@ namespace Rapadura.Gameplay.Quests
                 Reward("item_runa_cura", 3), Reward("item_gold", 270)),
 
             // -- Região 15, Limiar Profundo --
-            Step(15, CityCatalog.FortalezaUltimaLampada, "pamour_lampadas", "muralha_em_arco", "map_083_fortaleza_ultima_lampada", 340, DeepRampart, MixGate, 4000, "enemy_mountain_lacquer_ushabti", 6,
+            Step(15, CityCatalog.FortalezaUltimaLampada, "pamour_lampadas", "muralha_em_arco", "map_083_fortaleza_ultima_lampada", 340, DeepRampart, MixGate, 4000, "enemy_mountain_rampart_ushabti", 6,
                 Reward("item_health_potion", 5), Reward("item_mana_potion", 5), Reward("item_gold", 270)),
             Step(15, CityCatalog.FortalezaUltimaLampada, "makarios_cartas", "beira_do_abismo", "map_083_fortaleza_ultima_lampada", 344, DeepBrink, DeepRampart, 4100, "enemy_forest_little_shadow", 8,
                 Reward("item_lamparina_runica", 1), Reward("item_gold", 280)),

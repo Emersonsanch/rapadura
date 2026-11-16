@@ -43,6 +43,24 @@ namespace Rapadura.Gameplay.Enemies
             return BackAt <= now;
         }
 
+        /// <summary>Is it waiting out its return at <paramref name="now"/> (beaten and not back yet)?</summary>
+        public bool Waiting(float now) => WaitingForNight || BackAt > now;
+
+        /// <summary>
+        /// Called back early (the Velho Kul's silver lure, 64): a boss waiting out <see cref="RegionBossRules.RespawnSeconds"/> may come back now.
+        /// One waiting for a later night is not called (that is its own rule). False when there was nothing to shorten.
+        /// </summary>
+        public bool CallNow(float now)
+        {
+            if (WaitingForNight || BackAt <= now)
+            {
+                return false;
+            }
+
+            BackAt = now;
+            return true;
+        }
+
         /// <summary>A brand-new game, or a save read from disk: back at the arena, no timer, no night to wait for.</summary>
         public void Reset()
         {

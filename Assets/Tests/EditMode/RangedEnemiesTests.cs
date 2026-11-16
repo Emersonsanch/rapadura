@@ -101,6 +101,13 @@ namespace Rapadura.Tests
             // The nineteenth pass, the Costa das Monções (CoastOwnBeastsTests): the lionfish's glob of light and the kongamato's feathers, as the lantern fish and the crow they replace.
             ("enemy_cave_dimmed_lionfish", BiomeType.Caves, EnemyProjectileKind.LureGlob, ProceduralEnemyKind.DimmedLionfish),
             ("enemy_cave_kongamato", BiomeType.Caves, EnemyProjectileKind.Feather, ProceduralEnemyKind.Kongamato),
+            // The twenty-fourth pass, the Costa, the Delta and Mingcheng (WestOwnBeastsTests): each throws the shot of the beast it replaced.
+            ("enemy_cave_smoke_ray", BiomeType.Caves, EnemyProjectileKind.LureGlob, ProceduralEnemyKind.SmokeRay),
+            ("enemy_cave_rotten_root", BiomeType.Caves, EnemyProjectileKind.Feather, ProceduralEnemyKind.RottenRoot),
+            ("enemy_cave_fish_lantern", BiomeType.Caves, EnemyProjectileKind.LureGlob, ProceduralEnemyKind.FishLantern),
+            ("enemy_desert_dimmed_scarecrow", BiomeType.Desert, EnemyProjectileKind.LanternBolt, ProceduralEnemyKind.DimmedScarecrow),
+            // The twenty-sixth pass, Regions 2 and 3 (EarlyOwn2BeastsTests): the black eagle of the Abrigos throws the crested hawk's feathers.
+            ("enemy_mountain_dimmed_black_eagle", BiomeType.Mountain, EnemyProjectileKind.Feather, ProceduralEnemyKind.DimmedBlackEagle),
         };
 
         /// <summary>Map → the [distância] enemies its clearings must spawn (by day).</summary>

@@ -116,6 +116,12 @@ namespace Rapadura.Gameplay.Content
             ItemDescription("item_damasco", "A ripe apricot from Grandma Edna's trees, sweet as the Zarafshan summer. Eaten on the spot, it gives back a little health and breath.", "Damasco maduro das árvores da Vó Edna, doce como o verão do Zarafshan. Comido na hora, devolve um pouco de vida e de fôlego."),
             ItemName("item_gota_nevoa", "Mist Drop", "Gota de Névoa"),
             ItemDescription("item_gota_nevoa", "Water from the mist the laurels drink, gathered by the Mist Collector of the Garajonay Canopy. Drunk, it clears the head: gives back a little mana.", "Água da névoa que o louro bebe, juntada pelo Coletor de Névoa das Copas de Garajonay. Bebida, clareia a cabeça: devolve um pouco de mana."),
+            ItemName("item_isca_larva_gelo", "Ice Grub Bait", "Isca de Larva do Gelo"),
+            ItemDescription("item_isca_larva_gelo", "A pale grub dug from under the lake's ice by Pamour's boatmen. On the hook in a fishing hole, the fish bite sooner and the better ones come a little more often.", "Larva branca tirada de baixo do gelo do lago pelos barqueiros do Pamour. No anzol de um buraco de pesca, o peixe morde mais cedo e os melhores vêm um pouco mais."),
+            ItemName("item_isca_prata_kul", "Kul's Silver Lure", "Isca de Prata do Kul"),
+            ItemDescription("item_isca_prata_kul", "A lure of hammered fish-silver, the silver the Old Kul keeps the fish with. Only cast in the Great Hole: rare fish come twice as often, and three fish on it bring the Old Kul back up once he has gone down.", "Isca de prata de peixe batida, a prata com que o Velho Kul prende os peixes. Só vai no Buraco Grande: peixe raro vem o dobro, e três peixes nela trazem o Velho Kul de volta depois que ele afundou."),
+            ItemName("item_bomba_agua", "Water Bomb", "Bomba de Água"),
+            ItemDescription("item_bomba_agua", "A clay gourd of cold spring water sealed with wax, from Kurogane's forge. Used, it bursts at your feet: for 20 seconds the burning lava within 5 m hardens into a crust you can stand on (the Volcano Turtle's wake, Echeyde's flow, the Caldera's heat).", "Cabaça de barro com água fria de fonte, lacrada com cera, da forja do Kurogane. Usada, estoura nos seus pés: por 20 segundos a lava que queima a até 5 m endurece numa casca que aguenta o passo (o rastro da Tartaruga-Vulcão, o derrame do Echeyde, o calor da Caldeira)."),
             ItemName("item_passagem_dhow", "Dhow Passage", "Passagem de Dhow"),
             ItemDescription("item_passagem_dhow", "A cedar tablet stamped with the seal of the Taa Pwani boatmen. Gets you a place on a dhow out to the reef.", "Tábua de cedro marcada com o selo dos barqueiros de Taa Pwani. Dá lugar num dhow até o recife."),
             ItemName("item_reliquia_artifices", "Artificers' Relic", "Relíquia dos Artífices"),
@@ -628,6 +634,11 @@ namespace Rapadura.Gameplay.Content
             EnemyName("enemy_cave_dark_shoal", "Dark Shoal", "Cardume Escuro"),
             EnemyName("enemy_forest_blind_serpent", "Blind Serpent", "Serpente Cega"),
             EnemyName("enemy_mountain_giant_dimmed_ushabti", "Giant Dimmed Ushabti", "Ushabti Apagado Gigante"),
+            // Twenty-second pass, second half (DeepOwn2BeastRecipes): the last borrowed roles of the Limiar Profundo.
+            EnemyName("enemy_mountain_rampart_ushabti", "Rampart Dimmed Ushabti", "Ushabti Apagado da Muralha"),
+            EnemyName("enemy_mountain_gate_smoke", "Gate Smoke", "Fumaça do Portão"),
+            EnemyName("enemy_mountain_ruin_whirlwind", "Whirlwind", "Redemoinho"),
+            EnemyName("enemy_forest_dark_crawler", "Crawler", "Rastejante"),
             // Eighteenth pass (SkyOwnBeastRecipes): the roles of the Reinos do Céu that still borrowed another region's beast.
             EnemyName("enemy_forest_runaway_archon", "Lesser Runaway Archon", "Arconte Fujão Menor"),
             EnemyName("enemy_forest_stubborn_spark", "Stubborn Spark", "Faísca Teimosa"),
@@ -651,6 +662,12 @@ namespace Rapadura.Gameplay.Content
             EnemyName("enemy_forest_stone_lizard", "Stone Lizard", "Lagarto-de-Pedra"),
             EnemyName("enemy_cave_karez_rat", "Giant Karez Rat", "Rato-do-Karez Gigante"),
             EnemyName("enemy_desert_water_scorpion", "Dimmed Water Scorpion", "Escorpião-d'Água Apagado"),
+            // Twenty-sixth pass (EarlyOwn2BeastRecipes): the roles of Regions 2 and 3 that still borrowed another beast after the twenty-third.
+            EnemyName("enemy_desert_thirsty_root", "Thirsty Root", "Raiz Sedenta"),
+            EnemyName("enemy_desert_crystal_scorpion", "Crystal Scorpion", "Escorpião-Cristal"),
+            EnemyName("enemy_desert_salt_serpent", "Salt Serpent", "Serpente de Sal"),
+            EnemyName("enemy_mountain_dimmed_black_eagle", "Dimmed Verreaux's Eagle", "Águia-Preta Apagada"),
+            EnemyName("enemy_cave_cold_salamander", "Cold Salamander", "Salamandra Fria"),
 
             // -- Recipes (Resources/Recipes) --
             RecipeName("recipe_health_potion", "Health Potion", "Poção de Vida"),

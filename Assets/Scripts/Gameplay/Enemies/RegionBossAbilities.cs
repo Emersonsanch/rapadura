@@ -392,6 +392,9 @@ namespace Rapadura.Gameplay.Enemies
 
                     _wake.Add(Flat(transform.position));
                 }
+
+                // A water bomb's splash (68, WaterBombRules) hardens the wake inside it, and new spots there do not take while it lasts.
+                WaterBombBoard.CoolWake(_wake, Time.timeAsDouble);
             }
 
             if (_signatureWindup > 0f)

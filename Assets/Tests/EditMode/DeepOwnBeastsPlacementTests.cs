@@ -150,15 +150,8 @@ namespace Rapadura.Tests
             Assert.IsFalse(w.World.Zones.SelectMany(s => s.Day).Any(e => e.EnemyId == standIn), $"{standIn}: its roles in {region} have their own beasts now");
         }
 
-        [TestCase("ushabtis_da_muralha")]
-        [TestCase("ushabtis_das_cisternas")]
-        [TestCase("ushabtis_dos_varais")]
-        public void TheFortressUshabtis_KeepTheLacquerUshabti_ForALaterPass(string group)
-        {
-            // The Ushabti Apagado of the fortress (83) is still the lacquer ushabti: the story step of the Muralha em Arco hunts it.
-            OverworldFauna fauna = OverworldLayouts.Get(Profundo).Zones.SelectMany(z => z.Fauna).First(f => f.Id == group);
-            Assert.IsTrue(fauna.Day.Any(e => e.EnemyId == LacquerUshabti), $"{group}: still the lacquer ushabti by day");
-        }
+        // The Ushabti Apagado of the fortress (83) is its own beast now, the rampart ushabti, and the story step of the Muralha em Arco
+        // hunts it (DeepOwn2BeastsPlacementTests).
 
         [TestCase(CityQuestCatalog.MesektetCrocodiles, Rio, "enemy_forest_dark_river_crocodile")]
         [TestCase(CityQuestCatalog.MesektetScorpions, Rio, "enemy_forest_black_scorpion")]

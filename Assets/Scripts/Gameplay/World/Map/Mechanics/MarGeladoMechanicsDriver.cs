@@ -462,7 +462,8 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             }
 
             bool night = clock != null && clock.Phase == TimeOfDayPhase.Night;
-            _fishing = new IceFishingSession(unchecked(System.Environment.TickCount * 31 + hole), night, OverworldLayouts.IceFishingHoles[hole].Great);
+            IceBait bait = TakeBait(hole);
+            _fishing = new IceFishingSession(unchecked(System.Environment.TickCount * 31 + hole), night, OverworldLayouts.IceFishingHoles[hole].Great, bait);
             _fishingHole = hole;
             _saidBite = false;
             _holeRestUntil[hole] = Time.time + IceFishingRules.HoleCooldownSeconds;
@@ -522,6 +523,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             int leftover = item != null && _bag != null ? _bag.AddItem(item, 1) : 1;
             string name = FishingTexts.Get(localization, ContentText.ItemNameKey(session.Fish.Id));
             SayText(MarGeladoMechanicsTexts.Format(localization, leftover == 0 ? MarGeladoMechanicsTexts.FishCaught : MarGeladoMechanicsTexts.FishBagFull, name));
+            BaitLanded(session);
         }
 
         private void ShowFishLine(bool show, bool biting)

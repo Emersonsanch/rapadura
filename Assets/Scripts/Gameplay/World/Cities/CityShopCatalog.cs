@@ -833,6 +833,9 @@ namespace Rapadura.Gameplay.World.Cities
                 new CityShopEntry("item_lamparina_runica", 160, 2),
                 new CityShopEntry("item_grampos_escalada", 950, 1),
                 new CityShopEntry("item_capa_tempestade", 1100, 1),
+                // The baits of Old Kul's lake (64, IceBaitRules): the grub for any hole, the silver lure that calls the Kul at the Great Hole.
+                new CityShopEntry("item_isca_larva_gelo", 3, 20),
+                new CityShopEntry("item_isca_prata_kul", 40, 6),
                 // The rotation: what the boats bring in from the ice.
                 new CityShopEntry("item_cooked_meat", 6, 10, rotating: true),
                 new CityShopEntry("item_corda_escalada", 40, 3, rotating: true),
@@ -859,6 +862,8 @@ namespace Rapadura.Gameplay.World.Cities
                 new CityShopEntry("item_amuleto_antiveneno", 700, 1),
                 new CityShopEntry("item_vara_equilibrio", 480, 2),
                 new CityShopEntry("item_odre_agua", 30, 5),
+                // The water bombs that harden the lava (68, WaterBombRules): the turtle's wake, Echeyde's flow, the caldera's heat.
+                new CityShopEntry("item_bomba_agua", 35, 8),
                 // Cabra-dos-Pastores do Vulcão (Docs/Mounts.md §3.9): the herders of Echeyde sell through the forge.
                 new CityShopEntry("item_whistle_mount_volcano_goat", 145, -1),
                 // The rotation: what the forges and the boats of the isle bring.

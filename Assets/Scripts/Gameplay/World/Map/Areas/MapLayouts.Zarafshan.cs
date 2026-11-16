@@ -340,19 +340,19 @@ namespace Rapadura.Gameplay.World.Map.Areas
             // Step 4–5 (Mapas100 05): the Lobo stands in for the Lagarto-Gigante do Louro [rápido], the Javali is the Javali
             // de Musgo [tanque], the Aranha-Tecelã the Névoa Pegajosa [controle]; at night Mardagayl in the low forest and the
             // fireflies over the trails.
-            // (2026-11-16) The Névoa Pegajosa is its own beast now (OverworldLayouts.EarlyOwnBeasts); the Lobo still stands in for the lizard here.
+            // (2026-11-16) The Névoa Pegajosa is its own beast now (OverworldLayouts.EarlyOwnBeasts); the Lagarto-Gigante do Louro (EarlyBeasts) took the Lobo's place in every clearing of the map.
             m.Zones.Add(new MapSpawnZone
             {
                 Id = "samambaial", Center = new Vector2(-60f, -70f), Radius = 12f, MinLevel = 20, MaxLevel = 21, MaxAlive = 4, RespawnSeconds = 22f,
                 Archetypes = "[rápido]",
-                Day = new[] { PeriodSpawnEntry.Normal(Wolf, 3), PeriodSpawnEntry.Normal(Boar, 1) },
-                Night = new[] { PeriodSpawnEntry.Variant(Wolf, 3), PeriodSpawnEntry.Species(NightVariantRules.VagaLume, 1) },
+                Day = new[] { PeriodSpawnEntry.Normal(Overworld.OverworldLayouts.EarlyBeasts.LaurelLizard, 3), PeriodSpawnEntry.Normal(Boar, 1) },
+                Night = new[] { PeriodSpawnEntry.Variant(Overworld.OverworldLayouts.EarlyBeasts.LaurelLizard, 3), PeriodSpawnEntry.Species(NightVariantRules.VagaLume, 1) },
             });
             m.Zones.Add(new MapSpawnZone
             {
                 Id = "musgo", Center = new Vector2(55f, -80f), Radius = 12f, MinLevel = 21, MaxLevel = 23, MaxAlive = 4, RespawnSeconds = 26f,
                 Archetypes = "[tanque]",
-                Day = new[] { PeriodSpawnEntry.Normal(Boar, 3), PeriodSpawnEntry.Normal(Wolf, 1) },
+                Day = new[] { PeriodSpawnEntry.Normal(Boar, 3), PeriodSpawnEntry.Normal(Overworld.OverworldLayouts.EarlyBeasts.LaurelLizard, 1) },
                 Night = new[] { PeriodSpawnEntry.Variant(Boar, 2), PeriodSpawnEntry.Species(NightVariantRules.Queixada, 2) },
             });
             m.Zones.Add(new MapSpawnZone
@@ -367,21 +367,21 @@ namespace Rapadura.Gameplay.World.Map.Areas
             {
                 Id = "louros_altos", Center = new Vector2(50f, 90f), Radius = 12f, MinLevel = 23, MaxLevel = 25, MaxAlive = 4, RespawnSeconds = 26f,
                 Archetypes = "[rápido] [tanque]",
-                Day = new[] { PeriodSpawnEntry.Normal(Wolf, 2), PeriodSpawnEntry.Normal(Boar, 2) },
-                Night = new[] { PeriodSpawnEntry.Variant(Wolf, 2), PeriodSpawnEntry.Variant(Boar, 1), PeriodSpawnEntry.Species(NightVariantRules.Lobisomem, 1) },
+                Day = new[] { PeriodSpawnEntry.Normal(Overworld.OverworldLayouts.EarlyBeasts.LaurelLizard, 2), PeriodSpawnEntry.Normal(Boar, 2) },
+                Night = new[] { PeriodSpawnEntry.Variant(Overworld.OverworldLayouts.EarlyBeasts.LaurelLizard, 2), PeriodSpawnEntry.Variant(Boar, 1), PeriodSpawnEntry.Species(NightVariantRules.Lobisomem, 1) },
             });
             m.Zones.Add(new MapSpawnZone
             {
                 Id = "cascata_leste", Center = new Vector2(125f, -100f), Radius = 11f, MinLevel = 24, MaxLevel = 26, MaxAlive = 3, RespawnSeconds = 32f,
                 Archetypes = "[elite] [tanque]",
-                Day = new[] { PeriodSpawnEntry.Normal(Boar, 2), PeriodSpawnEntry.Normal(Wolf, 1) },
-                Night = new[] { PeriodSpawnEntry.Variant(Boar, 2), PeriodSpawnEntry.Variant(Wolf, 1), PeriodSpawnEntry.Species(NightVariantRules.Lobisomem, 1) },
+                Day = new[] { PeriodSpawnEntry.Normal(Boar, 2), PeriodSpawnEntry.Normal(Overworld.OverworldLayouts.EarlyBeasts.LaurelLizard, 1) },
+                Night = new[] { PeriodSpawnEntry.Variant(Boar, 2), PeriodSpawnEntry.Variant(Overworld.OverworldLayouts.EarlyBeasts.LaurelLizard, 1), PeriodSpawnEntry.Species(NightVariantRules.Lobisomem, 1) },
             });
             m.Zones.Add(new MapSpawnZone
             {
                 Id = "beira_da_cascata", Center = new Vector2(-125f, -115f), Radius = 11f, MinLevel = 25, MaxLevel = 26, MaxAlive = 5, RespawnSeconds = 24f,
                 Archetypes = "[enxame] [controle]",
-                Day = new[] { PeriodSpawnEntry.Normal(Overworld.OverworldLayouts.EarlyOwnBeasts.StickyMist, 3), PeriodSpawnEntry.Normal(Wolf, 1) },
+                Day = new[] { PeriodSpawnEntry.Normal(Overworld.OverworldLayouts.EarlyOwnBeasts.StickyMist, 3), PeriodSpawnEntry.Normal(Overworld.OverworldLayouts.EarlyBeasts.LaurelLizard, 1) },
                 Night = new[] { PeriodSpawnEntry.Variant(Overworld.OverworldLayouts.EarlyOwnBeasts.StickyMist, 3), PeriodSpawnEntry.Species(NightVariantRules.VagaLume, 1), PeriodSpawnEntry.Species(NightVariantRules.RasgaMortalha, 1) },
             });
             ClearingsFromZones(m);

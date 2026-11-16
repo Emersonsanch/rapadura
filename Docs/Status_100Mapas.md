@@ -163,7 +163,7 @@ de uma ficha feito por um bicho de outra região ou do bioma.
 |---|---|
 | Cidade | Taa Pwani (região tardia), Aratta e Kirta (raça), dentro do mundo com a própria receita |
 | Mundo contínuo | Feito, a leste do Zarafshan (`OverworldLayouts.Costa.cs`) |
-| Bichos próprios | 9: Gaivota Ladra, Caranguejo-dos-Coqueiros, Crocodilo do Mangue, Leão do Capim, Rinoceronte-de-Pó e mais 4 (2026-11-11): Moreia Apagada e Ouriço de Fumaça (25), Ave-Relâmpago (26), Caranguejo-Violinista (30) (`8ad5046`). Ainda emprestados, cerca de 11 papéis (chacal, escorpião, ushabti, Kongamato, Garça Apagada, Abada, Caranguejo-dos-Coqueiros Gigante…) |
+| Bichos próprios | 9: Gaivota Ladra, Caranguejo-dos-Coqueiros, Crocodilo do Mangue, Leão do Capim, Rinoceronte-de-Pó e mais 4 (2026-11-11): Moreia Apagada e Ouriço de Fumaça (25), Ave-Relâmpago (26), Caranguejo-Violinista (30) (`8ad5046`). Ainda emprestados, cerca de 11 papéis (chacal, escorpião, ushabti, Kongamato, Garça Apagada, Abada, Caranguejo-dos-Coqueiros Gigante…) De `WestOwnBeastRecipes` (2026-11-16, kinds 520–531): Tubarão-de-Lodo (28), Raia de Fumaça (29) e Garça Apagada (30). |
 | Mecânicas feitas | Maré do recife de 8 min com 6 baixios e baú (25, `CostaTideRules`); fogo baixo na Savana dos Auroques: 4 faixas de capim que se revezam, na cinza o herói anda ×1,2 e os bichos ficam lentos (26, `SavannaFireRules`) |
 | Mecânicas faltantes | Corrida de Shulgi e Lira do Touro (26); câmera em corte, andar no fundo e reacender o coral (28); 27, 29 e 30 sem mecânica própria |
 | Chefe do mundo | Hedammu (30, Nv 72): mordida em cone, vida ×1,2 (`068253c`). Loot próprio (Escama de Hedammu) e troféu de casa |
@@ -178,7 +178,7 @@ de uma ficha feito por um bicho de outra região ou do bioma.
 |---|---|
 | Cidade | Jhilpur (capital) e Palafitas de Tarchon (raça), dentro do mundo |
 | Mundo contínuo | Feito, ao sul da Costa (`OverworldLayouts.Delta.cs`) |
-| Bichos próprios | 6: Macaco Ladrão, Lontra Ladra, Píton Apagada, Trol Apagado, Garça-Lança Apagada (31) e Sanguessuga do Lodo (32) (`8ad5046`), mais o Crocodilo do Mangue da Costa. Ainda emprestados, cerca de 11 papéis (Peixe-Saltador, Garça-Fantasma, Raiz-Laço, fogo-fátuo, Sapo-Boi…) |
+| Bichos próprios | 6: Macaco Ladrão, Lontra Ladra, Píton Apagada, Trol Apagado, Garça-Lança Apagada (31) e Sanguessuga do Lodo (32) (`8ad5046`), mais o Crocodilo do Mangue da Costa. Ainda emprestados, cerca de 11 papéis (Peixe-Saltador, Garça-Fantasma, Raiz-Laço, fogo-fátuo, Sapo-Boi…) De `WestOwnBeastRecipes` (2026-11-16): Gavial do Lodo (31), Ninki Nanka Filhote (34) e Raiz Podre (35); seguem com o crocodilo da Costa o Crocodilo de Musgo (33) e o Gavial-Sombra (35). |
 | Mecânicas feitas | Ilhas de junco que mudam de lugar a cada 15 min (33, `DeltaIslandRules`); as 5 Fontes do Lodo (35, `LodoFountainRules`, `f0991e3`): espiral até o Olho do Lodo, lodo preto que morde e puxa e encolhe a cada fonte purificada (3 s com [E]/Usar), fonte limpa vira zona segura por 2 min, prêmio diário de 1 Pedra da Água Viva; filhotes que brilham a cada 12 s no Charco do Ninki Nanka, quem olha de frente fica ×0,6 por 3 s (34, `NinkiGazeRules`) |
 | Mecânicas faltantes | Monção, escola de barco e Maré de Lodo (31); Lanterna de Fogo-Fátuo e Despertar o vizinho (33); o brilho da própria Ninki Nanka e a seta no HUD (34); 32 sem mecânica própria |
 | Chefe do mundo | Lodo-que-Engole (35, Nv 88): puxão, mais forte à noite, vida ×1,18 (`068253c`). Só surge com as 5 Fontes acesas, e cada fonte apagada na luta o fortalece 10%. Loot próprio (Lama Limpa do Lodo) e troféu |
@@ -208,7 +208,7 @@ de uma ficha feito por um bicho de outra região ou do bioma.
 |---|---|
 | Cidade | Mingcheng (capital) e Torres Brancas (raça), dentro do mundo |
 | Mundo contínuo | Feito, ao norte do Zarafshan (`OverworldLayouts.Mingcheng.cs`). 43–46 fechados no catálogo |
-| Bichos próprios | 8: Leão de Pedra, Raposa de Cauda Lanterna, Soldado de Terracota, Tartaruga de Pedra, Búfalo de Lama, Filhote de Nian, Carpa-Dragão Apagada (43) e Cavalo de Terracota (45) (`8ad5046`). Ainda emprestados, cerca de 10: Grou de Papel, Espelho Quebrado, Espantalho… |
+| Bichos próprios | 8: Leão de Pedra, Raposa de Cauda Lanterna, Soldado de Terracota, Tartaruga de Pedra, Búfalo de Lama, Filhote de Nian, Carpa-Dragão Apagada (43) e Cavalo de Terracota (45) (`8ad5046`). Ainda emprestados, cerca de 10: Grou de Papel, Espelho Quebrado, Espantalho… De `WestOwnBeastRecipes` (2026-11-16): Raio Torto (42), Lanterna-Peixe e Barqueiro de Fumaça (43), Pato-Mandarim Ladrão e Espantalho Apagado (44); o peixe-lanterna e a gaivota saíram de Mingcheng. |
 | Mecânicas feitas | Muralha andável com faróis e corredor de luz (45); mundo do reflexo nos arrozais (44) |
 | Mecânicas faltantes | 9 anéis e portões por hora (41); Relógio de Espelhos (42); 4 eclusas (43); palácios e o que cada um come (46) |
 | Chefe do mundo | Quatro Gulosos (46, Nv 140): um apetite por semana e outro à noite. Taotie derrama oferendas de moedas e avisa antes de engolir; Qiongqi inverte os passos por 3 s (`HeroControlMirror`, teto de 4 s). Loot próprio (Bronze Antigo dos Vasos) e troféu |
@@ -223,7 +223,7 @@ de uma ficha feito por um bicho de outra região ou do bioma.
 |---|---|
 | Cidade | Acampamento de Soslan, Fortim e Arvoredo (raça), dentro do mundo |
 | Mundo contínuo | Feito, ao norte da Costa (`OverworldLayouts.Nartes.cs`) |
-| Bichos próprios | 7: Grifo Jovem, Saiga, Lobo de Bronze, Gigante Sonâmbulo, Besouro-Casca, Ochokochi e Cisne de Feltro (48, `8ad5046`). Ainda emprestados, cerca de 15: Cervo de Ouro, Grifo Guardião, Cabra-Montês, Lince, Garanhão, lobos e águias da estepe… |
+| Bichos próprios | 7: Grifo Jovem, Saiga, Lobo de Bronze, Gigante Sonâmbulo, Besouro-Casca, Ochokochi e Cisne de Feltro (48, `8ad5046`). Ainda emprestados, cerca de 15: Cervo de Ouro, Grifo Guardião, Cabra-Montês, Lince, Garanhão, lobos e águias da estepe… De `WestOwnBeastRecipes` (2026-11-16): Lobo-Cinzento (51), no lugar do Lobo do Tugai em toda a estepe. |
 | Mecânicas feitas | Corrida de estepe (47), Ouros do Céu (48, só a Lavine levanta), subida da Corrente de Amirani (52) |
 | Mecânicas faltantes | A cidade que anda (47); escala gigante e sonhos com baús (49); tempo lento (50); 51 sem mecânica própria |
 | Chefe do mundo | Ohya (52, Nv 150): corrente girando. Loot próprio (Elo de Ferro Antigo de Ohya) e troféu |
