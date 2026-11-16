@@ -304,6 +304,8 @@ namespace Rapadura.Gameplay.Housing
             { "Casa de Música do Mestre Xroshtag", "shop_casa_musica_bene" }, { "Olaria da Náfsha", "shop_olaria_rosa" },
             // City shops whose names do not slug to their ids (CityTexts): the furniture sets of Regions 5 and 6.
             { "Bazar de Pérolas da Mwana", "shop_bazar_mwana" }, { "Barcos e Trocas do Nuhzadag", "shop_trocas_nuhzadag" },
+            // ... and Danel's counter in Kirta, where the Móveis do Jardim de Coral (ficha 28) are sold.
+            { "Ferramentas de Mergulho do Danel", "shop_mergulho_danel" },
         };
 
         /// <summary>

@@ -36,9 +36,11 @@ namespace Rapadura.Gameplay.Mounts
     public sealed class MountRibbonRecipe
     {
         public readonly string BossId;
+
+        /// <summary>Null when the boss has no Rare (Ninki Nanka and the Glutão de Brasa free an Epic only).</summary>
         public readonly string RareMountId;
 
-        /// <summary>Null when the boss has no Epic (Lobo Alfa, Guardião da Ruína).</summary>
+        /// <summary>Null when the boss has no Epic (Lobo Alfa, Guardião da Ruína, Aydahar, O Cavalo de Fumaça).</summary>
         public readonly string EpicMountId;
 
         public MountRibbonRecipe(string bossId, string rareMountId, string epicMountId)
@@ -70,6 +72,12 @@ namespace Rapadura.Gameplay.Mounts
         public const string MountainWarlord = "enemy_mountain_warlord";
         public const string CaveDweller = "enemy_cave_dweller";
 
+        // The bosses that free a mount (MountBossCatalog, Docs/Mounts.md §3.13): two world bosses and two map bosses.
+        public const string Aydahar = Rapadura.Gameplay.Enemies.RegionBossRules.AydaharId;
+        public const string SmokeStallion = Rapadura.Gameplay.Enemies.RegionBossRules.SmokeStallionId;
+        public const string NinkiNanka = Rapadura.Gameplay.Enemies.RegionBossRules.NinkiNankaId;
+        public const string EmberGlutton = Rapadura.Gameplay.Enemies.RegionBossRules.EmberGluttonId;
+
         public const int RareRibbonCost = 25;
         public const int EpicRibbonCost = 80;
 
@@ -98,6 +106,12 @@ namespace Rapadura.Gameplay.Mounts
             new MountDropEntry(CaveDweller, MountWaveCatalog.Carbuncle, 0.015f),
             new MountDropEntry(CaveDweller, MountWaveCatalog.Kirin, 0.008f),
             new MountDropEntry(CaveDweller, "mount_sertao_phoenix", 0.002f),
+
+            // Bosses that free a mount (MountBossCatalog): Rare 2%, Epic 0.8%, like the region bosses above.
+            new MountDropEntry(Aydahar, MountBossCatalog.PamirArgali, 0.02f),
+            new MountDropEntry(SmokeStallion, MountBossCatalog.FreedSmokeHorse, 0.02f),
+            new MountDropEntry(NinkiNanka, MountBossCatalog.TameNinkiNanka, 0.008f),
+            new MountDropEntry(EmberGlutton, MountBossCatalog.LivingEmberBoar, 0.008f),
         };
 
         public static readonly IReadOnlyList<MountRibbonRecipe> Ribbons = new[]
@@ -106,6 +120,10 @@ namespace Rapadura.Gameplay.Mounts
             new MountRibbonRecipe(RuinGuardian, "mount_griffin", null),
             new MountRibbonRecipe(MountainWarlord, MountWaveCatalog.SnowTiger, "mount_pegasus"),
             new MountRibbonRecipe(CaveDweller, MountWaveCatalog.Carbuncle, MountWaveCatalog.Kirin),
+            new MountRibbonRecipe(Aydahar, MountBossCatalog.PamirArgali, null),
+            new MountRibbonRecipe(SmokeStallion, MountBossCatalog.FreedSmokeHorse, null),
+            new MountRibbonRecipe(NinkiNanka, null, MountBossCatalog.TameNinkiNanka),
+            new MountRibbonRecipe(EmberGlutton, null, MountBossCatalog.LivingEmberBoar),
         };
 
         /// <summary>Default availability: the species is in <see cref="MountCatalog"/>.</summary>
@@ -152,7 +170,7 @@ namespace Rapadura.Gameplay.Mounts
 
         public static MountRibbonRecipe RecipeFor(string bossId) => Ribbons.FirstOrDefault(r => r.BossId == bossId);
 
-        /// <summary>Whether <paramref name="enemyId"/> gives Fitas do Laço (the four region bosses).</summary>
+        /// <summary>Whether <paramref name="enemyId"/> gives Fitas do Laço (the four region bosses and the four bosses of <see cref="MountBossCatalog"/>).</summary>
         public static bool GivesRibbons(string enemyId) => RecipeFor(enemyId) != null;
 
         /// <summary>Ribbons <paramref name="mountId"/> costs from <paramref name="bossId"/>'s recipe; -1 when it is not on it.</summary>

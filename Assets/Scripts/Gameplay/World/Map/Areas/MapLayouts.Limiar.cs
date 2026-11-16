@@ -77,6 +77,7 @@ namespace Rapadura.Gameplay.World.Map.Areas
             // Step 4–5 (Mapas100 19): Enxame de Morcegos do Limiar [enxame]; the Aranha-Tecelã stands in for the Aranha de
             // Gruta [rápido]; the Lodo de Gruta [tanque] oozes out of the west gallery and the south island; the Peixe-Lanterna Apagado [distância]
             // swims over the beach and the south island; Ubır comes out of the lake at night.
+            // (2026-11-16) The Aranha de Gruta is its own beast now (OverworldLayouts.EarlyOwnBeasts).
             m.Zones.Add(new MapSpawnZone
             {
                 Id = "margem_oeste", Center = new Vector2(-70f, -122f), Radius = 11f, MinLevel = 13, MaxLevel = 14, MaxAlive = 5, RespawnSeconds = 22f,
@@ -88,8 +89,8 @@ namespace Rapadura.Gameplay.World.Map.Areas
             {
                 Id = "margem_leste", Center = new Vector2(68f, -120f), Radius = 12f, MinLevel = 13, MaxLevel = 14, MaxAlive = 4, RespawnSeconds = 22f,
                 Archetypes = "[rápido] [enxame]",
-                Day = new[] { PeriodSpawnEntry.Normal(Spider, 3), PeriodSpawnEntry.Normal(Bats, 1) },
-                Night = new[] { PeriodSpawnEntry.Variant(Spider, 2), PeriodSpawnEntry.Variant(Bats, 1), PeriodSpawnEntry.Species(NightVariantRules.MorcegoVampiro, 1) },
+                Day = new[] { PeriodSpawnEntry.Normal(Overworld.OverworldLayouts.EarlyOwnBeasts.GrottoSpider, 3), PeriodSpawnEntry.Normal(Bats, 1) },
+                Night = new[] { PeriodSpawnEntry.Variant(Overworld.OverworldLayouts.EarlyOwnBeasts.GrottoSpider, 2), PeriodSpawnEntry.Variant(Bats, 1), PeriodSpawnEntry.Species(NightVariantRules.MorcegoVampiro, 1) },
             });
             m.Zones.Add(new MapSpawnZone
             {
@@ -237,6 +238,7 @@ namespace Rapadura.Gameplay.World.Map.Areas
             // Step 4–5 (Mapas100 20): Morcegos [enxame]; the Aranha-Tecelã stands in for the Sombra Pequena [rápido] and the
             // Ushabti de Pedra for the Pedra-Lâmina [controle]; [distância]: the Peixe-Lanterna up the dark ford and a
             // Lanterna Quebrada of the Artífices among the columns; Ubır (the light-drinker) is the night's terror.
+            // (2026-11-16) The Pedra-Lâmina is its own beast now and the Sombra Pequena is the Limiar Profundo's (OverworldLayouts.EarlyOwnBeasts).
             m.Zones.Add(new MapSpawnZone
             {
                 Id = "galeria_sul", Center = new Vector2(-50f, -55f), Radius = 11f, MinLevel = 14, MaxLevel = 15, MaxAlive = 5, RespawnSeconds = 22f,
@@ -248,22 +250,22 @@ namespace Rapadura.Gameplay.World.Map.Areas
             {
                 Id = "vau_escuro", Center = new Vector2(68f, -66f), Radius = 11f, MinLevel = 15, MaxLevel = 16, MaxAlive = 4, RespawnSeconds = 24f,
                 Archetypes = "[rápido] [distância]",
-                Day = new[] { PeriodSpawnEntry.Normal(Spider, 3), PeriodSpawnEntry.Normal(LanternFish, 1) },
-                Night = new[] { PeriodSpawnEntry.Variant(Spider, 2), PeriodSpawnEntry.Variant(LanternFish, 1), PeriodSpawnEntry.Species(NightVariantRules.MorcegoVampiro, 1) },
+                Day = new[] { PeriodSpawnEntry.Normal(Overworld.OverworldLayouts.EarlyOwnBeasts.LittleShadow, 3), PeriodSpawnEntry.Normal(LanternFish, 1) },
+                Night = new[] { PeriodSpawnEntry.Variant(Overworld.OverworldLayouts.EarlyOwnBeasts.LittleShadow, 2), PeriodSpawnEntry.Variant(LanternFish, 1), PeriodSpawnEntry.Species(NightVariantRules.MorcegoVampiro, 1) },
             });
             m.Zones.Add(new MapSpawnZone
             {
                 Id = "colunata", Center = new Vector2(84f, 62f), Radius = 10f, MinLevel = 16, MaxLevel = 17, MaxAlive = 4, RespawnSeconds = 28f,
                 Archetypes = "[tanque] [controle] [distância]",
-                Day = new[] { PeriodSpawnEntry.Normal(Golem, 3), PeriodSpawnEntry.Normal(BrokenLantern, 1) },
-                Night = new[] { PeriodSpawnEntry.Variant(Golem, 2), PeriodSpawnEntry.Variant(BrokenLantern, 1), PeriodSpawnEntry.Species(NightVariantRules.MorcegoVampiro, 1) },
+                Day = new[] { PeriodSpawnEntry.Normal(Overworld.OverworldLayouts.EarlyOwnBeasts.BladeStone, 3), PeriodSpawnEntry.Normal(BrokenLantern, 1) },
+                Night = new[] { PeriodSpawnEntry.Variant(Overworld.OverworldLayouts.EarlyOwnBeasts.BladeStone, 2), PeriodSpawnEntry.Variant(BrokenLantern, 1), PeriodSpawnEntry.Species(NightVariantRules.MorcegoVampiro, 1) },
             });
             m.Zones.Add(new MapSpawnZone
             {
                 Id = "antessala_de_tages", Center = new Vector2(-62f, 44f), Radius = 11f, MinLevel = 17, MaxLevel = 18, MaxAlive = 3, RespawnSeconds = 34f,
                 Archetypes = "[elite] [tanque]",
-                Day = new[] { PeriodSpawnEntry.Normal(Golem, 2), PeriodSpawnEntry.Normal(Bats, 2) },
-                Night = new[] { PeriodSpawnEntry.Variant(Golem, 2), PeriodSpawnEntry.Species(NightVariantRules.MorcegoVampiro, 2) },
+                Day = new[] { PeriodSpawnEntry.Normal(Overworld.OverworldLayouts.EarlyOwnBeasts.BladeStone, 2), PeriodSpawnEntry.Normal(Bats, 2) },
+                Night = new[] { PeriodSpawnEntry.Variant(Overworld.OverworldLayouts.EarlyOwnBeasts.BladeStone, 2), PeriodSpawnEntry.Species(NightVariantRules.MorcegoVampiro, 2) },
             });
 
             // Tages' hall: the ring of stones where the boss waits.

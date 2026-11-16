@@ -19,10 +19,11 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
     /// Speed changes are short-lived effects on the BuffController, refreshed while they apply, so they end by themselves if this driver stops;
     /// the shoulder pushes through the CharacterController, so walls still hold. Nothing here takes the hero's controls away.
     /// </summary>
-    public sealed class MisturaMechanicsDriver : MonoBehaviour, IRegionMechanics
+    public sealed partial class MisturaMechanicsDriver : MonoBehaviour, IRegionMechanics
     {
         private const string PlayerTag = "Player";
         private const string BubbleSource = "mistura_time_bubble";
+        private const string BubbleAttackSource = "mistura_time_bubble_attack";
         private const string TarSource = "mistura_tar";
         private const string BurnChannelKey = "mistura_tar_burn";
         private const float FeedbackHeight = 2.4f;
@@ -54,11 +55,16 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         private sealed class HeroEffect
         {
             public readonly string Source;
+            public readonly StatType Stat;
             public float Factor = 1f;
             public float NextRefresh;
             public StatModifierDefinition Definition;
 
-            public HeroEffect(string source) => Source = source;
+            public HeroEffect(string source, StatType stat = StatType.MoveSpeed)
+            {
+                Source = source;
+                Stat = stat;
+            }
         }
 
         private readonly Dictionary<int, LineRenderer> _rings = new Dictionary<int, LineRenderer>();
@@ -67,8 +73,11 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         private readonly LineRenderer[] _streaks = new LineRenderer[StreakCount];
         private readonly HeroEffect _bubbleEffect = new HeroEffect(BubbleSource);
         private readonly HeroEffect _tarEffect = new HeroEffect(TarSource);
+        private readonly HeroEffect _bubbleAttackEffect = new HeroEffect(BubbleAttackSource, StatType.AttackSpeed);
         private readonly StatModifierDefinition _beastSlow = NewEffect(MisturaTimeBubbleRules.SlowFactor);
         private readonly StatModifierDefinition _beastFast = NewEffect(MisturaTimeBubbleRules.FastFactor);
+        private readonly StatModifierDefinition _beastSlowAttack = NewEffect(MisturaTimeBubbleRules.SlowFactor, StatType.AttackSpeed);
+        private readonly StatModifierDefinition _beastFastAttack = NewEffect(MisturaTimeBubbleRules.FastFactor, StatType.AttackSpeed);
 
         private OverworldView _view;
         private OverworldLayout _layout;
@@ -159,6 +168,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             TickTar(local);
             TickBeasts(local, night);
             TickShoulder(local, night);
+            TickResinLanterns(local);
         }
 
         private bool FindPlayer()
@@ -190,6 +200,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
 
             _inRegion = false;
             ClearHeroEffects();
+            LeaveResinLanterns();
             ResetTar();
             SetStreaks(false, Vector2.zero, false);
             foreach (LineRenderer ring in _rings.Values)
@@ -231,12 +242,12 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         // Speed effects
         // ------------------------------------------------------------------
 
-        private static StatModifierDefinition NewEffect(float factor) => new StatModifierDefinition
+        private static StatModifierDefinition NewEffect(float factor, StatType stat = StatType.MoveSpeed) => new StatModifierDefinition
         {
             displayName = "Mistura",
-            affectedStat = StatType.MoveSpeed,
+            affectedStat = stat,
             application = ModifierApplication.PercentAdditive,
-            value = MisturaTimeBubbleRules.MoveBonus(factor),
+            value = stat == StatType.AttackSpeed ? MisturaTimeBubbleRules.AttackBonus(factor) : MisturaTimeBubbleRules.MoveBonus(factor),
             durationSeconds = EffectSeconds,
             isDebuff = factor < 1f,
         };
@@ -253,7 +264,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
                 _buffs.RemoveEffectsBySource(effect.Source);
                 effect.Factor = factor;
                 effect.NextRefresh = 0f;
-                effect.Definition = Mathf.Approximately(factor, 1f) ? null : NewEffect(factor);
+                effect.Definition = Mathf.Approximately(factor, 1f) ? null : NewEffect(factor, effect.Stat);
             }
 
             if (effect.Definition != null && Time.time >= effect.NextRefresh)
@@ -266,6 +277,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         private void ClearHeroEffects()
         {
             SetHeroEffect(_bubbleEffect, 1f);
+            SetHeroEffect(_bubbleAttackEffect, 1f);
             SetHeroEffect(_tarEffect, 1f);
         }
 
@@ -278,6 +290,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             MisturaTimeBubble[] bubbles = OverworldLayouts.TimeBubbles;
             int here = MisturaTimeBubbleRules.IndexAt(bubbles, local, night);
             SetHeroEffect(_bubbleEffect, here >= 0 ? bubbles[here].Factor : 1f);
+            SetHeroEffect(_bubbleAttackEffect, here >= 0 ? bubbles[here].Factor : 1f);
             if (here >= 0 && here != _hintBubble)
             {
                 Say(bubbles[here].Factor < 1f ? MisturaMechanicsTexts.BubbleSlow : MisturaMechanicsTexts.BubbleFast);
@@ -305,6 +318,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
                 return;
             }
 
+            OnFireForLinks(evt);
             Vector2 target = new Vector2(evt.TargetPoint.x, evt.TargetPoint.z) - _origin;
             Vector2 caster = new Vector2(_player.position.x, _player.position.z) - _origin;
             MisturaTarPatch[] patches = OverworldLayouts.TarPatches;
@@ -530,6 +544,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
                 if (!Mathf.Approximately(factor, 1f))
                 {
                     enemy.Buffs.ApplyEffect(factor < 1f ? _beastSlow : _beastFast, BubbleSource);
+                    enemy.Buffs.ApplyEffect(factor < 1f ? _beastSlowAttack : _beastFastAttack, BubbleSource);
                 }
             }
         }

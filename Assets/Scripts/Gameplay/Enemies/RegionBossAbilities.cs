@@ -85,6 +85,7 @@ namespace Rapadura.Gameplay.Enemies
         private int _smears;
         private SmudgeColour _smudgeClean;
         private float _healthAtWarning;
+        private double _nianWarningAt;
         private Vector3 _home;
 
         // The six more map bosses (05, 10, 22, 33, 39, 42): the worm's songs and the verse it sings, the bottler's uncorkings and where his bottles
@@ -184,6 +185,7 @@ namespace Rapadura.Gameplay.Enemies
             ResetDeepMapBosses();
             ResetSkyMapBosses();
             ResetRiverMapBosses();
+            ResetLateLinks();
             _tosses = 0;
             _breaths = 0;
             _rises = 0;
@@ -251,6 +253,7 @@ namespace Rapadura.Gameplay.Enemies
             }
 
             TickSignature(deltaTime, hero);
+            TickDreamGiants(deltaTime, hero);
             if (_spawn.Signature == RegionBossSignature.FourAppetites)
             {
                 TickOfferings(deltaTime, hero);
@@ -530,6 +533,7 @@ namespace Rapadura.Gameplay.Enemies
             else if (signature == RegionBossSignature.NoiseFright || signature == RegionBossSignature.GoldenTouch)
             {
                 _healthAtWarning = _health != null ? _health.CurrentHealth : 0f;
+                _nianWarningAt = Time.timeAsDouble;
             }
             else if (signature == RegionBossSignature.HoardGuard)
             {
@@ -587,6 +591,7 @@ namespace Rapadura.Gameplay.Enemies
             else if (signature == RegionBossSignature.TarSoak)
             {
                 _tarSeconds = 0f;
+                _tarWarnedAt = Time.timeAsDouble;
             }
             else if (signature == RegionBossSignature.TongueSnap)
             {
@@ -717,16 +722,8 @@ namespace Rapadura.Gameplay.Enemies
             switch (_spawn.Signature)
             {
                 case RegionBossSignature.DrinkTheRiver:
-                    DungeonShockwave.Spawn(transform.position, null, _controller.gameObject, 0f, 0f);
-                    if (RegionBossRules.DrinkHits(FlatDistance(hero.position, transform.position)))
-                    {
-                        victim.ApplyDamage(Damage(RegionBossRules.DrinkDamageFactor), ElementType.Dark, _controller.gameObject);
-                        if (_health != null)
-                        {
-                            _health.ApplyHealing(_health.MaxHealth * RegionBossRules.DrinkHealFraction, _controller.gameObject);
-                        }
-                    }
-
+                    // 76: weaker and healing nothing while the freed barque sails (RegionBossAbilities.LateLinks.cs).
+                    ResolveApepDrink(hero, victim);
                     break;
 
                 case RegionBossSignature.DreamFall:
@@ -958,7 +955,9 @@ namespace Rapadura.Gameplay.Enemies
                     break;
 
                 case RegionBossSignature.NoiseFright:
-                    bool frightened = _health != null && RegionBossRules.NianTakesFright(_healthAtWarning, _health.CurrentHealth, _health.MaxHealth);
+                    // 45: the noise of a hard blow, or the drum / a red lantern round the ring (NianScareBoard, the Mingcheng driver).
+                    bool noise = _health != null && RegionBossRules.NianTakesFright(_healthAtWarning, _health.CurrentHealth, _health.MaxHealth);
+                    bool frightened = noise || Rapadura.Gameplay.World.Map.Mechanics.NianScareBoard.Scares(Flat(_signatureImpact), _nianWarningAt, Time.timeAsDouble);
                     if (frightened)
                     {
                         DungeonFx.Warn(transform.position + Vector3.up * 4f, Text(RegionBossTexts.NianFrightKey));
@@ -1046,6 +1045,9 @@ namespace Rapadura.Gameplay.Enemies
                     if (_health != null && RegionBossRules.GoldenTouchHits(_healthAtWarning, _health.CurrentHealth, _health.MaxHealth, FlatDistance(hero.position, transform.position)))
                     {
                         victim.ApplyDamage(Damage(RegionBossRules.GoldDamageFactor), ElementType.Holy, _controller.gameObject);
+
+                        // 53: the touch leaves gold on the hero (PactoloGildRules, the Farnkesh driver washes it off in the Pactolo).
+                        Rapadura.Gameplay.World.Map.Mechanics.GoldenTouchSignal.Landed();
                     }
 
                     break;
@@ -1084,12 +1086,8 @@ namespace Rapadura.Gameplay.Enemies
                     break;
 
                 case RegionBossSignature.TarSoak:
-                    DungeonShockwave.Spawn(transform.position, null, _controller.gameObject, 0f, 0f);
-                    if (RegionBossRules.TarSoakHits(_tarSeconds))
-                    {
-                        victim.ApplyDamage(Damage(RegionBossRules.TarDamageFactor), ElementType.Dark, _controller.gameObject);
-                    }
-
+                    // 79: fire on the tar during the warning burns it (RegionBossAbilities.LateLinks.cs).
+                    ResolvePitchTar(hero, victim);
                     _tarSeconds = 0f;
                     break;
 

@@ -169,7 +169,11 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             public const string Cat = "enemy_mountain_pallas_cat";
             public const string StormEagle = "enemy_mountain_storm_eagle";
             public const string Harpy = "enemy_mountain_smoke_harpy";
-            public const string Stone = "enemy_mountain_rolling_stone";
+            // The twenty-first pass (NorthOwnBeastRecipes, OverworldLayouts.NorthBeasts): the Pedra Voadora (57, was the rolling stone), the
+            // Ays (57, was the ill-wind mist) and the Raio Preso (58, was the broken lantern) are their own beasts now.
+            public const string Stone = "enemy_mountain_flying_stone";
+            public const string Ays = "enemy_mountain_gorge_ays";
+            public const string Lightning = "enemy_desert_trapped_lightning";
             public const string Bear = "enemy_mountain_brown_bear";
             public const string Spider = "enemy_forest_spider";
             public const string Marmot = "enemy_mountain_giant_marmot";
@@ -451,22 +455,22 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             sino.Fauna.Add(Fauna("gatos_de_pallas", "[rápido]", T(N(Fark.Cat, 3), N(Fark.Kite, 1)), T(V(Fark.Cat, 2), S(werewolf, 1)), 4));
             sino.Fauna.Add(Fauna("gralhas_das_ermidas", "[enxame]", T(N(Fark.Chough, 3), N(Fark.Cat, 1)), T(V(Fark.Chough, 2), S(bats, 2)), 5));
 
-            // Garganta dos Ays, Gruta Abrigo, Escarpa dos Ventos (57): the Ays [rápido] (the ill-wind mist, seen in the wind's dust),
-            // the Redemoinho de Pó [controle] (the mist), the Águia da Tempestade [distância], the Pedra Voadora [tanque]
-            // (the rolling stone).
-            garganta.Fauna.Add(Fauna("ays_do_vento", "[rápido]", T(N(Fark.Mist, 3), N(Fark.StormEagle, 1)), T(V(Fark.Mist, 3), S(werewolf, 1)), 4));
-            garganta.Fauna.Add(Fauna("pedras_voadoras", "[tanque]", T(N(Fark.Stone, 3), N(Fark.Mist, 1)), T(V(Fark.Stone, 2), S(bats, 1)), 3, null, 28f));
+            // Garganta dos Ays, Gruta Abrigo, Escarpa dos Ventos (57): the Ays [rápido] (seen in the wind's dust),
+            // the Redemoinho de Pó [controle] (the Ays too, the dust they spin), the Águia da Tempestade [distância], the Pedra Voadora
+            // [tanque] (the Ays and the stone are their own beasts now, NorthBeasts).
+            garganta.Fauna.Add(Fauna("ays_do_vento", "[rápido]", T(N(Fark.Ays, 3), N(Fark.StormEagle, 1)), T(V(Fark.Ays, 3), S(werewolf, 1)), 4));
+            garganta.Fauna.Add(Fauna("pedras_voadoras", "[tanque]", T(N(Fark.Stone, 3), N(Fark.Ays, 1)), T(V(Fark.Stone, 2), S(bats, 1)), 3, null, 28f));
             gruta.Fauna.Add(Fauna("aguias_da_tempestade", "[distância]", T(N(Fark.StormEagle, 3), N(Fark.Stone, 1)), T(V(Fark.StormEagle, 2), S(bats, 1)), 3));
-            gruta.Fauna.Add(Fauna("redemoinhos_de_po", "[controle]", T(N(Fark.Mist, 3), N(Fark.Stone, 1)), T(V(Fark.Mist, 2), S(werewolf, 1)), 4));
+            gruta.Fauna.Add(Fauna("redemoinhos_de_po", "[controle]", T(N(Fark.Ays, 3), N(Fark.Stone, 1)), T(V(Fark.Ays, 2), S(werewolf, 1)), 4));
             escarpa.Fauna.Add(Fauna("pedras_da_escarpa", "[tanque]", T(N(Fark.Stone, 3), N(Fark.StormEagle, 1)), T(V(Fark.Stone, 2), S(owl, 1)), 3, null, 28f));
             escarpa.Fauna.Add(Fauna("gatos_da_escarpa", "[rápido]", T(N(Fark.Cat, 3), N(Fark.Stone, 1)), T(V(Fark.Cat, 2), S(werewolf, 1)), 4));
 
             // Ilhas de Nuvem and Ninho da Huma (58): the Ventania [controle] (the mist), the Harpia de Fumaça [rápido],
-            // the Grifo Selvagem [elite] (a young griffin), the Raio Preso [distância] (the broken lantern).
+            // the Grifo Selvagem [elite] (a young griffin), the Raio Preso [distância] (its own beast now, NorthBeasts).
             ilhas.Fauna.Add(Fauna("ventanias", "[controle]", T(N(Fark.Mist, 3), N(Fark.Harpy, 1)), T(V(Fark.Mist, 3), S(moon, 1)), 4));
             ilhas.Fauna.Add(Fauna("harpias_de_fumaca", "[rápido]", T(N(Fark.Harpy, 3), N(Fark.Vulture, 1)), T(V(Fark.Harpy, 3), S(bats, 1)), 4));
-            ninho.Fauna.Add(Fauna("grifos_selvagens", "[elite]", T(N(Fark.Griffin, 3), N(Fark.Kite, 1)), T(V(Fark.Griffin, 2), S(owl, 1)), 3, null, 32f));
-            ninho.Fauna.Add(Fauna("raios_presos", "[distância]", T(N(Fark.Kite, 3), N(Fark.Mist, 1)), T(V(Fark.Kite, 2), S(moon, 1)), 3));
+            ninho.Fauna.Add(Fauna("grifos_selvagens", "[elite]", T(N(Fark.Griffin, 3), N(Fark.Lightning, 1)), T(V(Fark.Griffin, 2), S(owl, 1)), 3, null, 32f));
+            ninho.Fauna.Add(Fauna("raios_presos", "[distância]", T(N(Fark.Lightning, 3), N(Fark.Mist, 1)), T(V(Fark.Lightning, 2), S(moon, 1)), 3));
         }
     }
 }

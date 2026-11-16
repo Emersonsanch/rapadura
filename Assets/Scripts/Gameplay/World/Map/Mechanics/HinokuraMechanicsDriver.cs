@@ -18,7 +18,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
     /// The driver never takes the controls: the heat and the eruption only take health, down to their floors, after their warnings.
     /// The moment each forge was lit is saved per slot in <see cref="WorldMapProgress"/> (a server would keep the same three numbers); with the UTC clock, a forge survives a reload.
     /// </summary>
-    public sealed class HinokuraMechanicsDriver : MonoBehaviour, IRegionMechanics
+    public sealed partial class HinokuraMechanicsDriver : MonoBehaviour, IRegionMechanics
     {
         private const string PlayerTag = "Player";
         private const float HintCooldown = 3f;
@@ -129,6 +129,8 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             TickGlutton(local, unix);
             TickHeat(local);
             TickEruption(local, unix);
+            TickGravel(local);
+            TickFurnaces(local);
         }
 
         /// <summary>Copies the saved moments into <paramref name="litAt"/> (a forge with no mark is <see cref="HinokuraForgeRules.NeverLit"/>).</summary>
@@ -453,6 +455,11 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             _eruptionTick = 0f;
             bool inRoute = HinokuraEruptionRules.InRoute(OverworldLayouts.EruptionRoutes, route, local);
             float damage = HinokuraEruptionRules.DamageAmount(phase, inRoute, _stats.CurrentHealth, _stats.MaxHealth, seconds);
+            if (damage > 0f && GoatHoovesHold())
+            {
+                damage = 0f;
+            }
+
             if (damage > 0f)
             {
                 _stats.ApplyHazardDamage(damage);
@@ -620,6 +627,8 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             _pulseTimer = 0f;
             _spokenPhase = HinokuraEruptionPhase.Calm;
             _eruptionTick = 0f;
+            HideGravel();
+            HideFurnaces();
         }
 
         /// <summary>The ground under a fixed point (sluices, stones, the 13 points of each eruption route), sampled once per point.</summary>

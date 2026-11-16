@@ -99,7 +99,8 @@ namespace Rapadura.Gameplay.Mounts
                     return Hide(ability, ctx, effects, at);
             }
 
-            return null;
+            // The boss mounts and the last map-sheet ones (MountBossCatalog).
+            return MountBossAbilities.Execute(ability, ctx, effects);
         }
 
         private static string Wade(MountAbilityDefinition ability, MountAbilityContext ctx, MountAbilityEffects effects, Vector3 at)

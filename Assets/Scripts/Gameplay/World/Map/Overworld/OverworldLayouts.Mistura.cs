@@ -176,11 +176,13 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             public const string Hourglass = "enemy_forest_living_hourglass";
             public const string InstantLizard = "enemy_mountain_instant_lizard";
             public const string LateShadow = "enemy_forest_late_shadow";
-            public const string ClockUshabti = "enemy_mountain_lacquer_ushabti";
+            // The twenty-second pass (DeepOwnBeastRecipes, OverworldLayouts.DeepBeasts): the roles of the sheets that still borrowed
+            // another region's beast have their own now, with the stand-in's numbers.
+            public const string ClockUshabti = "enemy_mountain_clock_ushabti";
             public const string LivingTar = "enemy_forest_living_tar";
             public const string TarHeron = "enemy_forest_tar_heron";
             public const string Catfish = "enemy_mountain_black_catfish";
-            public const string TarSmoke = "enemy_mountain_smoke_harpy";
+            public const string TarSmoke = "enemy_mountain_pitch_smoke";
             public const string AngryCedar = "enemy_forest_angry_cedar";
             public const string CedarLynx = "enemy_forest_cedar_lynx";
             public const string ResinBee = "enemy_forest_resin_bee";

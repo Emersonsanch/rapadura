@@ -19,7 +19,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
     /// town and lasts a while, so a zeroing sip could never happen up here: the same choice as the heat of the Caldeira). Warning at 60; full,
     /// the hero walks 15 % slower until a fire or the way down. It never hurts.
     /// <code>
-    /// meter 0–100 · +1/s on the glacier (night ×2, tea ×0.5) · fire 7 m or the Cabana → 0 · off the map −10/s · 60 warns · 100: speed × 0.85
+    /// meter 0–100 · +1/s on the glacier (night ×2, tea ×0.5, the freed Great Almas guiding ×0.6) · fire 7 m or the Cabana → 0 · off the map −10/s · 60 warns · 100: speed × 0.85
     /// </code>
     /// </summary>
     public static class GlacierColdRules
@@ -33,11 +33,24 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         public const float ChillyAt = 60f;
         public const float FrozenMoveFactor = 0.85f;
 
+        /// <summary>The map boss of 38 (O Grande Almas): once freed it is the glacier's guide.</summary>
+        public const string GreatAlmasEnemyId = "enemy_mountain_great_almas";
+
+        /// <summary>
+        /// The freed Great Almas guides the cousins by the sheltered ways between the seracs: the meter fills at 0.6 (with tea and at night too).
+        /// Decision (2026-11-16): the guide is felt as less cold, not as a walking NPC, until the Almas has a model of its own out of the fight.
+        /// </summary>
+        public const float GuideFactor = 0.6f;
+
         /// <summary>The PercentAdditive value of the frozen slow on MoveSpeed (−0.15).</summary>
         public static float FrozenMoveBonus => FrozenMoveFactor - 1f;
 
         /// <summary>The meter after <paramref name="seconds"/>.</summary>
-        public static float Step(float cold, bool onGlacier, bool atShelter, bool night, bool tea, float seconds)
+        public static float Step(float cold, bool onGlacier, bool atShelter, bool night, bool tea, float seconds) =>
+            Step(cold, onGlacier, atShelter, night, tea, false, seconds);
+
+        /// <summary>The meter after <paramref name="seconds"/>, with the freed Great Almas guiding when <paramref name="guided"/>.</summary>
+        public static float Step(float cold, bool onGlacier, bool atShelter, bool night, bool tea, bool guided, float seconds)
         {
             if (atShelter)
             {
@@ -49,7 +62,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
                 return Mathf.Max(0f, cold - WarmPerSecond * seconds);
             }
 
-            float gain = GainPerSecond * (night ? NightFactor : 1f) * (tea ? TeaFactor : 1f);
+            float gain = GainPerSecond * (night ? NightFactor : 1f) * (tea ? TeaFactor : 1f) * (guided ? GuideFactor : 1f);
             return Mathf.Clamp(cold + gain * seconds, 0f, MaxCold);
         }
 

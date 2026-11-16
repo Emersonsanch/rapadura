@@ -123,6 +123,13 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         /// </summary>
         public float Lateral { get; set; }
 
+        /// <summary>
+        /// Metres under the water line the ride goes where the bottom lies deeper (the walk along the bottom of Kirta's reef, map 28): over water
+        /// the hero follows the bottom, at most this deep, instead of the surface or the straight line between the ends; on dry ground nothing
+        /// changes. 0 (the default) keeps to the surface. Begin puts it back to 0, so a driver sets it after Begin.
+        /// </summary>
+        public float Depth { get; set; }
+
         /// <summary>Whether a ride begun with <paramref name="keepMount"/> gets the hero off the mount first (pure): every ride but the mount's own.</summary>
         public static bool DismountsHero(bool keepMount) => !keepMount;
 
@@ -134,6 +141,13 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
 
         /// <summary>Seconds since the ride began.</summary>
         public float Elapsed { get; private set; }
+
+        /// <summary>The speed of the ride (m/s), which a driver may change while it runs (the sledge of the Areal Escondido, hauled faster or slower); never below 0.1.</summary>
+        public float Speed
+        {
+            get => _speed;
+            set => _speed = Mathf.Max(0.1f, value);
+        }
 
         /// <summary>0 at the start, 1 on arrival.</summary>
         public float Progress => _length > 1e-3f ? Mathf.Clamp01(_travelled / _length) : 1f;
@@ -189,6 +203,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             _travelled = 0f;
             _dropSpeed = Mathf.Max(0f, dropSpeed);
             Lateral = 0f;
+            Depth = 0f;
             Elapsed = 0f;
 
             // Clears the motor's velocity so the Animator rests in idle while the controls are off.
@@ -222,7 +237,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             float t = Progress;
             Vector2 d = RidePath.DirectionAt(_points, _travelled);
             Vector2 ground = RidePath.PointAt(_points, _travelled) + Right(d) * Lateral;
-            float y = Mathf.Max(SkyRouteRules.HeightAt(_fromY, _toY, _arc, t), Floor(ground));
+            float y = Depth > 0f ? Floor(ground) : Mathf.Max(SkyRouteRules.HeightAt(_fromY, _toY, _arc, t), Floor(ground));
             if (_dropSpeed > 0f && y < _last.y)
             {
                 y = Mathf.Max(y, _last.y - _dropSpeed * deltaTime);
@@ -260,13 +275,27 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             }
         }
 
+        /// <summary>
+        /// The height a ride keeps over <paramref name="ground"/> (pure): the water line over water, or with <paramref name="depth"/> &gt; 0 the
+        /// bottom, never more than <paramref name="depth"/> under the water line; the ground itself on dry land.
+        /// </summary>
+        public static float BottomOrSurface(float ground, float waterY, float depth)
+        {
+            if (ground >= waterY)
+            {
+                return ground;
+            }
+
+            return depth > 0f ? Mathf.Max(ground, waterY - depth) : waterY;
+        }
+
         /// <summary>The right-hand side of a direction of travel (world x/z).</summary>
         public static Vector2 Right(Vector2 direction) => new Vector2(direction.y, -direction.x);
 
         private float Floor(Vector2 p)
         {
             float ground = _layout != null ? OverworldRules.SurfaceAt(_layout, p) : 0f;
-            return Mathf.Max(ground, OverworldRelief.WaterY) + _hover;
+            return BottomOrSurface(ground, OverworldRelief.WaterY, Depth) + _hover;
         }
     }
 }

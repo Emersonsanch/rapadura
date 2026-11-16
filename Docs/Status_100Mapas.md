@@ -103,7 +103,7 @@ de uma ficha feito por um bicho de outra região ou do bioma.
 |---|---|
 | Cidade | Vila da Vó Edna (hub, 01) e Copas de Garajonay (raça, 05), dentro do mundo |
 | Mundo contínuo | Feito, 2400 × 2400 m, 18 áreas (`OverworldLayouts.Zarafshan.cs`). Falta conferir no Play: bordas, densidade, sombras e custo no celular |
-| Bichos próprios | 6 de base da Floresta (lobo, aranha, queixada, coruja, lobisomem e Kök-Böri) e mais 7 (`068253c`): Cegonha Apagada (02), Sapo-Bolha e Mosquito de Fumaça (03), Mariposa de Seda (04), Pombo-do-Louro e Lagarto-Gigante do Louro (05), Pavão de Fumaça (06). Ainda emprestados, 6: Enguia de Lama (03), Lagarta-Casulo e Gralha Ladra (04), Névoa Pegajosa (05), Roseira-Espinho e Lobo de Cinzas (06) |
+| Bichos próprios | 6 de base da Floresta (lobo, aranha, queixada, coruja, lobisomem e Kök-Böri) e mais 7 (`068253c`): Cegonha Apagada (02), Sapo-Bolha e Mosquito de Fumaça (03), Mariposa de Seda (04), Pombo-do-Louro e Lagarto-Gigante do Louro (05), Pavão de Fumaça (06); e mais 6 (2026-11-16, `EarlyOwnBeastRecipes`): Enguia de Lama (03), Lagarta-Casulo e Gralha Ladra de Fio (04), Névoa Pegajosa (05), Roseira-Espinho Apagada e Lobo de Cinzas (06), também nas clareiras dos mapas feitos à mão e nas trilhas. Ainda emprestado: o lobo no lugar do Lagarto-Gigante nas clareiras do mapa 05 (o Lagarto já existe; falta trocar e mudar a missão `calm_mist_lizards`) |
 | Mecânicas feitas | Colheita diária no Pomar (01); vaus de Água Viva que curam até 70% (02); lama ×0,7 fora das passarelas, com poças limpas pelas skills do Joaquim (03, `ZarafshanMireRules`); teias que prendem 1,5 s ou são cortadas por skill (04, `ZarafshanWebRules`); névoa a cada 3 min que esconde os bichos a mais de 8 m no chão, com orvalho a cada névoa (05, `GarajonayFogRules`); as 4 faíscas libertadas enchem os canais e viram pontos de cura (06, `ZarafshanGardenRules`) |
 | Mecânicas faltantes | Item de damasco próprio (01); a poção de Água Viva limpar poça (03); andar nas plataformas de verdade, Coletor de Névoa e Gota de Névoa própria (05); abrir o pavilhão e Pétala de Luz (06) |
 | Chefe do mundo | Saklas, o Lobo de Cinzas (evento com horário, arena do mapa-múndi) |
@@ -118,7 +118,7 @@ de uma ficha feito por um bicho de outra região ou do bioma.
 |---|---|
 | Cidade | Oásis de Qocho (hub) e Tambor Rubro (raça, 11, estilo `WarCamp`), as duas dentro do mundo com a própria receita |
 | Mundo contínuo | Feito, 2400 × 2400 m (`OverworldLayouts.Areias.cs`). Os 4 postos de 09–12 estão no mapa |
-| Bichos próprios | 9: 5 de base do Deserto e mais Chacal, Cobra-de-Areia, Orc Coroado de Āz e Lagarto-Espinho (10, `068253c`). Os outros papéis das fichas 09–12 ainda usam bichos existentes (sem contagem por papel) |
+| Bichos próprios | 9: 5 de base do Deserto e mais Chacal, Cobra-de-Areia, Orc Coroado de Āz e Lagarto-Espinho (10, `068253c`), e mais Rato-do-Karez Gigante e Escorpião-d'Água Apagado (09, 2026-11-16, `EarlyOwnBeastRecipes`). Os outros papéis das fichas 09–12 ainda usam bichos existentes (Raiz Sedenta, Serpente de Sal, Escorpião-Cristal…; sem contagem por papel) |
 | Mecânicas feitas | Tempestade de areia em toda a região, com abrigos (`AreiasStormRules`), e nela só se veem bichos a 6 m (07); fachos de sol nas Galerias do Karez: mana ×2,5 no facho e ×0,5 no escuro, bichos ofuscados (09, `KarezSunbeamRules`); descer a duna correndo atordoa os bichos a 14 m (10, `DuneSongRules`); das 11h às 14h, fora da sombra das torres, só se veem bichos a 10 m (12, `NamraelGlareRules`) |
 | Mecânicas faltantes | Escolta da caravana (07); leitura das inscrições (08); os 3 andares do Karez (09); clarão na tela e Espelho de Sal (12); Ritmo do Tambor e Têmpera do Tambor (11); Tambor Rubro numa mesa |
 | Chefe do mundo | Namrael, o Escorpião-Rei (evento com horário) |
@@ -133,7 +133,7 @@ de uma ficha feito por um bicho de outra região ou do bioma.
 |---|---|
 | Cidade | Vila de Litema (hub) e Salões de Bronze (raça, 17), dentro do mundo |
 | Mundo contínuo | Feito, 2400 × 2400 m (`OverworldLayouts.Kaggen.cs`). Liga com as Areias sem portão no mundo costurado |
-| Bichos próprios | 10: 4 de base da Montanha e mais Pedra que Rola, Neblina do Vento Ruim, Babuíno, Lince Apagado (14), Borrão (15) e Gralha de Pedra (16) (os 3 últimos de `068253c`). Os outros papéis de 15–18 ainda usam bichos existentes (Lagarto-de-Pedra, Águia-Preta, Salamandra Fria…; sem contagem por papel) |
+| Bichos próprios | 10: 4 de base da Montanha e mais Pedra que Rola, Neblina do Vento Ruim, Babuíno, Lince Apagado (14), Borrão (15) e Gralha de Pedra (16) (os 3 últimos de `068253c`) e Lagarto-de-Pedra (16, 2026-11-16, `EarlyOwnBeastRecipes`). Os outros papéis de 15–18 ainda usam bichos existentes (Águia-Preta, Salamandra Fria, Águia da Tempestade…; sem contagem por papel) |
 | Mecânicas feitas | Ventos da serra (13–14) e pontes de corda que gastam fôlego dobrado, que a Maithe ignora (`KaggenWindRules`); ar fino no platô do Cume, fôlego volta 30% mais devagar, a Maithe não sente (18, `MazanThinAirRules`) |
 | Mecânicas faltantes | Curvar projéteis (13); neve no chão (14); balanço visual das pontes; gravar 1 runa por dia e as 5 etapas da Grande Forja (17) |
 | Chefe do mundo | Mazan, o Gigante da Serra (evento com horário) |
@@ -148,7 +148,7 @@ de uma ficha feito por um bicho de outra região ou do bioma.
 |---|---|
 | Cidade | Vila das Lamparinas (hub) e Mercado dos Túneis (raça, 22, estilo `TunnelBazaar`), dentro do mundo |
 | Mundo contínuo | Feito, 2400 × 2400 m (`OverworldLayouts.Limiar.cs`), com o portão do Ossuário |
-| Bichos próprios | 7: 4 de base das Cavernas e mais Lodo de Gruta, Corvo-da-Treva e Ubır Jovem (20, nos Terraços de Tufo, `068253c`). Ainda emprestados, 3: Aranha de Gruta (19), Sombra Pequena e Pedra-Lâmina (20). Ossuário com 5 esqueletos próprios |
+| Bichos próprios | 7: 4 de base das Cavernas e mais Lodo de Gruta, Corvo-da-Treva e Ubır Jovem (20, nos Terraços de Tufo, `068253c`), e mais Aranha de Gruta (19) e Pedra-Lâmina (20) (2026-11-16, `EarlyOwnBeastRecipes`); a Sombra Pequena do 20 é a do Limiar Profundo (83), no vau escuro. Nenhum dos 3 emprestados das fichas 19–20 sobra. Ossuário com 5 esqueletos próprios |
 | Mecânicas feitas | Lâmpadas salvas que encurtam a volta à Vila (19, `LimiarLampRules`); barco do Lago do Limiar, ~7 s em vez de ~32 s a pé (19, `LimiarBoatRules`); medo do escuro: lâmpadas acesas enfraquecem os bichos, apagadas os fortalecem (20, `TagesDarkRules`); pedras-dragão: [E] acende uma fonte que cura e acorda o bicho mais perto, cada pedra 1 vez por dia (21, `VishapStoneRules`); ar parado longe dos 11 tubos, o fôlego escorre até 30%, a Garrafa de Ar Sereno corta (22, `TunnelStillAirRules`); poços de vento para planar sobre os abismos do Ninho de Mahaway (24, `LimiarWindWellRules`) |
 | Mecânicas faltantes | Modelo de barco e barqueiro (19); o Vishap Jovem saindo da pedra (21); a feira que muda de galeria por dia e a Garrafa limpar lentidão (22); entrada direta no Ossuário sem passar pelo mapa da ilha |
 | Chefe do mundo | Mahaway, o Rei da Revoada (evento com horário) |
@@ -413,8 +413,9 @@ Revisto em 2026-11-12 (código até `7381c7f`). Saíram da lista, porque ficaram
    - Feitas em `80d79f5`: escolta da caravana (07), monção e escola de barco (31), elevadores e calhas dos 7 terraços (36),
      barcas do tambor (41) e as 4 eclusas (43); em `dd6161a`, degraus do zigurate (77) e pouca gravidade (91). Os mapas 27–51
      já tinham mecânica própria desde `bca7acd` (as tabelas por região abaixo ainda dizem o contrário em 27, 29, 30, 32, 40).
-   - Faltam: andar no fundo do recife (28), portões dos anéis (41, a cidade só tem a muralha do 7º anel), túneis que mudam
-     (62), placas que se movem (63), trenó (73), dano no escuro (88) e lanternas entre as barcas (97).
+   - Em 2026-11-16 (`LateRouteMechanicsDriver`, teste `LateRouteMechanicsTests`): andar no fundo do recife (28), túneis que
+     mudam (62), placas que se movem (63), trenó (73), dano no escuro (88) e lanternas entre as barcas (97).
+   - Em 2026-11-16 também os portões do 4º anel por hora (41, `MingchengRingGateMechanicsDriver`, teste `MingchengRingGateTests`): com isso nenhuma mecânica de percurso das fichas falta.
 6. **Trocar os bichos emprestados que sobram.**
    - Em `dd6161a` e `80d79f5` saíram mais 46 papéis: Estepe dos Nartes (12), Céu (10), Costa e Delta (12), Teto e Mingcheng
      (12). Sobram sobretudo os das Regiões 1–4, 8 e 10–15; os lobos do Teto, o Tubarão-de-Lodo, a Raia de Fumaça, a Garça

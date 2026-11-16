@@ -59,5 +59,12 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
 
         /// <summary>The MoveSpeed modifier (PercentAdditive) that gives <paramref name="factor"/>: × 0.7 is −0.3.</summary>
         public static float MoveBonus(float factor) => factor - 1f;
+
+        /// <summary>
+        /// The AttackSpeed modifier (fraction) of a bubble, for the hero and the beasts alike (2026-11-16, "acelerar também os ataques"): × 1.3 swings
+        /// and recovers 30% faster, × 0.7 30% slower. The hero's swing reads it in <c>PlayerBasicAttack.ResolveCooldown</c>, a beast's in the
+        /// recovery of its swing cooldown (<c>EnemyController</c>). Night leaves no bubble, so no change.
+        /// </summary>
+        public static float AttackBonus(float factor) => factor - 1f;
     }
 }

@@ -81,14 +81,23 @@ namespace Rapadura.Tests
             }
         }
 
+        /// <summary>The fichas' other sets sold at the same capital counter (HouseFichaSetsTests): 58 in Farnkesh; 66, 68 and 69 in Hinokura.</summary>
+        private static readonly Dictionary<string, string[]> FichaSetsAtCounter = new Dictionary<string, string[]>
+        {
+            { CityShopCatalog.CordasSisin, new[] { "set_moveis_ninho_ouro" } },
+            { CityShopCatalog.FerroPretoKurogane, new[] { "set_moveis_jardim_pedra", "set_moveis_vidro_brasa", "set_moveis_fornalha" } },
+        };
+
         [Test]
-        public void EachCapitalsCounter_SellsOnlyItsOwnSet()
+        public void EachCapitalsCounter_SellsOnlyItsOwnSet_AndTheFichaSetsOfItsRegion()
         {
             foreach ((string setId, string shopId, _, _, _) in Sets)
             {
                 IEnumerable<string> sets = CityShopCatalog.Get(shopId).Entries.Where(e => e.Kind == CityShopEntryKind.HouseItem)
                     .Select(e => HouseCatalog.Get(e.ItemId).SetId).Distinct();
-                CollectionAssert.AreEquivalent(new[] { setId }, sets.ToList(), shopId);
+                List<string> expected = new List<string> { setId };
+                if (FichaSetsAtCounter.TryGetValue(shopId, out string[] others)) expected.AddRange(others);
+                CollectionAssert.AreEquivalent(expected, sets.ToList(), shopId);
             }
         }
 

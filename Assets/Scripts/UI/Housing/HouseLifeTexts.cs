@@ -365,6 +365,16 @@ namespace Rapadura.UI.Housing
                 ("set_moveis_relogio_sol", "Sundial Furniture", "Móveis do Relógio de Sol", "House of the hours of the sun", "Casa das horas do sol"),
                 ("set_moveis_novelo", "Bōlos Furniture", "Móveis do Novelo", "House of the bridge of the Bōlos", "Casa da ponte do Novelo"),
                 ("set_moveis_barca_lua", "Moon Ship Furniture", "Móveis da Barca da Lua", "Moon Ship deck house", "Casa no convés da Barca da Lua"),
+                ("set_moveis_jardim_coral", "Coral Garden Furniture", "Móveis do Jardim de Coral", "House in the lit coral garden", "Casa no jardim de coral aceso"),
+                ("set_moveis_palafita", "Stilt House Furniture", "Móveis da Palafita", "Stilt house over the swamp", "Palafita sobre o charco"),
+                ("set_moveis_arrozal", "Rice Terrace Furniture", "Móveis do Arrozal", "House by the mirror rice terraces", "Casa dos arrozais espelhados"),
+                ("set_moveis_torre_branca", "White Spire Furniture", "Móveis da Torre Branca", "White spire house", "Casa da torre branca"),
+                ("set_moveis_ouro_estepe", "Steppe Gold Furniture", "Móveis do Ouro da Estepe", "House of the kurgan gold", "Casa do ouro dos kurgans"),
+                ("set_moveis_flauta_dupla", "Double Flute Furniture", "Móveis da Flauta Dupla", "House of the satyrs' dance", "Casa do baile dos sátiros"),
+                ("set_moveis_ninho_ouro", "Golden Nest Furniture", "Móveis do Ninho de Ouro", "House in the huma's golden nest", "Casa no ninho de ouro da huma"),
+                ("set_moveis_jardim_pedra", "Stone Garden Furniture", "Móveis do Jardim de Pedra", "House of the raked lava gardens", "Casa dos jardins de lava rastelados"),
+                ("set_moveis_vidro_brasa", "Ember Glass Furniture", "Móveis do Vidro de Brasa", "House on the obsidian reef", "Casa no recife de obsidiana"),
+                ("set_moveis_fornalha", "Furnace Furniture", "Móveis da Fornalha", "House of the nine furnaces", "Casa das nove fornalhas"),
             };
 
             foreach ((string id, string enName, string ptName, string enTitle, string ptTitle) in sets)

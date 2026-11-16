@@ -17,7 +17,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
     /// minutes: 2 min 15 s clear, 10 s of rising fog (the warning) and 35 s of fog. In the fog, on the forest floor, the hero sees no beast
     /// farther than 8 m (bosses show); up on a canopy platform (6 m or more above the ground) the hero is above the fog and sees as usual.
     /// A hero who spends 20 s or more of one fog in the map off the city has crossed it: the drop the leaves gave is the Coletor de Névoa's,
-    /// who hands it over (an herb of the laurel forest) the next time the hero stands in the city; at most 3 drops are earned per game day and
+    /// who hands it over (a Gota de Névoa, <see cref="DropItemId"/>) the next time the hero stands in the city; at most 3 drops are earned per game day and
     /// at most 3 wait for the Coletor. Both counts stay in the save.
     /// <code>
     /// cycle 180 s: 135 clear · 10 rising · 35 fog · fog: beasts past 8 m unseen on the floor, 6 m up = above the fog
@@ -34,6 +34,9 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         public const float CrossSeconds = 20f;
         public const int DropsPerDay = 3;
         public const int MaxWaiting = 3;
+
+        /// <summary>What the Coletor hands over for each drop: the Gota de Névoa (a potion: +25 mana; until 2026-11-15 an herb).</summary>
+        public const string DropItemId = "item_gota_nevoa";
 
         /// <summary>The second of the cycle the fog starts to rise.</summary>
         public const double RisingStart = CycleSeconds - FogSeconds - RisingSeconds;

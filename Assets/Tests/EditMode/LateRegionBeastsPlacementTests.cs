@@ -69,16 +69,13 @@ namespace Rapadura.Tests
             new Placement(Costa, Lion, "savana_dos_auroques", "leoes_do_capim", Wolf),
             new Placement(Costa, Rhino, "savana_dos_auroques", "rinocerontes_de_po", Peccary, Golem),
 
-            new Placement(Delta, Crocodile, "lago_de_jhilpur", "gaviais_do_lodo", SandSnake),
-            new Placement(Delta, Crocodile, "charcos_de_lotus", "gaviais_do_charco", SandSnake),
-            new Placement(Delta, Crocodile, "floresta_de_mare", "gaviais_da_mare", SandSnake),
+            // The gharials of 31 (lago, charcos, maré) are the Gavial do Lodo since the twenty-fourth pass (WestOwnBeastsPlacementTests).
             new Placement(Delta, Crocodile, "pantano_aberto", "crocodilos_de_musgo", SandSnake),
             new Placement(Delta, Crocodile, "ilhas_que_andam", "crocodilos_das_ilhas", SandSnake),
             new Placement(Delta, Crocodile, "raizes_afogadas", "gaviais_sombra", SandSnake),
             new Placement(Delta, Crocodile, "coracao_do_lodo", "gaviais_sombra_do_lodo", SandSnake),
             new Placement(Delta, Crocodile, "olho_do_lodo", "gaviais_do_olho", SandSnake),
-            new Placement(Delta, Crocodile, "charco_do_ninki_nanka", "filhotes_de_ninki_nanka", SandSnake),
-            new Placement(Delta, Crocodile, "toca_da_dragoa", "filhotes_da_toca", SandSnake),
+            // The Ninki Nanka's young (34) are the Ninki Nanka Filhote since the twenty-fourth pass (WestOwnBeastsPlacementTests).
             new Placement(Delta, Monkey, "figueiral_das_raizes", "macacos_do_figueiral", Baboon),
             new Placement(Delta, Monkey, "floresta_de_mare", "macacos_da_mare", Baboon),
             new Placement(Delta, Monkey, "pontes_de_raiz_viva", "macacos_das_pontes", Baboon),

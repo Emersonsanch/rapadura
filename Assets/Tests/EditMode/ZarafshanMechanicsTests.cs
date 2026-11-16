@@ -68,6 +68,40 @@ namespace Rapadura.Tests
         }
 
         [Test]
+        public void Harvest_ApricotTrees_GiveTheOrchardsOwnApricot_EveryDay()
+        {
+            ScriptableObject apricot = Resources.Load<ScriptableObject>("Items/" + ZarafshanHarvestRules.Apricot);
+            Assert.IsNotNull(apricot, "item_damasco is missing from Resources/Items");
+            var definition = (Rapadura.Gameplay.Items.ItemDefinition)apricot;
+            Assert.AreEqual(Rapadura.Gameplay.Items.ItemCategory.Food, definition.Category, "the apricot is food, not a potion (it does not clean the Brejo's mud)");
+            Assert.Greater(definition.HealthRestore, 0f);
+
+            int apricotTrees = 0;
+            for (int i = 0; i < OverworldLayouts.ZarafshanHarvestSpots.Length; i++)
+            {
+                string id = OverworldLayouts.ZarafshanHarvestSpots[i].Id;
+                for (int day = 1; day <= 4; day++)
+                {
+                    string item = ZarafshanHarvestRules.ItemFor(id, i, day);
+                    if (ZarafshanHarvestRules.IsApricotTree(id))
+                    {
+                        Assert.AreEqual(ZarafshanHarvestRules.Apricot, item, id + " day " + day);
+                    }
+                    else
+                    {
+                        CollectionAssert.Contains(ZarafshanHarvestRules.Items, item, id + " gives a Cooking ingredient");
+                    }
+                }
+
+                apricotTrees += ZarafshanHarvestRules.IsApricotTree(id) ? 1 : 0;
+            }
+
+            Assert.AreEqual(2, apricotTrees, "the Pomar has its two apricot trees");
+            Assert.IsFalse(ZarafshanHarvestRules.IsApricotTree(null));
+            Assert.IsFalse(ZarafshanHarvestRules.IsApricotTree("romazeira_oeste"));
+        }
+
+        [Test]
         public void Harvest_Lines_HeroOrGrandma_AllTranslated()
         {
             Assert.IsTrue(ZarafshanHarvestRules.GrandmaSpeaks(0, 2));

@@ -299,8 +299,20 @@ namespace Rapadura.UI.Bestiary
             // -- Papéis do Teto do Mundo (e dois de Mingcheng) que ainda usavam bicho de outra região (own file too) --
             HighlandOwnBestiaryTexts.AddPages(entries);
 
+            // -- Papéis de Farnkesh, do Mar Gelado e de Hinokura que ainda usavam bicho emprestado (own file too) --
+            NorthOwnBestiaryTexts.AddPages(entries);
+
+            // -- Papéis da Costa, do Delta, de Mingcheng e dos Nartes que ainda usavam bicho emprestado (own file too) --
+            WestOwnBestiaryTexts.AddPages(entries);
+
+            // -- Papéis do Rio, da Mistura e do Limiar Profundo que ainda usavam bicho emprestado (own file too) --
+            DeepOwnBestiaryTexts.AddPages(entries);
+
             // -- Papéis dos Reinos do Céu que ainda usavam bicho de outra região (own file too) --
             SkyOwnBestiaryTexts.AddPages(entries);
+
+            // -- Papéis das Regiões 1–4 que ainda usavam bicho emprestado depois da 12ª leva (own file too) --
+            EarlyOwnBestiaryTexts.AddPages(entries);
 
             // -- Guardiões do Ossuário dos Artífices (Docs/Dungeons.md, own file) --
             RegionBossTexts.AddPages(entries);

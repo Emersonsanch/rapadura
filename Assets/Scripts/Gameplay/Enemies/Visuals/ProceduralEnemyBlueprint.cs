@@ -552,6 +552,111 @@ namespace Rapadura.Gameplay.Enemies.Visuals
         /// <summary>Íbis de Luz Apagada (42): a white ibis with a little mirror on its brow; wings, beak opens on the windup.</summary>
         LightIbis = 431,
 
+        // The twenty-fourth pass of beasts (bible §3.2.1): the most-seen roles of Regions 5, 6, 8 and 9, the Costa, the Delta, Mingcheng and the
+        // Nartes, still played by another beast (WestOwnBeastRecipes).
+        /// <summary>Tubarão-de-Lodo (28): a squat shark of the kelp gardens caked in grey mud; jaw and tail.</summary>
+        MudShark = 520,
+        /// <summary>Raia de Fumaça (29): a ray of smoke gliding over drowned Kilwa; its fins beat and its mouth opens on the windup.</summary>
+        SmokeRay = 521,
+        /// <summary>Garça Apagada (30): a tall grey heron of the Liyongo canals; wings, the bill opens on the windup.</summary>
+        DimmedHeron = 522,
+        /// <summary>Gavial do Lodo (31): a long-snouted gharial of Jhilpur's lake, caked in mud; jaw and tail.</summary>
+        MudGharial = 523,
+        /// <summary>Ninki Nanka Filhote (34): a young bog dragon with little horns and a crest of glinting scales; jaw and tail.</summary>
+        NinkiHatchling = 524,
+        /// <summary>Raiz Podre (35): a knot of rotten roots held up by its spores; squashes on the windup and the light rotting in it flares.</summary>
+        RottenRoot = 525,
+        /// <summary>Lanterna-Peixe (43): a paper carp lantern with a stolen light inside; leans back on the windup and the light flares.</summary>
+        FishLantern = 526,
+        /// <summary>Barqueiro de Fumaça (43): a smoke boatman in a straw hat with his punting pole; both arms go up on the windup.</summary>
+        SmokeBoatman = 527,
+        /// <summary>Pato-Mandarim Ladrão (44): a gaudy mandarin drake with a stolen trinket in its bill; wings, the bill opens on the windup.</summary>
+        MandarinDuck = 528,
+        /// <summary>Espantalho Apagado (44): a straw scarecrow with a lantern on its crossbar; leans back on the windup and the lantern flares.</summary>
+        DimmedScarecrow = 529,
+        /// <summary>Raio Torto (42): a bent beam of light in a shard of smoked glass; squashes on the windup and the glare flares.</summary>
+        CrookedRay = 530,
+        /// <summary>Lobo-Cinzento (51): a grey steppe wolf, its fur blown the wrong way by the Destroying Wind; jaw and tail.</summary>
+        GreyWolf = 531,
+
+        // The twenty-first pass of beasts (bible §3.2.1): the most-seen roles of Regions 10–12, Farnkesh, the Mar Gelado and Hinokura, still
+        // played by another beast (NorthOwnBeastRecipes).
+        /// <summary>Pedra Voadora (57): a scree stone held up by the ill wind in a ring of grey dust; squashes on the windup and its core flares.</summary>
+        FlyingStone = 450,
+        /// <summary>Ays da Garganta (57): a spirit of the ill wind seen only by the ash-grey dust it spins; squashes on the windup and its eye flares.</summary>
+        GorgeAys = 451,
+        /// <summary>Raio Preso (58): a bolt of lightning caged in a knot of cloud; leans back on the windup and the bolt flares.</summary>
+        TrappedLightning = 452,
+        /// <summary>Peixe-Gelo (60): a knife-thin white fish of the canals with frost on its back; jaw, fins and tail.</summary>
+        IceFish = 453,
+        /// <summary>Enguia-Lanterna (60): a long slick eel rearing out of a crack, a row of dimmed lights down its side; jaw and tail.</summary>
+        LanternEel = 454,
+        /// <summary>Mosquito da Tundra (61): a big grey mosquito of Omöl's lakes with a bead of stolen light in its belly; wings blur and the proboscis drops.</summary>
+        TundraMosquito = 455,
+        /// <summary>Narval Apagado (63): a narwhal hauled out on the floe, its long twisted tusk gone dull; jaw and tail.</summary>
+        DimmedNarwhal = 456,
+        /// <summary>Gaivota-Tempestade (63): a stiff-winged gull of the gales with grey in its feathers; wings, beak opens on the windup.</summary>
+        StormGull = 457,
+        /// <summary>Peixe-Bruxa (64): an eyeless hagfish of Old Kul's lake tied in a loose knot, in a cloud of slime; jaw and tail.</summary>
+        WitchFish = 458,
+        /// <summary>Polvo de Obsidiana (68): an octopus the colour of cold glass on the reef; squashes on the windup and the lure in its eye flares.</summary>
+        ObsidianOctopus = 459,
+        /// <summary>Faísca Raivosa (69): a furnace spark held down by the shadow until it is angry; squashes on the windup and it flares.</summary>
+        RagingSpark = 460,
+        /// <summary>Cinza Viva (70): a heap of warm ash with two coals for eyes; squashes on the windup and the coals flare.</summary>
+        LivingAsh = 461,
+
+        // The twenty-second pass of beasts (bible §3.2.1): the roles of Regions 13–15, the Rio das Doze Horas, the Margens da Mistura and the
+        // Limiar Profundo, still played by another region's beast (DeepOwnBeastRecipes).
+        /// <summary>Salamandra de Sombra (75): a black salamander of the Lake of Fire with embers down its back; jaw and tail.</summary>
+        ShadowSalamander = 470,
+        /// <summary>Escorpião dos Anéis (74): a heavy scorpion banded like the coils of Mehen; claws open and the sting draws back on the windup.</summary>
+        CoilScorpion = 471,
+        /// <summary>Ushabti Apagado (74): an answering figure of the night barge whose glyphs went out; both arms go up on the windup.</summary>
+        DimmedUshabti = 472,
+        /// <summary>Sombra Fervida (75): a puddle of shadow boiling on the shore; squashes on the windup and its coal flares.</summary>
+        BoiledShadow = 473,
+        /// <summary>Crocodilo de Lodo (76): a crocodile caked in the grey mud of Apep's sandbank; jaw and tail.</summary>
+        MudCrocodile = 474,
+        /// <summary>Ushabti Rachado (75): a red clay figure cracked by the heat, the fire showing through; both arms go up on the windup.</summary>
+        CrackedUshabti = 475,
+        /// <summary>Ushabti de Relógio (78): a sandstone figure with a sundial on its chest; both arms go up on the windup.</summary>
+        ClockUshabti = 476,
+        /// <summary>Fumaça de Piche (79): a low black smoke dripping pitch, a spark caught in it; squashes on the windup and the spark flares.</summary>
+        PitchSmoke = 477,
+        /// <summary>Fumaça Sufocante (84): a column of the Smoke of the Darkness; squashes on the windup and the light it squeezes flares.</summary>
+        ChokingSmoke = 478,
+        /// <summary>Cardume Escuro (87): a swirl of small dark fish round a swallowed light; squashes on the windup and the light flares.</summary>
+        DarkShoal = 479,
+        /// <summary>Serpente Cega (88): a pale eyeless serpent that follows warmth; slithers, the head rears and the jaw drops on the windup.</summary>
+        BlindSerpent = 480,
+        /// <summary>Ushabti Apagado Gigante (90): the huge answering figure before the Gate of Darkness; both arms go up on the windup.</summary>
+        GiantDimmedUshabti = 481,
+
+        // The twenty-third pass of beasts (bible §3.2.1): roles of Regions 1–4 still played by another beast after the twelfth pass (EarlyOwnBeastRecipes).
+        /// <summary>Enguia de Lama (03): a mud eel reared out of its puddle; the jaw drops on the windup and the loops in the mud sway.</summary>
+        MudEel = 490,
+        /// <summary>Lagarta-Casulo (04): a fat silk caterpillar with a lit cocoon on its back; squashes on the windup and the cocoon flares.</summary>
+        CocoonCaterpillar = 491,
+        /// <summary>Gralha Ladra de Fio (04): a jackdaw with a stolen spool of silk; the beak opens, wings held still.</summary>
+        ThreadJackdaw = 492,
+        /// <summary>Névoa Pegajosa (05): a low cloud of Smoke dripping sticky strands; squashes on the windup and its drop of light flares.</summary>
+        StickyMist = 493,
+        /// <summary>Roseira-Espinho Apagada (06): a dimmed rose bush on its roots; squashes on the windup and the last lit rose flares.</summary>
+        DimmedThornRose = 494,
+        /// <summary>Lobo de Cinzas (06): one of Saklas's ash-grey wolves, embers in the ruff; jaw and tail.</summary>
+        AshWolf = 495,
+        /// <summary>Aranha de Gruta (19): a pale cave spider with crystal eyes; the fangs open on the windup, the abdomen sways.</summary>
+        GrottoSpider = 496,
+        /// <summary>Pedra-Lâmina (20): a cluster of basalt blades round a lit seam; squashes on the windup and the seam flares.</summary>
+        BladeStone = 497,
+        /// <summary>Lagarto-de-Pedra (16): a granite-grey lizard with lichen on its back; jaw and tail.</summary>
+        StoneLizard = 498,
+        /// <summary>Rato-do-Karez Gigante (09): a giant karez rat with ember eyes; jaw and tail.</summary>
+        KarezRat = 499,
+        /// <summary>Escorpião-d'Água Apagado (09): a flat water scorpion, forelegs raised; the beak drops on the windup, the breathing tube sways.</summary>
+        WaterScorpion = 500,
+
         // The eighteenth pass of beasts (bible §3.2.1): roles of Região 16, the Reinos do Céu, still played by another region's beast (SkyOwnBeastRecipes).
         /// <summary>Arconte Fujão Menor (91): a small archon in a travelling cloak with a bundle of stolen sparks; both arms go up on the windup.</summary>
         RunawayArchon = 380,

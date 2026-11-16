@@ -88,6 +88,13 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         public static bool Cleans(Characters.CharacterId? hero) => hero == Characters.CharacterId.Joaquim;
 
         /// <summary>
+        /// Whether drinking an item of <paramref name="category"/> cleans the mud round the hero (any cousin): every potion is Living Water ("Água
+        /// Viva (skills do Joaquim, poção)"), so it opens one clean pool of <see cref="CleanRadius"/> at the hero's feet for <see cref="CleanSeconds"/>.
+        /// Food (the Pomar's apricots) does not.
+        /// </summary>
+        public static bool PotionCleans(Items.ItemCategory category) => category == Items.ItemCategory.Potion;
+
+        /// <summary>
         /// Opens a clean pool at <paramref name="center"/> until <paramref name="now"/> + <see cref="CleanSeconds"/>: dried pools are dropped and,
         /// past <see cref="MaxPools"/>, the oldest goes.
         /// </summary>

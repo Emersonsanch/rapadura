@@ -475,6 +475,8 @@ namespace Rapadura.Gameplay.World.Cities
                 new CityShopEntry("item_chave_jardim", 60, 1, unlock: ShopUnlock.Cleared(BiomeType.Forest)),
                 // Garça do Brejo (Docs/Mounts.md §3.12): the herons Dácil keeps, that fish the Brejo do Lodo Escuro (03) at dawn.
                 new CityShopEntry("item_whistle_mount_marsh_heron", 140, -1),
+                // Lagarto-do-Louro (Docs/Mounts.md §3.13): the laurel lizards warming on Dácil's counter (05).
+                new CityShopEntry("item_whistle_mount_laurel_lizard", 145, -1),
                 // The rotation: mist potions, laurel wood and fibre, mount feed (the Lagarto-do-Louro eats it too), Jonay's bows.
                 new CityShopEntry("item_mana_potion", 14, 4, rotating: true),
                 new CityShopEntry("item_fiber", 1, 20, rotating: true),
@@ -586,7 +588,7 @@ namespace Rapadura.Gameplay.World.Cities
                 new CityShopEntry("item_amuleto_sorte", 24, 1, rotating: true),
             })),
 
-            // ---- Kirta: Danel's diving tools, the breathing shell of 28 and the air bubble of 29; daily ----
+            // ---- Kirta: Danel's diving tools, the breathing shell of 28 and the air bubble of 29; daily; and the Móveis do Jardim de Coral (ficha 28, Docs/Housing.md §6.2), the Epic as the week's special ----
             new CityShopSpec(MergulhoDanel, ShopTheme.Speciality, BiomeType.Forest, ShopRotationPeriod.Daily, 3, WithHouse(MergulhoDanel, new List<CityShopEntry>
             {
                 new CityShopEntry("item_health_potion", 15, 6),
@@ -602,7 +604,7 @@ namespace Rapadura.Gameplay.World.Cities
                 new CityShopEntry("item_amuleto_sorte", 24, 1, rotating: true),
                 new CityShopEntry("item_pedra_bencao", 12, 3, rotating: true),
                 new CityShopEntry("item_hunting_bow", 34, 1, rotating: true),
-            })),
+            }), houseSlots: 3, weeklySlots: 1),
 
             // ---- Jhilpur: Nuhzadag's boats and trades, the gear of the gates 32–35; daily ----
             new CityShopSpec(TrocasNuhzadag, ShopTheme.Speciality, BiomeType.Forest, ShopRotationPeriod.Daily, 3, WithHouse(TrocasNuhzadag, new List<CityShopEntry>
@@ -616,6 +618,8 @@ namespace Rapadura.Gameplay.World.Cities
                 new CityShopEntry("item_barco_junco", 600, 1),
                 new CityShopEntry("item_amuleto_antiveneno", 700, 2),
                 new CityShopEntry("item_fruta_purificadora", 750, 2),
+                // Búfalo-d'Água de Jhilpur (Docs/Mounts.md §3.13): the paddy buffaloes that pull Nuhzadag's boats up the shallow canals.
+                new CityShopEntry("item_whistle_mount_jhilpur_buffalo", 145, -1),
                 // The rotation: what the boats bring up the delta.
                 new CityShopEntry("item_corda_escalada", 40, 2, rotating: true),
                 new CityShopEntry("item_fish_peixe_dourado", 60, 3, rotating: true),
@@ -626,7 +630,7 @@ namespace Rapadura.Gameplay.World.Cities
                 new CityShopEntry("item_pedra_bencao", 12, 3, rotating: true),
             }), houseSlots: 3, weeklySlots: 1),
 
-            // ---- Palafitas de Tarchon: Larthia's baskets, the reed boat of 33 and the antivenom amulet of 34; daily ----
+            // ---- Palafitas de Tarchon: Larthia's baskets, the reed boat of 33 and the antivenom amulet of 34; daily; and the Móveis da Palafita (ficha 33), the Epic as the week's special ----
             new CityShopSpec(CestariaLarthia, ShopTheme.Speciality, BiomeType.Forest, ShopRotationPeriod.Daily, 3, WithHouse(CestariaLarthia, new List<CityShopEntry>
             {
                 new CityShopEntry("item_health_potion", 15, 6),
@@ -651,7 +655,7 @@ namespace Rapadura.Gameplay.World.Cities
                 new CityShopEntry("item_mount_feed", 3, 12, rotating: true),
                 new CityShopEntry("item_corda_escalada", 40, 2, rotating: true),
                 new CityShopEntry("item_amuleto_sorte", 25, 1, rotating: true),
-            })),
+            }), houseSlots: 3, weeklySlots: 1),
 
             // ---- Sangkent: Sisinnios's mountain gear, the gear of the gates 36, 38 and 40; daily ----
             new CityShopSpec(AgasalhosSisinnios, ShopTheme.Speciality, BiomeType.Forest, ShopRotationPeriod.Daily, 3, WithHouse(AgasalhosSisinnios, new List<CityShopEntry>
@@ -698,7 +702,7 @@ namespace Rapadura.Gameplay.World.Cities
                 new CityShopEntry("item_pedra_bencao", 12, 3, rotating: true),
             }), houseSlots: 3, weeklySlots: 1),
 
-            // ---- Torres Brancas: Natakamani's mirrors, the stones of the refining; daily ----
+            // ---- Torres Brancas: Natakamani's mirrors, the stones of the refining; daily; and the Móveis da Torre Branca (ficha 42), the Epic as the week's special ----
             new CityShopSpec(EspelhosNatakamani, ShopTheme.Speciality, BiomeType.Forest, ShopRotationPeriod.Daily, 3, WithHouse(EspelhosNatakamani, new List<CityShopEntry>
             {
                 new CityShopEntry("item_health_potion", 15, 6),
@@ -713,7 +717,7 @@ namespace Rapadura.Gameplay.World.Cities
                 new CityShopEntry("item_herb", 3, 12, rotating: true),
                 new CityShopEntry("item_cooked_meat", 6, 8, rotating: true),
                 new CityShopEntry("item_amuleto_sorte", 25, 1, rotating: true),
-            })),
+            }), houseSlots: 3, weeklySlots: 1),
 
             // ---- Acampamento de Soslan: Syrdon's saddlery, felt and feed for the steppe; daily ----
             new CityShopSpec(SelariaNomade, ShopTheme.Speciality, BiomeType.Forest, ShopRotationPeriod.Daily, 3, WithHouse(SelariaNomade, new List<CityShopEntry>
@@ -771,7 +775,7 @@ namespace Rapadura.Gameplay.World.Cities
                 new CityShopEntry("item_pedra_bencao", 12, 3, rotating: true),
             })),
 
-            // ---- Vale dos Sátiros: Marsyas' double flute, wind runes, songs and travel food; daily ----
+            // ---- Vale dos Sátiros: Marsyas' double flute, wind runes, songs and travel food; daily; and the Móveis da Flauta Dupla (ficha 53), the Epic as the week's special ----
             new CityShopSpec(FlautaDupla, ShopTheme.Speciality, BiomeType.Forest, ShopRotationPeriod.Daily, 3, WithHouse(FlautaDupla, new List<CityShopEntry>
             {
                 new CityShopEntry("item_health_potion", 15, 6),
@@ -787,9 +791,9 @@ namespace Rapadura.Gameplay.World.Cities
                 new CityShopEntry("item_runa_clareza", 15, 2, rotating: true),
                 new CityShopEntry("item_amuleto_sorte", 25, 1, rotating: true),
                 new CityShopEntry("item_pedra_bencao", 12, 3, rotating: true),
-            })),
+            }), houseSlots: 3, weeklySlots: 1),
 
-            // ---- Farnkesh: Sisin's rope rack, the gear of the gates 57 and 58 and of the bridges; daily; and the Móveis do Ninho de Pedra (Docs/Housing.md §6.2), the Epic as the week's special ----
+            // ---- Farnkesh: Sisin's rope rack, the gear of the gates 57 and 58 and of the bridges; daily; and the Móveis do Ninho de Pedra and the Móveis do Ninho de Ouro (ficha 58) (Docs/Housing.md §6.2), the Epic as the week's special ----
             new CityShopSpec(CordasSisin, ShopTheme.Speciality, BiomeType.Forest, ShopRotationPeriod.Daily, 3, WithHouse(CordasSisin, new List<CityShopEntry>
             {
                 new CityShopEntry("item_health_potion", 15, 6),
@@ -839,7 +843,7 @@ namespace Rapadura.Gameplay.World.Cities
                 new CityShopEntry("item_pedra_bencao", 12, 3, rotating: true),
             }), houseSlots: 3, weeklySlots: 1),
 
-            // ---- Hinokura: Kurogane's black iron, the gear of the gates of the Arquipélago de Hinokura (65–70); daily; and the Móveis do Palácio de Laca (Docs/Housing.md §6.2), the Epic as the week's special ----
+            // ---- Hinokura: Kurogane's black iron, the gear of the gates of the Arquipélago de Hinokura (65–70); daily; and the Móveis do Palácio de Laca, do Jardim de Pedra, do Vidro de Brasa and da Fornalha (Docs/Housing.md §6.2), the Epics as the week's specials ----
             new CityShopSpec(FerroPretoKurogane, ShopTheme.Speciality, BiomeType.Forest, ShopRotationPeriod.Daily, 3, WithHouse(FerroPretoKurogane, new List<CityShopEntry>
             {
                 new CityShopEntry("item_health_potion", 15, 6),
@@ -866,7 +870,10 @@ namespace Rapadura.Gameplay.World.Cities
                 new CityShopEntry("item_runa_cura", 15, 2, rotating: true),
                 new CityShopEntry("item_amuleto_sorte", 25, 1, rotating: true),
                 new CityShopEntry("item_pedra_bencao", 12, 3, rotating: true),
-            }), houseSlots: 3, weeklySlots: 1),
+                // Hinokura is the only city of Região 12, so the three ficha sets (66 Jardim de Pedra, 68 Vidro de Brasa, 69 Fornalha)
+                // share this counter with the Palácio de Laca: twice the furniture slots and two Epics a week, so the 28 pieces go
+                // round in about five days and each of the 4 Epics comes back every other week.
+            }), houseSlots: 6, weeklySlots: 2),
 
             // ---- Cais de Mesektet: Khunanup's trades, the gear of the hours of the Rio das Doze Horas (71–76); daily ----
             new CityShopSpec(TrocasKhunanup, ShopTheme.Speciality, BiomeType.Forest, ShopRotationPeriod.Daily, 3, WithHouse(TrocasKhunanup, new List<CityShopEntry>

@@ -177,7 +177,9 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         private static class Rio
         {
             public const string Crocodile = "enemy_forest_dark_river_crocodile";
-            public const string MudCrocodile = "enemy_forest_mangrove_crocodile";
+            // The twenty-second pass (DeepOwnBeastRecipes, OverworldLayouts.DeepBeasts): the roles of the sheets that still borrowed
+            // another region's beast have their own now, with the stand-in's numbers.
+            public const string MudCrocodile = "enemy_forest_mud_crocodile";
             public const string Ibis = "enemy_forest_dimmed_ibis";
             public const string Goose = "enemy_forest_thief_goose";
             public const string Scarab = "enemy_forest_shadow_scarab";
@@ -186,18 +188,18 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             public const string Locust = FarBeasts.HungryFlame;
             public const string Hippo = "enemy_forest_mud_hippo";
             public const string ReedSnake = "enemy_forest_reed_snake";
-            public const string Salamander = "enemy_desert_sand_snake";
+            public const string Salamander = "enemy_desert_shadow_salamander";
             public const string ThreeHeaded = "enemy_forest_three_headed_serpent";
             public const string Python = "enemy_forest_child_of_apep";
             public const string Scorpion = "enemy_forest_black_scorpion";
-            public const string RingScorpion = "enemy_desert_scorpion";
+            public const string RingScorpion = "enemy_desert_coil_scorpion";
             public const string SandUshabti = "enemy_forest_sand_ushabti";
-            public const string DimmedUshabti = "enemy_mountain_rope_ushabti";
+            public const string DimmedUshabti = "enemy_mountain_dimmed_ushabti";
             public const string ShadowBiter = "enemy_forest_shadow_biter";
             public const string Creeper = "enemy_forest_creeping_dark";
-            public const string Ooze = "enemy_cave_ooze";
+            public const string Ooze = "enemy_cave_boiled_shadow";
             public const string Quicksand = "enemy_forest_quicksand";
-            public const string CrackedUshabti = "enemy_forest_terracotta_soldier";
+            public const string CrackedUshabti = "enemy_forest_cracked_ushabti";
             public const string Vulture = "enemy_desert_ember_vulture";
         }
 

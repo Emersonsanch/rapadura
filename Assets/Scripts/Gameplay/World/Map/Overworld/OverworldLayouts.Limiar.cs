@@ -401,11 +401,11 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             // Row 1 — the Lago do Limiar (19), the Boca do Hahya (the Lodo de Gruta [tanque]), the Salão de Tages (20), the outer fissures and terraces.
             lago.Fauna.Add(Fauna("morcegos_do_limiar", "[enxame]", T(N(bats, 4)), T(V(bats, 3), S(ubir, 1)), 5, null, 22f));
             lago.Fauna.Add(Fauna("peixes_da_margem", "[distância] [enxame]", T(N(fish, 2), N(bats, 2)), T(V(fish, 2), S(ubir, 1)), 4, null, 26f));
-            lago.Fauna.Add(Fauna("aranhas_de_gruta", "[rápido]", T(N(spider, 3), N(bats, 1)), T(V(spider, 2), S(ubir, 1)), 4));
-            boca.Fauna.Add(Fauna("boca_aranhas", "[rápido]", T(N(spider, 3), N(bats, 1)), T(V(spider, 3), S(ubir, 1)), 4));
+            lago.Fauna.Add(Fauna("aranhas_de_gruta", "[rápido]", T(N(EarlyOwnBeasts.GrottoSpider, 3), N(bats, 1)), T(V(EarlyOwnBeasts.GrottoSpider, 2), S(ubir, 1)), 4));
+            boca.Fauna.Add(Fauna("boca_aranhas", "[rápido]", T(N(EarlyOwnBeasts.GrottoSpider, 3), N(bats, 1)), T(V(EarlyOwnBeasts.GrottoSpider, 3), S(ubir, 1)), 4));
             boca.Fauna.Add(Fauna("boca_pedras", "[tanque]", T(N(ooze, 2), N(bats, 2)), T(V(ooze, 2), S(ubir, 1)), 3, null, 28f));
-            tages.Fauna.Add(Fauna("estalactites", "[enxame] [controle]", T(N(bats, 3), N(golem, 1)), T(V(bats, 3), S(ubir, 1)), 5, null, 22f));
-            tages.Fauna.Add(Fauna("lanternas_quebradas", "[distância] [tanque]", T(N(lantern, 2), N(golem, 2)), T(V(lantern, 2), S(ubir, 1)), 4, null, 28f));
+            tages.Fauna.Add(Fauna("estalactites", "[enxame] [controle]", T(N(bats, 3), N(EarlyOwnBeasts.BladeStone, 1)), T(V(bats, 3), V(EarlyOwnBeasts.BladeStone, 1), S(ubir, 1)), 5, null, 22f));
+            tages.Fauna.Add(Fauna("lanternas_quebradas", "[distância] [controle]", T(N(lantern, 2), N(EarlyOwnBeasts.BladeStone, 2)), T(V(lantern, 2), V(EarlyOwnBeasts.BladeStone, 1), S(ubir, 1)), 4, null, 28f));
             fendas.Fauna.Add(Fauna("beirais", "[tanque] [enxame]", T(N(golem, 2), N(bats, 2)), T(V(golem, 2), S(ubir, 2)), 4, null, 28f));
             fendas.Fauna.Add(Fauna("urutaus_da_fenda", "[distância]", T(N(potoo, 3), N(bats, 1)), T(V(potoo, 2), S(ubir, 1)), 3));
             terracos.Fauna.Add(Fauna("degraus_rosados", "[rápido] [enxame]", T(N(EarlyBeasts.YoungUbir, 2), N(bats, 2)), T(V(EarlyBeasts.YoungUbir, 2), S(ubir, 1)), 4));

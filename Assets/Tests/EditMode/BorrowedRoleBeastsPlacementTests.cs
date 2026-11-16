@@ -117,7 +117,7 @@ namespace Rapadura.Tests
         // The Sky's garden and noon shadows have their own beasts since the eighteenth pass (SkyOwnBeastsPlacementTests).
         [TestCase(Gelo, "rachaduras", Ooze)]
         [TestCase(Gelo, "raizes_gelo", Ooze)]
-        [TestCase(Fogo, "polvos_de_obsidiana", Ooze)]
+        // The Polvo de Obsidiana has its own beast since the twenty-first pass (NorthOwnBeastsPlacementTests).
         public void TheSheetsThatSharedTheStandIn_KeepIt(string region, string group, string standIn)
         {
             OverworldFauna fauna = OverworldLayouts.Get(region).Zones.SelectMany(z => z.Fauna).FirstOrDefault(f => f.Id == group);

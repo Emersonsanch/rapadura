@@ -24,7 +24,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
     /// mount and throw the rider off with a warning first; the holes of Old Kul's lake fish with one button, the hero keeping
     /// every control. Nothing here can hold the hero: the crossing hands control back on arrival or if anything else moves them.
     /// </summary>
-    public sealed class MarGeladoMechanicsDriver : MonoBehaviour, IRegionMechanics
+    public sealed partial class MarGeladoMechanicsDriver : MonoBehaviour, IRegionMechanics
     {
         private const string PlayerTag = "Player";
         private const float HintCooldown = 3f;
@@ -141,6 +141,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             TickThinIce(local, clock);
             TickCrossings(local, day);
             TickFishing(local, clock);
+            TickSeason(local, day);
         }
 
         private bool FindPlayer()
@@ -603,6 +604,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             _fishing = null;
             ShowFishLine(false, false);
             _iceLoad = 0f;
+            LeaveSeason();
         }
 
         private LineRenderer NewLine(string objectName, float width)

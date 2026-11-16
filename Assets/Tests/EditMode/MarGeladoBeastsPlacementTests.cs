@@ -14,8 +14,8 @@ namespace Rapadura.Tests
     /// (Docs/Mapas100.md 59–64), same idea as <see cref="FarnkeshBeastsPlacementTests"/>: each one is in the day table of
     /// every group its sheet gives it (leading the group or as its companion), its night form in the same group's night table
     /// where the beast leads it, the stand-in left those groups' day tables, and every case is checked on the clearings the
-    /// group really got (each group listed here draws at least one clearing in its area), at that area's levels. The leopard
-    /// seal is also the narwhals, the ice gull also the storm gulls and the giant pike also the ice fish of the canals.
+    /// group really got (each group listed here draws at least one clearing in its area), at that area's levels. The narwhals, the storm
+    /// gulls and the ice fish of the canals have their own beasts since the twenty-first pass (NorthOwnBeastsPlacementTests).
     /// </summary>
     public class MarGeladoBeastsPlacementTests
     {
@@ -57,11 +57,8 @@ namespace Rapadura.Tests
         {
             P(LeopardSeal, "baia_das_focas", "focas_leopardo", Leads, Otter),
             P(LeopardSeal, "baia_gelada", "focas_da_baia", Leads, Otter),
-            P(LeopardSeal, "banquisas", "narvais_apagados", Leads, Otter),
-            P(LeopardSeal, "ilha_do_farol", "narvais_do_farol", Leads, Otter),
             P(LeopardSeal, "baia_das_focas", "morsas_de_fumaca", Joins, Otter),
-            P(LeopardSeal, "banquisas", "lobos_do_mar", Joins, Otter),
-            P(LeopardSeal, "mar_das_auroras", "gaivotas_tempestade", Joins, Otter),
+            // The narwhals of the Mar das Auroras (63) are the Narval Apagado since the twenty-first pass (NorthOwnBeastsPlacementTests).
 
             P(Walrus, "baia_das_focas", "morsas_de_fumaca", Leads, Buffalo),
             P(Walrus, "baia_gelada", "morsas_da_baia", Leads, Buffalo),
@@ -70,15 +67,11 @@ namespace Rapadura.Tests
 
             P(IceGull, "porto_da_lua_branca", "gaivotas_do_gelo", Leads, ThiefGull),
             P(IceGull, "passo_da_muralha", "gaivotas_da_muralha", Leads, ThiefGull),
-            P(IceGull, "mar_das_auroras", "gaivotas_tempestade", Leads, Hawk),
-            P(IceGull, "ilha_do_farol", "gaivotas_do_farol", Leads, Hawk),
             P(IceGull, "porto_da_lua_branca", "raposas_do_artico", Joins, ThiefGull),
             P(IceGull, "baia_das_focas", "focas_leopardo", Joins, ThiefGull),
             P(IceGull, "baia_gelada", "morsas_da_baia", Joins, ThiefGull),
             P(IceGull, "passo_da_muralha", "raposas_da_muralha", Joins, ThiefGull),
-            P(IceGull, "mar_das_auroras", "gelos_das_auroras", Joins, Hawk),
-            P(IceGull, "ilha_do_farol", "narvais_do_farol", Joins, Hawk),
-            P(IceGull, "fiorde_negro", "irbis_do_fiorde_negro", Joins, Hawk),
+            // The storm gulls of the Mar das Auroras (63) are the Gaivota-Tempestade since the twenty-first pass (NorthOwnBeastsPlacementTests).
 
             P(ArcticFox, "porto_da_lua_branca", "raposas_do_artico", Leads, LanternFox),
             P(ArcticFox, "passo_da_muralha", "raposas_da_muralha", Leads, LanternFox),
@@ -119,12 +112,9 @@ namespace Rapadura.Tests
             P(SeaWolf, "banquisas_do_oeste", "gelos_flutuantes", Joins, Wolf),
             P(SeaWolf, "ilha_do_farol", "gaivotas_do_farol", Joins, Wolf),
 
-            P(Pike, "canais_de_gelo", "peixes_gelo", Leads, LanternFish),
+            // The ice fish of the canals (60) are the Peixe-Gelo since the twenty-first pass (NorthOwnBeastsPlacementTests); the pike keeps 64.
             P(Pike, "fundo_do_velho_kul", "lucios_gigantes", Leads, LanternFish),
             P(Pike, "buracos_de_pesca", "lucios_dos_buracos", Leads, LanternFish),
-            P(Pike, "canais_de_gelo", "enguias_lanterna", Joins, LanternFish),
-            P(Pike, "canais_do_oeste", "ursos_polares", Joins, LanternFish),
-            P(Pike, "canais_do_oeste", "peixes_gelo_do_oeste", Joins, LanternFish),
             P(Pike, "fundo_do_velho_kul", "kuls_pequenos", Joins, LanternFish),
             P(Pike, "buracos_de_pesca", "peixes_bruxa", Joins, LanternFish),
 

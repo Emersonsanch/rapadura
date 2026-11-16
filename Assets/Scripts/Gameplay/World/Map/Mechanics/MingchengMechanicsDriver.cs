@@ -145,6 +145,12 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
 
             // 42 · the mirror clock of the Torres Brancas (MingchengMechanicsDriver.Mirrors.cs).
             TickMirrorClock(local, clock);
+
+            // 45 · the red lanterns and the drum of Nian's ring (MingchengMechanicsDriver.Nian.cs).
+            TickNian(local);
+
+            // 42 · the shadow clock of the freed Little Eclipse (MingchengMechanicsDriver.ShadowClock.cs).
+            TickShadowClock(local, clock);
         }
 
         private bool FindPlayer()
@@ -181,6 +187,8 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             ShowRibbon(false, 0);
             HideMirror();
             LeaveMirrorClock();
+            LeaveNian();
+            HideShadowClock();
             _hintTower = -1;
             _hintPool = -1;
         }

@@ -116,8 +116,7 @@ namespace Rapadura.Tests
             checks.EachBeast_SpawnsInItsGroupsClearings_AtTheAreasLevels(placement);
 
         // The Ushabti de Bronze Kushita of Meroë (27) has its own body now (CoastOwnBeastsPlacementTests).
-        [TestCase(Ming, "espantalhos_apagados", BrokenLantern)]
-        [TestCase(Nart, "lobos_cinzentos", Wolf)]
+        // The Espantalho Apagado (44) and the Lobo-Cinzento (51) have their own bodies since the twenty-fourth pass (WestOwnBeastsPlacementTests).
         [TestCase(Nart, "neblinas_do_rio", Mist)]
         public void TheSheetsThatSharedTheConstant_KeepTheirStandIn(string region, string group, string standIn)
         {

@@ -30,6 +30,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         public const string MonsoonEnds = "ui.route_mech.monsoon_ends";
         public const string FordFlooded = "ui.route_mech.ford_flooded";
         public const string FordFloodedNoBoat = "ui.route_mech.ford_flooded_no_boat";
+        public const string FordBuffalo = "ui.route_mech.ford_buffalo";
         public const string MooringRow = "ui.route_mech.mooring_row";
         public const string MooringFerry = "ui.route_mech.mooring_ferry";
         public const string MooringShallow = "ui.route_mech.mooring_shallow";
@@ -100,6 +101,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
                 "A monção cobriu o vau: a correnteza empurra você de volta. Pegue um barco no cais da estrada"),
             new LocalizationEntry(FordFloodedNoBoat, "The monsoon covered this ford: take the boats of the road fords or the root bridge",
                 "A monção cobriu este vau: use os barcos dos vaus da estrada ou a ponte de raiz"),
+            new LocalizationEntry(FordBuffalo, "The buffalo leans into the current and wades the flooded ford", "O búfalo encara a correnteza e atravessa o vau alagado"),
             new LocalizationEntry(MooringRow, "[E] Row over to the other bank", "[E] Remar até a outra margem"),
             new LocalizationEntry(MooringFerry, "[E] Call Nuhzadag the ferryman (he comes over and rows slowly). Abiesous teaches rowing in Jhilpur",
                 "[E] Chamar o Nuhzadag, o barqueiro (ele vem e rema devagar). O Abiesous ensina a remar em Jhilpur"),

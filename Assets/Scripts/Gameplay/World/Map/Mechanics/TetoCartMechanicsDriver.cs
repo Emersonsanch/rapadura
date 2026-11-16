@@ -189,7 +189,8 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             }
 
             bool night = IsNight();
-            float runSeconds = TetoCartRules.RunSeconds(_courseLength, night);
+            bool freed = RunawayFreed();
+            float runSeconds = TetoCartRules.RunSeconds(_courseLength, night, freed);
             double now = NowExact();
             MapRequirementState state = _heroState.Get(_bag);
             MapModeController mode = MapModeController.Current;
@@ -202,6 +203,11 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
                 _hinting = true;
                 _nextHint = Time.unscaledTime + HintCooldown;
                 SayStation(check, now);
+                if (check == TetoCartCheck.Ride && freed)
+                {
+                    ServiceLocator.TryGet(out LocalizationManager localization);
+                    SayText(TetoCartTexts.Get(localization, TetoCartTexts.StationFreed), 1.4f);
+                }
             }
 
             if (check == TetoCartCheck.Ride)
@@ -216,7 +222,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
 
             if (check == TetoCartCheck.Ride)
             {
-                BeginRun(night);
+                BeginRun(night, freed);
             }
             else if (Time.unscaledTime >= _nextDenied)
             {
@@ -257,9 +263,13 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         // The run
         // ------------------------------------------------------------------
 
-        private void BeginRun(bool night)
+        /// <summary>Whether O Carrinho Desgovernado (the map boss) was freed: then it is the station's cart, the fastest of the chutes.</summary>
+        private static bool RunawayFreed() =>
+            ServiceLocator.TryGet(out DefeatedEnemyRegistry registry) && registry != null && registry.IsDefeated(TetoCartRules.RunawayCartEnemyId);
+
+        private void BeginRun(bool night, bool freed)
         {
-            if (!_ride.Begin(_player.gameObject, _layout, _courseWorld, TetoCartRules.Speed(night), 0f, TetoCartRules.Hover, TetoCartRules.DropSpeed))
+            if (!_ride.Begin(_player.gameObject, _layout, _courseWorld, TetoCartRules.Speed(night, freed), 0f, TetoCartRules.Hover, TetoCartRules.DropSpeed))
             {
                 return;
             }
@@ -270,7 +280,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             _knocked.Clear();
             Array.Clear(_caught, 0, _caught.Length);
             _hinting = false;
-            Say(TetoCartTexts.Started);
+            Say(freed ? TetoCartTexts.StartedFreed : TetoCartTexts.Started);
         }
 
         private void TickRun()

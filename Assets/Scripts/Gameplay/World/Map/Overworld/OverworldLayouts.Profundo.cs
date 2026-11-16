@@ -149,7 +149,9 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             public const string DimUshabti = "enemy_mountain_lacquer_ushabti";
             public const string CopyShadow = "enemy_forest_copy_shadow";
             public const string SmokeGiant = "enemy_forest_smoke_giant";
-            public const string ChokeSmoke = "enemy_forest_smoke_goat";
+            // The twenty-second pass (DeepOwnBeastRecipes, OverworldLayouts.DeepBeasts): the roles of the sheets that still borrowed
+            // another region's beast have their own now, with the stand-in's numbers.
+            public const string ChokeSmoke = "enemy_forest_choking_smoke";
             public const string SmokeArcher = "enemy_forest_smoke_archer";
             public const string EmberWolf = "enemy_forest_ember_wolf";
             public const string AshBull = "enemy_forest_ash_bull";
@@ -162,13 +164,13 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             public const string DarkFish = "enemy_forest_dark_fish";
             public const string GreatEel = "enemy_forest_great_eel";
             public const string MudOctopus = "enemy_forest_mud_octopus";
-            public const string DarkShoal = "enemy_cave_lantern_fish";
-            public const string BlindSerpent = "enemy_forest_dimmed_python";
+            public const string DarkShoal = "enemy_cave_dark_shoal";
+            public const string BlindSerpent = "enemy_forest_blind_serpent";
             public const string ShadowLizard = "enemy_forest_shadow_lizard";
             public const string Creeper = "enemy_forest_creeping_dark";
             public const string LesserDragon = "enemy_forest_lesser_shadow_dragon";
             public const string LesserArchon = "enemy_forest_lesser_archon";
-            public const string GiantUshabti = "enemy_mountain_stone_golem";
+            public const string GiantUshabti = "enemy_mountain_giant_dimmed_ushabti";
         }
 
         private static OverworldLayout ProfundoRegion()

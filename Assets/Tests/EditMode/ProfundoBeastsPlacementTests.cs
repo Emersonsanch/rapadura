@@ -153,15 +153,10 @@ namespace Rapadura.Tests
         [TestCase("ushabtis_da_muralha", LacquerUshabti)]
         [TestCase("ushabtis_das_cisternas", LacquerUshabti)]
         [TestCase("ushabtis_dos_varais", LacquerUshabti)]
-        [TestCase("fumacas_sufocantes", SmokeGoat)]
         [TestCase("redemoinhos", Mist)]
         [TestCase("redemoinhos_das_correntes", Mist)]
-        [TestCase("cardumes_escuros", LanternFish)]
-        [TestCase("serpentes_cegas", DimmedPython)]
         [TestCase("rastejantes", CreepingDark)]
         [TestCase("filhos_da_treva", CreepingDark)]
-        [TestCase("ushabtis_gigantes", Golem)]
-        [TestCase("ushabtis_do_portao", Golem)]
         public void TheOtherSheets_KeepTheirStandIn(string group, string standIn)
         {
             OverworldFauna fauna = Group(group);

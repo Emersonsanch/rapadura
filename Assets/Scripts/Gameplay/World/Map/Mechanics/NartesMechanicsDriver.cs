@@ -145,6 +145,9 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             TickChain(local, now, today);
             TickGolds(local, today);
 
+            // 48 · the old griffin's presents, one per cousin (NartesMechanicsDriver.Gifts.cs).
+            TickGifts(local);
+
             // 49, 50, 51 (NartesMechanicsDriver.Steppe.cs).
             TickSteppe(local, now, today);
         }
@@ -674,6 +677,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         {
             HideLines(_anchorBeacons);
             HideLines(_goldBeacons);
+            ShowGift(false);
             ShowStart(false);
             HideGate();
             ShowGust(WindGustPhase.Calm, Vector2.zero);

@@ -107,11 +107,17 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             public const string Mirror = "enemy_desert_broken_mirror";
             public const string PaperCrane = "enemy_mountain_paper_crane";
             public const string Carp = "enemy_desert_sand_snake";
-            public const string LanternFish = "enemy_cave_lantern_fish";
+            // The twenty-fourth pass (WestOwnBeastRecipes, OverworldLayouts.WestOwnBeasts): the Lanterna-Peixe (43, was the lantern fish) and the
+            // Pato-Mandarim Ladrão (44, was the gull) took every role of their stand-ins here; the Barqueiro de Fumaça (43) and the Raio Torto (42),
+            // both the ill-wind mist before, and the Espantalho Apagado (44, the broken lantern) only the roles of their sheets.
+            public const string LanternFish = "enemy_cave_fish_lantern";
+            public const string Boatman = "enemy_mountain_smoke_boatman";
+            public const string CrookedRay = "enemy_mountain_crooked_ray";
+            public const string Scarecrow = "enemy_desert_dimmed_scarecrow";
             public const string Smoke = "enemy_mountain_ill_wind_mist";
             public const string Turtle = "enemy_forest_stone_turtle";
             public const string Buffalo = "enemy_forest_mud_buffalo";
-            public const string Duck = "enemy_forest_thief_gull";
+            public const string Duck = "enemy_forest_mandarin_duck";
             public const string Locusts = "enemy_cave_smoke_locust";
             public const string Bats = PeriodSpawnTable.CaveBats;
             public const string Spider = "enemy_forest_spider";
@@ -408,20 +414,20 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             salgueiros.Fauna.Add(Fauna("patos_mandarins", "[rápido]", T(N(Ming.Duck, 3), N(Ming.Carp, 1)), T(V(Ming.Duck, 2), S(owl, 1)), 4));
             salgueiros.Fauna.Add(Fauna("bufalos_da_margem", "[tanque]", T(N(Ming.Buffalo, 3), N(Ming.Duck, 1)), T(S(herd, 2), V(Ming.Duck, 1)), 3, null, 28f));
 
-            // Eclusa da Lua and Canal das Lanternas (43): the Carpa-Dragão Apagada [rápido], the Barqueiro de Fumaça [elite] (the
-            // ill-wind mist), the Lanterna-Peixe [enxame] (the lantern fish), the Tartaruga de Pedra [tanque] (the coconut crab).
+            // Eclusa da Lua and Canal das Lanternas (43): the Carpa-Dragão Apagada [rápido], the Barqueiro de Fumaça [elite] (was the
+            // ill-wind mist), the Lanterna-Peixe [enxame] (was the lantern fish; both their own beasts now, WestOwnBeasts), the Tartaruga de Pedra [tanque] (the coconut crab).
             eclusa.Fauna.Add(Fauna("carpas_da_eclusa", "[rápido]", T(N(MidBeasts.DragonCarp, 3), N(Ming.LanternFish, 1)), T(V(MidBeasts.DragonCarp, 2), S(moon, 1)), 4));
             eclusa.Fauna.Add(Fauna("tartarugas_de_pedra", "[tanque]", T(N(Ming.Turtle, 3), N(Ming.Carp, 1)), T(V(Ming.Turtle, 2), V(Ming.Carp, 1)), 3, null, 30f));
             canal.Fauna.Add(Fauna("lanternas_peixe", "[enxame]", T(N(Ming.LanternFish, 3), N(Ming.Carp, 1)), T(V(Ming.LanternFish, 3), S(moon, 1)), 5));
-            canal.Fauna.Add(Fauna("barqueiros_de_fumaca", "[elite]", T(N(Ming.Smoke, 3), N(Ming.LanternFish, 1)), T(V(Ming.Smoke, 3), S(owl, 1)), 3, null, 32f));
-            canal.Fauna.Add(Fauna("tartarugas_do_canal", "[tanque]", T(N(Ming.Turtle, 3), N(Ming.Smoke, 1)), T(V(Ming.Turtle, 2), V(Ming.Smoke, 1)), 3, null, 30f));
+            canal.Fauna.Add(Fauna("barqueiros_de_fumaca", "[elite]", T(N(Ming.Boatman, 3), N(Ming.LanternFish, 1)), T(V(Ming.Boatman, 3), S(owl, 1)), 3, null, 32f));
+            canal.Fauna.Add(Fauna("tartarugas_do_canal", "[tanque]", T(N(Ming.Turtle, 3), N(Ming.Boatman, 1)), T(V(Ming.Turtle, 2), V(Ming.Boatman, 1)), 3, null, 30f));
 
             // Arrozais Espelhados and Moinho d'Água (44): the Búfalo de Lama [tanque] (the peccary), the Pato-Mandarim Ladrão
-            // [rápido] (the thief gull), the Gafanhoto de Fumaça [enxame] (its own beast now), the Espantalho Apagado [controle] (a broken lantern).
+            // [rápido] (was the thief gull), the Gafanhoto de Fumaça [enxame] (its own beast now), the Espantalho Apagado [controle] (was a broken lantern; both their own beasts now, WestOwnBeasts).
             arrozais.Fauna.Add(Fauna("bufalos_de_lama", "[tanque]", T(N(Ming.Buffalo, 3), N(Ming.Duck, 1)), T(S(herd, 2), V(Ming.Duck, 1)), 3, null, 28f));
             arrozais.Fauna.Add(Fauna("patos_ladroes", "[rápido]", T(N(Ming.Duck, 3), N(Ming.Locusts, 1)), T(V(Ming.Duck, 2), S(fireflies, 1)), 4));
             arrozais.Fauna.Add(Fauna("gafanhotos_de_fumaca", "[enxame]", T(N(Ming.Locusts, 3), N(Ming.Duck, 1)), T(V(Ming.Locusts, 2), S(fireflies, 2)), 5));
-            moinho.Fauna.Add(Fauna("espantalhos_apagados", "[controle]", T(N(Ming.Kite, 3), N(Ming.Buffalo, 1)), T(V(Ming.Kite, 2), S(owl, 1)), 4));
+            moinho.Fauna.Add(Fauna("espantalhos_apagados", "[controle]", T(N(Ming.Scarecrow, 3), N(Ming.Buffalo, 1)), T(V(Ming.Scarecrow, 2), S(owl, 1)), 4));
             moinho.Fauna.Add(Fauna("bufalos_do_moinho", "[tanque]", T(N(Ming.Buffalo, 3), N(Ming.Locusts, 1)), T(S(herd, 2), S(fireflies, 1)), 3, null, 28f));
 
             // Bambuzal do Oeste: spiders in the culms, thief macaques, the potoo.
@@ -441,13 +447,13 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             guerreiros.Fauna.Add(Fauna("cavalos_do_vale", "[rápido]", T(N(MidBeasts.TerracottaHorse, 3), N(Ming.Lion, 1)), T(V(MidBeasts.TerracottaHorse, 2), S(werewolf, 1)), 4));
 
             // Jardins em Terraço and Torres Brancas (42): the Espelho Quebrado [distância] (its own beast now), the Íbis de Luz
-            // Apagada [rápido] (its own beast now, HighlandBeasts; it throws like the hawk it replaced), the Guardião de Cal [tanque] (the golem), the Raio Torto [controle] (the ill-wind mist).
+            // Apagada [rápido] (its own beast now, HighlandBeasts; it throws like the hawk it replaced), the Guardião de Cal [tanque] (the golem), the Raio Torto [controle] (its own beast now, WestOwnBeasts).
             jardins.Fauna.Add(Fauna("ibis_de_luz", "[rápido]", T(N(Ming.LightIbis, 3), N(Ming.Mirror, 1)), T(V(Ming.LightIbis, 2), S(moon, 1)), 4));
             jardins.Fauna.Add(Fauna("espelhos_quebrados", "[distância]", T(N(Ming.Mirror, 3), N(Ming.LightIbis, 1)), T(V(Ming.Mirror, 2), S(owl, 1)), 4));
-            torres.Fauna.Add(Fauna("guardioes_de_cal", "[tanque]", T(N(Ming.Lion, 3), N(Ming.Smoke, 1)), T(V(Ming.Lion, 2), V(Ming.Smoke, 1)), 3, null, 30f));
-            torres.Fauna.Add(Fauna("raios_tortos", "[controle]", T(N(Ming.Smoke, 3), N(Ming.Mirror, 1)), T(V(Ming.Smoke, 2), S(owl, 1)), 4));
+            torres.Fauna.Add(Fauna("guardioes_de_cal", "[tanque]", T(N(Ming.Lion, 3), N(Ming.CrookedRay, 1)), T(V(Ming.Lion, 2), V(Ming.CrookedRay, 1)), 3, null, 30f));
+            torres.Fauna.Add(Fauna("raios_tortos", "[controle]", T(N(Ming.CrookedRay, 3), N(Ming.Mirror, 1)), T(V(Ming.CrookedRay, 2), S(owl, 1)), 4));
             torres.Fauna.Add(Fauna("espelhos_das_torres", "[distância]", T(N(Ming.Mirror, 3), N(Ming.Lion, 1)), T(V(Ming.Mirror, 2), S(bats, 1)), 4));
-            espelhos.Fauna.Add(Fauna("espelhos_do_atalho", "[distância]", T(N(Ming.Mirror, 3), N(Ming.Smoke, 1)), T(V(Ming.Mirror, 2), S(owl, 1)), 4));
+            espelhos.Fauna.Add(Fauna("espelhos_do_atalho", "[distância]", T(N(Ming.Mirror, 3), N(Ming.CrookedRay, 1)), T(V(Ming.Mirror, 2), S(owl, 1)), 4));
             espelhos.Fauna.Add(Fauna("guardioes_das_colinas", "[tanque]", T(N(Ming.Lion, 3), N(Ming.LightIbis, 1)), T(V(Ming.Lion, 2), S(bats, 1)), 3, null, 30f));
 
             // Ravinas de Loess: scorpions in the yellow earth, vultures, sand snakes.

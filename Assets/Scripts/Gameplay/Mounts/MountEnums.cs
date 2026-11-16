@@ -91,6 +91,14 @@ namespace Rapadura.Gameplay.Mounts
         LanternOlm = 38,
         ArattaAurochs = 39,
         WhiteBactrian = 40,
+
+        // The boss mounts and the last map-sheet ones of the Regions 1 and 6 (MountBossCatalog, MountBossRecipes). Appended only.
+        LaurelLizard = 41,
+        JhilpurBuffalo = 42,
+        PamirArgali = 43,
+        FreedSmokeHorse = 44,
+        TameNinkiNanka = 45,
+        LivingEmberBoar = 46,
     }
 
     /// <summary>The effect family of a mount ability (§12.2). M1 implements Dash, LootMagnet and Fear; M3 wave 1 the walkers' kinds (MountWaveAbilities).</summary>
@@ -149,6 +157,14 @@ namespace Rapadura.Gameplay.Mounts
         GlowSpit,
         AurochsStomp,
         StormHide,
+
+        // The boss mounts and the last map-sheet ones of the Regions 1 and 6 (MountBossAbilities). Appended only: assets store the int.
+        TailDecoy,
+        MudWallow,
+        LedgeWatch,
+        SmokeCloud,
+        ShyDive,
+        EmberForge,
     }
 
     /// <summary>Where the hero is, as far as riding goes (§2.1, §2.5).</summary>

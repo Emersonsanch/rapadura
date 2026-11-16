@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Rapadura.Runtime::Rapadura.Gameplay.Items.ItemDefinition
   _itemId: item_garrafa_ar_sereno
   _displayName: "Garrafa de Ar Sereno"
-  _description: "Garrafa de vidro verde com o ar quieto e estrelado que desce das frestas, engarrafado pelos kobolds. Aberta, devolve o fôlego: +20% de recuperação de vigor por 60 segundos, para o ar parado longe dos tubos."
+  _description: "Garrafa de vidro verde com o ar quieto e estrelado que desce das frestas, engarrafado pelos kobolds. Aberta, devolve o fôlego: +20% de recuperação de vigor por 60 segundos, para o ar parado longe dos tubos, e o ar limpo tira toda lentidão."
   _icon: {fileID: 21300000, guid: 6644d2351460348a4d7cf71fafc77b46, type: 3}
   _worldModelPrefab: {fileID: 0}
   _type: 1

@@ -116,7 +116,7 @@ namespace Rapadura.Gameplay.Quests
                 Reward("item_runa_vento", 3), Reward("item_gold", 220)),
 
             // -- Região 11, Mar Gelado --
-            Step(11, CityCatalog.PortoDaLuaBranca, "yirkap", "canais_de_gelo", "map_060_canais_gelo", 184, IceCanals, PeaksBells, 3200, "enemy_mountain_giant_pike", 6,
+            Step(11, CityCatalog.PortoDaLuaBranca, "yirkap", "canais_de_gelo", "map_060_canais_gelo", 184, IceCanals, PeaksBells, 3200, "enemy_mountain_ice_fish", 6,
                 Reward("item_health_potion", 5), Reward("item_mana_potion", 5), Reward("item_gold", 230)),
             Step(11, CityCatalog.PortoDaLuaBranca, "pera", "galerias_dos_mamutes", "map_062_galerias_mamutes", 200, IceGalleries, IceCanals, 3300, "enemy_mountain_burrow_mammoth", 4,
                 Reward("item_roupa_termica", 1), Reward("item_gold", 230)),

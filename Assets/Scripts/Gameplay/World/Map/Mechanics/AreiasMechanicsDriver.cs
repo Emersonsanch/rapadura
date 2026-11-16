@@ -68,6 +68,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         {
             Hide();
             LeaveSouth();
+            StopDrum();
         }
 
         private void OnDestroy()

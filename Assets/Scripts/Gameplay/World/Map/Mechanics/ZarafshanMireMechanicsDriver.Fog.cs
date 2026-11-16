@@ -15,7 +15,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
     /// The fog of the Copas de Garajonay (05, <see cref="GarajonayFogRules"/>), on the same driver as the mud and the webs: in the fog, on the
     /// forest floor, the beasts past 8 m are lost to sight through a <see cref="BeastSightHider"/> (every one shows again when the fog lifts,
     /// the hero climbs above it, leaves the map or the driver stops); pale streaks of mist circle the hero. A fog crossed earns a drop that the
-    /// Coletor de Névoa hands over as an herb the next time the hero stands in the city; the counts stay in the save (time marks).
+    /// Coletor de Névoa hands over as a Gota de Névoa the next time the hero stands in the city; the counts stay in the save (time marks).
     /// </summary>
     public sealed partial class ZarafshanMireMechanicsDriver
     {
@@ -120,7 +120,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             Say(RouteSightAirColdTexts.FogCrossed, RouteSightAirColdTexts.Get);
         }
 
-        /// <summary>In the city the Coletor de Névoa hands over the waiting drops as herbs of the laurel forest.</summary>
+        /// <summary>In the city the Coletor de Névoa hands over the waiting drops (Gotas de Névoa).</summary>
         private void TickCollector()
         {
             if (Time.unscaledTime < _nextFogPay || !ServiceLocator.TryGet(out WorldMapProgress progress))
@@ -136,7 +136,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             }
 
             _fogBag ??= _player.GetComponentInChildren<InventoryManager>();
-            ItemDefinition herb = ItemDatabase.GetById(MealCatalog.Herb);
+            ItemDefinition herb = ItemDatabase.GetById(GarajonayFogRules.DropItemId);
             if (_fogBag == null || herb == null)
             {
                 return;

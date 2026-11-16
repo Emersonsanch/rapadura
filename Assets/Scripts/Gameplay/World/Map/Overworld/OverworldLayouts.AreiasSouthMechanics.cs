@@ -15,6 +15,9 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         /// <summary>The Galerias do Karez (09): its zone.</summary>
         public static readonly Rect KarezGalleriesBounds = Rect.MinMaxRect(-400f, -1300f, 400f, -900f);
 
+        /// <summary>The Ermos do Tambor Rubro (11): its zone, where the drums of the city are heard (<c>DrumRhythmRules</c>).</summary>
+        public static readonly Rect TamborRubroBadlandsBounds = Rect.MinMaxRect(-1200f, -1900f, -400f, -1300f);
+
         /// <summary>The Dunas que Cantam (10): its zone.</summary>
         public static readonly Rect SingingDunesBounds = Rect.MinMaxRect(-400f, -1900f, 400f, -1300f);
 

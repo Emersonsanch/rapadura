@@ -289,7 +289,7 @@ namespace Rapadura.Gameplay.Enemies
                 return;
             }
 
-            _attackCooldownRemaining = Mathf.Max(0f, _attackCooldownRemaining - deltaTime);
+            _attackCooldownRemaining = Mathf.Max(0f, _attackCooldownRemaining - deltaTime * AttackRecoveryRate(_buffController != null ? _buffController.GetAdditiveFractionTotal(StatType.AttackSpeed) : 0f));
 
             if (IsHoldingAggro)
             {
@@ -654,6 +654,12 @@ namespace Rapadura.Gameplay.Enemies
         /// after its swing (2.4-3.3 s cooldown, 0.3-0.5 s stun) made it hit back sooner (Docs/Balance/README.md §10).
         /// </summary>
         public float AttackCooldownRemaining => _attackCooldownRemaining;
+
+        /// <summary>
+        /// How fast the swing cooldown runs down with <paramref name="attackSpeedBonus"/> (Σ AttackSpeed on this enemy, a fraction like the hero's,
+        /// clamped to −0.5…+1): the time bubbles of the Deserto do Relógio (map 78) make a beast swing 30% faster or slower. 1 with no bonus.
+        /// </summary>
+        public static float AttackRecoveryRate(float attackSpeedBonus) => 1f + Mathf.Clamp(attackSpeedBonus, -0.5f, 1f);
 
         /// <summary>Called by <see cref="EnemyAttackState"/> when a telegraphed windup starts; damage lands <paramref name="duration"/> s later.</summary>
         public void NotifyAttackWindup(float duration)

@@ -1,5 +1,7 @@
 using Rapadura.Core.DI;
+using Rapadura.Core.Localization;
 using Rapadura.Gameplay.Cooking;
+using Rapadura.Gameplay.Enemies;
 using Rapadura.Gameplay.Environment;
 using Rapadura.Gameplay.Skills;
 using Rapadura.Gameplay.World.Map.Overworld;
@@ -27,6 +29,8 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         private GlacierColdBand _coldBand;
         private bool _coldApplied;
         private float _nextColdRefresh;
+        private bool _almasAsked;
+        private bool _almasGuides;
 
         private void TickCold(Vector2 local)
         {
@@ -35,6 +39,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             {
                 HideFires();
                 SetColdSlow(false);
+                _almasAsked = false;
                 return;
             }
 
@@ -43,7 +48,8 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
                 || OverworldRules.SettlementAt(_layout, _tetoOrigin + local) != null;
             bool night = ServiceLocator.TryGet(out TimeOfDayManager time) && time != null && time.DaylightFactor < 0.5f;
             float before = _cold;
-            _cold = GlacierColdRules.Step(_cold, onGlacier, atShelter, night, TeaActive(), Time.deltaTime);
+            bool guided = AlmasGuides(onGlacier);
+            _cold = GlacierColdRules.Step(_cold, onGlacier, atShelter, night, TeaActive(), guided, Time.deltaTime);
 
             GlacierColdBand band = GlacierColdRules.BandOf(_cold);
             if (band > _coldBand)
@@ -58,6 +64,39 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             _coldBand = band;
             SetColdSlow(band == GlacierColdBand.Frozen && alive);
             ShowFires(local, onGlacier);
+        }
+
+        /// <summary>
+        /// Whether the freed Great Almas guides the hero (38): asked once per walk onto the glacier, when the guide is announced; the cousin's
+        /// line the first time is kept in the save (one mark, on that event).
+        /// </summary>
+        private bool AlmasGuides(bool onGlacier)
+        {
+            if (!onGlacier)
+            {
+                _almasAsked = false;
+                return _almasGuides;
+            }
+
+            if (_almasAsked)
+            {
+                return _almasGuides;
+            }
+
+            _almasAsked = true;
+            _almasGuides = ServiceLocator.TryGet(out DefeatedEnemyRegistry registry) && registry != null && registry.IsDefeated(GlacierColdRules.GreatAlmasEnemyId);
+            if (_almasGuides)
+            {
+                ServiceLocator.TryGet(out LocalizationManager localization);
+                SayText(GlacierGuideTexts.Get(localization, GlacierGuideTexts.Guides));
+                if (ServiceLocator.TryGet(out WorldMapProgress progress) && progress.GetTimeMark(GlacierGuideTexts.FirstGuideKey) <= 0L)
+                {
+                    progress.SetTimeMark(GlacierGuideTexts.FirstGuideKey, 1L);
+                    SayText(GlacierGuideTexts.Get(localization, GlacierGuideTexts.LineFor(MapRequirementHeroState.Capture(null).Hero)));
+                }
+            }
+
+            return _almasGuides;
         }
 
         private bool TeaActive()

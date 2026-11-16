@@ -1,5 +1,6 @@
 using System;
 using Rapadura.Core.DI;
+using Rapadura.Gameplay.Mounts;
 using Rapadura.Gameplay.Player;
 using Rapadura.Gameplay.World.Map.Overworld;
 using UnityEngine;
@@ -115,6 +116,13 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
                     continue;
                 }
 
+                // The Búfalo-d'Água de Jhilpur (31) leans into the current and wades the flooded ford (MountBossRules.BuffaloWadesFlood).
+                if (BuffaloWades())
+                {
+                    SayOnce(RouteMechanicsTexts.FordBuffalo);
+                    continue;
+                }
+
                 // Unknown side (a respawn or a portal into the water): back to the nearer bank.
                 int side = _fordSide[i] != 0 ? _fordSide[i] : JhilpurMonsoonRules.SideOf(ford, local);
                 if (_character != null && _character.enabled)
@@ -124,6 +132,14 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
 
                 SayOnce(ford.HasMoorings ? RouteMechanicsTexts.FordFlooded : RouteMechanicsTexts.FordFloodedNoBoat);
             }
+        }
+
+        /// <summary>Whether the hero rides the Búfalo-d'Água de Jhilpur, whom the monsoon's current does not move.</summary>
+        private static bool BuffaloWades()
+        {
+            MountController mount = MountController.Active;
+            bool mounted = mount != null && mount.IsMounted && mount.ActiveMount != null;
+            return MountBossRules.BuffaloWadesFlood(mounted, mounted ? mount.ActiveMount.mountId : null);
         }
 
         private bool TickMoorings(Vector2 local, DeltaFord[] fords, bool monsoon, int day)

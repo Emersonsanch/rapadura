@@ -273,9 +273,9 @@ Cada item colocado soma os pontos de **Conforto** do catálogo (Comum 1–2, Inc
 
 ### 6.2 Conjuntos **[proposto]**
 
-São 41 conjuntos no catálogo, cada um com um tema (Iwan da Vó Edna, Caravana do Vô Jorge, Oficina do Ícaro, Noite Rubra da Lavine, Bema…). A lista e a contagem de peças estão no fim do `CatalogoCasa.md`.
+São 51 conjuntos no catálogo, cada um com um tema (Iwan da Vó Edna, Caravana do Vô Jorge, Oficina do Ícaro, Noite Rubra da Lavine, Bema…). A lista e a contagem de peças estão no fim do `CatalogoCasa.md`.
 
-Vinte deles são **conjuntos de móveis regionais**, de 8 peças (1 Comum, 3 Incomuns, 3 Raras, 1 Épica), vendidos só na loja da capital da região a preço de catálogo, com a Épica como especial da semana (`houseSlots: 3, weeklySlots: 1`). O nome começa com "Móveis" para não confundir com o conjunto de equipamento da mesma região (`Docs/Items.md`):
+Trinta deles são **conjuntos de móveis regionais**, de 8 peças (1 Comum, 3 Incomuns, 3 Raras, 1 Épica), vendidos só na loja da capital da região a preço de catálogo, com a Épica como especial da semana (`houseSlots: 3, weeklySlots: 1`). O nome começa com "Móveis" para não confundir com o conjunto de equipamento da mesma região (`Docs/Items.md`):
 
 | Região | Conjunto | Loja (cidade) | Preço | Épica |
 |---|---|---|---|---|
@@ -299,11 +299,31 @@ Vinte deles são **conjuntos de móveis regionais**, de 8 peças (1 Comum, 3 Inc
 | 14 Margens da Mistura (2º) | Móveis do Relógio de Sol | Betume do Atrahasis (Dur-Jarras) | 32–545 | Gnômon de pedra do Deserto do Relógio |
 | 15 Limiar Profundo (2º) | Móveis do Novelo | Pavios da Tehat (Fortaleza da Última Lâmpada) | 32–610 | Globo do Novelo em redoma |
 | 16 Reinos do Céu (2º) | Móveis da Barca da Lua | A Última Caravana do Ammo (Cais da Coluna) | 32–690 | Barca da Lua em miniatura |
+| 5 Costa das Monções (2º) | Móveis do Jardim de Coral | Ferramentas de Mergulho do Danel (Kirta) | 24–380 | Recife de coral aceso em miniatura |
+| 6 Delta de Jhilpur (2º) | Móveis da Palafita | Cestaria da Larthia (Palafitas de Tarchon) | 23–385 | Cesto gigante dos trols |
+| 8 Planície de Mingcheng (2º) | Móveis do Arrozal | Lanternas do Mestre Mōzak (Mingcheng) | 25–405 | Roda-d'água do Moinho d'Água |
+| 8 Planície de Mingcheng (3º) | Móveis da Torre Branca | Espelhos de Natakamani (Torres Brancas) | 25–410 | Astrolábio de bronze de Arkamani |
+| 9 Estepe dos Nartes (2º) | Móveis do Ouro da Estepe | Selaria Nômade (Acampamento de Soslan) | 26–420 | Cervo de ouro deitado dos kurgans |
+| 10 Picos de Farnkesh (2º) | Móveis da Flauta Dupla | Flauta Dupla (Vale dos Sátiros) | 27–450 | Caramanchão de parreira dos sátiros |
+| 10 Picos de Farnkesh (3º) | Móveis do Ninho de Ouro | Cordas do Sisin (Farnkesh) | 28–470 | Pergolado de galhos dourados da huma |
+| 12 Arquipélago de Hinokura (2º) | Móveis do Jardim de Pedra | Ferro Preto do Kurogane (Hinokura) | 29–480 | Laguinho de lava domada com ponte vermelha |
+| 12 Arquipélago de Hinokura (3º) | Móveis do Vidro de Brasa | Ferro Preto do Kurogane (Hinokura) | 30–500 | Chafariz de vidro de brasa com vapor |
+| 12 Arquipélago de Hinokura (4º) | Móveis da Fornalha | Ferro Preto do Kurogane (Hinokura) | 30–520 | Bigorna de ferro celeste de enfeite |
 
-Os das Regiões 5–9 custam no máximo o que a peça de mesma raridade custa nos distantes (Comum 22–24, Incomum 55–65, Raro 135–165, Épico 360–420) e dão o mesmo conforto (2/3/5/8). Os das Regiões 1–4 custam menos que os do meio (Comum 16–20, Incomum 40–50, Raro 100–125, Épico 300–340), com o mesmo conforto, e são vendidos numa loja que já existia na vila-sede, ao lado dos móveis que ela já vendia (só a Selaria do Vandak não tinha móveis): a Costureira ganhou a vaga de especial da semana, a Forja do Mihr e as Lamparinas da Parthenos passaram de 2 para 3 vagas de casa e ganharam a especial, a Selaria ganhou 3 vagas e a especial. Os das Regiões 10 e 12 custam mais que os do meio e no máximo o que a peça mais cara de mesma raridade custa nos distantes (Comum 26–29, Incomum 66–80, Raro 168–195, Épico 425–450), com o mesmo conforto; são os únicos móveis das Cordas do Sisin e do Ferro Preto do Kurogane, que ganharam 3 vagas de casa e a especial da semana. As Regiões 13–16 têm um segundo conjunto cada, o "conjunto novo" de uma ficha (72, 78, 89, 93), vendido no mesmo balcão do primeiro (a
+Os das Regiões 5–9 custam no máximo o que a peça de mesma raridade custa nos distantes (Comum 22–24, Incomum 55–65, Raro 135–165, Épico 360–420) e dão o mesmo conforto (2/3/5/8). Os das Regiões 1–4 custam menos que os do meio (Comum 16–20, Incomum 40–50, Raro 100–125, Épico 300–340), com o mesmo conforto, e são vendidos numa loja que já existia na vila-sede, ao lado dos móveis que ela já vendia (só a Selaria do Vandak não tinha móveis): a Costureira ganhou a vaga de especial da semana, a Forja do Mihr e as Lamparinas da Parthenos passaram de 2 para 3 vagas de casa e ganharam a especial, a Selaria ganhou 3 vagas e a especial. Os das Regiões 10 e 12 custam mais que os do meio e no máximo o que a peça mais cara de mesma raridade custa nos distantes (Comum 26–29, Incomum 66–80, Raro 168–195, Épico 425–450), com o mesmo conforto; foram os primeiros móveis das Cordas do Sisin e do Ferro Preto do Kurogane, que ganharam 3 vagas de casa e a especial da semana. As Regiões 13–16 têm um segundo conjunto cada, o "conjunto novo" de uma ficha (72, 78, 89, 93), vendido no mesmo balcão do primeiro (a
 cidade só tem uma loja): mesmas faixas de preço e de conforto dos distantes (Comum 32, Incomum 72–92, Raro 190–250, Épico 490–690),
 a Épica um pouco acima da Épica do primeiro da região. Testes: `HouseEarlyRegionSetsTests`, `HouseMiddleRegionSetsTests`, `HouseHighRegionSetsTests` e
-`HouseFarRegionSetsTests` (que cobre os nove das Regiões 11 e 13–16).
+`HouseFarRegionSetsTests` (que cobre os nove das Regiões 11 e 13–16). Seis fichas das Regiões 5–10 ganharam o seu "conjunto novo" (28, 33, 44, 42, 48, 53), vendido na cidade de retorno do mapa:
+Kirta, Tarchon, Torres Brancas e o Vale dos Sátiros não vendiam móveis e ganharam 3 vagas de casa e a especial da semana; o
+Arrozal (Mingcheng) e o Ouro da Estepe (Soslan) ficam no mesmo balcão do primeiro conjunto da região. Os das Regiões 5–9 seguem a
+faixa do meio (Comum 23–26, Incomum 58–65, Raro 145–165, Épico 380–420), o da 10 a das Regiões 10 e 12 (Comum 27, Incomum 70–74,
+Raro 175–185, Épico 450), com o mesmo conforto (2/3/5/8); sem efeito de ambiente nem mimo, só os bônus de 3, 6 e todas as peças.
+Mais quatro fichas das Regiões 10 e 12 (58, 66, 68, 69) ganharam o seu conjunto, na mesma faixa (Comum 28–30, Incomum 74–88,
+Raro 185–225, Épico 470–520; os da 12 um degrau acima do Palácio de Laca, subindo com o nível do mapa) e com o mesmo conforto: o
+Ninho de Ouro (58) fica nas Cordas do Sisin, ao lado do Ninho de Pedra, como o Arrozal em Mingcheng; o Jardim de Pedra (66), o
+Vidro de Brasa (68) e a Fornalha (69) ficam no Ferro Preto do Kurogane, porque Hinokura é a única cidade da Região 12 (não há
+cidade de raça para espalhar); com quatro conjuntos no balcão, o Kurogane passou a 6 vagas de casa e 2 especiais da semana.
+Teste: `HouseFichaSetsTests`.
 
 | Peças do mesmo conjunto colocadas | Bônus |
 |---|---|

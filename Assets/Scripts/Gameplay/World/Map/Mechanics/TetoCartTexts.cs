@@ -21,6 +21,8 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         public const string Paid = "ui.teto_cart.paid";
         public const string BagFull = "ui.teto_cart.bag_full";
         public const string Broken = "ui.teto_cart.broken";
+        public const string StationFreed = "ui.teto_cart.station_freed";
+        public const string StartedFreed = "ui.teto_cart.started_freed";
 
         private static List<LocalizationEntry> _entries;
         private static Dictionary<string, string> _fallback;
@@ -42,6 +44,9 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             new LocalizationEntry(Paid, "The Artificers pay {0} nuggets for today's sparks", "Os Artífices pagam {0} pepitas pelas faíscas de hoje"),
             new LocalizationEntry(BagFull, "Your bag is full: the nuggets wait for your next descent today", "Mochila cheia: as pepitas esperam a próxima descida de hoje"),
             new LocalizationEntry(Broken, "You jump off the cart", "Você salta do carrinho"),
+            new LocalizationEntry(StationFreed, "The freed Runaway Cart waits at the station, tame now: the fastest of the chutes",
+                "O Carrinho Desgovernado, manso agora, espera na estação: o mais rápido das calhas"),
+            new LocalizationEntry(StartedFreed, "The Runaway Cart takes the chute like it was born there!", "O Carrinho Desgovernado pega a calha como quem nasceu nela!"),
         };
 
         public static string Get(LocalizationManager manager, string key)

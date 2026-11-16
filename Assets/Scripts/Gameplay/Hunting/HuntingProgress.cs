@@ -341,6 +341,22 @@ namespace Rapadura.Gameplay.Hunting
             EventBus.Publish(new HuntingTaskCompletedEvent(task));
         }
 
+        /// <summary>
+        /// Extra Pontos de Caça for a task just completed (the Ritmo do Tambor of the Tambor Rubro, 11: +1 while the drums play); earned and
+        /// spendable, like the task's own. Ignores 0 or less.
+        /// </summary>
+        public void AddBonusHuntPoints(int points)
+        {
+            if (points <= 0)
+            {
+                return;
+            }
+
+            _state.huntPointsEarned += points;
+            _state.huntPointsAvailable += points;
+            Changed();
+        }
+
         /// <summary>Hands queued task rewards to a live hero: XP to <paramref name="stats"/>, gold that fits (grid) into <paramref name="inventory"/>.</summary>
         public void DeliverPending(PlayerStats stats, InventoryManager inventory)
         {

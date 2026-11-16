@@ -184,21 +184,27 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             public const string Walrus = "enemy_mountain_smoke_walrus";
             public const string Gull = "enemy_mountain_ice_gull";
             public const string Fox = "enemy_mountain_arctic_fox";
-            public const string IceFish = "enemy_mountain_giant_pike";
+            // The twenty-first pass (NorthOwnBeastRecipes, OverworldLayouts.NorthBeasts): the Peixe-Gelo and the Enguia-Lanterna (60, were the
+            // giant pike and the sand snake), the Mosquito da Tundra (61, the firefly swarm), the Narval Apagado and the Gaivota-Tempestade
+            // (63, the leopard seal and the ice gull) and the Peixe-Bruxa (64, the ooze) are their own beasts now; the pike keeps 64.
+            public const string IceFish = "enemy_mountain_ice_fish";
+            public const string Pike = "enemy_mountain_giant_pike";
+            public const string Narwhal = "enemy_mountain_dimmed_narwhal";
+            public const string WitchFish = "enemy_cave_witch_fish";
             public const string Bear = "enemy_mountain_polar_bear";
-            public const string Eel = "enemy_desert_sand_snake";
+            public const string Eel = "enemy_desert_lantern_eel";
             public const string Ooze = "enemy_cave_ooze";
             public const string TwigBird = "enemy_mountain_twig_bird";
             public const string Hare = "enemy_mountain_stone_hare";
             public const string Reindeer = "enemy_mountain_clay_reindeer";
-            public const string Mosquito = NightVariantRules.FireflySwarmEnemyId;
+            public const string Mosquito = "enemy_desert_tundra_mosquito";
             public const string Kul = FarBeasts.LittleKul;
             public const string Mammoth = "enemy_mountain_burrow_mammoth";
             public const string Mole = "enemy_mountain_ice_mole";
             public const string Crystal = "enemy_desert_broken_lantern";
             public const string SeaWolf = "enemy_mountain_sea_wolf";
             public const string Floe = FarBeasts.DriftingFloe;
-            public const string StormGull = "enemy_mountain_ice_gull";
+            public const string StormGull = "enemy_mountain_storm_gull";
             public const string ShadowSeal = "enemy_mountain_shadow_seal";
             public const string Irbis = "enemy_mountain_irbis";
         }
@@ -448,8 +454,8 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             pastos.Fauna.Add(Fauna("lobos_dos_pastos", "[enxame]", T(N(Gelo.SeaWolf, 3), N(Gelo.Fox, 1)), T(V(Gelo.SeaWolf, 2), S(werewolf, 1)), 5));
             pastos.Fauna.Add(Fauna("renas_dos_pastos", "[tanque]", T(N(Gelo.Reindeer, 3), N(Gelo.Fox, 1)), T(V(Gelo.Reindeer, 2), S(owl, 1)), 3, null, 28f));
 
-            // Canais de Gelo, Canais do Oeste, Gelo Rachado (60): the Peixe-Gelo [enxame] (the giant pike), the Urso-Polar Apagado
-            // [tanque], the Enguia-Lanterna [distância] (the sand snake), the Rachadura [controle] (the ooze); the eels
+            // Canais de Gelo, Canais do Oeste, Gelo Rachado (60): the Peixe-Gelo [enxame], the Urso-Polar Apagado
+            // [tanque], the Enguia-Lanterna [distância] (both their own beasts now, NorthBeasts), the Rachadura [controle] (the ooze); the eels
             // light up at night.
             canais.Fauna.Add(Fauna("peixes_gelo", "[enxame]", T(N(Gelo.IceFish, 3), N(Gelo.Eel, 1)), T(V(Gelo.IceFish, 2), S(moon, 1)), 5));
             canais.Fauna.Add(Fauna("enguias_lanterna", "[distância]", T(N(Gelo.Eel, 3), N(Gelo.IceFish, 1)), T(V(Gelo.Eel, 3), S(moon, 1)), 3));
@@ -460,7 +466,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
 
             // Tundra de Omöl, Tundra do Sul, Lagos de Omöl (61): Omöl's clumsy creatures — the twig bird [distância], the
             // stone hare [rápido], the clay reindeer [tanque] — and the tundra mosquito [enxame]
-            // (the firefly swarm); at night they sleep standing: thinner groups, the owl and the moon-mother.
+            // (its own beast now, NorthBeasts); at night they sleep standing: thinner groups, the owl and the moon-mother.
             omol.Fauna.Add(Fauna("aves_graveto", "[distância]", T(N(Gelo.TwigBird, 3), N(Gelo.Hare, 1)), T(V(Gelo.TwigBird, 1), S(moon, 1)), 3));
             omol.Fauna.Add(Fauna("lebres_pedra", "[rápido]", T(N(Gelo.Hare, 3), N(Gelo.Reindeer, 1)), T(V(Gelo.Hare, 1), S(owl, 1)), 4));
             tundraSul.Fauna.Add(Fauna("renas_de_barro", "[tanque]", T(N(Gelo.Reindeer, 3), N(Gelo.Hare, 1)), T(V(Gelo.Reindeer, 1), S(owl, 1)), 3, null, 28f));
@@ -478,31 +484,31 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             presas.Fauna.Add(Fauna("irbis_das_presas", "[rápido]", T(N(Gelo.Irbis, 3), N(Gelo.Mole, 1)), T(V(Gelo.Irbis, 2), S(werewolf, 1)), 4));
             presas.Fauna.Add(Fauna("mamutes_do_fiorde", "[elite]", T(N(Gelo.Mammoth, 3), N(Gelo.Crystal, 1)), T(V(Gelo.Mammoth, 2), S(bats, 1)), 3, null, 32f));
 
-            // Banquisas, Mar das Auroras, Ilha do Farol, Fiorde Negro (63): the Narval Apagado [rápido] (the leopard seal), the
+            // Banquisas, Mar das Auroras, Ilha do Farol, Fiorde Negro (63): the Narval Apagado [rápido], the
             // Lobo-do-Mar [enxame], the Gelo Flutuante [controle] (its own beast now, FarBeasts), the Gaivota-Tempestade [distância]
-            // (the ice gull); the aurora's sparks and the sea werewolves at night.
-            banquisas.Fauna.Add(Fauna("lobos_do_mar", "[enxame]", T(N(Gelo.SeaWolf, 3), N(Gelo.Seal, 1)), T(V(Gelo.SeaWolf, 2), S(werewolf, 1)), 5));
-            banquisas.Fauna.Add(Fauna("narvais_apagados", "[rápido]", T(N(Gelo.Seal, 3), N(Gelo.Floe, 1)), T(V(Gelo.Seal, 2), S(sparks, 1)), 4));
+            // (the narwhal and the gull are their own beasts now, NorthBeasts); the aurora's sparks and the sea werewolves at night.
+            banquisas.Fauna.Add(Fauna("lobos_do_mar", "[enxame]", T(N(Gelo.SeaWolf, 3), N(Gelo.Narwhal, 1)), T(V(Gelo.SeaWolf, 2), S(werewolf, 1)), 5));
+            banquisas.Fauna.Add(Fauna("narvais_apagados", "[rápido]", T(N(Gelo.Narwhal, 3), N(Gelo.Floe, 1)), T(V(Gelo.Narwhal, 2), S(sparks, 1)), 4));
             banquisasOeste.Fauna.Add(Fauna("gelos_flutuantes", "[controle]", T(N(Gelo.Floe, 3), N(Gelo.SeaWolf, 1)), T(V(Gelo.Floe, 2), S(sparks, 1)), 4));
             banquisasOeste.Fauna.Add(Fauna("lobos_das_banquisas", "[enxame]", T(N(Gelo.SeaWolf, 3), N(Gelo.Floe, 1)), T(V(Gelo.SeaWolf, 2), S(werewolf, 1)), 5));
-            auroras.Fauna.Add(Fauna("gaivotas_tempestade", "[distância]", T(N(Gelo.StormGull, 3), N(Gelo.Seal, 1)), T(V(Gelo.StormGull, 2), S(sparks, 1)), 3));
+            auroras.Fauna.Add(Fauna("gaivotas_tempestade", "[distância]", T(N(Gelo.StormGull, 3), N(Gelo.Narwhal, 1)), T(V(Gelo.StormGull, 2), S(sparks, 1)), 3));
             auroras.Fauna.Add(Fauna("gelos_das_auroras", "[controle]", T(N(Gelo.Floe, 3), N(Gelo.StormGull, 1)), T(V(Gelo.Floe, 2), S(sparks, 2)), 4));
             farol.Fauna.Add(Fauna("gaivotas_do_farol", "[distância]", T(N(Gelo.StormGull, 3), N(Gelo.SeaWolf, 1)), T(V(Gelo.StormGull, 2), S(owl, 1)), 3));
-            farol.Fauna.Add(Fauna("narvais_do_farol", "[rápido]", T(N(Gelo.Seal, 3), N(Gelo.StormGull, 1)), T(V(Gelo.Seal, 2), S(sparks, 1)), 4));
+            farol.Fauna.Add(Fauna("narvais_do_farol", "[rápido]", T(N(Gelo.Narwhal, 3), N(Gelo.StormGull, 1)), T(V(Gelo.Narwhal, 2), S(sparks, 1)), 4));
             fiordeNegro.Fauna.Add(Fauna("irbis_do_fiorde_negro", "[rápido]", T(N(Gelo.Irbis, 3), N(Gelo.StormGull, 1)), T(V(Gelo.Irbis, 2), S(werewolf, 1)), 4));
             fiordeNegro.Fauna.Add(Fauna("ursos_do_fiorde_negro", "[tanque]", T(N(Gelo.Bear, 3), N(Gelo.Floe, 1)), T(V(Gelo.Bear, 2), S(bats, 1)), 3, null, 30f));
 
             // Fundo do Velho Kul, Buracos de Pesca, Lago do Kul, Gelo Negro, Fiorde do Kul (64): the Lúcio Gigante [rápido], the
-            // Kul Pequeno [enxame] (its own beast now, FarBeasts: little water spirits that glow), the Peixe-Bruxa [controle] (the
-            // ooze), the Foca-Sombra [tanque]; the holes glow at night (the moon-mother, the sparks).
-            fundo.Fauna.Add(Fauna("lucios_gigantes", "[rápido]", T(N(Gelo.IceFish, 3), N(Gelo.Kul, 1)), T(V(Gelo.IceFish, 2), S(moon, 1)), 4));
-            fundo.Fauna.Add(Fauna("kuls_pequenos", "[enxame]", T(N(Gelo.Kul, 3), N(Gelo.IceFish, 1)), T(V(Gelo.Kul, 3), S(sparks, 1)), 5));
-            buracos.Fauna.Add(Fauna("peixes_bruxa", "[controle]", T(N(Gelo.Ooze, 3), N(Gelo.IceFish, 1)), T(V(Gelo.Ooze, 2), S(moon, 1)), 4));
-            buracos.Fauna.Add(Fauna("lucios_dos_buracos", "[rápido]", T(N(Gelo.IceFish, 3), N(Gelo.Ooze, 1)), T(V(Gelo.IceFish, 2), S(sparks, 1)), 4));
-            lagoKul.Fauna.Add(Fauna("focas_sombra", "[tanque]", T(N(Gelo.ShadowSeal, 3), N(Gelo.Ooze, 1)), T(V(Gelo.ShadowSeal, 2), S(moon, 1)), 3, null, 30f));
+            // Kul Pequeno [enxame] (its own beast now, FarBeasts: little water spirits that glow), the Peixe-Bruxa [controle] (its own
+            // beast now, NorthBeasts), the Foca-Sombra [tanque]; the holes glow at night (the moon-mother, the sparks).
+            fundo.Fauna.Add(Fauna("lucios_gigantes", "[rápido]", T(N(Gelo.Pike, 3), N(Gelo.Kul, 1)), T(V(Gelo.Pike, 2), S(moon, 1)), 4));
+            fundo.Fauna.Add(Fauna("kuls_pequenos", "[enxame]", T(N(Gelo.Kul, 3), N(Gelo.Pike, 1)), T(V(Gelo.Kul, 3), S(sparks, 1)), 5));
+            buracos.Fauna.Add(Fauna("peixes_bruxa", "[controle]", T(N(Gelo.WitchFish, 3), N(Gelo.Pike, 1)), T(V(Gelo.WitchFish, 2), S(moon, 1)), 4));
+            buracos.Fauna.Add(Fauna("lucios_dos_buracos", "[rápido]", T(N(Gelo.Pike, 3), N(Gelo.WitchFish, 1)), T(V(Gelo.Pike, 2), S(sparks, 1)), 4));
+            lagoKul.Fauna.Add(Fauna("focas_sombra", "[tanque]", T(N(Gelo.ShadowSeal, 3), N(Gelo.WitchFish, 1)), T(V(Gelo.ShadowSeal, 2), S(moon, 1)), 3, null, 30f));
             lagoKul.Fauna.Add(Fauna("kuls_do_lago", "[enxame]", T(N(Gelo.Kul, 3), N(Gelo.ShadowSeal, 1)), T(V(Gelo.Kul, 3), S(sparks, 1)), 5));
             geloNegro.Fauna.Add(Fauna("focas_do_gelo_negro", "[tanque]", T(N(Gelo.ShadowSeal, 3), N(Gelo.Floe, 1)), T(V(Gelo.ShadowSeal, 2), S(bats, 1)), 3, null, 30f));
-            geloNegro.Fauna.Add(Fauna("peixes_bruxa_do_gelo_negro", "[controle]", T(N(Gelo.Ooze, 3), N(Gelo.ShadowSeal, 1)), T(V(Gelo.Ooze, 2), S(moon, 1)), 4));
+            geloNegro.Fauna.Add(Fauna("peixes_bruxa_do_gelo_negro", "[controle]", T(N(Gelo.WitchFish, 3), N(Gelo.ShadowSeal, 1)), T(V(Gelo.WitchFish, 2), S(moon, 1)), 4));
             fiordeKul.Fauna.Add(Fauna("irbis_do_kul", "[rápido]", T(N(Gelo.Irbis, 3), N(Gelo.ShadowSeal, 1)), T(V(Gelo.Irbis, 2), S(werewolf, 1)), 4));
             fiordeKul.Fauna.Add(Fauna("ursos_do_kul", "[tanque]", T(N(Gelo.Bear, 3), N(Gelo.Irbis, 1)), T(V(Gelo.Bear, 2), S(bats, 1)), 3, null, 30f));
         }

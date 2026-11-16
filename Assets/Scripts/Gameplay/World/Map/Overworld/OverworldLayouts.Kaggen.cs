@@ -442,7 +442,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             // Muralhas de Pedra Seca (16): the granite ushabtis [tanque] (and the lesser Mazan at night), the stone crows [distância].
             pedraSeca.Fauna.Add(Fauna("muralhas", "[tanque] [elite]", T(N(Golem, 3)), T(V(Golem, 3), S(NightVariantRules.Lobisomem, 1)), 4, null, 32f));
             pedraSeca.Fauna.Add(Fauna("gralhas_de_pedra", "[distância]", T(N(EarlyBeasts.StoneJackdaw, 3), N(KaggenHawk, 1)), T(V(EarlyBeasts.StoneJackdaw, 2), V(KaggenHawk, 1), S(aveGraveto, 1)), 4));
-            pedraSeca.Fauna.Add(Fauna("lagartos", "[rápido]", T(N(Wolf, 3), N(Boar, 1)), T(V(Wolf, 3), S(NightVariantRules.Queixada, 1)), 4));
+            pedraSeca.Fauna.Add(Fauna("lagartos", "[rápido]", T(N(EarlyOwnBeasts.StoneLizard, 3), N(Boar, 1)), T(V(EarlyOwnBeasts.StoneLizard, 3), S(NightVariantRules.Queixada, 1)), 4));
 
             // Campos de Neve: snow ushabtis and wolves, the Neblina do Vento Ruim [controle].
             neve.Fauna.Add(Fauna("neve", "[tanque] [rápido]", T(N(Golem, 3), N(Wolf, 1)), T(V(Golem, 2), S(NightVariantRules.Lobisomem, 1)), 4, null, 30f));

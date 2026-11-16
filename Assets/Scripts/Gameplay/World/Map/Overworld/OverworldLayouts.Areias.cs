@@ -682,8 +682,8 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             meroe.Fauna.Add(Fauna("morcegos_das_capelas", "[enxame]", T(N(morcegos, 3)), T(N(morcegos, 2), S(ubir, 1)), 5, null, 22f));
 
             // 09 · Galerias do Karez: the karez bats [enxame] (Ubır down the shafts at night), scorpions by the water, ushabti diggers.
-            galerias.Fauna.Add(Fauna("morcegos_do_karez", "[enxame]", T(N(morcegos, 3), N(esc, 1)), T(N(morcegos, 2), S(ubir, 1)), 5, null, 22f));
-            galerias.Fauna.Add(Fauna("escorpioes_dagua", "[rápido] [tanque]", T(N(esc, 3), N(chacal, 1)), T(V(esc, 3), S(ubir, 1)), 4));
+            galerias.Fauna.Add(Fauna("morcegos_do_karez", "[enxame]", T(N(EarlyOwnBeasts.KarezRat, 3), N(esc, 1)), T(V(EarlyOwnBeasts.KarezRat, 2), S(ubir, 1)), 5, null, 22f));
+            galerias.Fauna.Add(Fauna("escorpioes_dagua", "[rápido] [tanque]", T(N(EarlyOwnBeasts.WaterScorpion, 3), N(chacal, 1)), T(V(EarlyOwnBeasts.WaterScorpion, 3), S(ubir, 1)), 4));
             galerias.Fauna.Add(Fauna("ushabtis_cavadores_fundos", "[tanque]", T(N(ushabti, 3)), T(V(ushabti, 3), N(morcegos, 1)), 3, null, 30f));
 
             // 10 · Dunas que Cantam: the giant scorpions [tanque], jackals for the spiny lizards [rápido], the sparks doubling at night.

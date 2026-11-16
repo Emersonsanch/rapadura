@@ -115,7 +115,9 @@ namespace Rapadura.Gameplay.World.Map.Overworld
 
         private static class Nart
         {
-            public const string Wolf = PeriodSpawnTable.ForestWolf;
+            // The twenty-fourth pass (WestOwnBeastRecipes, OverworldLayouts.WestOwnBeasts): the Lobo-Cinzento (51) took every role the Tugai wolf
+            // still had on the steppe.
+            public const string Wolf = "enemy_forest_grey_wolf";
             public const string SteppeWolf = "enemy_mountain_steppe_wolf";
             public const string Eagle = "enemy_mountain_crested_hawk";
             public const string Griffin = "enemy_desert_steppe_vulture";
@@ -458,7 +460,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             degelo.Fauna.Add(Fauna("linces_do_lago", "[rápido]", T(N(Nart.Lynx, 3), N(Nart.DimmedFungus, 1)), T(V(Nart.Lynx, 2), S(werewolf, 1)), 4));
 
             // Campos de Papoula, Pradaria Ondulada, Pradaria dos Mil Cavalos (51): the Garanhão Apagado [rápido] (its own beast now,
-            // LentBeasts), the Lobo-Cinzento [enxame] (wolves), the Tempestade de Capim [controle] and the Abutre da Estepe [distância]
+            // LentBeasts), the Lobo-Cinzento [enxame] (its own beast now, WestOwnBeasts), the Tempestade de Capim [controle] and the Abutre da Estepe [distância]
             // (their own beasts now, WideBeasts); fireflies over the poppies at night.
             papoula.Fauna.Add(Fauna("tempestades_de_capim", "[controle]", T(N(Nart.GrassStorm, 3), N(Nart.Wolf, 1)), T(V(Nart.GrassStorm, 2), S(fireflies, 1)), 4));
             papoula.Fauna.Add(Fauna("abutres_da_papoula", "[distância]", T(N(Nart.Griffin, 3), N(Nart.Saiga, 1)), T(V(Nart.Griffin, 2), S(fireflies, 1)), 3));

@@ -424,6 +424,51 @@ as exigências de barco e de sela continuam com a Dhow-Tartaruga e o Sapo-Gigant
   Luz não tem projétil visível, só a luz em volta do proteu.
 - **Testes:** `MountSheetTests`.
 
+### 3.13 Montarias dos chefes e as duas últimas das fichas das Regiões 1 e 6 (no código, 2026-11-15)
+
+Seis montarias em `MountBossCatalog`, cada uma exata no orçamento do §2.4. **Quatro de chefe:** o bicho que o chefe prendia,
+libertado quando ele cai e que segue os primos como **drop raro desse chefe** (`MountDropRules.Table`: Rara 2%, Épica 0,8%,
+como os chefes de região do §3.3/§3.4) com as **Fitas do Laço** de garantia (1 por vitória; 25 pela Rara, 80 pela Épica, no
+Haras). **Duas das fichas** (`Docs/Mapas100.md` §6) que faltavam nas Regiões 1 e 6: Incomuns, apito à venda na cidade da
+região, preço = valor do item (§5.1). O Búfalo e a Ninki Nanka são **aquáticos** (como nas fichas 31 e 34): abrem o barco e
+os vaus como o Sapo-Gigante, que já é Incomum na mesma região. Ninguém voa.
+
+| Id | Nome | Região (ficha) | Tipo | Raridade | Vel. | Def. | Vida | Fôlego | Pts | Carga | Habilidade | Como consegue | Favorito |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| `mount_laurel_lizard` | Lagarto-do-Louro / *Laurel Lizard* | 1 Zarafshan (05) | terrestre, pequeno | Incomum | 1,50 | +2% | 125 | 150 | 12 | 90 | **Rabo Solto:** solta o rabo atrás; bichos comuns a até 8 m esquecem o primo por 3 s e são puxados até 3 m para o rabo; chefe não. Recarga 25 s | Apito, 145 de ouro, Ervaria da Dácil (Copas de Garajonay) | — |
+| `mount_jhilpur_buffalo` | Búfalo-d'Água de Jhilpur / *Jhilpur Water Buffalo* | 6 Delta (31) | aquático, grande | Incomum | 1,35 | +5% | 200 | 120 | 12 | 300 | **Banho de Lama:** por 8 s o primo e o grupo a até 6 m recarregam as habilidades 15% mais rápido. Recarga 35 s | Apito, 145 de ouro, Trocas do Nuhzadag (Jhilpur) | Joaquim |
+| `mount_pamir_argali` | Argali do Pamir / *Pamir Argali* | 7 Teto (40) | terrestre | Raro | 1,55 | +4% | 150 | 150 | 16 | 150 | **Vigia da Escarpa:** por 8 s o primo e o grupo a até 8 m ganham +10% de chance de crítico. Recarga 35 s | Drop do Aydahar (chefe do mundo, 2%) ou 25 Fitas dele | — |
+| `mount_freed_smoke_horse` | Cavalo de Fumaça Liberto / *Freed Smoke Horse* | 9 Nartes (47) | terrestre | Raro | 1,70 | +2% | 125 | 150 | 16 | 160 | **Nuvem de Fumaça:** deixa 5 m de fumaça por 5 s; bichos comuns dentro esquecem todo alvo; chefe atravessa. Recarga 35 s | Drop d'O Cavalo de Fumaça (chefe do mapa 47, 2%) ou 25 Fitas dele | Maria |
+| `mount_ninki_nanka` | Ninki Nanka Mansa / *Tame Ninki Nanka* | 6 Delta (34) | aquático, grande | Épico | 1,55 | +6% | 225 | 150 | 21 | 220 | **Mergulho Tímido:** bichos a até 12 m olhando para ela ficam 40% mais lentos por 3 s (chefe 1,5 s), os comuns perdem o primo, e os dois somem de vista 4 s (detecção a 20%). Recarga 45 s | Drop da Ninki Nanka (chefe do mapa 34, 0,8%) ou 80 Fitas dela | Lavine |
+| `mount_living_ember_boar` | Javali de Brasa Viva / *Living Ember Boar* | 12 Hinokura (70) | terrestre, guerra | Épico | 1,50 | +9% | 225 | 130 | 21 | 200 | **Forja Acesa:** por 10 s o primo e o grupo a até 8 m dão 30% mais dano crítico, e o javali clareia 10 m. Recarga 50 s | Drop do Glutão de Brasa (chefe do mundo, 0,8%) ou 80 Fitas dele | Ícaro |
+
+- **Decisões:** os chefes escolhidos são os que a ficha já diz que prendem ou são um bicho (o Cavalo de Fumaça "libertado,
+  vira cavalo de verdade", a Ninki Nanka "libertada") e dois chefes do mundo que prendiam um bicho do lugar (os argalis
+  das escarpas do Wakhan; o javali das forjas que o Glutão engoliu com o fogo). Fonte só pelo chefe: nada se vende, nenhuma
+  missão dá. Os chefes de mapa passam a dar Fitas do Laço só para a montaria deles. O Lagarto e o Búfalo ficam nas lojas
+  das cidades da ficha, a 145 (meio da faixa Incomum).
+- **Efeitos novos** (`MountBossAbilities`, regras puras em `MountBossRules`; o `MountSheetAbilities` passa adiante os tipos
+  que não conhece): `TailDecoy`, `MudWallow`, `LedgeWatch`, `SmokeCloud` (`MountSmokeCloud`, um `HoldAggro` curto a cada
+  0,25 s), `ShyDive` e `EmberForge`, acrescentados ao fim de `MountAbilityKind`. Nada de dano (§2.2).
+- **Modelos:** `MountBossRecipes` (`MountVisualRecipe` 41–46), só com peças que já existem (escamas, chifres, presas, crista
+  de chama, papada); nenhum menor que o pônei no corpo, nem mais baixo que o proteu na sela.
+- **Carga (§2.7):** em `EncumbranceRules.MountBaseCapacity`; o Búfalo é o carregador delas (300), o Lagarto o menor (90).
+- **No jogo (2026-11-16): fora da habilidade** (teste `MountBossTraversalTests`):
+  - **Lagarto-do-Louro sobe os troncos marcados** da ficha 05 (`GarajonayTrunkRules`, `GarajonayTrunkMechanicsDriver`,
+    `OverworldLayouts.GarajonayTrunks`): três pares de louros com marca de garra no chão das Copas; montado nele, [E] a até 3 m
+    sobe e corre pelos galhos até o outro tronco do par (11 m/s, arco de 10 m, continua montado; 2 s de fôlego). Atalhos por
+    cima dos dois córregos e da mata norte. Nenhuma outra montaria sobe.
+  - **Búfalo-d'Água na monção** (`MountBossRules.BuffaloWadesFlood`, ficha 31): a correnteza dos vaus alagados não empurra
+    quem vai nele; atravessa sem barco. Só ele entre os aquáticos (é o grande e pesado).
+  - **Nuvem de Fumaça visível** (`MountSmokeCloud`): partículas cinzentas do tamanho do efeito, que se espalham em 0,4 s e
+    afinam no último 1,5 s (`MountBossRules.SmokeDensity`, `SmokePuffsPerSecond`, até 120 por segundo).
+  - **Cena de libertar** (`MountBossFreeing`, chamada em `MountCollection` na morte do chefe): quando uma das quatro de chefe
+    sai no drop, uma coluna de luz na cor do bicho onde o chefe caiu e a fala de libertação (`ui.mount.boss.freed.*`, PT/EN).
+    Só visual: não trava nada, e o aviso de drop do HUD continua.
+- **Limites:** a subida no tronco é um arco por cima das copas (sem animação de escalada); a cena de libertar não mostra o
+  bicho andando para fora da arena.
+- **Testes:** `MountBossTests`.
+
 ### 3.7 Checagem de unicidade
 
 30 IDs distintos, 30 nomes distintos e 30 habilidades com nome e efeito distintos, conferidos por script (inclusive

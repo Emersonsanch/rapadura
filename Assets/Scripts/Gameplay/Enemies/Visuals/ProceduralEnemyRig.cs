@@ -108,6 +108,7 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                 case ProceduralEnemyKind.ThreeHeadedSerpent:
                 case ProceduralEnemyKind.ChildOfApep:
                 case ProceduralEnemyKind.GreatEel:
+                case ProceduralEnemyKind.BlindSerpent:
                     return SnakeParts;
                 case ProceduralEnemyKind.DustRhino:
                 case ProceduralEnemyKind.WildYak:
@@ -367,6 +368,9 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                 case ProceduralEnemyKind.CrackedJar:
                 case ProceduralEnemyKind.VolcanicBomb:
                 case ProceduralEnemyKind.SmokeKite:
+                case ProceduralEnemyKind.TrappedLightning:
+                case ProceduralEnemyKind.FishLantern:
+                case ProceduralEnemyKind.DimmedScarecrow:
                 {
                     // Stands and sways a little; it leans back on the windup and its broken line flares before the words fly.
                     float r = StepAttack(deltaTime, 4f, 2.5f);
@@ -406,6 +410,7 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                 case ProceduralEnemyKind.ThreeHeadedSerpent:
                 case ProceduralEnemyKind.ChildOfApep:
                 case ProceduralEnemyKind.GreatEel:
+                case ProceduralEnemyKind.BlindSerpent:
                 {
                     // Slithers: a travelling wave down the tail, the raised head sways and pulls back before it strikes.
                     float r = StepAttack(deltaTime, 6f, 3f);
@@ -489,6 +494,21 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                 case ProceduralEnemyKind.DioriteStone:
                 case ProceduralEnemyKind.OrbitWind:
                 case ProceduralEnemyKind.RunawayLantern:
+                case ProceduralEnemyKind.FlyingStone:
+                case ProceduralEnemyKind.GorgeAys:
+                case ProceduralEnemyKind.ObsidianOctopus:
+                case ProceduralEnemyKind.RagingSpark:
+                case ProceduralEnemyKind.LivingAsh:
+                case ProceduralEnemyKind.BoiledShadow:
+                case ProceduralEnemyKind.PitchSmoke:
+                case ProceduralEnemyKind.ChokingSmoke:
+                case ProceduralEnemyKind.DarkShoal:
+                case ProceduralEnemyKind.RottenRoot:
+                case ProceduralEnemyKind.CrookedRay:
+                case ProceduralEnemyKind.CocoonCaterpillar:
+                case ProceduralEnemyKind.StickyMist:
+                case ProceduralEnemyKind.DimmedThornRose:
+                case ProceduralEnemyKind.BladeStone:
                 {
                     // Squash and stretch; it flattens on the windup and the swallowed lights flare.
                     float r = StepAttack(deltaTime, 4f, 2.5f);
@@ -684,6 +704,11 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                 case ProceduralEnemyKind.HighWind:
                 case ProceduralEnemyKind.Kongamato:
                 case ProceduralEnemyKind.GhostHeron:
+                case ProceduralEnemyKind.StormGull:
+                case ProceduralEnemyKind.SmokeRay:
+                case ProceduralEnemyKind.DimmedHeron:
+                case ProceduralEnemyKind.MandarinDuck:
+                case ProceduralEnemyKind.ThreadJackdaw:
                 {
                     // The birds of the peaks: the eagle soars on long glides, the chough and the flute bird beat quicker; the wings
                     // hold still and the beak opens on the windup (the flute bird's note, the chough's and the harpy's screech).
@@ -702,16 +727,21 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                 case ProceduralEnemyKind.SeaWolf:
                 case ProceduralEnemyKind.ShadowSeal:
                 case ProceduralEnemyKind.GiantPike:
+                case ProceduralEnemyKind.IceFish:
+                case ProceduralEnemyKind.LanternEel:
+                case ProceduralEnemyKind.DimmedNarwhal:
+                case ProceduralEnemyKind.WitchFish:
                 {
                     // The Mar Gelado's biters: the jaw gapes on the windup; the fox's brush and the sea wolf's finned tail sway,
                     // the seals' hind flippers paddle, the pike's tail sweeps and its fins row in the cold air.
                     float r = StepAttack(deltaTime, 5f, 3f);
                     Rotate(ProceduralEnemyParts.Jaw, Quaternion.Euler(Mathf.Max(0f, Mathf.Sin(t * 0.7f)) * 3f * k + 32f * r, 0f, 0f));
-                    float sway = _kind == ProceduralEnemyKind.GiantPike ? Mathf.Sin(t * 2.6f) * 20f
-                        : _kind == ProceduralEnemyKind.LeopardSeal || _kind == ProceduralEnemyKind.ShadowSeal ? Mathf.Sin(t * 1.2f) * 10f
+                    bool fish = _kind == ProceduralEnemyKind.GiantPike || _kind == ProceduralEnemyKind.IceFish;
+                    float sway = fish ? Mathf.Sin(t * 2.6f) * 20f
+                        : _kind == ProceduralEnemyKind.LeopardSeal || _kind == ProceduralEnemyKind.ShadowSeal || _kind == ProceduralEnemyKind.DimmedNarwhal ? Mathf.Sin(t * 1.2f) * 10f
                         : Mathf.Sin(t * 1.6f) * 12f;
                     Rotate(ProceduralEnemyParts.Tail, Quaternion.Euler(0f, sway * k, 0f));
-                    if (_kind == ProceduralEnemyKind.GiantPike)
+                    if (fish)
                     {
                         FlapWings(t, speed * 0.7f, Mathf.Max(k, 0.25f) * 0.5f, Mathf.Clamp01(MoveSpeed01));
                     }
@@ -753,6 +783,16 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                 case ProceduralEnemyKind.EmberStowaway:
                 case ProceduralEnemyKind.BlackSandJackal:
                 case ProceduralEnemyKind.DimmedLionfish:
+                case ProceduralEnemyKind.MudShark:
+                case ProceduralEnemyKind.MudGharial:
+                case ProceduralEnemyKind.NinkiHatchling:
+                case ProceduralEnemyKind.GreyWolf:
+                case ProceduralEnemyKind.MudEel:
+                case ProceduralEnemyKind.AshWolf:
+                case ProceduralEnemyKind.GrottoSpider:
+                case ProceduralEnemyKind.StoneLizard:
+                case ProceduralEnemyKind.KarezRat:
+                case ProceduralEnemyKind.WaterScorpion:
                 {
                     // Hinokura's biters: the jaw gapes on the windup and the tail sways; the blade fish's fins row in the steam, the
                     // ember coral's fronds stir slowly as it drifts.
@@ -792,6 +832,8 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                 case ProceduralEnemyKind.ToyArchon:
                 case ProceduralEnemyKind.SkyStone:
                 case ProceduralEnemyKind.NoonShadow:
+                case ProceduralEnemyKind.ShadowSalamander:
+                case ProceduralEnemyKind.MudCrocodile:
                 {
                     // The river's biters and the Margins': the jaw gapes on the windup and the tail sways; what drifts (the reed snare's root, the
                     // late shadow's trail, the mantle's hem) drags slowly and its nooses or sleeves stir.
@@ -814,6 +856,7 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                 case ProceduralEnemyKind.ResinBee:
                 case ProceduralEnemyKind.SmokeMosquito:
                 case ProceduralEnemyKind.SmokeDragonfly:
+                case ProceduralEnemyKind.TundraMosquito:
                 {
                     // A blur of fast wingbeats; the sting swings forward under the body on the windup.
                     float r = StepAttack(deltaTime, 5f, 3f);
@@ -855,6 +898,11 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                 case ProceduralEnemyKind.RunawayArchon:
                 case ProceduralEnemyKind.LastShadow:
                 case ProceduralEnemyKind.FledArchon:
+                case ProceduralEnemyKind.DimmedUshabti:
+                case ProceduralEnemyKind.CrackedUshabti:
+                case ProceduralEnemyKind.ClockUshabti:
+                case ProceduralEnemyKind.GiantDimmedUshabti:
+                case ProceduralEnemyKind.SmokeBoatman:
                 {
                     // Waits with its hoe; both arms go up and the hoe comes down like on the fields of the other world (Hinokura: the
                     // lacquer ushabti's tongs, the furnace ogre's hammer, the slag giant's fists).
@@ -874,6 +922,7 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                 case ProceduralEnemyKind.ShadowScarab:
                 case ProceduralEnemyKind.BlackScorpion:
                 case ProceduralEnemyKind.YoungScorpionKing:
+                case ProceduralEnemyKind.CoilScorpion:
                 {
                     // The mandibles open wide on the windup and snap shut on the pinch (the scorpion's sting draws back over it).
                     float r = StepAttack(deltaTime, 5f, 4f);

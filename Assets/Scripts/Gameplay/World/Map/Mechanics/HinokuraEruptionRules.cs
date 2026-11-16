@@ -87,5 +87,11 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
 
             return Mathf.Min(current - floor, max * DamageFractionPerSecond * seconds);
         }
+
+        /// <summary>
+        /// Whether the rider's hooves carry them over the lava untouched (2026-11-16: the Cascos de Pedra-Pomes of the Cabra-dos-Pastores do
+        /// Vulcão, map 67, are the region's first answer to hot ground): mounted on <c>mount_volcano_goat</c>.
+        /// </summary>
+        public static bool HoovesProof(bool mounted, string mountId) => mounted && mountId == Rapadura.Gameplay.Mounts.MountFarRegionCatalog.VolcanoGoat;
     }
 }

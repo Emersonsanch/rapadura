@@ -147,11 +147,16 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             }
         }
 
-        private void OnEnable() => EventBus.Subscribe<SkillCastEvent>(HandleSkillCast);
+        private void OnEnable()
+        {
+            EventBus.Subscribe<SkillCastEvent>(HandleSkillCast);
+            EventBus.Subscribe<Inventory.ItemConsumedEvent>(HandleItemConsumed);
+        }
 
         private void OnDisable()
         {
             EventBus.Unsubscribe<SkillCastEvent>(HandleSkillCast);
+            EventBus.Unsubscribe<Inventory.ItemConsumedEvent>(HandleItemConsumed);
             SetMud(false);
             LeaveMire();
             LeaveGrove();
@@ -455,6 +460,19 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         // ------------------------------------------------------------------
         // Skills: Living Water cleans the mud, any skill cuts a web
         // ------------------------------------------------------------------
+
+        /// <summary>03 · a potion drunk in the marsh is Living Water: one clean pool at the hero's feet (any cousin).</summary>
+        private void HandleItemConsumed(Inventory.ItemConsumedEvent evt)
+        {
+            if (_areas == null || _player == null || !_inMire || !ZarafshanMireRules.PotionCleans(evt.Category)
+                || evt.User == null || (evt.User != _player.gameObject && !evt.User.transform.IsChildOf(_player)))
+            {
+                return;
+            }
+
+            ZarafshanMireRules.AddPool(_pools, new Vector2(_player.position.x, _player.position.z) - _origin, Time.time);
+            Say(ZarafshanMireTexts.MudPotion);
+        }
 
         private void HandleSkillCast(SkillCastEvent evt)
         {

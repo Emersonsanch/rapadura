@@ -52,7 +52,7 @@ namespace Rapadura.Tests.PlayMode
             (7, OverworldLayouts.TetoId, new[] { typeof(CostaDeltaTetoMechanicsDriver), typeof(TetoCartMechanicsDriver) }),
             (8, OverworldLayouts.MingchengId, new[] { typeof(MingchengMechanicsDriver) }),
             (9, OverworldLayouts.NartesId, new[] { typeof(NartesMechanicsDriver) }),
-            (10, OverworldLayouts.FarnkeshRegionId, new[] { typeof(FarnkeshMechanicsDriver), typeof(FarnkeshSilenceMechanicsDriver) }),
+            (10, OverworldLayouts.FarnkeshRegionId, new[] { typeof(FarnkeshMechanicsDriver), typeof(FarnkeshSilenceMechanicsDriver), typeof(FarnkeshHeightsMechanicsDriver) }),
             (11, OverworldLayouts.MarGeladoRegionId, new[] { typeof(MarGeladoMechanicsDriver) }),
             (12, OverworldLayouts.HinokuraRegionId, new[] { typeof(HinokuraMechanicsDriver) }),
             (13, OverworldLayouts.RioRegionId, new[] { typeof(RioMechanicsDriver), typeof(RioRaftMechanicsDriver) }),

@@ -152,17 +152,6 @@ namespace Rapadura.Tests
         private static OverworldFauna Group(string id) =>
             OverworldLayouts.Get(MisturaId).Zones.SelectMany(z => z.Fauna).First(f => f.Id == id);
 
-        [TestCase("ushabtis_de_relogio", LacquerUshabti)]
-        [TestCase("ushabtis_das_horas", LacquerUshabti)]
-        [TestCase("fumacas_de_piche", SmokeHarpy)]
-        [TestCase("fumacas_do_juncal", SmokeHarpy)]
-        public void TheOtherSheets_KeepTheirStandIn(string group, string standIn)
-        {
-            OverworldFauna fauna = Group(group);
-            Assert.IsTrue(fauna.Day.Any(e => e.EnemyId == standIn), $"{group}: still {standIn} by day");
-            Assert.IsTrue(fauna.Night.Any(e => e.EnemyId == standIn), $"{group}: still {standIn} at night");
-        }
-
         [TestCase(OverworldLayouts.DesertoRelogioMapId, BrickLion)]
         [TestCase(OverworldLayouts.DesertoRelogioMapId, Locust)]
         [TestCase(OverworldLayouts.PocosBetumeMapId, Locust)]

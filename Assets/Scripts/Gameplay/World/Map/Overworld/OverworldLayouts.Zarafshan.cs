@@ -365,11 +365,11 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             brejo.Fauna.Add(Fauna("lodo_escuro", "[tanque] [distância]", T(N(Boar, 3), N(EarlyBeasts.BubbleToad, 2)), T(S(NightVariantRules.Queixada, 2), S(NightVariantRules.VagaLume, 1)), 5));
             brejo.Fauna.Add(Fauna("fumaca", "[enxame]", T(N(EarlyBeasts.SmokeMosquito, 3), N(Spider, 1)), T(V(EarlyBeasts.SmokeMosquito, 3), S(NightVariantRules.VagaLume, 1)), 5, null, 22f));
             amoreiras.Fauna.Add(Fauna("fiandeiras", "[enxame]", T(N(Spider, 4)), T(V(Spider, 3), S(NightVariantRules.VagaLume, 1)), 5, null, 22f));
-            amoreiras.Fauna.Add(Fauna("gralhas", "[rápido] [distância]", T(N(EarlyBeasts.SilkMoth, 3), N(Spider, 1)), T(V(EarlyBeasts.SilkMoth, 2), S(NightVariantRules.RasgaMortalha, 1)), 4));
+            amoreiras.Fauna.Add(Fauna("gralhas", "[rápido] [distância]", T(N(EarlyBeasts.SilkMoth, 3), N(EarlyOwnBeasts.ThreadJackdaw, 2)), T(V(EarlyBeasts.SilkMoth, 2), V(EarlyOwnBeasts.ThreadJackdaw, 1), S(NightVariantRules.RasgaMortalha, 1)), 4));
             garajonay.Fauna.Add(Fauna("louros", "[rápido] [tanque]", T(N(EarlyBeasts.LaurelLizard, 2), N(Boar, 2)), T(V(EarlyBeasts.LaurelLizard, 2), S(NightVariantRules.Lobisomem, 1)), 4, null, 28f));
-            garajonay.Fauna.Add(Fauna("nevoa", "[controle] [distância]", T(N(Spider, 2), N(EarlyBeasts.LaurelPigeon, 2)), T(V(Spider, 1), V(EarlyBeasts.LaurelPigeon, 2), S(NightVariantRules.VagaLume, 1)), 4));
-            jardim.Fauna.Add(Fauna("jardineiros", "[tanque]", T(N(Golem, 3), N(Wolf, 1)), T(V(Golem, 2), S(NightVariantRules.Lobisomem, 1)), 4, null, 30f));
-            jardim.Fauna.Add(Fauna("lobos_de_cinzas", "[rápido] [distância]", T(N(Wolf, 3), N(EarlyBeasts.SmokePeacock, 1)), T(V(Wolf, 3), S(NightVariantRules.VagaLume, 1)), 4));
+            garajonay.Fauna.Add(Fauna("nevoa", "[controle] [distância]", T(N(EarlyOwnBeasts.StickyMist, 2), N(EarlyBeasts.LaurelPigeon, 2)), T(V(EarlyOwnBeasts.StickyMist, 1), V(EarlyBeasts.LaurelPigeon, 2), S(NightVariantRules.VagaLume, 1)), 4));
+            jardim.Fauna.Add(Fauna("jardineiros", "[tanque] [controle]", T(N(Golem, 3), N(EarlyOwnBeasts.ThornRose, 1)), T(V(Golem, 2), V(EarlyOwnBeasts.ThornRose, 1), S(NightVariantRules.Lobisomem, 1)), 4, null, 30f));
+            jardim.Fauna.Add(Fauna("lobos_de_cinzas", "[rápido] [distância]", T(N(EarlyOwnBeasts.AshWolf, 3), N(EarlyBeasts.SmokePeacock, 1)), T(V(EarlyOwnBeasts.AshWolf, 3), S(NightVariantRules.VagaLume, 1)), 4));
         }
     }
 }

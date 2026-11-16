@@ -10,6 +10,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         public const string MudSlows = "ui.zarafshan_mire.mud_slows";
         public const string MudJoaquim = "ui.zarafshan_mire.mud_joaquim";
         public const string MudCleaned = "ui.zarafshan_mire.mud_cleaned";
+        public const string MudPotion = "ui.zarafshan_mire.mud_potion";
         public const string WebCaught = "ui.zarafshan_mire.web_caught";
         public const string WebCut = "ui.zarafshan_mire.web_cut";
         public const string WebAhead = "ui.zarafshan_mire.web_ahead";
@@ -19,9 +20,10 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
 
         public static IReadOnlyList<LocalizationEntry> Entries => _entries ??= new List<LocalizationEntry>
         {
-            new LocalizationEntry(MudSlows, "Mud: off the log walkways you wade slowly", "Lama: fora das passarelas de tronco você anda devagar"),
+            new LocalizationEntry(MudSlows, "Mud: off the log walkways you wade slowly (a potion's Living Water clears it round you)", "Lama: fora das passarelas de tronco você anda devagar (a Água Viva de uma poção limpa em volta)"),
             new LocalizationEntry(MudJoaquim, "Mud: your skills' Living Water clears it for a while", "Lama: a Água Viva das suas skills limpa a lama por um tempo"),
             new LocalizationEntry(MudCleaned, "Living Water clears the mud round here", "A Água Viva limpa a lama aqui em volta"),
+            new LocalizationEntry(MudPotion, "The potion is Living Water: the mud round you clears for a while", "A poção é Água Viva: a lama em volta fica limpa por um tempo"),
             new LocalizationEntry(WebCaught, "Caught in a silk web!", "Preso numa teia de seda!"),
             new LocalizationEntry(WebCut, "The web is cut", "A teia foi cortada"),
             new LocalizationEntry(WebAhead, "A glowing web between the trees: cut it with a skill or go round", "Uma teia brilhante entre as árvores: corte com uma skill ou dê a volta"),

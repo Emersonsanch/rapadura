@@ -29,7 +29,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
     /// When each crack reopens is saved per slot in <see cref="WorldMapProgress"/>, so reloading cannot unseal one and heal again. The porch keeps nothing: the story comes from the UTC clock and
     /// sitting is a rest with no daily limit or prize, so there is no state to save.
     /// </summary>
-    public sealed class CeuMechanicsDriver : MonoBehaviour, IRegionMechanics
+    public sealed partial class CeuMechanicsDriver : MonoBehaviour, IRegionMechanics
     {
         private const string PlayerTag = "Player";
         private const float HintCooldown = 3f;
@@ -111,10 +111,15 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             _areas = new[] { MechanicsDriverHub.WorldArea(OverworldLayouts.CeuBounds, _origin) };
         }
 
-        private void OnEnable() => _heroState.Attach();
+        private void OnEnable()
+        {
+            _heroState.Attach();
+            EventBus.Subscribe<EnemyDiedEvent>(OnAzDied);
+        }
 
         private void OnDisable()
         {
+            EventBus.Unsubscribe<EnemyDiedEvent>(OnAzDied);
             EndRide(false);
             _hold.Cancel();
             _porch.Cancel();

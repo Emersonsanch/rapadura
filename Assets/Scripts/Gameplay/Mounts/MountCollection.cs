@@ -833,7 +833,10 @@ namespace Rapadura.Gameplay.Mounts
                 return;
             }
 
-            ResolveEnemyDeath(enemy.Definition.name, evt.WasBoss, IsNight != null && IsNight());
+            List<OwnedMount> dropped = ResolveEnemyDeath(enemy.Definition.name, evt.WasBoss, IsNight != null && IsNight());
+
+            // A boss mount that dropped is the creature the boss held: the little freeing scene where it fell (looks only, MountBossCatalog).
+            MountBossFreeing.Play(enemy.transform.position, dropped);
 
             // Fighting with the hero (§6.2): 2 + 1% of the kill XP, at most 30, to the active mount (mounted, or waiting at
             // the edge of the arena). Replaces the old +5 per won fight.

@@ -321,7 +321,7 @@ namespace Rapadura.Gameplay.World.Cities
                 new[] { new RegionObjectiveSpec("clear_the_gates", QuestObjectiveType.KillEnemyType, "enemy_mountain_stone_golem", 7) },
                 new[] { new RegionRewardSpec("item_health_potion", 5), new RegionRewardSpec("item_mana_potion", 5), new RegionRewardSpec("item_gold", 150) })),
             new CityQuestSpec(CityCatalog.Mingcheng, "lin_deng", new RegionQuestSpec(MingchengCanal, BiomeType.Forest, MingchengLions, 1800,
-                new[] { new RegionObjectiveSpec("clear_the_canal", QuestObjectiveType.KillEnemyType, "enemy_cave_lantern_fish", 6) },
+                new[] { new RegionObjectiveSpec("clear_the_canal", QuestObjectiveType.KillEnemyType, "enemy_cave_fish_lantern", 6) }, // the Lanterna-Peixe (WestOwnBeastRecipes)
                 new[] { new RegionRewardSpec("item_selo_sol", 1), new RegionRewardSpec("item_gold", 150) })),
 
             // -- Torres Brancas: Amanirenas, then Shanakdakhete. The Espelho Quebrado of the ficha (Docs/Mapas100.md 42) is its own beast now
@@ -336,7 +336,7 @@ namespace Rapadura.Gameplay.World.Cities
             // -- Acampamento de Soslan: Soslan, then Satana. The wolf stands in for the Lobo da Estepe Apagado of the ficha
             // (Docs/Mapas100.md 47); the Águia-Dourada Apagada is its own beast now (LentRoleBeastRecipes). --
             new CityQuestSpec(CityCatalog.AcampamentoSoslan, "soslan", new RegionQuestSpec(SoslanWolves, BiomeType.Forest, null, 2000,
-                new[] { new RegionObjectiveSpec("chase_the_wolves", QuestObjectiveType.KillEnemyType, "enemy_forest_wolf", 8) },
+                new[] { new RegionObjectiveSpec("chase_the_wolves", QuestObjectiveType.KillEnemyType, "enemy_mountain_steppe_wolf", 8) }, // the Lobo da Estepe Apagado (the Tugai wolf left the steppe, WestOwnBeastRecipes)
                 new[] { new RegionRewardSpec("item_health_potion", 5), new RegionRewardSpec("item_mana_potion", 5), new RegionRewardSpec("item_gold", 170) })),
             new CityQuestSpec(CityCatalog.AcampamentoSoslan, "satana", new RegionQuestSpec(SoslanEagles, BiomeType.Forest, SoslanWolves, 2100,
                 new[] { new RegionObjectiveSpec("chase_the_eagles", QuestObjectiveType.KillEnemyType, "enemy_mountain_dimmed_golden_eagle", 6) },
@@ -396,13 +396,13 @@ namespace Rapadura.Gameplay.World.Cities
                 new[] { new RegionObjectiveSpec("chase_the_gulls", QuestObjectiveType.KillEnemyType, "enemy_desert_ember_vulture", 6) },
                 new[] { new RegionRewardSpec("item_barco_junco", 1), new RegionRewardSpec("item_gold", 230) })),
 
-            // -- Cais de Mesektet: Sinuhe, then Djedi. The mangrove crocodile stands in for the Crocodilo do Rio Escuro of the
-            // ficha (Docs/Mapas100.md 71) and the desert scorpion for the Escorpião Negro of 73, until the region's own creatures exist. --
+            // -- Cais de Mesektet: Sinuhe, then Djedi. The Crocodilo do Rio Escuro of the ficha (Docs/Mapas100.md 71) and the Escorpião
+            // Negro of 73 are the region's own beasts (the mangrove crocodile and the desert scorpion left the Rio in the twenty-second pass). --
             new CityQuestSpec(CityCatalog.CaisDeMesektet, "sinuhe", new RegionQuestSpec(MesektetCrocodiles, BiomeType.Forest, null, 3400,
-                new[] { new RegionObjectiveSpec("chase_the_crocodiles", QuestObjectiveType.KillEnemyType, "enemy_forest_mangrove_crocodile", 8) },
+                new[] { new RegionObjectiveSpec("chase_the_crocodiles", QuestObjectiveType.KillEnemyType, "enemy_forest_dark_river_crocodile", 8) },
                 new[] { new RegionRewardSpec("item_health_potion", 5), new RegionRewardSpec("item_mana_potion", 5), new RegionRewardSpec("item_gold", 240) })),
             new CityQuestSpec(CityCatalog.CaisDeMesektet, "djedi", new RegionQuestSpec(MesektetScorpions, BiomeType.Forest, MesektetCrocodiles, 3500,
-                new[] { new RegionObjectiveSpec("chase_the_scorpions", QuestObjectiveType.KillEnemyType, "enemy_desert_scorpion", 6) },
+                new[] { new RegionObjectiveSpec("chase_the_scorpions", QuestObjectiveType.KillEnemyType, "enemy_forest_black_scorpion", 6) },
                 new[] { new RegionRewardSpec("item_lamparina_runica", 1), new RegionRewardSpec("item_gold", 240) })),
 
             // -- Dur-Jarras: Utnapishtim, then Sin-leqi-unninni. The stone lion stands in for the Leão de Tijolo Apagado of the ficha
@@ -446,13 +446,13 @@ namespace Rapadura.Gameplay.World.Cities
                 new[] { new RegionObjectiveSpec("chase_the_storm_eagles", QuestObjectiveType.KillEnemyType, "enemy_mountain_storm_eagle", 7) },
                 new[] { new RegionRewardSpec("item_runa_vento", 3), new RegionRewardSpec("item_gold", 210) })),
             new CityQuestSpec(CityCatalog.Farnkesh, "shad_ohrmizd", "map_057_garganta_ays", "garganta_dos_ays", 168, new RegionQuestSpec(FarnkeshGorge, BiomeType.Forest, FarnkeshVultures, 4600,
-                new[] { new RegionObjectiveSpec("clear_the_gorge", QuestObjectiveType.KillEnemyType, "enemy_mountain_rolling_stone", 7) },
+                new[] { new RegionObjectiveSpec("clear_the_gorge", QuestObjectiveType.KillEnemyType, "enemy_mountain_flying_stone", 7) }, // the Pedra Voadora (NorthOwnBeastRecipes)
                 new[] { new RegionRewardSpec("item_health_potion", 5), new RegionRewardSpec("item_mana_potion", 5), new RegionRewardSpec("item_gold", 210) })),
             new CityQuestSpec(CityCatalog.PortoDaLuaBranca, "yirkap", "map_062_galerias_mamutes", "fiorde_das_presas", 202, new RegionQuestSpec(PortoIrbis, BiomeType.Forest, PortoGulls, 4650,
                 new[] { new RegionObjectiveSpec("chase_the_irbis", QuestObjectiveType.KillEnemyType, "enemy_mountain_irbis", 6) },
                 new[] { new RegionRewardSpec("item_runa_vento", 3), new RegionRewardSpec("item_gold", 215) })),
             new CityQuestSpec(CityCatalog.PortoDaLuaBranca, "yirkap", "map_063_mar_auroras", "mar_das_auroras", 208, new RegionQuestSpec(PortoAuroraSeals, BiomeType.Forest, PortoIrbis, 4680,
-                new[] { new RegionObjectiveSpec("chase_the_leopard_seals", QuestObjectiveType.KillEnemyType, "enemy_mountain_leopard_seal", 7) },
+                new[] { new RegionObjectiveSpec("chase_the_leopard_seals", QuestObjectiveType.KillEnemyType, "enemy_mountain_dimmed_narwhal", 7) }, // the Narval Apagado (NorthOwnBeastRecipes)
                 new[] { new RegionRewardSpec("item_health_potion", 5), new RegionRewardSpec("item_mana_potion", 5), new RegionRewardSpec("item_gold", 215) })),
             new CityQuestSpec(CityCatalog.PortoDaLuaBranca, "pera", "map_064_fundo_velho_kul", "fiorde_do_kul", 232, new RegionQuestSpec(PortoKulSeals, BiomeType.Forest, PortoBears, 4700,
                 new[] { new RegionObjectiveSpec("chase_the_shadow_seals", QuestObjectiveType.KillEnemyType, "enemy_mountain_shadow_seal", 7) },
@@ -476,7 +476,7 @@ namespace Rapadura.Gameplay.World.Cities
                 new[] { new RegionObjectiveSpec("chase_the_creeping_dark", QuestObjectiveType.KillEnemyType, "enemy_forest_creeping_dark", 8) },
                 new[] { new RegionRewardSpec("item_runa_vento", 3), new RegionRewardSpec("item_gold", 250) })),
             new CityQuestSpec(CityCatalog.CaisDeMesektet, "sinuhe", "map_075_lago_de_fogo", "beira_fervente", 288, new RegionQuestSpec(MesektetBoilingShore, BiomeType.Forest, MesektetOuterRing, 5400,
-                new[] { new RegionObjectiveSpec("chase_the_snakes", QuestObjectiveType.KillEnemyType, "enemy_desert_sand_snake", 7) },
+                new[] { new RegionObjectiveSpec("chase_the_snakes", QuestObjectiveType.KillEnemyType, "enemy_desert_shadow_salamander", 7) },
                 new[] { new RegionRewardSpec("item_runa_cura", 3), new RegionRewardSpec("item_gold", 250) })),
             new CityQuestSpec(CityCatalog.DurJarras, "utnapishtim", "map_079_pocos_betume", "pocos_de_betume", 314, new RegionQuestSpec(DurJarrasTar, BiomeType.Forest, DurJarrasLions, 5500,
                 new[] { new RegionObjectiveSpec("scrape_the_living_tar", QuestObjectiveType.KillEnemyType, "enemy_forest_living_tar", 7) },
@@ -518,7 +518,7 @@ namespace Rapadura.Gameplay.World.Cities
                 new[] { new RegionObjectiveSpec("chase_the_mud_octopus", QuestObjectiveType.KillEnemyType, "enemy_forest_mud_octopus", 6) },
                 new[] { new RegionRewardSpec("item_runa_cura", 3), new RegionRewardSpec("item_gold", 300) })),
             new CityQuestSpec(CityCatalog.FortalezaUltimaLampada, "makarios_cartas", "map_088_cova_treva", "cova_da_treva", 398, new RegionQuestSpec(UltimaLampadaSerpents, BiomeType.Forest, UltimaLampadaEels, 6800,
-                new[] { new RegionObjectiveSpec("chase_the_blind_serpents", QuestObjectiveType.KillEnemyType, "enemy_forest_dimmed_python", 7) },
+                new[] { new RegionObjectiveSpec("chase_the_blind_serpents", QuestObjectiveType.KillEnemyType, "enemy_forest_blind_serpent", 7) },
                 new[] { new RegionRewardSpec("item_health_potion", 5), new RegionRewardSpec("item_mana_potion", 5), new RegionRewardSpec("item_gold", 300) })),
             new CityQuestSpec(CityCatalog.FortalezaUltimaLampada, "pamour_lampadas", "map_088_cova_treva", "cova_da_treva", 402, new RegionQuestSpec(UltimaLampadaLizards, BiomeType.Forest, UltimaLampadaOctopus, 6900,
                 new[] { new RegionObjectiveSpec("chase_the_shadow_lizards", QuestObjectiveType.KillEnemyType, "enemy_forest_shadow_lizard", 6) },

@@ -30,7 +30,7 @@ namespace Rapadura.Gameplay.Mounts
     }
 
     /// <summary>
-    /// The "Caderno de Montarias" (Docs/Mounts.md §7, phase M2): all 50 species of §3 (30 + the Grifo da Coluna, §3.8, + the 8 of §3.9 + the 5 of §3.10 + the 6 of §3.12), in catalog order. Owned ones show
+    /// The "Caderno de Montarias" (Docs/Mounts.md §7, phase M2): all 56 species of §3 (30 + the Grifo da Coluna, §3.8, + the 8 of §3.9 + the 5 of §3.10 + the 6 of §3.12 + the 6 of §3.13), in catalog order. Owned ones show
     /// their name and stats, seen-but-not-owned ones their name, the rest a "???" silhouette with the hint of where they
     /// appear. The species in <see cref="MountCatalog"/> (3 starters + M3 wave 1 + the first flyer) are playable, the rest only listed; their names and
     /// hints live in <see cref="MountTexts"/>, the others here.
@@ -97,6 +97,14 @@ namespace Rapadura.Gameplay.Mounts
             (MountSheetCatalog.LanternOlm, ItemRarity.Rare, BiomeType.Caves, "Threshold Lantern Olm", "Proteu-Lanterna do Limiar", "Help Farnkhund clear the rails of the Tunnel Market.", "Ajude o Farnkhund a liberar os trilhos do Mercado dos Túneis."),
             (MountSheetCatalog.ArattaAurochs, ItemRarity.Rare, BiomeType.Desert, "Aratta Aurochs", "Auroque de Aratta", "Help Shulgi clear the course of Aratta.", "Ajude o Shulgi a liberar o percurso de Aratta."),
             (MountSheetCatalog.WhiteBactrian, ItemRarity.Rare, BiomeType.Mountain, "White Bactrian Camel", "Camelo-Bactriano Branco", "Help Kustai with the mist on the caravan board of Sangkent.", "Ajude o Kustai com a neblina no quadro das caravanas de Sangkent."),
+
+            // The boss mounts and the last map-sheet ones of the Regions 1 and 6 (MountBossCatalog, Docs/Mounts.md §3.13).
+            (MountBossCatalog.LaurelLizard, ItemRarity.Uncommon, BiomeType.Forest, "Laurel Lizard", "Lagarto-do-Louro", "Dácil's herb shop, in the Garajonay Canopy.", "A Ervaria da Dácil, nas Copas de Garajonay."),
+            (MountBossCatalog.JhilpurBuffalo, ItemRarity.Uncommon, BiomeType.Forest, "Jhilpur Water Buffalo", "Búfalo-d'Água de Jhilpur", "Nuhzadag's boats and trades, in Jhilpur.", "Os barcos e trocas do Nuhzadag, em Jhilpur."),
+            (MountBossCatalog.PamirArgali, ItemRarity.Rare, BiomeType.Mountain, "Pamir Argali", "Argali do Pamir", "Held on the ledges by Aydahar, the Dragon of the Pass.", "Preso nas escarpas pelo Aydahar, o Dragão do Passo."),
+            (MountBossCatalog.FreedSmokeHorse, ItemRarity.Rare, BiomeType.Mountain, "Freed Smoke Horse", "Cavalo de Fumaça Liberto", "The Smoke Horse of Soslan's racetracks, freed.", "O Cavalo de Fumaça das pistas de Soslan, libertado."),
+            (MountBossCatalog.TameNinkiNanka, ItemRarity.Epic, BiomeType.Forest, "Tame Ninki Nanka", "Ninki Nanka Mansa", "The shy dragoness of the bog, once freed… very rare.", "A dragoa tímida do charco, depois de libertada… muito rara."),
+            (MountBossCatalog.LivingEmberBoar, ItemRarity.Epic, BiomeType.Mountain, "Living Ember Boar", "Javali de Brasa Viva", "Swallowed by the Ember Glutton with the forges' fire… very rare.", "Engolido pelo Glutão de Brasa junto com o fogo das forjas… muito raro."),
         };
 
         public static readonly IReadOnlyList<MountCodexEntry> Entries = Rows.Select(r => new MountCodexEntry(r.Id, r.Rarity, r.Region)).ToList();

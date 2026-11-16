@@ -18,7 +18,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
     /// in a gust through the CharacterController (so walls still hold), and carries them along rope baskets and wind currents
     /// with the player's own controls off, giving them back on arrival or if anything else moves the hero meanwhile (respawn, barca).
     /// </summary>
-    public sealed class FarnkeshMechanicsDriver : MonoBehaviour, IRegionMechanics
+    public sealed partial class FarnkeshMechanicsDriver : MonoBehaviour, IRegionMechanics
     {
         private const string PlayerTag = "Player";
         private const int StreakCount = 8;
@@ -81,13 +81,18 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             _areas = new[] { MechanicsDriverHub.WorldArea(OverworldLayouts.FarnkeshBounds, _origin) };
         }
 
-        private void OnEnable() => _heroState.Attach();
+        private void OnEnable()
+        {
+            _heroState.Attach();
+            SubscribeGild();
+        }
 
         private void OnDisable()
         {
             EndRide(false);
             HideFeedback();
             _heroState.Detach();
+            UnsubscribeGild();
         }
 
         private void OnDestroy()
@@ -115,11 +120,19 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             if (!OverworldLayouts.FarnkeshBounds.Contains(local))
             {
                 HideFeedback();
+                if (_inGildRegion)
+                {
+                    ClearGild();
+                }
+
                 return;
             }
 
             TickGusts(local);
             TickStations(local);
+
+            // 53 · the gilding of the Vale dos Sátiros, washed off in the Pactolo (FarnkeshMechanicsDriver.Gild.cs).
+            TickGild(local);
         }
 
         private bool FindPlayer()

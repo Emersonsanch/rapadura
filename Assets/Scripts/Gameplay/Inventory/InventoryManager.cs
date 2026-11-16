@@ -1476,7 +1476,19 @@ namespace Rapadura.Gameplay.Inventory
                 _buffController.ApplyEffects(item.ConsumeBuffs, GetConsumableSourceKey(item.ItemId));
             }
 
-            return RemoveFromSlot(slotIndex, 1);
+            // The Garrafa de Ar Sereno shakes off the slows (Mercado dos Túneis, 22).
+            if (_buffController != null && ConsumableEffectRules.CleansSlows(item.ItemId))
+            {
+                _buffController.RemoveDebuffs(StatType.MoveSpeed);
+            }
+
+            if (!RemoveFromSlot(slotIndex, 1))
+            {
+                return false;
+            }
+
+            EventBus.Publish(new ItemConsumedEvent(item.ItemId, item.Category, gameObject));
+            return true;
         }
 
         // ---------------------------------------------------------------

@@ -180,7 +180,8 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
 
         private void Pick(int spot, int day, WorldMapProgress progress, string mark)
         {
-            ItemDefinition item = ItemDatabase.GetById(ZarafshanHarvestRules.ItemFor(spot, day));
+            ItemDefinition item = ItemDatabase.GetById(
+                ZarafshanHarvestRules.ItemFor(OverworldLayouts.ZarafshanHarvestSpots[spot].Id, spot, day));
             if (item == null || _bag == null)
             {
                 return;

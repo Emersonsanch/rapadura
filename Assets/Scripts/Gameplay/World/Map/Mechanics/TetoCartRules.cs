@@ -56,7 +56,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
     /// chute of the course and the run would still be on it when the bell rings. At night the chutes freeze: faster, and the sparks are harder to take.
     /// <code>
     /// course ≈ 813 m: east chute of the Calhas Geladas (286 m), the shelf (92 m), east chute of the Calhas de Pedra (434 m)
-    /// 17 m/s by day (≈ 48 s), 21 m/s at night (≈ 39 s); on foot ≈ 150 s · steer ±6 m off the centre line at 8 m/s
+    /// 17 m/s by day (≈ 48 s), 21 m/s at night (≈ 39 s); on foot ≈ 150 s · the freed Carrinho Desgovernado (map boss defeated): ×1.15 · steer ±6 m off the centre line at 8 m/s
     /// 12 sparks every 60 m from 60 m; caught within 1.8 m sideways (1.4 m at night) · −1.5 s a spark
     /// first run of the UTC day: 3 nuggets a spark (36 at most) · 4 s between runs
     /// the cart knocks a beast within 2.5 m of it once a run: 4 % of its max life (a boss 1 %)
@@ -81,6 +81,12 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         public const float KnockFraction = 0.04f;
         public const float KnockBossFraction = 0.01f;
 
+        /// <summary>The map boss of 37 (O Carrinho Desgovernado): once freed it is the cart of the station, the fastest of the chutes.</summary>
+        public const string RunawayCartEnemyId = "enemy_mountain_runaway_cart";
+
+        /// <summary>How much faster the freed Carrinho Desgovernado runs than the Artificers' carts (17 → 19.55 m/s by day, 21 → 24.15 at night).</summary>
+        public const float FreedSpeedFactor = 1.15f;
+
         /// <summary>The save key of the best score (stored in a time mark: milliseconds, 0 = never run).</summary>
         public const string BestKey = "teto.cart.best_ms";
 
@@ -100,10 +106,16 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
 
         public static float Speed(bool night) => night ? NightSpeed : DaySpeed;
 
+        /// <summary>The cart's speed; the freed Carrinho Desgovernado (<paramref name="runawayFreed"/>) runs <see cref="FreedSpeedFactor"/> faster.</summary>
+        public static float Speed(bool night, bool runawayFreed) => Speed(night) * (runawayFreed ? FreedSpeedFactor : 1f);
+
         public static float CatchWidth(bool night) => night ? NightCatchHalfWidth : CatchHalfWidth;
 
         /// <summary>Seconds of the run along a course of <paramref name="length"/> metres.</summary>
         public static float RunSeconds(float length, bool night) => Mathf.Max(0f, length) / Speed(night);
+
+        /// <summary>Seconds of the run, on the freed Carrinho Desgovernado when <paramref name="runawayFreed"/>.</summary>
+        public static float RunSeconds(float length, bool night, bool runawayFreed) => Mathf.Max(0f, length) / Speed(night, runawayFreed);
 
         /// <summary>The new sideways offset after <paramref name="dt"/> seconds of <paramref name="steer"/> (−1 left … 1 right), inside the chute.</summary>
         public static float Steer(float offset, float steer, float dt) =>

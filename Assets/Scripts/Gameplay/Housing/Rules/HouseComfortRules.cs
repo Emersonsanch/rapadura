@@ -34,7 +34,7 @@ namespace Rapadura.Gameplay.Housing
         WoodRefund,
     }
 
-    /// <summary>One of the 41 furniture sets (Housing.md §6.2, <c>CatalogoCasa.md</c> "Conjuntos").</summary>
+    /// <summary>One of the 51 furniture sets (Housing.md §6.2, <c>CatalogoCasa.md</c> "Conjuntos").</summary>
     public sealed class HouseSetDefinition
     {
         public readonly string Id;
@@ -55,7 +55,7 @@ namespace Rapadura.Gameplay.Housing
         public string TitleKey => "ui.house_life.set_title." + ShortId;
     }
 
-    /// <summary>The 41 sets, in the catalog's order.</summary>
+    /// <summary>The 51 sets, in the catalog's order.</summary>
     public static class HouseSetCatalog
     {
         public const int FirstStagePieces = 3;
@@ -113,6 +113,20 @@ namespace Rapadura.Gameplay.Housing
             new HouseSetDefinition("set_moveis_relogio_sol"),
             new HouseSetDefinition("set_moveis_novelo"),
             new HouseSetDefinition("set_moveis_barca_lua"),
+            // The other "conjunto novo" of the fichas of Regions 5–10 (28, 33, 44, 42, 48, 53): sold in the ficha's own race city (Kirta,
+            // Tarchon, Torres Brancas, Vale dos Sátiros) or, when its return city is the capital, at the same counter as the region's first set.
+            new HouseSetDefinition("set_moveis_jardim_coral"),
+            new HouseSetDefinition("set_moveis_palafita"),
+            new HouseSetDefinition("set_moveis_arrozal"),
+            new HouseSetDefinition("set_moveis_torre_branca"),
+            new HouseSetDefinition("set_moveis_ouro_estepe"),
+            new HouseSetDefinition("set_moveis_flauta_dupla"),
+            // The other "conjunto novo" of the fichas of Regions 10 and 12 (58, 66, 68, 69): Farnkesh sells the Ninho de Ouro beside the
+            // Ninho de Pedra; Hinokura, the only city of Região 12, sells the other three beside the Palácio de Laca.
+            new HouseSetDefinition("set_moveis_ninho_ouro"),
+            new HouseSetDefinition("set_moveis_jardim_pedra"),
+            new HouseSetDefinition("set_moveis_vidro_brasa"),
+            new HouseSetDefinition("set_moveis_fornalha"),
         };
 
         public static HouseSetDefinition Get(string setId) => string.IsNullOrEmpty(setId) ? null : All.FirstOrDefault(s => s.Id == setId);

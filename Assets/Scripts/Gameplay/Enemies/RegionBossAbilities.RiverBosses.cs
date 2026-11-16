@@ -102,6 +102,7 @@ namespace Rapadura.Gameplay.Enemies
                 {
                     // A new mantle on the hero's spot; the ones already down light up again with it.
                     int mantle = RegionBossRules.ThrowMantle(_hobabishMantles, Flat(_signatureImpact), _hobabishThrown++);
+                    TrimHobabishMantles();
                     warning = RegionBossTexts.MantleKey(mantle);
                     foreach (Vector2 spot in _hobabishMantles)
                     {

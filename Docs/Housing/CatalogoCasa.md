@@ -3,33 +3,33 @@
 > Gerado a partir de uma lista curada (cada nome escrito à mão). Design do sistema em [`Docs/Housing.md`](../Housing.md). Tema: a Ilha da Aurora (ver [`Docs/WorldBible_Maniqueismo.md`](../WorldBible_Maniqueismo.md) §3.20); ids, números e colunas não mudaram no re-tema.
 > **Este é o conjunto inicial de lançamento da casa, não a lista de todos os itens possíveis.** Novos itens entram por temporada e evento, sempre com ID novo (`casa_<categoria>_<nnn>` continuando a numeração); um ID nunca é reaproveitado.
 
-**Total: 752 itens únicos.** Checagem automática: 752 IDs distintos, 752 nomes distintos, nenhuma duplicata (inclusive ignorando acento, maiúscula e pontuação).
+**Total: 832 itens únicos.** Checagem automática: 832 IDs distintos, 832 nomes distintos, nenhuma duplicata (inclusive ignorando acento, maiúscula e pontuação).
 
 | Raridade | Itens | % |
 |---|---|---|
-| Comum | 245 | 32,6% |
-| Incomum | 209 | 27,8% |
-| Raro | 186 | 24,7% |
-| Épico | 94 | 12,5% |
-| Lendário | 18 | 2,4% |
-| **Total** | **752** | 100% |
+| Comum | 255 | 30,6% |
+| Incomum | 239 | 28,7% |
+| Raro | 216 | 26,0% |
+| Épico | 104 | 12,5% |
+| Lendário | 18 | 2,2% |
+| **Total** | **832** | 100% |
 
 | Categoria | Itens |
 |---|---|
-| [Móveis de sala](#sala) | 84 |
-| [Quarto](#quarto) | 47 |
-| [Cozinha](#cozinha) | 53 |
+| [Móveis de sala](#sala) | 93 |
+| [Quarto](#quarto) | 53 |
+| [Cozinha](#cozinha) | 61 |
 | [Banheiro](#banheiro) | 21 |
-| [Quintal e horta](#quintal) | 48 |
+| [Quintal e horta](#quintal) | 54 |
 | [Curral e animais](#curral) | 27 |
-| [Iluminação](#luz) | 52 |
-| [Paredes e quadros](#parede) | 63 |
-| [Tapetes](#tapete) | 41 |
-| [Cortinas](#cortina) | 25 |
-| [Plantas](#planta) | 36 |
-| [Instrumentos musicais](#musica) | 23 |
+| [Iluminação](#luz) | 62 |
+| [Paredes e quadros](#parede) | 74 |
+| [Tapetes](#tapete) | 48 |
+| [Cortinas](#cortina) | 31 |
+| [Plantas](#planta) | 40 |
+| [Instrumentos musicais](#musica) | 24 |
 | [Brinquedos](#brinquedo) | 31 |
-| [Decoração regional por região](#regional) | 62 |
+| [Decoração regional por região](#regional) | 74 |
 | [Troféus de chefes](#trofeu) | 36 |
 | [Itens sazonais](#sazonal) | 45 |
 | [Raros e lendários com história de família](#familia) | 27 |
@@ -37,7 +37,7 @@
 
 | Origem | Itens |
 |---|---|
-| Loja | 536 |
+| Loja | 616 |
 | Drop de inimigo/chefe | 80 |
 | Missão (regional, pessoal, diária ou da casa) | 34 |
 | Conquista | 24 |
@@ -55,7 +55,7 @@
 - **Troféus dos chefes do mundo (`casa_trofeu_025`–`036`):** origem "Crafting: Forja": receita na Forja da casa com o loot próprio do chefe (Escama de Hedammu, Lama Limpa, Semente de Luz de Āz…), que só abre depois de vencê-lo (`HouseCraftRules`, Housing.md §7.6). Um por chefe do mundo das Regiões 5–16.
 
 <a id="sala"></a>
-## Móveis de sala (84)
+## Móveis de sala (93)
 
 | ID | Nome | Raridade | Origem | Preço (ouro) | Conforto | Conjunto | Encaixe |
 |---|---|---|---|---|---|---|---|
@@ -143,9 +143,18 @@
 | `casa_sala_082` | Mesa de pedra com mostrador de sol | Raro | Loja: Betume do Atrahasis | 215 | 6 | Móveis do Relógio de Sol | Piso |
 | `casa_sala_083` | Banco da ponte do novelo | Incomum | Loja: Pavios da Tehat | 86 | 4 | Móveis do Novelo | Piso |
 | `casa_sala_084` | Banco do convés da lua | Incomum | Loja: A Última Caravana do Ammo | 88 | 4 | Móveis da Barca da Lua | Piso |
+| `casa_sala_085` | Banco de coral branco do recife | Raro | Loja: Ferramentas de Mergulho do Danel | 145 | 5 | Móveis do Jardim de Coral | Piso |
+| `casa_sala_086` | Banco de tábuas sobre estacas | Incomum | Loja: Cestaria da Larthia | 62 | 3 | Móveis da Palafita | Piso |
+| `casa_sala_087` | Banco de bambu do dique | Raro | Loja: Lanternas do Mestre Mōzak | 155 | 5 | Móveis do Arrozal | Piso |
+| `casa_sala_088` | Mesa de arenito com borda de ouro | Raro | Loja: Espelhos de Natakamani | 160 | 5 | Móveis da Torre Branca | Piso |
+| `casa_sala_089` | Arca de bétula com ouro batido | Raro | Loja: Selaria Nômade | 165 | 5 | Móveis do Ouro da Estepe | Piso |
+| `casa_sala_090` | Banco de pedra do baile dos sátiros | Raro | Loja: Flauta Dupla | 175 | 5 | Móveis da Flauta Dupla | Piso |
+| `casa_sala_091` | Banco de pedra vulcânica sobre musgo | Raro | Loja: Ferro Preto do Kurogane | 195 | 5 | Móveis do Jardim de Pedra | Piso |
+| `casa_sala_092` | Mesa de obsidiana polida do recife | Raro | Loja: Ferro Preto do Kurogane | 205 | 5 | Móveis do Vidro de Brasa | Piso |
+| `casa_sala_093` | Bigorna de ferro celeste de enfeite | Épico | Loja: Ferro Preto do Kurogane | 520 | 8 | Móveis da Fornalha | Piso |
 
 <a id="quarto"></a>
-## Quarto (47)
+## Quarto (53)
 
 | ID | Nome | Raridade | Origem | Preço (ouro) | Conforto | Conjunto | Encaixe |
 |---|---|---|---|---|---|---|---|
@@ -196,9 +205,15 @@
 | `casa_quarto_045` | Cama baixa de laca vermelha | Raro | Loja: Ferro Preto do Kurogane | 195 | 5 | Móveis do Palácio de Laca | Piso |
 | `casa_quarto_046` | Cama de fios enovelados | Raro | Loja: Pavios da Tehat | 235 | 5 | Móveis do Novelo | Piso |
 | `casa_quarto_047` | Cama de convés de prata de lua | Raro | Loja: A Última Caravana do Ammo | 250 | 6 | Móveis da Barca da Lua | Piso |
+| `casa_quarto_048` | Cama de concha gigante | Raro | Loja: Ferramentas de Mergulho do Danel | 150 | 5 | Móveis do Jardim de Coral | Piso |
+| `casa_quarto_049` | Catre alto de estacas de Tarchon | Raro | Loja: Cestaria da Larthia | 150 | 5 | Móveis da Palafita | Piso |
+| `casa_quarto_050` | Cama branca de dossel de linho | Raro | Loja: Espelhos de Natakamani | 165 | 5 | Móveis da Torre Branca | Piso |
+| `casa_quarto_051` | Cama de peles sob o kurgan | Raro | Loja: Selaria Nômade | 165 | 5 | Móveis do Ouro da Estepe | Piso |
+| `casa_quarto_052` | Cama de galhos dourados do ninho | Raro | Loja: Cordas do Sisin | 185 | 5 | Móveis do Ninho de Ouro | Piso |
+| `casa_quarto_053` | Baú de ferro celeste com rebites | Raro | Loja: Ferro Preto do Kurogane | 210 | 5 | Móveis da Fornalha | Piso |
 
 <a id="cozinha"></a>
-## Cozinha (53)
+## Cozinha (61)
 
 | ID | Nome | Raridade | Origem | Preço (ouro) | Conforto | Conjunto | Encaixe |
 |---|---|---|---|---|---|---|---|
@@ -255,6 +270,14 @@
 | `casa_cozinha_051` | Jarra de óleo do lamparineiro | Incomum | Loja: Lamparinas da Parthenos | 50 | 3 | Móveis da Casa na Rocha | Superfície |
 | `casa_cozinha_052` | Tigela de laca vermelha | Comum | Loja: Ferro Preto do Kurogane | 29 | 2 | Móveis do Palácio de Laca | Superfície |
 | `casa_cozinha_053` | Cesto de espigas de trigo de luz | Comum | Loja: Trocas do Khunanup | 30 | 2 | Móveis do Campo de Juncos | Superfície |
+| `casa_cozinha_054` | Cesto de peixe de vime | Comum | Loja: Cestaria da Larthia | 23 | 2 | Móveis da Palafita | Superfície |
+| `casa_cozinha_055` | Tigela de arroz de porcelana branca | Comum | Loja: Lanternas do Mestre Mōzak | 25 | 2 | Móveis do Arrozal | Superfície |
+| `casa_cozinha_056` | Caldeirão pequeno de bronze cita | Comum | Loja: Selaria Nômade | 26 | 2 | Móveis do Ouro da Estepe | Superfície |
+| `casa_cozinha_057` | Cacho de uvas de barro pintado | Comum | Loja: Flauta Dupla | 27 | 2 | Móveis da Flauta Dupla | Superfície |
+| `casa_cozinha_058` | Tigela de galhos dourados trançados | Comum | Loja: Cordas do Sisin | 28 | 2 | Móveis do Ninho de Ouro | Superfície |
+| `casa_cozinha_059` | Xícara de cerâmica da casa de chá | Comum | Loja: Ferro Preto do Kurogane | 29 | 2 | Móveis do Jardim de Pedra | Superfície |
+| `casa_cozinha_060` | Copo de vidro de brasa | Comum | Loja: Ferro Preto do Kurogane | 30 | 2 | Móveis do Vidro de Brasa | Superfície |
+| `casa_cozinha_061` | Chaleira de ferro preto da fornalha | Comum | Loja: Ferro Preto do Kurogane | 30 | 2 | Móveis da Fornalha | Superfície |
 
 <a id="banheiro"></a>
 ## Banheiro (21)
@@ -284,7 +307,7 @@
 | `casa_banheiro_021` | Banheira de tufo rosa de fonte termal | Épico | Drop: Tages, o Habitante Ancestral (chefe) | — | 8 | Tufo Rosa das Lamparinas | Piso |
 
 <a id="quintal"></a>
-## Quintal e horta (48)
+## Quintal e horta (54)
 
 | ID | Nome | Raridade | Origem | Preço (ouro) | Conforto | Conjunto | Encaixe |
 |---|---|---|---|---|---|---|---|
@@ -336,6 +359,12 @@
 | `casa_quintal_046` | Cesto de corda de subir | Raro | Loja: Cordas do Sisin | 175 | 5 | Móveis do Ninho de Pedra | Quintal |
 | `casa_quintal_047` | Canoa de junco do canal | Raro | Loja: Trocas do Khunanup | 210 | 6 | Móveis do Campo de Juncos | Quintal |
 | `casa_quintal_048` | Gnômon de pedra do Deserto do Relógio | Épico | Loja: Betume do Atrahasis | 545 | 9 | Móveis do Relógio de Sol | Quintal |
+| `casa_quintal_049` | Pontão de tábuas da palafita | Raro | Loja: Cestaria da Larthia | 155 | 5 | Móveis da Palafita | Quintal |
+| `casa_quintal_050` | Roda-d'água do Moinho d'Água | Épico | Loja: Lanternas do Mestre Mōzak | 405 | 8 | Móveis do Arrozal | Quintal |
+| `casa_quintal_051` | Caramanchão de parreira dos sátiros | Épico | Loja: Flauta Dupla | 450 | 8 | Móveis da Flauta Dupla | Quintal |
+| `casa_quintal_052` | Pergolado de galhos dourados da huma | Épico | Loja: Cordas do Sisin | 470 | 8 | Móveis do Ninho de Ouro | Quintal |
+| `casa_quintal_053` | Laguinho de lava domada com ponte vermelha | Épico | Loja: Ferro Preto do Kurogane | 480 | 8 | Móveis do Jardim de Pedra | Quintal |
+| `casa_quintal_054` | Chafariz de vidro de brasa com vapor | Épico | Loja: Ferro Preto do Kurogane | 500 | 8 | Móveis do Vidro de Brasa | Quintal |
 
 <a id="curral"></a>
 ## Curral e animais (27)
@@ -371,7 +400,7 @@
 | `casa_curral_027` | Ferradura da sorte no portão | Incomum | Loja: Forja do Mestre Mihr | 60 | 4 | Caravana do Vô Jorge | Quintal |
 
 <a id="luz"></a>
-## Iluminação (52)
+## Iluminação (62)
 
 | ID | Nome | Raridade | Origem | Preço (ouro) | Conforto | Conjunto | Encaixe |
 |---|---|---|---|---|---|---|---|
@@ -427,9 +456,19 @@
 | `casa_luz_050` | Arandela da sombra das horas | Incomum | Loja: Betume do Atrahasis | 88 | 4 | Móveis do Relógio de Sol | Parede |
 | `casa_luz_051` | Gaiola de luz acesa | Raro | Loja: Pavios da Tehat | 240 | 6 | Móveis do Novelo | Teto |
 | `casa_luz_052` | Lanterna de mastro da Barca da Lua | Raro | Loja: A Última Caravana do Ammo | 245 | 6 | Móveis da Barca da Lua | Superfície |
+| `casa_luz_053` | Lanterna de coral aceso | Incomum | Loja: Ferramentas de Mergulho do Danel | 58 | 3 | Móveis do Jardim de Coral | Superfície |
+| `casa_luz_054` | Lanterna de fogo-fátuo em vidro | Incomum | Loja: Cestaria da Larthia | 60 | 3 | Móveis da Palafita | Superfície |
+| `casa_luz_055` | Lanterna de papel do arrozal espelhado | Raro | Loja: Lanternas do Mestre Mōzak | 165 | 5 | Móveis do Arrozal | Superfície |
+| `casa_luz_056` | Arandela de vidro de luz | Incomum | Loja: Espelhos de Natakamani | 65 | 3 | Móveis da Torre Branca | Parede |
+| `casa_luz_057` | Lamparina de ouro dos kurgans | Incomum | Loja: Selaria Nômade | 64 | 3 | Móveis do Ouro da Estepe | Superfície |
+| `casa_luz_058` | Lanterna de vinha do baile | Incomum | Loja: Flauta Dupla | 74 | 3 | Móveis da Flauta Dupla | Teto |
+| `casa_luz_059` | Lanterna de pena de huma | Incomum | Loja: Cordas do Sisin | 74 | 3 | Móveis do Ninho de Ouro | Teto |
+| `casa_luz_060` | Arandela de cerâmica de shisa | Incomum | Loja: Ferro Preto do Kurogane | 78 | 3 | Móveis do Jardim de Pedra | Parede |
+| `casa_luz_061` | Lustre de vidro de obsidiana | Incomum | Loja: Ferro Preto do Kurogane | 82 | 3 | Móveis do Vidro de Brasa | Teto |
+| `casa_luz_062` | Braseiro de ferro com correntes | Incomum | Loja: Ferro Preto do Kurogane | 84 | 3 | Móveis da Fornalha | Teto |
 
 <a id="parede"></a>
-## Paredes e quadros (63)
+## Paredes e quadros (74)
 
 | ID | Nome | Raridade | Origem | Preço (ouro) | Conforto | Conjunto | Encaixe |
 |---|---|---|---|---|---|---|---|
@@ -496,9 +535,20 @@
 | `casa_parede_061` | Prateleira das tábuas das horas | Raro | Loja: Betume do Atrahasis | 205 | 5 | Móveis do Relógio de Sol | Parede |
 | `casa_parede_062` | Prateleira de corda da ponte | Raro | Loja: Pavios da Tehat | 225 | 5 | Móveis do Novelo | Parede |
 | `casa_parede_063` | Leme de prata da Barca da Lua | Raro | Loja: A Última Caravana do Ammo | 250 | 6 | Móveis da Barca da Lua | Parede |
+| `casa_parede_064` | Painel de madrepérola do povo-do-mar | Raro | Loja: Ferramentas de Mergulho do Danel | 155 | 5 | Móveis do Jardim de Coral | Parede |
+| `casa_parede_065` | Rede de pesca dos trols | Raro | Loja: Cestaria da Larthia | 145 | 5 | Móveis da Palafita | Parede |
+| `casa_parede_066` | Chapéu de palha do arrozal | Incomum | Loja: Lanternas do Mestre Mōzak | 63 | 3 | Móveis do Arrozal | Parede |
+| `casa_parede_067` | Espelho de bronze das torres | Raro | Loja: Espelhos de Natakamani | 158 | 5 | Móveis da Torre Branca | Parede |
+| `casa_parede_068` | Placa de ouro da pantera enrolada | Incomum | Loja: Selaria Nômade | 63 | 3 | Móveis do Ouro da Estepe | Parede |
+| `casa_parede_069` | Quadro do rio de ouro do Pactolo | Raro | Loja: Flauta Dupla | 180 | 5 | Móveis da Flauta Dupla | Parede |
+| `casa_parede_070` | Quadro da sombra da huma | Raro | Loja: Cordas do Sisin | 190 | 5 | Móveis do Ninho de Ouro | Parede |
+| `casa_parede_071` | Painel da ponte vermelha sobre o musgo | Raro | Loja: Ferro Preto do Kurogane | 200 | 5 | Móveis do Jardim de Pedra | Parede |
+| `casa_parede_072` | Espelho de obsidiana do recife | Raro | Loja: Ferro Preto do Kurogane | 210 | 5 | Móveis do Vidro de Brasa | Parede |
+| `casa_parede_073` | Fole de couro pendurado | Incomum | Loja: Ferro Preto do Kurogane | 86 | 3 | Móveis da Fornalha | Parede |
+| `casa_parede_074` | Estandarte das nove fornalhas | Raro | Loja: Ferro Preto do Kurogane | 220 | 5 | Móveis da Fornalha | Parede |
 
 <a id="tapete"></a>
-## Tapetes (41)
+## Tapetes (48)
 
 | ID | Nome | Raridade | Origem | Preço (ouro) | Conforto | Conjunto | Encaixe |
 |---|---|---|---|---|---|---|---|
@@ -543,9 +593,16 @@
 | `casa_tapete_039` | Tapete das horas bordadas | Incomum | Loja: Betume do Atrahasis | 88 | 4 | Móveis do Relógio de Sol | Piso |
 | `casa_tapete_040` | Tapete de fio enovelado | Incomum | Loja: Pavios da Tehat | 85 | 4 | Móveis do Novelo | Piso |
 | `casa_tapete_041` | Tapete de prata de lua | Incomum | Loja: A Última Caravana do Ammo | 90 | 4 | Móveis da Barca da Lua | Piso |
+| `casa_tapete_042` | Esteira de junco das palafitas | Incomum | Loja: Cestaria da Larthia | 58 | 3 | Móveis da Palafita | Piso |
+| `casa_tapete_043` | Esteira de palha dourada | Incomum | Loja: Lanternas do Mestre Mōzak | 62 | 3 | Móveis do Arrozal | Piso |
+| `casa_tapete_044` | Tapete branco de franja de ouro claro | Incomum | Loja: Espelhos de Natakamani | 63 | 3 | Móveis da Torre Branca | Piso |
+| `casa_tapete_045` | Tapete de lã de Pazyryk | Raro | Loja: Selaria Nômade | 160 | 5 | Móveis do Ouro da Estepe | Piso |
+| `casa_tapete_046` | Tapete de penugem branca do ninho | Incomum | Loja: Cordas do Sisin | 78 | 3 | Móveis do Ninho de Ouro | Piso |
+| `casa_tapete_047` | Esteira de cascalho rastelado | Incomum | Loja: Ferro Preto do Kurogane | 82 | 3 | Móveis do Jardim de Pedra | Piso |
+| `casa_tapete_048` | Tapete de feltro antichama | Incomum | Loja: Ferro Preto do Kurogane | 88 | 3 | Móveis da Fornalha | Piso |
 
 <a id="cortina"></a>
-## Cortinas (25)
+## Cortinas (31)
 
 | ID | Nome | Raridade | Origem | Preço (ouro) | Conforto | Conjunto | Encaixe |
 |---|---|---|---|---|---|---|---|
@@ -574,9 +631,15 @@
 | `casa_cortina_023` | Cortina de caniço dos Campos de Juncos | Incomum | Loja: Trocas do Khunanup | 80 | 4 | Móveis do Campo de Juncos | Parede |
 | `casa_cortina_024` | Cortina de fios do novelo | Incomum | Loja: Pavios da Tehat | 88 | 4 | Móveis do Novelo | Parede |
 | `casa_cortina_025` | Cortina de luar tecido | Incomum | Loja: A Última Caravana do Ammo | 90 | 4 | Móveis da Barca da Lua | Parede |
+| `casa_cortina_026` | Cortina de alga trançada | Incomum | Loja: Ferramentas de Mergulho do Danel | 60 | 3 | Móveis do Jardim de Coral | Parede |
+| `casa_cortina_027` | Cortina branca de linho de Meroé | Incomum | Loja: Espelhos de Natakamani | 62 | 3 | Móveis da Torre Branca | Parede |
+| `casa_cortina_028` | Cortina de feltro com grifos de ouro | Incomum | Loja: Selaria Nômade | 65 | 3 | Móveis do Ouro da Estepe | Parede |
+| `casa_cortina_029` | Cortina de folhas de parreira | Incomum | Loja: Flauta Dupla | 72 | 3 | Móveis da Flauta Dupla | Parede |
+| `casa_cortina_030` | Cortina de nuvem branca bordada a ouro | Incomum | Loja: Cordas do Sisin | 76 | 3 | Móveis do Ninho de Ouro | Parede |
+| `casa_cortina_031` | Cortina de contas de obsidiana | Incomum | Loja: Ferro Preto do Kurogane | 86 | 3 | Móveis do Vidro de Brasa | Parede |
 
 <a id="planta"></a>
-## Plantas (36)
+## Plantas (40)
 
 | ID | Nome | Raridade | Origem | Preço (ouro) | Conforto | Conjunto | Encaixe |
 |---|---|---|---|---|---|---|---|
@@ -616,9 +679,13 @@
 | `casa_planta_034` | Pinheiro-anão em vaso de porcelana | Incomum | Loja: Lanternas do Mestre Mōzak | 64 | 3 | Móveis do Pátio dos Nove Anéis | Piso |
 | `casa_planta_035` | Pinheiro podado em vaso de pedra de lava | Incomum | Loja: Ferro Preto do Kurogane | 80 | 3 | Móveis do Palácio de Laca | Piso |
 | `casa_planta_036` | Feixe de trigo de luz em vaso | Incomum | Loja: Trocas do Khunanup | 72 | 3 | Móveis do Campo de Juncos | Piso |
+| `casa_planta_037` | Jardinzinho de coral em tina de vidro | Incomum | Loja: Ferramentas de Mergulho do Danel | 62 | 3 | Móveis do Jardim de Coral | Piso |
+| `casa_planta_038` | Muda de arroz em tina d'água | Incomum | Loja: Lanternas do Mestre Mōzak | 64 | 3 | Móveis do Arrozal | Piso |
+| `casa_planta_039` | Musgo de lava em bandeja de pedra | Incomum | Loja: Ferro Preto do Kurogane | 80 | 3 | Móveis do Jardim de Pedra | Superfície |
+| `casa_planta_040` | Coral de brasa em vaso de vidro | Incomum | Loja: Ferro Preto do Kurogane | 84 | 3 | Móveis do Vidro de Brasa | Superfície |
 
 <a id="musica"></a>
-## Instrumentos musicais (23)
+## Instrumentos musicais (24)
 
 | ID | Nome | Raridade | Origem | Preço (ouro) | Conforto | Conjunto | Encaixe |
 |---|---|---|---|---|---|---|---|
@@ -645,6 +712,7 @@
 | `casa_musica_021` | Flauta de cristal que assobia sozinha | Épico | Drop: Tages, o Habitante Ancestral (chefe) | — | 9 | Tufo Rosa das Lamparinas | Superfície |
 | `casa_musica_022` | Matraca de madeira | Comum | Loja: Casa de Música do Mestre Xroshtag | 23 | 2 | — | Superfície |
 | `casa_musica_023` | Metrônomo de sintonia | Incomum | Conquista: Em Sintonia | — | 4 | — | Superfície |
+| `casa_musica_024` | Flauta dupla de cana em suporte | Incomum | Loja: Flauta Dupla | 70 | 3 | Móveis da Flauta Dupla | Superfície |
 
 <a id="brinquedo"></a>
 ## Brinquedos (31)
@@ -684,7 +752,7 @@
 | `casa_brinquedo_031` | Aranhinha de crochê | Incomum | Drop: Aranha-Tecelã Apagada | — | 3 | Tugai do Zarafshan | Superfície |
 
 <a id="regional"></a>
-## Decoração regional por região (62)
+## Decoração regional por região (74)
 
 | ID | Nome | Raridade | Origem | Preço (ouro) | Conforto | Conjunto | Encaixe |
 |---|---|---|---|---|---|---|---|
@@ -750,6 +818,18 @@
 | `casa_regional_060` | Globo do Novelo em redoma | Épico | Loja: Pavios da Tehat | 610 | 9 | Móveis do Novelo | Piso |
 | `casa_regional_061` | Concha de prata de lua | Comum | Loja: A Última Caravana do Ammo | 30 | 2 | Móveis da Barca da Lua | Superfície |
 | `casa_regional_062` | Barca da Lua em miniatura | Épico | Loja: A Última Caravana do Ammo | 690 | 9 | Móveis da Barca da Lua | Piso |
+| `casa_regional_063` | Pérola grande em concha aberta | Comum | Loja: Ferramentas de Mergulho do Danel | 24 | 2 | Móveis do Jardim de Coral | Superfície |
+| `casa_regional_064` | Recife de coral aceso em miniatura | Épico | Loja: Ferramentas de Mergulho do Danel | 380 | 8 | Móveis do Jardim de Coral | Piso |
+| `casa_regional_065` | Cesto gigante dos trols | Épico | Loja: Cestaria da Larthia | 385 | 8 | Móveis da Palafita | Piso |
+| `casa_regional_066` | Feixe de espigas de arroz dourado | Raro | Loja: Lanternas do Mestre Mōzak | 160 | 5 | Móveis do Arrozal | Superfície |
+| `casa_regional_067` | Caco de vidro de luz em moldura | Comum | Loja: Espelhos de Natakamani | 25 | 2 | Móveis da Torre Branca | Superfície |
+| `casa_regional_068` | Astrolábio de bronze de Arkamani | Épico | Loja: Espelhos de Natakamani | 410 | 8 | Móveis da Torre Branca | Piso |
+| `casa_regional_069` | Cervo de ouro deitado dos kurgans | Épico | Loja: Selaria Nômade | 420 | 8 | Móveis do Ouro da Estepe | Piso |
+| `casa_regional_070` | Pote de pó de ouro do Pactolo | Raro | Loja: Flauta Dupla | 185 | 5 | Móveis da Flauta Dupla | Superfície |
+| `casa_regional_071` | Pena de huma em redoma de vidro | Raro | Loja: Cordas do Sisin | 195 | 5 | Móveis do Ninho de Ouro | Superfície |
+| `casa_regional_072` | Par de shisas de cerâmica do telhado | Raro | Loja: Ferro Preto do Kurogane | 205 | 5 | Móveis do Jardim de Pedra | Superfície |
+| `casa_regional_073` | Tartaruga-vulcão de vidro em miniatura | Raro | Loja: Ferro Preto do Kurogane | 215 | 5 | Móveis do Vidro de Brasa | Superfície |
+| `casa_regional_074` | Fornalha de laca em miniatura | Raro | Loja: Ferro Preto do Kurogane | 225 | 5 | Móveis da Fornalha | Superfície |
 
 <a id="trofeu"></a>
 ## Troféus de chefes (36)
@@ -962,6 +1042,16 @@ Bônus de conjunto em Housing.md §6.2. Peças por conjunto:
 | Móveis do Relógio de Sol | móveis: Deserto do Relógio, areia do tempo, relógio de água e gnômon | 8 | 1 |
 | Móveis do Novelo | móveis: Ponte do Novelo, fio de luz, gaiolas acesas e o globo do Novelo | 8 | 1 |
 | Móveis da Barca da Lua | móveis: Convés da Barca da Lua, prata de lua, leme e barca em miniatura | 8 | 1 |
+| Móveis do Jardim de Coral | móveis: Kirta, coral aceso, madrepérola e cama de concha | 8 | 1 |
+| Móveis da Palafita | móveis: Palafitas de Tarchon, cesto gigante, rede de pesca e fogo-fátuo | 8 | 1 |
+| Móveis do Arrozal | móveis: Arrozais Espelhados, palha dourada, muda de arroz e roda-d'água | 8 | 1 |
+| Móveis da Torre Branca | móveis: Torres Brancas, espelho de bronze, vidro de luz e astrolábio | 8 | 1 |
+| Móveis do Ouro da Estepe | móveis, não o equipamento Ouro dos Kurgans: Kurgans de Ouro, cervo de ouro e feltro de Pazyryk | 8 | 1 |
+| Móveis da Flauta Dupla | móveis: Vale dos Sátiros, flauta dupla, parreira e pó de ouro do Pactolo | 8 | 1 |
+| Móveis do Ninho de Ouro | móveis, não o Ninho de Pedra de Farnkesh: Ninho da Huma, galhos dourados, nuvem e pena de huma | 8 | 1 |
+| Móveis do Jardim de Pedra | móveis: Jardins de Lava Laqueada, cascalho rastelado, musgo de lava e shisas de cerâmica | 8 | 1 |
+| Móveis do Vidro de Brasa | móveis: Recife de Obsidiana, obsidiana, coral de brasa e vapor | 8 | 1 |
+| Móveis da Fornalha | móveis: Castelo das Nove Fornalhas, ferro celeste, fole e a bigorna de enfeite | 8 | 1 |
 
 <a id="drops"></a>
 ## Itens de casa exclusivos de drop, por inimigo

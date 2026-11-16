@@ -134,11 +134,12 @@ namespace Rapadura.Tests
         }
 
         [Test]
-        public void TheGreyWolves_KeepTheWolf_ForALaterPass()
+        public void TheGreyWolves_AreTheLoboCinzento_SinceTheTwentyFourthPass()
         {
             OverworldFauna fauna = OverworldLayouts.Get(Nart).Zones.SelectMany(z => z.Fauna).FirstOrDefault(f => f.Id == "lobos_cinzentos");
             Assert.IsNotNull(fauna, "lobos_cinzentos");
-            Assert.IsTrue(fauna.Day.Any(e => e.EnemyId == Wolf), "the Lobo-Cinzento (51) is still the wolf by day");
+            Assert.IsFalse(fauna.Day.Any(e => e.EnemyId == Wolf), "the Tugai wolf left the steppe (WestOwnBeastsPlacementTests)");
+            Assert.IsTrue(fauna.Day.Any(e => e.EnemyId == OverworldLayouts.WestOwnBeasts.GreyWolf), "the Lobo-Cinzento (51) by day");
         }
 
         [TestCase("javalis_da_colina")]

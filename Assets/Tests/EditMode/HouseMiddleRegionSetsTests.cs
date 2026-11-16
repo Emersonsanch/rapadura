@@ -31,6 +31,13 @@ namespace Rapadura.Tests
             "set_moveis_casa_lua_branca", "set_moveis_cais_papiro", "set_moveis_tijolo_azul", "set_moveis_mil_lampadas", "set_moveis_cais_luz",
         };
 
+        /// <summary>The fichas' second sets sold at a capital's counter (the ficha's return city is the capital).</summary>
+        private static readonly Dictionary<string, string> SecondSetAtCounter = new Dictionary<string, string>
+        {
+            { CityShopCatalog.LanternasMozak, "set_moveis_arrozal" },
+            { CityShopCatalog.SelariaNomade, "set_moveis_ouro_estepe" },
+        };
+
         private static List<HouseItemDefinition> PiecesOf(string setId) => HouseCatalog.All.Where(i => i.SetId == setId).ToList();
 
         [Test]
@@ -70,10 +77,12 @@ namespace Rapadura.Tests
                     Assert.AreEqual(item.Rarity == ItemRarity.Epic ? ShopPool.Weekly : ShopPool.House, entry.Pool, item.ItemId);
                 }
 
-                // Only this region's set on this counter: the capital sells no furniture of another set.
+                // Only this region's sets on this counter: the capital sells no furniture of another region (Mingcheng and Soslan
+                // also sell the second set of a ficha whose return city they are, HouseFichaSetsTests).
                 IEnumerable<string> sets = shop.Entries.Where(e => e.Kind == CityShopEntryKind.HouseItem)
                     .Select(e => HouseCatalog.Get(e.ItemId).SetId).Distinct();
-                CollectionAssert.AreEquivalent(new[] { setId }, sets.ToList(), shopId);
+                string[] expected = SecondSetAtCounter.TryGetValue(shopId, out string second) ? new[] { setId, second } : new[] { setId };
+                CollectionAssert.AreEquivalent(expected, sets.ToList(), shopId);
             }
         }
 

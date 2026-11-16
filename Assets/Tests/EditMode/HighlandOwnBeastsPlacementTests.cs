@@ -198,7 +198,7 @@ namespace Rapadura.Tests
             Assert.IsFalse(w.World.Zones.SelectMany(s => s.Day).Any(e => e.EnemyId == Hawk), "the Íbis de Luz Apagada took the hawk's last roles");
         }
 
-        [TestCase("espantalhos_apagados")]
+        // The scarecrows of the mill (44) are the Espantalho Apagado since the twenty-fourth pass (WestOwnBeastsPlacementTests).
         [TestCase("grous_das_vilas")]
         public void TheScarecrowsAndTheVillageCranes_KeepTheBrokenLantern_ForALaterPass(string group)
         {

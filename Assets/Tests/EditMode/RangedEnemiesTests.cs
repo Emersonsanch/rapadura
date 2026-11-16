@@ -90,6 +90,14 @@ namespace Rapadura.Tests
             ("enemy_cave_snow_chough", BiomeType.Caves, EnemyProjectileKind.Feather, ProceduralEnemyKind.SnowChough),
             ("enemy_desert_terracotta_archer", BiomeType.Desert, EnemyProjectileKind.LanternBolt, ProceduralEnemyKind.TerracottaArcher),
             ("enemy_mountain_dimmed_light_ibis", BiomeType.Mountain, EnemyProjectileKind.Feather, ProceduralEnemyKind.LightIbis),
+            // The twenty-first pass, Farnkesh, the Mar Gelado and Hinokura (NorthOwnBeastsTests): the trapped lightning's bolt and the storm
+            // gull's feathers, as the broken lantern and the ice gull they replace.
+            ("enemy_desert_trapped_lightning", BiomeType.Desert, EnemyProjectileKind.LanternBolt, ProceduralEnemyKind.TrappedLightning),
+            ("enemy_mountain_storm_gull", BiomeType.Mountain, EnemyProjectileKind.Feather, ProceduralEnemyKind.StormGull),
+            // The twenty-second pass, the Rio, the Mistura and the Limiar Profundo (DeepOwnBeastsTests): the boiled shadow spits a glob of hot shadow and the
+            // clock ushabti throws the dial's stolen sunlight, as their sheets ask (the dark shoal bites in a pack instead: [enxame]).
+            ("enemy_cave_boiled_shadow", BiomeType.Caves, EnemyProjectileKind.LureGlob, ProceduralEnemyKind.BoiledShadow),
+            ("enemy_mountain_clock_ushabti", BiomeType.Mountain, EnemyProjectileKind.LanternBolt, ProceduralEnemyKind.ClockUshabti),
             // The nineteenth pass, the Costa das Monções (CoastOwnBeastsTests): the lionfish's glob of light and the kongamato's feathers, as the lantern fish and the crow they replace.
             ("enemy_cave_dimmed_lionfish", BiomeType.Caves, EnemyProjectileKind.LureGlob, ProceduralEnemyKind.DimmedLionfish),
             ("enemy_cave_kongamato", BiomeType.Caves, EnemyProjectileKind.Feather, ProceduralEnemyKind.Kongamato),
@@ -114,7 +122,7 @@ namespace Rapadura.Tests
         {
             (OverworldLayouts.MarGeladoRegionId, OverworldLayouts.PortoLuaBrancaMapId, new[] { "enemy_mountain_ice_gull" }),
             (OverworldLayouts.MarGeladoRegionId, OverworldLayouts.TundraOmolMapId, new[] { "enemy_mountain_twig_bird" }),
-            (OverworldLayouts.MarGeladoRegionId, OverworldLayouts.MarAurorasMapId, new[] { "enemy_mountain_ice_gull" }),
+            (OverworldLayouts.MarGeladoRegionId, OverworldLayouts.MarAurorasMapId, new[] { "enemy_mountain_storm_gull" }),
             (OverworldLayouts.HinokuraRegionId, OverworldLayouts.HinokuraMapId, new[] { "enemy_mountain_ember_gull" }),
             (OverworldLayouts.HinokuraRegionId, OverworldLayouts.RecifeObsidianaMapId, new[] { "enemy_mountain_ember_coral" }),
             (OverworldLayouts.MisturaRegionId, OverworldLayouts.PocosBetumeMapId, new[] { "enemy_forest_tar_heron" }),
@@ -125,6 +133,7 @@ namespace Rapadura.Tests
             (OverworldLayouts.CeuRegionId, OverworldLayouts.BarcaDoSolMapId, new[] { "enemy_forest_dimmed_light_gull" }),
             (OverworldLayouts.HinokuraRegionId, OverworldLayouts.MonteEcheydeMapId, new[] { "enemy_mountain_volcanic_bomb" }),
             (OverworldLayouts.MisturaRegionId, OverworldLayouts.DurJarrasMapId, new[] { "enemy_forest_scorpion_man" }),
+            (OverworldLayouts.MisturaRegionId, OverworldLayouts.DesertoRelogioMapId, new[] { "enemy_mountain_clock_ushabti" }),
         };
 
         private readonly List<Object> _created = new List<Object>();

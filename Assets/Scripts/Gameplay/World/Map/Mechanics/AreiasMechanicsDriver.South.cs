@@ -140,6 +140,10 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             {
                 LeaveSalt();
             }
+
+            TickDrum(local);
+            TickInscriptions(local);
+            TickOasis(local);
         }
 
         private void LeaveSouth()
@@ -147,6 +151,9 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             LeaveGalleries();
             LeaveDunes();
             LeaveSalt();
+            LeaveDrum();
+            HideStelae();
+            LeaveOasis();
             RevealAll();
         }
 

@@ -167,6 +167,13 @@ namespace Rapadura.Gameplay.Inventory
             { "mount_lantern_olm", 110f },
             { "mount_aratta_aurochs", 260f },
             { "mount_white_bactrian", 320f }, // the caravan camel of the passes: second only to the yak among the newer mounts
+
+            { "mount_laurel_lizard", 90f }, // a lizard: light frame
+            { "mount_jhilpur_buffalo", 300f }, // the paddy buffalo pulls the delta's carts: the carrier of these six
+            { "mount_pamir_argali", 150f },
+            { "mount_freed_smoke_horse", 160f },
+            { "mount_ninki_nanka", 220f },
+            { "mount_living_ember_boar", 200f },
         };
 
         // ------------------------------------------------------------------
