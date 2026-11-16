@@ -71,3 +71,4 @@ Thumbs.db
 .vs/
 *.swp
 tools/balance/__pycache__/
+tools/unity-claude-skills/
