@@ -162,3 +162,19 @@ Código em `Assets/Scripts/Gameplay/Party/`, C# puro (só `Vector3` da Unity) e 
 | Sem fogo amigo | `PartyCombatRules.CanHarm` | `SafeZoneRules.CanAttack` e, além dele, jogador nunca fere membro do próprio grupo, nem em área de PvP. Para duelar, é preciso sair do grupo. |
 
 Falta: mensagens de rede, HUD dos membros, chat de grupo, procurar grupo, reviver companheiro, entrar junto em chefe e evento, e o Golpe em dupla com um membro real.
+
+## 11. Troca entre jogadores: regras puras (2026-11-23)
+
+Base da troca da Fase 12.3, sem rede, em `Assets/Scripts/Gameplay/Trade/` (C# puro, só lê `ItemDefinition` e as regras de mochila; testes em `Assets/Tests/EditMode/TradeTests.cs`). O servidor guarda uma `TradeSession` por troca e passa nela as intenções dos dois jogadores com o relógio dele; nada no cliente decide.
+
+| Peça | O que faz |
+|---|---|
+| `TradeRules` | Abrir: os dois na zona segura da **mesma cidade** (até 40 m) ou cara a cara (até 5 m) e, fora da cidade, sem luta nos últimos `SafeZoneRules.PlayerCombatTagSeconds` (10 s). Nada consigo mesmo, nem com quem já está em outra troca. Limites: 12 linhas de item e 1.000.000 de ouro por lado, ninguém acaba com mais de 2.000.000.000. A janela fecha após 120 s parada ou 600 s no total |
+| `TradeSession` | Pôr e tirar itens (uma linha por entrada da mochila, o mesmo stack duas vezes é recusado) e ouro (só pelo campo de ouro; `item_gold` não entra como item). **Qualquer mudança desfaz as duas travas e as duas confirmações** e sobe a `Revision`. Travar nos dois lados dá o resumo (`BuildSummary`), e a confirmação final cita a revisão que viu (resumo velho é recusado). Cancelar e expirar fecham de vez |
+| `TradeItemRules` | Não trocam: itens de história (`QuestItem` e `story_*`), relíquias da família (Patuá da Vó Edna, `relic_*`, `item_reliquia_*`), itens de conquista (`conquista_*`), montarias (apitos `item_whistle_*`), itens da casa (`casa_*`), outras moedas e tudo com `IsBound` (o mesmo campo que já protege da queda ao morrer). Nenhum asset mudou. Aviso de item raro: raridade Rara ou acima, +7 ou mais, opção excelente ou set antigo |
+| `TradeSettlement` | Conclui tudo ou nada sobre cópias e devolve as mochilas novas para o servidor gravar numa transação só. Confere de novo cada linha pela "impressão" da entrada (id, durabilidade, afixos, refino, opções), as quantidades e o ouro, o limite de ouro, as contas novas, o espaço na grade (quem entrega libera espaço antes de receber) e o peso (não passa da carga, a não ser que fique mais leve). Se falhar, nada se move e a troca volta destravada. Concluir duas vezes é recusado |
+| `TradeAccountProtection` | Conta nova = menos de 72 h **ou** herói abaixo do nível 30: por dia UTC, até 20.000 de ouro e 20 linhas de item recebidos, e o mesmo entregues. O servidor guarda o `TradeDailyTally` de cada conta |
+| `TradeRecord` | Registro serializável (id da troca, os dois jogadores, hora UTC, itens e ouro de cada lado, impressão de cada item) com `ToLogLine()` para o log de economia |
+| `TradeTexts` | Textos PT/EN de cada recusa e aviso e dos rótulos do resumo |
+
+Falta (online): mensagens de rede para cada intenção, a janela de troca na UI, gravar o resultado e o registro no banco na mesma transação, e travar a mochila do jogador (vender, largar, usar) enquanto a troca está aberta, para reduzir as recusas na conclusão.

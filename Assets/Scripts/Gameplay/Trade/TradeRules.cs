@@ -133,7 +133,7 @@ namespace Rapadura.Gameplay.Trade
 
     /// <summary>
     /// The numbers and the "can these two open a trade?" rule of the trade between players (TODO.md Fase 12.3, "Troca entre
-    /// jogadores"; Docs/Network.md §10). Plain C# with no Unity dependency, like <see cref="SafeZoneRules"/>, so the
+    /// jogadores"; Docs/Network.md §11). Plain C# with no Unity dependency, like <see cref="SafeZoneRules"/>, so the
     /// authoritative server runs this very file. Decisions (2026-11-23):
     /// <list type="bullet">
     /// <item><b>Where:</b> both in the safe zone of the <i>same</i> city → up to <see cref="CityTradeDistance"/> m apart

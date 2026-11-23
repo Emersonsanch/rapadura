@@ -98,7 +98,7 @@ namespace Rapadura.Gameplay.Trade
     }
 
     /// <summary>
-    /// The trade window between two players as a pure state machine (TODO.md Fase 12.3; Docs/Network.md §10). The server
+    /// The trade window between two players as a pure state machine (TODO.md Fase 12.3; Docs/Network.md §11). The server
     /// owns one per trade and feeds it the players' intents with its clock (<c>now</c>, seconds); nothing here touches a
     /// bag: <see cref="TradeSettlement.Settle"/> does, all or nothing.
     /// <list type="number">

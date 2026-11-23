@@ -234,6 +234,7 @@ fica em y = 0 dentro de um círculo de ~22 m com 3 saídas de rua, no lugar que 
 - **Missões da cidade:** o rei Kirta pede 6 bolotas de lodo no recife (o Lodo de Gruta faz a Água-Viva de Lodo; 4 poções
   de vida + 4 de mana + 90 ouro, 1040 XP); depois Pughat pede 5 peixes-lanterna longe da gruta dos mergulhadores (o
   Peixe-Lanterna faz o Peixe-Leão Apagado; **Bolha de Ar** + 100 ouro, 1120 XP). Testes: `CityKirtaTests`.
+- **No jogo (2026-11-23): o coral-mãe segue o recife** (`KirtaMotherCoralRules`, `CityTownRecipes.Kirta(int)`, `TownKit.CoralMother`): a receita leva os corais do recife acesos como variante do coral-mãe; 3 dos 7 galhos acesos no começo (a metade leste de sempre), +1 galho por coral, e com os 5 o tronco e a borda do poço também voltam (inteiro). No mundo contínuo, anel em volta do coral-mãe do cinza ao rosa conforme os acesos, e Pughat/Kirta falam do novo galho na primeira passada depois de cada coral (`kirta.mother.seen`). Teste `KirtaTarchonTownTests`.
 
 **Palafitas de Tarchon** (trols, mapa 33; cidade de retorno de 33–34):
 - **Passeio da cidade:** receita `CityTownRecipes.Tarchon` (`CityTownRecipes.Tarchon.cs`) no estilo novo
@@ -264,6 +265,7 @@ fica em y = 0 dentro de um círculo de ~22 m com 3 saídas de rua, no lugar que 
 - **Missões da cidade:** o velho Tarchon pede 8 fogos-fátuos presos libertados (o Enxame de Vaga-lumes faz o Fogo-Fátuo
   Preso; 5 poções de vida + 5 de mana + 120 ouro, 1350 XP); depois Vel pede 6 pássaros-fantasma fora das redes (a
   Coruja-Mortalha faz a Garça-Fantasma; **Amuleto Antiveneno** + 130 ouro, 1450 XP). Testes: `CityTarchonTests`.
+- **No jogo (2026-11-23): a cidade enche, a Larthia compra fogos-fátuos e a diária do Tarchon** (`TarchonCrowdRules`, `LarthiaWispRules`, `TarchonDailyRules`, `CityDailyQuestCatalog`, `CityTownRecipes.Tarchon(int)`/`TarchonCrowdSpots`, `CostaDeltaTetoMechanicsDriver.TarchonTown.cs`; teste `KirtaTarchonTownTests`): com 3/10/20/35/55/80 vizinhos já acordados volta para casa um trol (Aule, Seianti, Thana, Sethre, Hasti, Tite: figuras com gesto próprio e fala de chegada, uma vez cada) e a praça ganha 2 lanternas a partir do 2º e mais 2 a partir do 5º. Cada vizinho acordado solta o fogo-fátuo que o prendia (até 10 com o herói); [E] na porta da Cestaria a Larthia paga 25 de ouro cada, e com 20 vendidos dá uma Lanterna de Fogo-Fátuo (1×). Diária "Despertar os Vizinhos" (`quest_daily_tarchon_wake_neighbours`, tipo Diária no diário): o Tarchon entrega na primeira entrada de cada dia do jogo; 3 vizinhos acordados = 90 de ouro, 2 poções de vida e XP de 1/3 de missão da cidade (mín. 450).
 
 **Torres Brancas de Amanirenas** (altos-elfos, Planície de Mingcheng, mapa 42; cidade de retorno de 42 e 45):
 - **Passeio da cidade:** receita `CityTownRecipes.TorresBrancas` (`CityTownRecipes.TorresBrancas.cs`) no estilo novo

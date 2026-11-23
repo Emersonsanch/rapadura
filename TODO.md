@@ -1950,10 +1950,10 @@ Cada primo possui uma cadeia de 4 etapas que aprofunda seu trauma, sua maturidad
   - [ ] Barras de vida dos membros no HUD, marcador no mapa, chat de grupo, procurar grupo (lista de quem quer grupo por região/nível).
   - [~] Sem fogo amigo; reviver companheiro caído; entrar junto nas lutas de chefe e nos eventos. — sem fogo amigo: regras puras prontas (data 2026-11-23); online pendente (`PartyCombatRules.CanHarm`, junto do `SafeZoneRules`). Reviver e entrar junto ainda não.
 - [ ] Chat (geral, grupo, clã, sussurro) com filtro de palavras e denúncia; emotes para o mobile.
-- [ ] **Troca entre jogadores** — pedido do usuário (2026-10-29):
-  - [ ] Janela de troca cara a cara (só na cidade/zona segura ou perto um do outro): cada lado põe itens e ouro, os dois confirmam, qualquer mudança desfaz a confirmação, confirmação final com resumo.
-  - [ ] Itens "vinculados" que não podem ser trocados (recompensas de história, relíquias da família, itens de conquista); aviso de item raro.
-  - [ ] Tudo validado e registrado no servidor (log de trocas, proteção contra duplicação de item, limite para contas novas contra golpe).
+- [~] **Troca entre jogadores** — pedido do usuário (2026-10-29):
+  - [~] Janela de troca cara a cara (só na cidade/zona segura ou perto um do outro): cada lado põe itens e ouro, os dois confirmam, qualquer mudança desfaz a confirmação, confirmação final com resumo. — regras puras prontas (2026-11-23); online pendente. `Gameplay/Trade/TradeSession.cs` + `TradeRules` (mesma cidade até 40 m, fora dela 5 m e sem luta há 10 s; travar → resumo com revisão → confirmar; expira em 120 s parada / 600 s). Falta a janela na UI e a rede.
+  - [~] Itens "vinculados" que não podem ser trocados (recompensas de história, relíquias da família, itens de conquista); aviso de item raro. — regras puras prontas (2026-11-23); online pendente. `TradeItemRules` (história, relíquias, conquista, apitos de montaria, itens da casa, outras moedas e `IsBound`; aviso para Rara+, +7, excelente ou set antigo).
+  - [~] Tudo validado e registrado no servidor (log de trocas, proteção contra duplicação de item, limite para contas novas contra golpe). — regras puras prontas (2026-11-23); online pendente. `TradeSettlement` (tudo ou nada sobre cópias, impressão de cada entrada, espaço e peso, limite de ouro), `TradeAccountProtection` (menos de 72 h ou nível < 30: 20.000 de ouro e 20 itens por dia), `TradeRecord.ToLogLine()`; testes em `TradeTests`. Ver `Docs/Network.md` §11.
   - [ ] Barraca de venda na cidade (vender enquanto está parado/offline) e casa de leilões com taxa (dreno de ouro).
 - [ ] **Guildas (clãs)** — pedido do usuário (2026-10-29):
   - [ ] Criar guilda (custo em ouro, nível mínimo, nome único com filtro de palavras), brasão personalizável e lema.

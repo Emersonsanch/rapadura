@@ -103,13 +103,19 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         private int _tiltedBreath = -1;
         private int _heldBreath = -1;
 
-        private void OnEnable() => EventBus.Subscribe<SkillCastEvent>(OnSkillCast);
+        private void OnEnable()
+        {
+            EventBus.Subscribe<SkillCastEvent>(OnSkillCast);
+            HookNight();
+        }
 
         private void OnDisable()
         {
             EventBus.Unsubscribe<SkillCastEvent>(OnSkillCast);
+            UnhookNight();
             ClearHeroEffects();
             LeaveRegion();
+            ClearNight();
         }
 
         private Rect[] _areas;
@@ -169,6 +175,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             TickBeasts(local, night);
             TickShoulder(local, night);
             TickResinLanterns(local);
+            TickNight(local, night);
         }
 
         private bool FindPlayer()
@@ -201,6 +208,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             _inRegion = false;
             ClearHeroEffects();
             LeaveResinLanterns();
+            ClearNight();
             ResetTar();
             SetStreaks(false, Vector2.zero, false);
             foreach (LineRenderer ring in _rings.Values)
@@ -319,6 +327,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             }
 
             OnFireForLinks(evt);
+            OnFireForSmoke(evt);
             Vector2 target = new Vector2(evt.TargetPoint.x, evt.TargetPoint.z) - _origin;
             Vector2 caster = new Vector2(_player.position.x, _player.position.z) - _origin;
             MisturaTarPatch[] patches = OverworldLayouts.TarPatches;
@@ -446,7 +455,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
                 {
                     if (_tar[i].Stage == MisturaTarStage.Burning && MisturaTarRules.InBurnReach(patches[i], at))
                     {
-                        enemy.Health.ApplyChanneledDamage(MisturaTarRules.BeastBurn(enemy.Health.MaxHealth), ElementType.Fire, _player.gameObject, false, _burnChannel);
+                        enemy.Health.ApplyChanneledDamage(NightBurnTick(enemy), ElementType.Fire, _player.gameObject, false, _burnChannel);
                         break;
                     }
                 }

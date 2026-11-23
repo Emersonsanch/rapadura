@@ -41,7 +41,8 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             new TarchonNeighbour("arnth", TarchonOffset + new Vector2(-5f, 0.8f)),
             new TarchonNeighbour("velia", TarchonOffset + new Vector2(5f, -0.8f)),
             new TarchonNeighbour("laris", TarchonOffset + new Vector2(0.8f, -10f)),
-            new TarchonNeighbour("ravnthu", TarchonOffset + new Vector2(10f, 0.8f)),
+            // On the south side of the East street: at (10, 0.8) he stood 1.2 m from Ramtha's door (KirtaTarchonTownTests).
+            new TarchonNeighbour("ravnthu", TarchonOffset + new Vector2(10.5f, -0.9f)),
             new TarchonNeighbour("fasti", TarchonOffset + new Vector2(-12f, -0.8f)),
         };
 

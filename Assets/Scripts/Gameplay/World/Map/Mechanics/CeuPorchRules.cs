@@ -18,6 +18,8 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
     /// <code>
     /// 5 stories of 4 lines, 6 s a line (24 s), plus one closing line at night · start within 4 m, stay within 5 m
     /// rest: 3% of max health per second (about 72% over a story)
+    /// kept (2026-11-23, "guardar a história do dia no save"): a sitting cut short is saved with its line, and sitting again the same UTC day picks the
+    /// story up there; each story told to the end is kept in a mask of five, and the fifth one heard brings Vô Jorge's memory once
     /// </code>
     /// </summary>
     public static class CeuPorchRules
@@ -56,6 +58,57 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             return Mathf.Min(max - current, max * RestFractionPerSecond * Mathf.Max(0f, seconds));
         }
 
+        public const string ResumeMarkKey = "ceu.porch.resume";
+        public const string HeardMarkKey = "ceu.porch.heard";
+        public const string AllHeardMarkKey = "ceu.porch.all_heard";
+        public const int AllHeardMask = (1 << Stories) - 1;
+
+        /// <summary>The UTC day number of <paramref name="unixSeconds"/> (floored, also before 1970).</summary>
+        public static long UtcDay(long unixSeconds)
+        {
+            long day = unixSeconds / SecondsPerDay;
+            if (unixSeconds % SecondsPerDay != 0 && unixSeconds < 0)
+            {
+                day--;
+            }
+
+            return day;
+        }
+
+        /// <summary>The saved mark of a sitting cut short on <paramref name="utcDay"/> at <paramref name="line"/> (never 0, so 0 means "nothing kept").</summary>
+        public static long EncodeResume(long utcDay, int line) => utcDay * (LinesPerStory + 1) + Mathf.Clamp(line, 0, LinesPerStory) + 1;
+
+        /// <summary>The line to start from: the one kept from the same UTC day, or 0 (another day, nothing kept, or the story was already over).</summary>
+        public static int ResumeLine(long mark, long utcDay)
+        {
+            if (mark <= 0L)
+            {
+                return 0;
+            }
+
+            long raw = mark - 1L;
+            long day = raw / (LinesPerStory + 1);
+            int line = (int)(raw % (LinesPerStory + 1));
+            return day == utcDay && line > 0 && line < LinesPerStory ? line : 0;
+        }
+
+        public static int WithStory(int mask, int story) => story >= 0 && story < Stories ? mask | (1 << story) : mask;
+
+        public static bool Heard(int mask, int story) => story >= 0 && story < Stories && (mask & (1 << story)) != 0;
+
+        public static int HeardCount(int mask)
+        {
+            int count = 0;
+            for (int i = 0; i < Stories; i++)
+            {
+                count += Heard(mask, i) ? 1 : 0;
+            }
+
+            return count;
+        }
+
+        public static bool AllHeard(int mask) => (mask & AllHeardMask) == AllHeardMask;
+
         public static bool WithinSeat(Vector2 chair, Vector2 hero) => (chair - hero).sqrMagnitude <= SeatReach * SeatReach;
 
         public static bool WithinStay(Vector2 chair, Vector2 hero) => (chair - hero).sqrMagnitude <= StayReach * StayReach;
@@ -74,11 +127,14 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         /// <summary>The line being told; past the story's own lines it is the night's closing line.</summary>
         public int Line { get; private set; }
 
-        public void Begin(int story, bool isNight)
+        public void Begin(int story, bool isNight) => Begin(story, isNight, 0);
+
+        /// <summary>Sits down at <paramref name="startLine"/> of the story (a kept sitting picks up where it stopped).</summary>
+        public void Begin(int story, bool isNight, int startLine)
         {
             IsSitting = true;
             Story = story;
-            Line = 0;
+            Line = Mathf.Clamp(startLine, 0, CeuPorchRules.LinesPerStory - 1);
             _clock = 0f;
             _lineCount = CeuPorchRules.LineCount(isNight);
         }

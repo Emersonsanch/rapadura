@@ -26,6 +26,8 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
     /// drip every 6 s (warned 1.5 s before): 5% of max health, never below 30% of it (at most 15% in a whole hold)
     /// sealing mends 30% of max health and bites the beasts within 20 m for 15% of their max health (bosses untouched)
     /// sealed for 600 s
+    /// night (2026-11-23, "as rachaduras aparecem mais: sombra escorre melhor no escuro"): hold 24 s, drip every 4.5 s for 6% (same floor),
+    /// the seal lasts only 300 s, but it mends 40% and bites 20%
     /// </code>
     /// </summary>
     public static class CeuSkyHoldRules
@@ -42,6 +44,40 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         public const float SealBiteFraction = 0.15f;
         public const float SealBiteRadius = 20f;
         public const long SealSeconds = 600;
+
+        public const float NightHoldSeconds = 24f;
+        public const float NightDripInterval = 4.5f;
+        public const float NightDripFraction = 0.06f;
+        public const float NightSealHealFraction = 0.4f;
+        public const float NightSealBiteFraction = 0.2f;
+        public const long NightSealSeconds = 300;
+
+        public static float HoldFor(bool night) => night ? NightHoldSeconds : HoldSeconds;
+
+        public static float DripIntervalFor(bool night) => night ? NightDripInterval : DripInterval;
+
+        /// <summary>How long a seal made by day or by night keeps the crack shut (a night seal fits inside a day one, so the saved check still holds).</summary>
+        public static long SealSecondsFor(bool night) => night ? NightSealSeconds : SealSeconds;
+
+        /// <summary>A drip by night: <see cref="NightDripFraction"/> of the max, with the same floor.</summary>
+        public static float DripAmount(float current, float max, bool night)
+        {
+            if (!night)
+            {
+                return DripAmount(current, max);
+            }
+
+            if (max <= 0f || current <= 0f)
+            {
+                return 0f;
+            }
+
+            return Mathf.Min(max * NightDripFraction, Mathf.Max(0f, current - max * DripFloor));
+        }
+
+        public static float SealHeal(float max, bool night) => Mathf.Max(0f, max) * (night ? NightSealHealFraction : SealHealFraction);
+
+        public static float SealBite(float enemyMax, bool isBoss, bool night) => isBoss ? 0f : Mathf.Max(0f, enemyMax) * (night ? NightSealBiteFraction : SealBiteFraction);
 
         /// <summary>Health a drip takes: <see cref="DripFraction"/> of the max, cut short so the hero is left at <see cref="DripFloor"/> at the lowest.</summary>
         public static float DripAmount(float current, float max)
@@ -82,6 +118,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
     {
         private readonly long[] _sealedUntil = new long[CeuSkyHoldRules.Cracks];
         private float _dripClock;
+        private bool _night;
 
         /// <summary>The crack whose pillar is up, or −1.</summary>
         public int ActiveCrack { get; private set; } = -1;
@@ -92,7 +129,10 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         /// <summary>True between the warning and the drip.</summary>
         public bool DripImminent { get; private set; }
 
-        public float Fraction => Mathf.Clamp01(Progress / CeuSkyHoldRules.HoldSeconds);
+        public float Fraction => Mathf.Clamp01(Progress / CeuSkyHoldRules.HoldFor(_night));
+
+        /// <summary>Whether the last <see cref="CeuSkyEvent.Sealed"/> was made by night (it heals and bites more, and lasts less).</summary>
+        public bool LastSealAtNight { get; private set; }
 
         public bool IsSealed(int crack, long now) => crack >= 0 && crack < _sealedUntil.Length && now < _sealedUntil[crack];
 
@@ -129,8 +169,12 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         }
 
         /// <summary>One step. <paramref name="inReach"/>: the hero is within <see cref="CeuSkyHoldRules.Reach"/> of the active crack.</summary>
-        public CeuSkyEvent Tick(float deltaTime, bool inReach, long now)
+        public CeuSkyEvent Tick(float deltaTime, bool inReach, long now) => Tick(deltaTime, inReach, now, false);
+
+        /// <summary>One step, by day or by night (<see cref="CeuSkyHoldRules.HoldFor"/>, <see cref="CeuSkyHoldRules.DripIntervalFor"/>).</summary>
+        public CeuSkyEvent Tick(float deltaTime, bool inReach, long now, bool night)
         {
+            _night = night;
             if (ActiveCrack < 0)
             {
                 return CeuSkyEvent.None;
@@ -150,21 +194,23 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             }
 
             Progress += deltaTime;
-            if (Progress >= CeuSkyHoldRules.HoldSeconds)
+            if (Progress >= CeuSkyHoldRules.HoldFor(night))
             {
-                _sealedUntil[ActiveCrack] = now + CeuSkyHoldRules.SealSeconds;
+                _sealedUntil[ActiveCrack] = now + CeuSkyHoldRules.SealSecondsFor(night);
+                LastSealAtNight = night;
                 Cancel();
                 return CeuSkyEvent.Sealed;
             }
 
             _dripClock += deltaTime;
-            if (_dripClock >= CeuSkyHoldRules.DripInterval)
+            float interval = CeuSkyHoldRules.DripIntervalFor(night);
+            if (_dripClock >= interval)
             {
                 ResetDrip();
                 return CeuSkyEvent.Drip;
             }
 
-            if (!DripImminent && _dripClock >= CeuSkyHoldRules.DripInterval - CeuSkyHoldRules.DripWarningSeconds)
+            if (!DripImminent && _dripClock >= interval - CeuSkyHoldRules.DripWarningSeconds)
             {
                 DripImminent = true;
                 return CeuSkyEvent.DripWarning;
