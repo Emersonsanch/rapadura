@@ -127,6 +127,7 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                 case ProceduralEnemyKind.HillBoar:
                 case ProceduralEnemyKind.DimmedStallion:
                 case ProceduralEnemyKind.DimmedArgali:
+                case ProceduralEnemyKind.StoneRam:
                     return ChargerParts;
                 default: return null;
             }
@@ -371,6 +372,7 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                 case ProceduralEnemyKind.TrappedLightning:
                 case ProceduralEnemyKind.FishLantern:
                 case ProceduralEnemyKind.DimmedScarecrow:
+                case ProceduralEnemyKind.RiddleLantern:
                 {
                     // Stands and sways a little; it leans back on the windup and its broken line flares before the words fly.
                     float r = StepAttack(deltaTime, 4f, 2.5f);
@@ -507,6 +509,8 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                 case ProceduralEnemyKind.RuinWhirlwind:
                 case ProceduralEnemyKind.RottenRoot:
                 case ProceduralEnemyKind.CrookedRay:
+                case ProceduralEnemyKind.ShenMist:
+                case ProceduralEnemyKind.HundunBubble:
                 case ProceduralEnemyKind.CocoonCaterpillar:
                 case ProceduralEnemyKind.StickyMist:
                 case ProceduralEnemyKind.DimmedThornRose:
@@ -558,6 +562,7 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                 case ProceduralEnemyKind.HillBoar:
                 case ProceduralEnemyKind.DimmedStallion:
                 case ProceduralEnemyKind.DimmedArgali:
+                case ProceduralEnemyKind.StoneRam:
                 {
                     // Chargers: the head swings while grazing and drops, horns first, on the windup.
                     float r = StepAttack(deltaTime, 4f, 2.5f);
@@ -791,6 +796,11 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                 case ProceduralEnemyKind.MudGharial:
                 case ProceduralEnemyKind.NinkiHatchling:
                 case ProceduralEnemyKind.GreyWolf:
+                case ProceduralEnemyKind.Dingonek:
+                case ProceduralEnemyKind.StripedJackal:
+                case ProceduralEnemyKind.SmokeHyena:
+                case ProceduralEnemyKind.MossCrocodile:
+                case ProceduralEnemyKind.ShadowGharial:
                 case ProceduralEnemyKind.MudEel:
                 case ProceduralEnemyKind.AshWolf:
                 case ProceduralEnemyKind.GrottoSpider:

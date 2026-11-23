@@ -191,6 +191,11 @@ namespace Rapadura.Gameplay.Mounts.Visuals
                         return boss;
                     }
 
+                    if (MountLegendRecipes.TryShape(recipe, out QuadrupedShape legend))
+                    {
+                        return legend;
+                    }
+
                     return new QuadrupedShape
                     {
                         LegLength = 0.6f, BodyLength = 1.12f, BodyThickness = 0.44f, BodyWidth = 0.4f,

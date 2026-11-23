@@ -29,13 +29,14 @@
   sem trocar de cena.
 - **Cidades:** as 27 cidades do `Docs/Mapas100.md` §1 estão no `CityCatalog`: 4 hubs, 12 de raça e 11 de região tardia.
   Todas ficam dentro do mundo contínuo e usam a própria receita (`CityTownRecipes.*`). Os postos são `K.Outpost`, sem respawn.
-- **Bichos próprios:** 218, todos com asset em `Resources/Enemies`: os 130 das tabelas da bíblia §3.2.1, mais 12 das Regiões 1–4
+- **Bichos próprios:** 227, todos com asset em `Resources/Enemies`: os 130 das tabelas da bíblia §3.2.1, mais 12 das Regiões 1–4
   (`068253c`, `EarlyStandInBeastRecipes`), 12 das Regiões 5–9, na estrada da história do meio (`8ad5046`,
   `MidStandInBeastRecipes`), e 12 das Regiões 10–16 (`07a4770`, `FarStandInBeastRecipes`), no lugar dos emprestados mais
-  vistos, e mais 52 no lugar de papéis ainda emprestados (2026-11-16): 12 `NorthOwnBeastRecipes`, 12 `DeepOwnBeastRecipes`, 11
-  `EarlyOwnBeastRecipes`, 12 `WestOwnBeastRecipes` e 5 `EarlyOwn2BeastRecipes` (a Águia da Tempestade do 18 é a do Farnkesh). A leva
+  vistos, e mais 61 no lugar de papéis ainda emprestados (2026-11-16 em diante): 12 `NorthOwnBeastRecipes`, 12 `DeepOwnBeastRecipes`, 11
+  `EarlyOwnBeastRecipes`, 12 `WestOwnBeastRecipes`, 5 `EarlyOwn2BeastRecipes` (a Águia da Tempestade do 18 é a do Farnkesh) e 9
+  `WestOwn2BeastRecipes` (2026-11-23, Costa 25–29, Delta 33 e 35, Mingcheng 41, 46 e Vale da Névoa; kinds 570–578). A leva
   `DeepOwn2` (Regiões 13–15) ainda está sendo feita e vai somar aqui. Somam-se a eles os 19 bichos de base dos 4 biomas. Ainda há papéis de ficha feitos por bicho
-  emprestado (eram cerca de 125 antes destas 5 levas; contagem por região abaixo).
+  emprestado (eram cerca de 125 antes destas 6 levas; contagem por região abaixo).
 - **Mecânicas:** 132 arquivos em `Gameplay/World/Map/Mechanics/`, todos commitados, com pelo menos uma mecânica por região.
   São regras puras com driver por região, e o estado vai salvo por slot em `WorldMapProgress`. O `MechanicsDriverHub` liga só
   o driver da região do herói. O botão de toque **Usar** do HUD acende quando há uma interação [E] ao alcance. Depois de
@@ -165,7 +166,7 @@ de uma ficha feito por um bicho de outra região ou do bioma.
 |---|---|
 | Cidade | Taa Pwani (região tardia), Aratta e Kirta (raça), dentro do mundo com a própria receita |
 | Mundo contínuo | Feito, a leste do Zarafshan (`OverworldLayouts.Costa.cs`) |
-| Bichos próprios | 9: Gaivota Ladra, Caranguejo-dos-Coqueiros, Crocodilo do Mangue, Leão do Capim, Rinoceronte-de-Pó e mais 4 (2026-11-11): Moreia Apagada e Ouriço de Fumaça (25), Ave-Relâmpago (26), Caranguejo-Violinista (30) (`8ad5046`). Ainda emprestados, cerca de 11 papéis (chacal, escorpião, ushabti, Kongamato, Garça Apagada, Abada, Caranguejo-dos-Coqueiros Gigante…) De `WestOwnBeastRecipes` (2026-11-16, kinds 520–531): Tubarão-de-Lodo (28), Raia de Fumaça (29) e Garça Apagada (30). |
+| Bichos próprios | 9: Gaivota Ladra, Caranguejo-dos-Coqueiros, Crocodilo do Mangue, Leão do Capim, Rinoceronte-de-Pó e mais 4 (2026-11-11): Moreia Apagada e Ouriço de Fumaça (25), Ave-Relâmpago (26), Caranguejo-Violinista (30) (`8ad5046`). Ainda emprestados, cerca de 11 papéis (chacal, escorpião, ushabti, Kongamato, Garça Apagada, Abada, Caranguejo-dos-Coqueiros Gigante…) De `WestOwnBeastRecipes` (2026-11-16, kinds 520–531): Tubarão-de-Lodo (28), Raia de Fumaça (29) e Garça Apagada (30). De `WestOwn2BeastRecipes` (2026-11-23, kinds 570–578): Chacal-Listrado Apagado (25–26, o chacal saiu da Costa de dia), Hiena de Fumaça (26), Carneiro de Pedra Apagado (27) e Dingonek (29). |
 | Mecânicas feitas | Maré do recife de 8 min com 6 baixios e baú (25, `CostaTideRules`); fogo baixo na Savana dos Auroques: 4 faixas de capim que se revezam, na cinza o herói anda ×1,2 e os bichos ficam lentos (26, `SavannaFireRules`) |
 | Mecânicas faltantes | Corrida de Shulgi e Lira do Touro (26); câmera em corte, andar no fundo e reacender o coral (28); 27, 29 e 30 sem mecânica própria |
 | Chefe do mundo | Hedammu (30, Nv 72): mordida em cone, vida ×1,2 (`068253c`). Loot próprio (Escama de Hedammu) e troféu de casa |
@@ -180,7 +181,7 @@ de uma ficha feito por um bicho de outra região ou do bioma.
 |---|---|
 | Cidade | Jhilpur (capital) e Palafitas de Tarchon (raça), dentro do mundo |
 | Mundo contínuo | Feito, ao sul da Costa (`OverworldLayouts.Delta.cs`) |
-| Bichos próprios | 6: Macaco Ladrão, Lontra Ladra, Píton Apagada, Trol Apagado, Garça-Lança Apagada (31) e Sanguessuga do Lodo (32) (`8ad5046`), mais o Crocodilo do Mangue da Costa. Ainda emprestados, cerca de 11 papéis (Peixe-Saltador, Garça-Fantasma, Raiz-Laço, fogo-fátuo, Sapo-Boi…) De `WestOwnBeastRecipes` (2026-11-16): Gavial do Lodo (31), Ninki Nanka Filhote (34) e Raiz Podre (35); seguem com o crocodilo da Costa o Crocodilo de Musgo (33) e o Gavial-Sombra (35). |
+| Bichos próprios | 6: Macaco Ladrão, Lontra Ladra, Píton Apagada, Trol Apagado, Garça-Lança Apagada (31) e Sanguessuga do Lodo (32) (`8ad5046`), mais o Crocodilo do Mangue da Costa. Ainda emprestados, cerca de 11 papéis (Peixe-Saltador, Garça-Fantasma, Raiz-Laço, fogo-fátuo, Sapo-Boi…) De `WestOwnBeastRecipes` (2026-11-16): Gavial do Lodo (31), Ninki Nanka Filhote (34) e Raiz Podre (35); de `WestOwn2BeastRecipes` (2026-11-23): Crocodilo de Musgo (33) e Gavial-Sombra (35); o crocodilo da Costa saiu do Delta. |
 | Mecânicas feitas | Ilhas de junco que mudam de lugar a cada 15 min (33, `DeltaIslandRules`); as 5 Fontes do Lodo (35, `LodoFountainRules`, `f0991e3`): espiral até o Olho do Lodo, lodo preto que morde e puxa e encolhe a cada fonte purificada (3 s com [E]/Usar), fonte limpa vira zona segura por 2 min, prêmio diário de 1 Pedra da Água Viva; filhotes que brilham a cada 12 s no Charco do Ninki Nanka, quem olha de frente fica ×0,6 por 3 s (34, `NinkiGazeRules`) |
 | Mecânicas faltantes | Monção, escola de barco e Maré de Lodo (31); Lanterna de Fogo-Fátuo e Despertar o vizinho (33); o brilho da própria Ninki Nanka e a seta no HUD (34); 32 sem mecânica própria |
 | Chefe do mundo | Lodo-que-Engole (35, Nv 88): puxão, mais forte à noite, vida ×1,18 (`068253c`). Só surge com as 5 Fontes acesas, e cada fonte apagada na luta o fortalece 10%. Loot próprio (Lama Limpa do Lodo) e troféu |
@@ -195,7 +196,7 @@ de uma ficha feito por um bicho de outra região ou do bioma.
 |---|---|
 | Cidade | Sangkent (capital), dentro do mundo |
 | Mundo contínuo | Feito, ao norte da Serra (`OverworldLayouts.Teto.cs`) |
-| Bichos próprios | 8: Urso-Pardo do Pamir, Iaque Selvagem, Irbis, Almas, Marmota Gigante e mais 3 (2026-11-11): Gralha-de-Bico-Vermelho (36), Abutre-Barbudo Apagado (37), Lobo de Gelo (38) (`8ad5046`). Ainda emprestados, cerca de 11 papéis (Argali, ushabtis de calha, Fenda Viva, Gralha das Neves…) |
+| Bichos próprios | 8: Urso-Pardo do Pamir, Iaque Selvagem, Irbis, Almas, Marmota Gigante e mais 3 (2026-11-11): Gralha-de-Bico-Vermelho (36), Abutre-Barbudo Apagado (37), Lobo de Gelo (38) (`8ad5046`; desde 2026-11-23 também nos lobos dos zimbros, das pastagens e da neve, no lugar do lobo da floresta). Ainda emprestados, cerca de 11 papéis (Argali, ushabtis de calha, Fenda Viva, Gralha das Neves…) |
 | Mecânicas feitas | Avalanches com sino de 20 s nas 4 calhas (37, `TetoAvalancheRules`); descida de carrinho de ~48 s pegando faíscas, com recorde salvo e prêmio do dia (37, `TetoCartRules`); medidor de frio na Geleira, cheio deixa o passo ×0,85, as 5 fogueiras zeram (38, `GlacierColdRules`); 4 cata-ventos no Forte dos Ventos, alinhados fazem vento a favor ou contra (39, `WindVaneRules`) |
 | Mecânicas faltantes | Os 7 terraços (36); ranking online e modelo do carrinho (37); medidor de frio na tela (38); projéteis a favor do vento indo mais longe (39); 40 sem mecânica própria |
 | Chefe do mundo | Aydahar (40, Nv 98): sopro em linha, vida ×1,2 (`068253c`). Loot próprio e troféu |
@@ -210,7 +211,7 @@ de uma ficha feito por um bicho de outra região ou do bioma.
 |---|---|
 | Cidade | Mingcheng (capital) e Torres Brancas (raça), dentro do mundo |
 | Mundo contínuo | Feito, ao norte do Zarafshan (`OverworldLayouts.Mingcheng.cs`). 43–46 fechados no catálogo |
-| Bichos próprios | 8: Leão de Pedra, Raposa de Cauda Lanterna, Soldado de Terracota, Tartaruga de Pedra, Búfalo de Lama, Filhote de Nian, Carpa-Dragão Apagada (43) e Cavalo de Terracota (45) (`8ad5046`). Ainda emprestados, cerca de 10: Grou de Papel, Espelho Quebrado, Espantalho… De `WestOwnBeastRecipes` (2026-11-16): Raio Torto (42), Lanterna-Peixe e Barqueiro de Fumaça (43), Pato-Mandarim Ladrão e Espantalho Apagado (44); o peixe-lanterna e a gaivota saíram de Mingcheng. |
+| Bichos próprios | 8: Leão de Pedra, Raposa de Cauda Lanterna, Soldado de Terracota, Tartaruga de Pedra, Búfalo de Lama, Filhote de Nian, Carpa-Dragão Apagada (43) e Cavalo de Terracota (45) (`8ad5046`). Ainda emprestados, cerca de 10: Grou de Papel, Espelho Quebrado, Espantalho… De `WestOwnBeastRecipes` (2026-11-16): Raio Torto (42), Lanterna-Peixe e Barqueiro de Fumaça (43), Pato-Mandarim Ladrão e Espantalho Apagado (44); o peixe-lanterna e a gaivota saíram de Mingcheng. De `WestOwn2BeastRecipes` (2026-11-23): Lanterna de Charada Apagada (41), Névoa do Shen (Vale da Névoa) e Bolha de Hundun (46); a neblina do vento ruim e a lanterna quebrada saíram de Mingcheng de dia. |
 | Mecânicas feitas | Muralha andável com faróis e corredor de luz (45); mundo do reflexo nos arrozais (44) |
 | Mecânicas faltantes | 9 anéis e portões por hora (41); Relógio de Espelhos (42); 4 eclusas (43); palácios e o que cada um come (46) |
 | Chefe do mundo | Quatro Gulosos (46, Nv 140): um apetite por semana e outro à noite. Taotie derrama oferendas de moedas e avisa antes de engolir; Qiongqi inverte os passos por 3 s (`HeroControlMirror`, teto de 4 s). Loot próprio (Bronze Antigo dos Vasos) e troféu |
@@ -288,7 +289,7 @@ de uma ficha feito por um bicho de outra região ou do bioma.
 | Bichos próprios | 16 (12 e mais Ganso Ladrão, Filho de Apep, Areia Movediça e a Chama Faminta do 75, a mesma do 70). Ainda emprestados, 6: Salamandra de Sombra, Escorpião [tanque] do 74, Ushabti Apagado, Ushabti Rachado, Sombra Fervida, Crocodilo de Lodo |
 | Mecânicas feitas | Horas da barca com 12 píeres e hora de 3 min (71); jangadas de junco nos canais (72, `RioRaftRules`, `075b4ef`: 864 m em ~62 s em vez de ~2 km pelas estradas); anel de Mehen que gira (74); fogo que escolhe (75); defender a barca encalhada enquanto os remadores a desencalham (76, `RioBarqueDefenseRules`) |
 | Mecânicas faltantes | Evento A Barca Atrasou e noite permanente (71); puxar o trenó (73) |
-| Chefe do mundo | Apep (76), que recua até a noite seguinte. Loot próprio e troféu (Barca de luz vencendo Apep). Falta a Pedra da Mistura |
+| Chefe do mundo | Apep (76), que recua até a noite seguinte. Loot próprio e troféu (Barca de luz vencendo Apep). Pedra da Mistura ao cuspir o rio (2026-11-23, `ApepSpitRiverRules`) |
 | Chefe de mapa | Feitos 4: O Hipopótamo-de-Junco Gigante (72, Nv 276: a onda para na distância do herói), A Grande Serpente do Areal (73), O Nó Errado (74) e O Guardião do Lago (75, Nv 306: a sombra do lado oposto ao braço aceso). O Nó Errado (74, feito: Nv 296, duas alças dos lados atravessadas na linha até o herói; ficar na linha é seguro, desviar não); o evento A Barca Atrasou (71, toda hora às :30, com noite permanente na região) também está feito |
 | Montaria | Íbis Real de Mesektet (71, voadora). Falta a Barquinha de Luz (76) |
 | Conjunto | Cais do Papiro (2 peças, por drop) e Escamas de Mehen (o de Mehen da ficha 74: Couraça de Escamas de Mehen e Elmo da Serpente Enrolada, Defesa 31/17; Anel de Mehen: ao ser atingido, 18% de curar 35% do golpe). Drop do Filho de Apep, da Areia Movediça e do Ganso Ladrão, 1 em 50 (`ArmorSetRules.MehenScale`) |

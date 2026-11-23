@@ -53,18 +53,25 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         private readonly bool _greatHole;
         private float _timer;
 
-        public IceFishingSession(int seed, bool night, bool greatHole, IceBait bait = IceBait.None)
+        public IceFishingSession(int seed, bool night, bool greatHole, IceBait bait = IceBait.None, bool lakeFreed = false)
         {
             _random = new System.Random(seed);
             _night = night;
             _greatHole = greatHole;
             Bait = bait;
+            LakeFreed = lakeFreed;
             float minDelay = IceBaitRules.MinBiteDelay(bait);
             _timer = minDelay + (float)_random.NextDouble() * (IceBaitRules.MaxBiteDelay(bait) - minDelay);
         }
 
         /// <summary>What is on the hook (<see cref="IceBaitRules"/>).</summary>
         public IceBait Bait { get; }
+
+        /// <summary>The Velho Kul was beaten a short while ago and the lake is free (<see cref="KulFreedLake"/>).</summary>
+        public bool LakeFreed { get; }
+
+        /// <summary>"Dono da pesca": a second fish of the same kind came with this one (<see cref="IceFishingState.Caught"/> only).</summary>
+        public bool ExtraFish { get; private set; }
 
         /// <summary>The cast was at the Buraco Grande.</summary>
         public bool GreatHole => _greatHole;
@@ -110,9 +117,11 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             }
             else if (State == IceFishingState.Bite)
             {
-                Fish = IceFishingRules.Roll(_random.NextDouble(), _night, _greatHole, Bait);
+                Fish = IceFishingRules.Roll(_random.NextDouble(), _night, _greatHole, Bait, LakeFreed);
                 float kg = Fish.MinKg + (float)_random.NextDouble() * (Fish.MaxKg - Fish.MinKg);
                 Grams = Mathf.RoundToInt(kg * 1000f);
+                // Drawn last and only on a freed lake, so every older seed keeps its fish.
+                ExtraFish = LakeFreed && KulFreedLake.ExtraFish(true, _random.NextDouble());
                 State = IceFishingState.Caught;
             }
         }
@@ -158,11 +167,16 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         public static FishSpec Roll(double roll, bool night, bool greatHole) => Roll(roll, night, greatHole, IceBait.None);
 
         /// <summary>The species for a roll in [0, 1) with <paramref name="bait"/> on the hook (<see cref="IceBaitRules"/>).</summary>
-        public static FishSpec Roll(double roll, bool night, bool greatHole, IceBait bait)
+        public static FishSpec Roll(double roll, bool night, bool greatHole, IceBait bait) => Roll(roll, night, greatHole, bait, false);
+
+        /// <summary>The species for a roll in [0, 1) with <paramref name="bait"/> on the hook, on a lake the beaten Kul let go (<see cref="KulFreedLake"/>).</summary>
+        public static FishSpec Roll(double roll, bool night, bool greatHole, IceBait bait, bool lakeFreed)
         {
             float uncommon = UncommonWeight * IceBaitRules.UncommonFactor(bait);
-            float rare = RareWeight * (night ? NightRareFactor : 1f) * (greatHole ? GreatHoleRareFactor : 1f) * IceBaitRules.RareFactor(bait);
-            float legendary = LegendaryWeight * (greatHole ? GreatHoleLegendaryFactor : 1f) * IceBaitRules.LegendaryFactor(bait);
+            float rare = RareWeight * (night ? NightRareFactor : 1f) * (greatHole ? GreatHoleRareFactor : 1f) * IceBaitRules.RareFactor(bait)
+                * KulFreedLake.RareFactorFor(lakeFreed);
+            float legendary = LegendaryWeight * (greatHole ? GreatHoleLegendaryFactor : 1f) * IceBaitRules.LegendaryFactor(bait)
+                * KulFreedLake.LegendaryFactorFor(lakeFreed);
             float total = CommonWeight + uncommon + rare + legendary;
             float at = (float)Math.Max(0d, Math.Min(0.999999d, roll)) * total;
             if (at < CommonWeight)

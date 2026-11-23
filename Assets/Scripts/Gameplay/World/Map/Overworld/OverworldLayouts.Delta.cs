@@ -111,6 +111,10 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             public const string MudGharial = "enemy_forest_mud_gharial";
             public const string NinkiHatchling = "enemy_forest_ninki_hatchling";
             public const string RottenRoot = "enemy_cave_rotten_root";
+            // The twenty-seventh pass (WestOwn2BeastRecipes, OverworldLayouts.WestOwn2Beasts): the Crocodilo de Musgo (33) and the Gavial-Sombra
+            // (35), both the Costa's crocodile before, are their own beasts now; the crocodile left the Delta.
+            public const string MossCrocodile = "enemy_forest_moss_crocodile";
+            public const string ShadowGharial = "enemy_forest_shadow_gharial";
         }
 
         private static readonly Rect DeltaPostSafe = Rect.MinMaxRect(-15f, -14f, 16f, 15f);
@@ -450,21 +454,21 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             chuva.Fauna.Add(Fauna("sanguessugas_da_chuva", "[enxame] [controle]", T(N(MidBeasts.MireLeech, 3), N(CoastOwnBeasts.SnareRoot, 1)), T(V(MidBeasts.MireLeech, 2), V(CoastOwnBeasts.SnareRoot, 1)), 5));
 
             // Ilhas de Junco and Pântano Aberto (towards 33): the Fogo-Fátuo Preso [enxame] (its own beast now, the fireflies at
-            // night), the Garça-Fantasma [distância] (its own beast now, CoastOwnBeasts; the shroud owl with it at night), the Crocodilo de Musgo [tanque].
+            // night), the Garça-Fantasma [distância] (its own beast now, CoastOwnBeasts; the shroud owl with it at night), the Crocodilo de Musgo [tanque] (its own beast now, WestOwn2Beasts).
             ilhasJunco.Fauna.Add(Fauna("fogos_fatuos", "[enxame]", T(N(Delta.Lantern, 3), N(Delta.Mist, 1)), T(V(Delta.Lantern, 2), S(fireflies, 2)), 5));
             ilhasJunco.Fauna.Add(Fauna("garcas_fantasma", "[distância]", T(N(CoastOwnBeasts.GhostHeron, 3), N(Delta.Crow, 1)), T(V(CoastOwnBeasts.GhostHeron, 1), S(ghostHeron, 2)), 4, null, 22f));
             pantano.Fauna.Add(Fauna("fogos_fatuos_do_pantano", "[enxame]", T(N(Delta.Lantern, 3), N(Delta.Bats, 1)), T(V(Delta.Lantern, 2), S(fireflies, 2)), 5));
-            pantano.Fauna.Add(Fauna("crocodilos_de_musgo", "[tanque]", T(N(Delta.Crocodile, 3), N(Delta.Ooze, 1)), T(V(Delta.Crocodile, 2), V(Delta.Ooze, 1)), 3, null, 28f));
+            pantano.Fauna.Add(Fauna("crocodilos_de_musgo", "[tanque]", T(N(Delta.MossCrocodile, 3), N(Delta.Ooze, 1)), T(V(Delta.MossCrocodile, 2), V(Delta.Ooze, 1)), 3, null, 28f));
 
             // Brejo das Palmeiras (towards 34): the Sapo-Boi [tanque] (its own beast now, WideBeasts), the Cobra-d'Água [rápido].
             palmeiras.Fauna.Add(Fauna("sapos_boi", "[tanque]", T(N(Delta.BullFrog, 3), N(Delta.Ooze, 1)), T(V(Delta.BullFrog, 2), V(Delta.Ooze, 1)), 3, null, 28f));
             palmeiras.Fauna.Add(Fauna("cobras_dagua", "[rápido]", T(N(Delta.Python, 3), N(Delta.Gull, 1)), T(V(Delta.Python, 2), S(fireflies, 1)), 4));
 
             // Mata Morta and Raízes Afogadas (towards 35): the Raiz Podre [distância] (its own beast now, WestOwnBeasts), forgotten trolls (the golem),
-            // the Gavial-Sombra [tanque], the Bolha de Fumaça [controle] (its own beast now, CoastOwnBeasts) and the Filhos do Lodo with it.
+            // the Gavial-Sombra [tanque] (its own beast now, WestOwn2Beasts), the Bolha de Fumaça [controle] (its own beast now, CoastOwnBeasts) and the Filhos do Lodo with it.
             mataMorta.Fauna.Add(Fauna("raizes_podres", "[distância]", T(N(Delta.RottenRoot, 3), N(Delta.Lantern, 1)), T(V(Delta.RottenRoot, 2), S(bats, 1)), 4));
             mataMorta.Fauna.Add(Fauna("trols_esquecidos_da_mata", "[tanque]", T(N(Delta.Troll, 3), N(Delta.Mist, 1)), T(V(Delta.Troll, 2), V(Delta.Mist, 1)), 3, null, 30f));
-            afogadas.Fauna.Add(Fauna("gaviais_sombra", "[tanque]", T(N(Delta.Crocodile, 3), N(CoastOwnBeasts.MudChild, 1)), T(V(Delta.Crocodile, 2), V(CoastOwnBeasts.MudChild, 1)), 3, null, 28f));
+            afogadas.Fauna.Add(Fauna("gaviais_sombra", "[tanque]", T(N(Delta.ShadowGharial, 3), N(CoastOwnBeasts.MudChild, 1)), T(V(Delta.ShadowGharial, 2), V(CoastOwnBeasts.MudChild, 1)), 3, null, 28f));
             afogadas.Fauna.Add(Fauna("bolhas_de_fumaca", "[controle]", T(N(CoastOwnBeasts.SmokeBubble, 3), N(CoastOwnBeasts.MudChild, 1)), T(V(CoastOwnBeasts.SmokeBubble, 2), S(fireflies, 1)), 4));
 
             // Bancos de Lama: the Filhos do Lodo begin [enxame] (CoastOwnBeasts), herons.
@@ -472,11 +476,11 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             bancosLama.Fauna.Add(Fauna("garcas_da_lama", "[distância]", T(N(MidBeasts.SpearHeron, 3), N(Delta.Crow, 1)), T(V(MidBeasts.SpearHeron, 2), S(ghostHeron, 1)), 4, null, 22f));
 
             // Palafitas de Tarchon and Ilhas que Andam (33): the Trol Apagado [tanque] (the golem), the Fogo-Fátuo Preso
-            // [enxame], the Garça-Fantasma [distância], the Crocodilo de Musgo [tanque].
+            // [enxame], the Garça-Fantasma [distância], the Crocodilo de Musgo [tanque] (its own beast now, WestOwn2Beasts).
             tarchon.Fauna.Add(Fauna("trols_apagados", "[tanque]", T(N(Delta.Troll, 3), N(Delta.Lantern, 1)), T(V(Delta.Troll, 2), V(Delta.Lantern, 1)), 3, null, 30f));
             tarchon.Fauna.Add(Fauna("fogos_fatuos_presos", "[enxame]", T(N(Delta.Lantern, 3), N(Delta.Bats, 1)), T(V(Delta.Lantern, 2), S(fireflies, 2)), 5));
             tarchon.Fauna.Add(Fauna("garcas_fantasma_de_tarchon", "[distância]", T(N(CoastOwnBeasts.GhostHeron, 3), N(Delta.Crow, 1)), T(V(CoastOwnBeasts.GhostHeron, 1), S(ghostHeron, 2)), 4, null, 22f));
-            ilhasAndam.Fauna.Add(Fauna("crocodilos_das_ilhas", "[tanque]", T(N(Delta.Crocodile, 3), N(Delta.Golem, 1)), T(V(Delta.Crocodile, 2), V(Delta.Golem, 1)), 3, null, 30f));
+            ilhasAndam.Fauna.Add(Fauna("crocodilos_das_ilhas", "[tanque]", T(N(Delta.MossCrocodile, 3), N(Delta.Golem, 1)), T(V(Delta.MossCrocodile, 2), V(Delta.Golem, 1)), 3, null, 30f));
             ilhasAndam.Fauna.Add(Fauna("fogos_das_ilhas", "[enxame] [controle]", T(N(Delta.Lantern, 3), N(Delta.Mist, 1)), T(V(Delta.Lantern, 2), S(fireflies, 2)), 5));
 
             // Charco do Ninki Nanka, Ilhota das Lanternas and Toca da Dragoa (34): the Ninki Nanka Filhote [elite] (the sand
@@ -490,13 +494,13 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             toca.Fauna.Add(Fauna("sapos_da_toca", "[tanque] [enxame]", T(N(Delta.BullFrog, 3), N(CoastOwnBeasts.SmokeDragonfly, 1)), T(V(Delta.BullFrog, 2), V(CoastOwnBeasts.SmokeDragonfly, 1)), 4));
 
             // Coração do Lodo and Olho do Lodo (35): the Filhos do Lodo [enxame] (their own beast now, CoastOwnBeasts, doubled at night), the Bolha de
-            // Fumaça [controle], the Gavial-Sombra [tanque], the Raiz Podre [distância].
+            // Fumaça [controle], the Gavial-Sombra [tanque] (its own beast now, WestOwn2Beasts), the Raiz Podre [distância].
             coracao.Fauna.Add(Fauna("filhos_do_lodo", "[enxame]", T(N(CoastOwnBeasts.MudChild, 3), N(CoastOwnBeasts.SmokeBubble, 1)), T(V(CoastOwnBeasts.MudChild, 4), S(fireflies, 1)), 6));
-            coracao.Fauna.Add(Fauna("gaviais_sombra_do_lodo", "[tanque]", T(N(Delta.Crocodile, 3), N(Delta.Crow, 1)), T(V(Delta.Crocodile, 2), V(Delta.Crow, 1)), 3, null, 30f));
+            coracao.Fauna.Add(Fauna("gaviais_sombra_do_lodo", "[tanque]", T(N(Delta.ShadowGharial, 3), N(Delta.Crow, 1)), T(V(Delta.ShadowGharial, 2), V(Delta.Crow, 1)), 3, null, 30f));
             coracao.Fauna.Add(Fauna("raizes_podres_do_lodo", "[distância]", T(N(Delta.RottenRoot, 3), N(Delta.Lantern, 1)), T(V(Delta.RottenRoot, 2), S(bats, 1)), 4));
             olho.Fauna.Add(Fauna("filhos_do_olho", "[enxame]", T(N(CoastOwnBeasts.MudChild, 3), N(Delta.LanternFish, 1)), T(V(CoastOwnBeasts.MudChild, 4), S(fireflies, 1)), 6));
             olho.Fauna.Add(Fauna("bolhas_do_olho", "[controle]", T(N(CoastOwnBeasts.SmokeBubble, 3), N(CoastOwnBeasts.MudChild, 1)), T(V(CoastOwnBeasts.SmokeBubble, 2), V(CoastOwnBeasts.MudChild, 1)), 4));
-            olho.Fauna.Add(Fauna("gaviais_do_olho", "[tanque] [elite]", T(N(Delta.Crocodile, 3), N(Delta.Golem, 1)), T(V(Delta.Crocodile, 2), V(Delta.Golem, 1)), 3, null, 32f));
+            olho.Fauna.Add(Fauna("gaviais_do_olho", "[tanque] [elite]", T(N(Delta.ShadowGharial, 3), N(Delta.Golem, 1)), T(V(Delta.ShadowGharial, 2), V(Delta.Golem, 1)), 3, null, 32f));
         }
     }
 }

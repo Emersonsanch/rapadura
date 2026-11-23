@@ -37,8 +37,9 @@ Uma segunda cidade dentro de uma região (Docs/Mapas100.md §3.3) fica **fora** 
 | Planície de Mingcheng (mapa 42; 45 planejado) | **Torres Brancas de Amanirenas** (altos-elfos, `torres_brancas`) | Rainha Amanirenas, a Guardiã (casa na cabeça da praça), Natakamani, o Mestre dos Espelhos (rua Oeste), Amanitore, a Construtora (rua Leste), Arkamani, o que Lê as Estrelas (rua Leste), Shanakdakhete, a que Ensina a Luz (rua Sul) | **Espelhos de Natakamani** (`shop_espelhos_natakamani`) | Amanirenas: "Espelhos Quebrados"; Shanakdakhete: "As Íbis Apagadas" |
 
 - **Passeio da cidade:** a mesma receita `CityTownRecipes.Garajonay` do mapa 05 e do mundo contínuo (mesmo `CityId`,
-  mesma geometria; os moradores só ganharam `ResidentId` nos lotes que já existiam). Problema herdado da receita (não
-  mexido, outro agente usa a geometria): o banco da praça a 250° encosta na rua Sul (`CityLayoutRules` acusa).
+  mesma geometria; os moradores só ganharam `ResidentId` nos lotes que já existiam). *(2026-11-16, conferido:
+  o banco da praça que ficava a 250° e encostava na rua Sul já está a 235°, fora da rua; `CityGarajonayTests` roda o
+  `CityLayoutRules.Validate` inteiro, com prédios e peças fora das ruas, sem problemas.)*
 - **Respawn:** derrota nos mapas 05 e 06 acorda na praça das Copas (`MapCatalog.RespawnCityFor` → `CityProgress.ApplyDefeatIn`);
   no mundo contínuo continua valendo o assentamento de retorno da área (`MapModeController.RespawnHere`).
 - **Ervaria da Dácil** (diária, 3 vagas que giram): erva, poção de vida e **Corda de Escalada** (exigência do 05) fixas;
@@ -66,16 +67,17 @@ Uma segunda cidade dentro de uma região (Docs/Mapas100.md §3.3) fica **fora** 
   (`TrainingRing`, pisável) e portões de tronco com tochas (`TownKit.WarCampGate`). Peças em `TownKit.WarCamp.cs`,
   colisores em `CitySolids`. Tudo em y = 0 e dentro de ±33 m (o mundo contínuo das Areias reserva ±34 de zona segura e
   ±38 de chão plano); `CityLayoutRules.Validate` sem problemas, com e sem o mascate.
-- **No mundo contínuo:** `OverworldLayouts.Areias.cs` ainda monta a "primeira versão" própria (`TamborRubroCity()`,
-  estilo `Oasis`). Para usar esta receita lá basta trocar a linha do `Place` do 11 por
-  `CityTownRecipe tambor = CityTownRecipes.TamborRubro(); tambor.Backdrop = false;` e
-  `Place(w, TamborRubroMapId, tambor, TamborRubroOffset, Rect.MinMaxRect(-34f, -34f, 34f, 34f), 38f, true);` (mesmas
-  três saídas S/L/O e cais na rua Oeste).
+- **No mundo contínuo:** `OverworldLayouts.Areias.cs` já monta esta receita (`CityTownRecipes.TamborRubro()` com
+  `Backdrop = false`, `Place` do 11 com zona segura ±34 e chão plano 38; mesmas três saídas S/L/O e cais na rua Oeste).
 - **Respawn:** derrota nos mapas 11 e 12 acorda na praça do Tambor Rubro (`MapCatalog.RespawnCityFor` → `ApplyDefeatIn`).
 - **Forja de Tambor** (semanal, 3 vagas que giram, tema Ferreiro): ferro, minério, poção de vida, Pedra da Bênção e a
   **Teriaga do Oásis** (exigência do 12, Trono de Namrael) fixas; giram martelo, machado, peitoral de couro, arco de
   caça, carne, ração de montaria e espada de ferro (esta após o chefe do Deserto). O 11 não tem exigência. O Ammo
-  nunca para lá. (O conserto 20% mais barato e a "Têmpera do Tambor" da ficha ainda faltam.)
+  nunca para lá. (O conserto 20% mais barato ainda falta.)
+- **No jogo (2026-11-16): Têmpera do Tambor** (`CityServiceRules`, `CityServicesMechanicsDriver`, `CityServiceTexts`,
+  teste `CityServicesTests`): [E] a até 2,6 m do tambor de guerra do canto oeste do Salão Grande
+  (`CityTownRecipes.TamborRubroTemperDrum`), só no minuto em que os tambores tocam (`DrumRhythmRules`), uma vez por dia
+  UTC, fora de combate: +8% de dano de ataque por 10 min; fala do Tushratta para cada primo. De graça (decisão).
 - **Missões da cidade:** Gurparanzah pede 6 escorpiões (o Escorpião das Areias faz o Escorpião-Rubro; 4 poções de vida +
   2 Pedras da Bênção + 45 ouro, 460 XP); depois Kessi pede 5 Gaviões de Brasa (o Gavião-de-Penacho faz o papel; Teriaga
   do Oásis + 55 ouro, 540 XP). Testes: `CityTamborRubroTests`.
@@ -98,15 +100,18 @@ Uma segunda cidade dentro de uma região (Docs/Mapas100.md §3.3) fica **fora** 
   parede de rocha só ao norte e a leste (o lado longe da câmera); tudo em y = 0 dentro de ±19 m (o mundo contínuo da
   Serra reserva x −20…21, z −19…20 de zona segura e ±24 de chão plano); `CityLayoutRules.Validate` sem problemas, com
   e sem o mascate.
-- **No mundo contínuo:** `OverworldLayouts.Kaggen.cs` ainda monta a "primeira versão" própria (`SaloesDeBronze()`).
-  Para usar esta receita basta trocar o `SaloesDeBronze()` do `Place` do 17 por `CityTownRecipes.BronzeHalls()` (mesmo
-  `CityId`, mesmo lugar e raio; `Backdrop` já é falso) e apagar o método antigo.
+- **No mundo contínuo:** `OverworldLayouts.Kaggen.cs` já monta esta receita (`Place` do 17 com
+  `CityTownRecipes.BronzeHalls()`, zona segura x −20…21, z −19…20, chão plano 24), com os cinco moradores e as falas.
 - **Respawn:** derrota nos mapas 17 e 18 acorda na praça dos Salões (`MapCatalog.RespawnCityFor` → `ApplyDefeatIn`).
 - **Portões de Runa do Puzur** (semanal, 3 vagas que giram, tema Especialidade): poções de vida e mana, Pedra da
   Bênção, Pedra da Alma (após o chefe da Montanha) e as exigências da região fixas: **Picareta** e **Lamparina**
   (Picareta e Tocha do 17) e **Chá de Gengibre** (Resistência à Nevasca do 18); giram as runas de bronze (Clareza,
-  Couro, Cura, Vento, Cura Grande), ferro, minério e martelo. O Ammo nunca para lá. (Gravar 1 runa por dia de graça e
-  as 5 etapas da Grande Forja ainda faltam.)
+  Couro, Cura, Vento, Cura Grande), ferro, minério e martelo. O Ammo nunca para lá. (As 5 etapas da Grande Forja ainda
+  faltam.)
+- **No jogo (2026-11-16): a runa do dia do Puzur** (`CityServiceRules`, `CityServicesMechanicsDriver`,
+  `CityServiceTexts`, teste `CityServicesTests`): [E] a até 2,4 m do pilar de runa da praça do lado do Puzur
+  (`CityTownRecipes.BronzeHallsRuneStone`, o de 125°) dá de graça uma runa de bronze por dia UTC, a que o dia sorteia
+  (Clareza, Couro, Cura ou Vento; a Cura Grande só à venda), marca diária no save; fala do Puzur para cada primo.
 - **Missões da cidade:** Untash pede 5 golens de escória (o Ushabti de Pedra faz o Golem de Escória; 4 poções de vida
   + 2 Pedras da Bênção + 55 ouro, 620 XP); depois Shilhak pede 6 bandos de morcegos de brasa no veio (o Enxame de
   Morcegos faz o papel; Chá de Gengibre + 60 ouro, 700 XP). Testes: `CityBronzeHallsTests`.
@@ -167,8 +172,12 @@ fica em y = 0 dentro de um círculo de ~22 m com 3 saídas de rua, no lugar que 
 - **Respawn:** derrota nos mapas 26 e 27 acorda na praça de Aratta (`MapCatalog.RespawnCityFor` → `ApplyDefeatIn`).
 - **Alforje do Lugalbanda** (diário, 3 vagas que giram, tema Especialidade): poção de vida, Odre de Água e a **Relíquia dos
   Artífices** (exigência do 27, Pirâmides de Meroé) fixos; giram corda de escalada, poção de mana, carne, ração de
-  montaria, botas de couro, fibra e Amuleto da Sorte. O Ammo nunca para lá. (A Lira do Touro com a canção do dia, as
-  Fitas de Corrida e o Auroque de Aratta ainda faltam.)
+  montaria, botas de couro, fibra e Amuleto da Sorte. O Ammo nunca para lá. (As Fitas de Corrida e o Auroque de
+  Aratta ainda faltam.)
+- **No jogo (2026-11-16): a Lira do Touro** (`CityServiceRules`, `CityServicesMechanicsDriver`, `CityServiceTexts`,
+  teste `CityServicesTests`): [E] a até 2,6 m da lira da praça (`CityTownRecipes.ArattaBullLyre`), fora de combate,
+  toca a canção do dia (5 canções sumérias, uma nova por dia UTC): +5% de velocidade de andar por 5 min, só a pé e fora
+  de combate; tocar de novo renova; fala do primo. Versão solo do buff de grupo da ficha (decisão).
 - **Missões da cidade:** Enmerkar pede 6 chacais no capim seco (o Chacal Apagado faz o Leão do Capim Apagado; 4 poções
   de vida + 3 de mana + 75 ouro, 900 XP); depois Shulgi pede 5 babuínos fora do percurso da corrida (Babuíno Apagado;
   2 Odres de Água + 90 ouro, 980 XP). Testes: `CityArattaTests`.
@@ -385,7 +394,7 @@ separa a hub da região (só nela o Ammo para). O `CitySpec.Region` é emprestad
 |---|---|---|---|---|
 | Reinos do Céu (mapas 91–100, ainda fora do `MapCatalog`) | **Cais da Coluna** (`cais_da_coluna`) | Ammo, o Caravaneiro (rua Sul), Adda, o Guardião da Roda (píer do Sol, rua Leste) | **A Última Caravana do Ammo** (`shop_ultima_caravana_ammo`) | Ammo: "Clandestinas nos Fardos"; Adda: "Aves nas Jarras" |
 | Limiar Profundo (mapas 83–90, ainda fora do `MapCatalog`) | **Fortaleza da Última Lâmpada** (`fortaleza_ultima_lampada`) | Tehat, a Tecelã de Pavios (rua Oeste), Pamour, o Comandante das Lâmpadas (rua Leste), Makarios, o Escritor de Cartas (rua Sul) | **Pavios da Tehat** (`shop_pavios_tehat`) | Pamour: "Morcegos na Muralha"; Makarios: "Ushabtis na Estrada das Cartas" |
-| Margens da Mistura (mapas 77–82, ainda fora do `MapCatalog`) | **Dur-Jarras, a Cidade-Zigurate** (`dur_jarras`) | Atrahasis, o Mestre das Balsas (rua Oeste), Utnapishtim, o Guardião do Relógio e Siduri, a Taberneira (rua Leste), Sin-leqi-unninni, o Bibliotecário (rua Sul) | **Betume do Atrahasis** (`shop_betume_atrahasis`) | Utnapishtim: "Leões nos Canais"; Sin-leqi-unninni: "Besouros nas Tábuas" |
+| Margens da Mistura (mapas 77–82, ainda fora do `MapCatalog`) | **Dur-Jarras, a Cidade-Zigurate** (`dur_jarras`) | Atrahasis, o Mestre das Balsas (rua Oeste), Utnapishtim, o Guardião do Relógio e Siduri, a Taberneira (rua Leste), Sin-leqi-unninni, o Bibliotecário (rua Sul) | **Betume do Atrahasis** (`shop_betume_atrahasis`) | Utnapishtim: "Leões nos Canais"; Sin-leqi-unninni: "Gafanhotos nas Tábuas" |
 | Rio das Doze Horas (mapas 71–76, ainda fora do `MapCatalog`) | **Cais de Mesektet** (o cais da barca da noite, `cais_de_mesektet`) | Sinuhe, o Barqueiro-Chefe (salão na cabeça da praça), Khunanup, o Comerciante do Cais (rua Oeste), Djedi, o Mágico (rua Leste), Setne, o Bibliotecário do Caderno (rua Sul) | **Trocas do Khunanup** (`shop_trocas_khunanup`) | Sinuhe: "Crocodilos no Cais"; Djedi: "Escorpiões no Areal" |
 | Arquipélago de Hinokura (mapas 65–70, ainda fora do `MapCatalog`) | **Hinokura, a Ilha-Forja** (capital do Fogo Vivo, `hinokura`) | Mestra Akane, a Mestra da Laca (salão na cabeça da praça), Kurogane, o Ferreiro do Ferro Preto (rua Oeste), Hikari, o Guardião das Comportas (rua Leste), Sango, a Barqueira (rua Sul) | **Ferro Preto do Kurogane** (`shop_ferro_preto_kurogane`) | Akane: "Caranguejos nos Varais"; Sango: "Gaivotas no Barco-Farol" |
 | Mar Gelado (mapas 59–64) | **Porto da Lua Branca** (capital do Ar Sereno, `porto_da_lua_branca`) | Yirkap, o Caçador de Esqui (casa comprida na cabeça da praça), Pamour, o Peleiro do Cais (rua Oeste), Makarios, o Guardião das Lanternas (rua Leste), Pera, o Gigante Bom (rua Sul) | **Peles e Barcos do Pamour** (`shop_peles_pamour`) | Yirkap: "Gaivotas nos Varais"; Pera: "Ursos nos Canais" |
@@ -457,8 +466,9 @@ Roda Celeste, Esferas dos Arcontes, Jardim de Luz, Barca do Sol). Testes em `Cit
   Gruta faz os Filhos do Lodo da Maré de Lodo; 5 poções de vida + 4 de mana + 110 ouro, 1200 XP); depois Abiesous pede
   6 corvos fora do telhado da escola de barco (o Corvo-da-Treva faz a Garça-Lança Apagada que rouba os remos; **Fruta
   Purificadora** + 120 ouro, 1300 XP). Testes: `CityJhilpurTests`.
-- **Falta:** ~~o mapa 31 e o mundo contínuo do delta~~ (já existem, com a cidade dentro; 2026-11-11); a monção que sobe um andar, a escola de barco ensinando a remar, a Maré de
-  Lodo e a Casa nas Raízes ainda faltam.
+- **Falta:** ~~o mapa 31 e o mundo contínuo do delta~~ (já existem, com a cidade dentro; 2026-11-11); as ruas da cidade virando canais na monção e a Casa nas Raízes
+  ainda faltam. *(2026-11-16, conferido: a monção nos vaus com a escola de barco do Abiesous, `JhilpurMonsoonRules`,
+  2026-11-13, e a Maré de Lodo, `JhilpurMudTideRules`, 2026-11-12, já existem; ver as fichas 31–35.)*
 
 **Sangkent, a Cidade-Escadaria** (capital do Teto do Mundo, região 7, mapa 36; cidade de retorno de 36–40):
 - **Passeio da cidade:** receita `CityTownRecipes.Sangkent` (`CityTownRecipes.Sangkent.cs`) no estilo novo
@@ -539,9 +549,11 @@ Roda Celeste, Esferas dos Arcontes, Jardim de Luz, Barca do Sol). Testes em `Cit
 - **Missões da cidade:** Bögü pede 7 leões de pedra apagados fora dos portões (o Golem de Pedra faz o Leão de Pedra
   Apagado da ficha; 5 poções de vida + 5 de mana + 150 ouro, 1700 XP); depois Lin Deng pede 6 peixes-lanterna fora do
   canal (a Lanterna-Peixe do Canal das Lanternas, 43; **Selo do Sol** + 150 ouro, 1800 XP). Testes: `CityMingchengTests`.
-- **Falta:** ~~o mundo contínuo da Planície de Mingcheng vai encaixar a cidade~~ (já encaixa; 2026-11-11). Os 9 anéis de verdade, os portões por hora (tambor e
-  sino), as Barcas de canal entre os bairros 4–6, a Festa das Lanternas com charadas, a Lâmpada de Mingcheng (G4 da
-  Maria), o Qilin de Jade e o conjunto Pátio dos Nove Anéis ainda faltam.
+- **Falta:** ~~o mundo contínuo da Planície de Mingcheng vai encaixar a cidade~~ (já encaixa; 2026-11-11). Os 9 anéis de verdade, a Lâmpada de Mingcheng (G4 da
+  Maria), o Qilin de Jade e o conjunto Pátio dos Nove Anéis ainda faltam. *(2026-11-16, conferido: os portões do 4º anel
+  por hora, `MingchengRingGateRules`, 2026-11-16; as barcas do tambor no canal com o sino que fecha as comportas,
+  `DrumBargeRules`, 2026-11-13; e a Festa das Lanternas com charadas, `MingchengLanternFestaRules`, 2026-11-12, já
+  existem; ver as fichas 41–46.)*
 
 **Farnkesh, os Ninhos de Pedra** (capital do Vento Vivo, região 10 — Picos de Farnkesh, mapa 54; cidade de retorno de
 54–58):
@@ -738,7 +750,8 @@ Roda Celeste, Esferas dos Arcontes, Jardim de Luz, Barca do Sol). Testes em `Cit
   ouro, 3600 XP); depois Sin-leqi-unninni pede 6 besouros fora das prateleiras de tábuas (o besouro `enemy_mountain_bark_beetle` faz o
   Gafanhoto de Betume; **Barco de Junco** + 250 ouro, 3700 XP). Testes: `CityDurJarrasTests`.
 - **Falta:** os degraus do zigurate como bairros de serviços (feira, ofícios, biblioteca,
-  relógio, Torre), o zigurate acender de cima para baixo em sequência à noite, o evento Cheia e a Roda Celeste no céu. (Já existem, 2026-11-11: os mapas 77–82 no catálogo e no overworld, o Mušḫuššu Manso, o conjunto de equipamento Tijolo Azul e os Móveis de Tijolo Azul.)
+  relógio, Torre), o zigurate acender de cima para baixo em sequência à noite e a Roda Celeste no céu. (O evento A Cheia,
+  com a água subindo um degrau do zigurate por minuto, existe desde 2026-11-13: `DurJarrasFloodRules`.) (Já existem, 2026-11-11: os mapas 77–82 no catálogo e no overworld, o Mušḫuššu Manso, o conjunto de equipamento Tijolo Azul e os Móveis de Tijolo Azul.)
 
 **Fortaleza da Última Lâmpada** (região 15 — Limiar Profundo, mapa 83; cidade de retorno de 83–90):
 - **Passeio da cidade:** receita `CityTownRecipes.FortalezaUltimaLampada` (`CityTownRecipes.UltimaLampada.cs`) no estilo novo `TownStyles.BasaltFort`
@@ -763,7 +776,8 @@ Roda Celeste, Esferas dos Arcontes, Jardim de Luz, Barca do Sol). Testes em `Cit
   carne, erva, ferro, Runa de Clareza, Runa de Cura, Amuleto da Sorte, Pedra da Bênção e Pedra da Alma (nunca Vida/Caos). O Ammo nunca para lá.
 - **Missões da cidade:** Pamour pede 8 enxames de morcegos fora da muralha (`enemy_cave_bat_swarm` faz o Morcego da Treva; poções + 260 ouro, 3800 XP); depois Makarios pede 6 ushabtis fora da estrada das cartas
   (`enemy_mountain_rope_ushabti` faz o Ushabti Apagado; **Lamparina Rúnica** + 260 ouro, 3900 XP). Testes: `CityUltimaLampadaTests`.
-- **Falta:** os cinco portões abrindo para as covas (hoje selados; as 3 ruas são as saídas) e a Raposa-Joia. (Já existem, 2026-11-11: os mapas 83–90 no catálogo e no overworld, a rede de 12 lâmpadas em 3 anéis com a Maré de
+- **Falta:** a Raposa-Joia. *(2026-11-16, conferido: os cinco portões da muralha abrem para as covas desde 2026-11-11,
+  `ProfundoGateRules`: chegar à lâmpada-posto da cova rompe o selo para sempre; ver a ficha 83.)* (Já existem, 2026-11-11: os mapas 83–90 no catálogo e no overworld, a rede de 12 lâmpadas em 3 anéis com a Maré de
   Treva, `ProfundoLampRules`, e os Móveis das Mil Lâmpadas, conjunto de casa.)
 
 **Cais da Coluna** (região 16 — Reinos do Céu, mapa 91; cidade de retorno de 91–100):

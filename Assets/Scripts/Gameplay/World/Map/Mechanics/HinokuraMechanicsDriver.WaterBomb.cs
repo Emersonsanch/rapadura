@@ -3,13 +3,15 @@ using Rapadura.Core.Events;
 using Rapadura.Core.Localization;
 using Rapadura.Gameplay.Inventory;
 using Rapadura.Gameplay.World.Map.Overworld;
+using Rapadura.Gameplay.WorldEvents;
 using UnityEngine;
 
 namespace Rapadura.Gameplay.World.Map.Mechanics
 {
     /// <summary>
     /// The Bomba de Água (68, <see cref="WaterBombRules"/>) on the Hinokura driver: when the hero uses one from the bag (<see cref="ItemConsumedEvent"/>)
-    /// it bursts at their feet onto <see cref="WaterBombBoard"/>, which the turtle's fight (its wake), the eruption (67) and the heat (70) read.
+    /// it bursts at their feet onto <see cref="WaterBombBoard"/>, which the turtle's fight (its wake), the eruption (67), the heat (70) and the
+    /// Grande Tremor's spill (65, <c>LateCityEventsMechanicsDriver.Tremor</c>) read.
     /// A blue ring shows the crust while it lasts. Nothing is saved: a splash lives 20 s.
     /// </summary>
     public sealed partial class HinokuraMechanicsDriver
@@ -84,6 +86,14 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             if ((local - OverworldLayouts.TartarugaVulcaoArena).sqrMagnitude <= TurtleNear * TurtleNear)
             {
                 return WaterBombTexts.Wake;
+            }
+
+            System.DateTime utc = System.DateTime.UtcNow;
+            RealTimeWindow tremor = HinokuraGreatTremorRules.WindowAt(utc);
+            if (tremor.IsOpen && HinokuraGreatTremorRules.SplashReachesSpill(OverworldLayouts.HinokuraLavaDiverters, tremor.Index,
+                    HinokuraGreatTremorRules.SecondsInto(tremor, utc), local, WaterBombRules.Radius))
+            {
+                return WaterBombTexts.Spill;
             }
 
             long unix = System.DateTimeOffset.UtcNow.ToUnixTimeSeconds();

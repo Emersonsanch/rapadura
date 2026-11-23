@@ -26,7 +26,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
     /// <c>WorldMapProgress.SetDailyMark</c>). A ride takes the controls for at most 12 s, and hands them back on arrival, on death
     /// or if anything else moves the hero.
     /// </summary>
-    public sealed class RioMechanicsDriver : MonoBehaviour, IRegionMechanics
+    public sealed partial class RioMechanicsDriver : MonoBehaviour, IRegionMechanics
     {
         private const string PlayerTag = "Player";
         private const float HintCooldown = 3f;
@@ -128,10 +128,15 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             _areas = new[] { MechanicsDriverHub.WorldArea(OverworldLayouts.RioBounds, _origin) };
         }
 
-        private void OnEnable() => _heroState.Attach();
+        private void OnEnable()
+        {
+            _heroState.Attach();
+            HookApepSpit();
+        }
 
         private void OnDisable()
         {
+            UnhookApepSpit();
             EndRide(false);
             HideFeedback();
             _heroState.Detach();
@@ -152,6 +157,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
                 return;
             }
 
+            TickApepOwed();
             if (_riding)
             {
                 TickRide();

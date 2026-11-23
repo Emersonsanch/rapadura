@@ -642,6 +642,8 @@ namespace Rapadura.Gameplay.World.Cities
                 new CityShopEntry("item_amuleto_antiveneno", 700, 2),
                 // The Cesto de Lanternas: oil lamps to carry a light through the swamp night (Docs/Mapas100.md §3.3).
                 new CityShopEntry("item_lamparina_oleo", 30, 3),
+                // ...and the Lanterna de Fogo-Fátuo (ficha 33): in the bag, the swamp night's mist hides nothing (TarchonLanternRules.SightRange).
+                new CityShopEntry(Rapadura.Gameplay.World.Map.Mechanics.TarchonLanternRules.WispLanternItem, 220, 2),
                 // Larthia's bags (Docs/Mapas100.md §3.3: +1 row of the backpack, her version of the Alforje): one per save.
                 new CityShopEntry(BornalItemId, 160, 1, unlock: ShopUnlock.Cleared(BiomeType.Forest)),
                 // Sapo-Gigante de Tarchon (Docs/Mounts.md §3.10): the trols' stilt-to-stilt frog.

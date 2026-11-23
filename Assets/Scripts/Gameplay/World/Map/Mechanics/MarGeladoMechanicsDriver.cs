@@ -98,10 +98,15 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             _areas = new[] { MechanicsDriverHub.WorldArea(OverworldLayouts.MarGeladoBounds, _origin) };
         }
 
-        private void OnEnable() => _heroState.Attach();
+        private void OnEnable()
+        {
+            _heroState.Attach();
+            HookFreedLake();
+        }
 
         private void OnDisable()
         {
+            UnhookFreedLake();
             EndRide(false);
             _fishing = null;
             HideFeedback();
@@ -463,11 +468,13 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
 
             bool night = clock != null && clock.Phase == TimeOfDayPhase.Night;
             IceBait bait = TakeBait(hole);
-            _fishing = new IceFishingSession(unchecked(System.Environment.TickCount * 31 + hole), night, OverworldLayouts.IceFishingHoles[hole].Great, bait);
+            bool freed = LakeFreeNow();
+            _fishing = new IceFishingSession(unchecked(System.Environment.TickCount * 31 + hole), night, OverworldLayouts.IceFishingHoles[hole].Great, bait, freed);
             _fishingHole = hole;
             _saidBite = false;
-            _holeRestUntil[hole] = Time.time + IceFishingRules.HoleCooldownSeconds;
+            _holeRestUntil[hole] = Time.time + KulFreedLake.HoleRest(freed);
             Say(MarGeladoMechanicsTexts.FishLineDown);
+            SayFreeCast(freed);
         }
 
         private void TickFishingSession(Vector2 local)
@@ -523,6 +530,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             int leftover = item != null && _bag != null ? _bag.AddItem(item, 1) : 1;
             string name = FishingTexts.Get(localization, ContentText.ItemNameKey(session.Fish.Id));
             SayText(MarGeladoMechanicsTexts.Format(localization, leftover == 0 ? MarGeladoMechanicsTexts.FishCaught : MarGeladoMechanicsTexts.FishBagFull, name));
+            LandExtraFish(session, item, name);
             BaitLanded(session);
         }
 

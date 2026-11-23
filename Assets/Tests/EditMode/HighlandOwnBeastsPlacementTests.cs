@@ -198,12 +198,7 @@ namespace Rapadura.Tests
             Assert.IsFalse(w.World.Zones.SelectMany(s => s.Day).Any(e => e.EnemyId == Hawk), "the Íbis de Luz Apagada took the hawk's last roles");
         }
 
-        // The scarecrows of the mill (44) are the Espantalho Apagado since the twenty-fourth pass (WestOwnBeastsPlacementTests).
-        [TestCase("grous_das_vilas")]
-        public void TheScarecrowsAndTheVillageCranes_KeepTheBrokenLantern_ForALaterPass(string group)
-        {
-            OverworldFauna fauna = OverworldLayouts.Get(Ming).Zones.SelectMany(z => z.Fauna).First(f => f.Id == group);
-            Assert.IsTrue(fauna.Day.Any(e => e.EnemyId == Lantern), $"{group}: still the broken lantern by day");
-        }
+        // The scarecrows of the mill (44) are the Espantalho Apagado since the twenty-fourth pass (WestOwnBeastsPlacementTests), and the broken
+        // lantern that flew with the village cranes (41) is the Lanterna de Charada Apagada since the twenty-seventh (WestOwn2BeastsPlacementTests).
     }
 }

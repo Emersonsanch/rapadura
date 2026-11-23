@@ -7,6 +7,7 @@ using Rapadura.Gameplay.Inventory;
 using Rapadura.Gameplay.Items;
 using Rapadura.Gameplay.World.Cities;
 using Rapadura.Gameplay.World.Map.Mechanics;
+using Rapadura.Gameplay.World.Map.Overworld;
 using UnityEngine;
 
 namespace Rapadura.Tests
@@ -158,6 +159,106 @@ namespace Rapadura.Tests
             Assert.IsFalse(ConsumableEffectRules.ThrowsWater(ConsumableEffectRules.PureAirBottle));
         }
 
+        // ---------------- 64 · the beaten Kul lets the fish go ----------------
+
+        [Test]
+        public void FreedLake_LastsHalfAnHour_FromTheLastVictory_AndOnlyTheMomentIsKept()
+        {
+            var lake = new KulFreedLake();
+            Assert.IsFalse(lake.IsFree(1000), "never beaten");
+            lake.Free(1000);
+            Assert.IsTrue(lake.IsFree(1000));
+            Assert.IsTrue(lake.IsFree(1000 + KulFreedLake.FreeSeconds - 1));
+            Assert.IsFalse(lake.IsFree(1000 + KulFreedLake.FreeSeconds), "the time ran out");
+            Assert.IsFalse(lake.IsFree(999), "not before the victory");
+            Assert.AreEqual(KulFreedLake.FreeSeconds - 60, lake.SecondsLeft(1060));
+            Assert.AreEqual(0, lake.SecondsLeft(5000));
+
+            lake.Free(2000);
+            Assert.AreEqual(KulFreedLake.FreeSeconds, lake.SecondsLeft(2000), "a new victory starts the time over, never stacks");
+
+            var restored = new KulFreedLake();
+            restored.Restore(lake.FreedAt);
+            Assert.IsTrue(restored.IsFree(2100));
+            restored.Restore(KulFreedLake.NeverFreed);
+            Assert.IsFalse(restored.IsFree(long.MaxValue));
+        }
+
+        [Test]
+        public void FreedLake_BetterFish_ShorterRest_AndTheMasterOfTheFishingsSecondFish()
+        {
+            // 0.92: uncommon on a plain lake, rare on a freed one (rare x 1.5); 0.991: rare, then the Peixe-Dourado (x 2).
+            Assert.AreEqual(FishRarity.Uncommon, IceFishingRules.Roll(0.92, false, false, IceBait.None, false).Rarity);
+            Assert.AreEqual(FishCatalog.Surubim, IceFishingRules.Roll(0.92, false, false, IceBait.None, true).Id);
+            Assert.AreEqual(FishCatalog.Surubim, IceFishingRules.Roll(0.991, false, false, IceBait.None, false).Id);
+            Assert.AreEqual(FishCatalog.PeixeDourado, IceFishingRules.Roll(0.991, false, false, IceBait.None, true).Id);
+            Assert.AreEqual(IceFishingRules.Roll(0.92, false, false, IceBait.Silver).Id, IceFishingRules.Roll(0.92, false, false, IceBait.Silver, false).Id);
+
+            Assert.AreEqual(IceFishingRules.HoleCooldownSeconds, KulFreedLake.HoleRest(false));
+            Assert.Less(KulFreedLake.HoleRest(true), KulFreedLake.HoleRest(false));
+            Assert.IsTrue(KulFreedLake.ExtraFish(true, 0.1));
+            Assert.IsFalse(KulFreedLake.ExtraFish(true, 0.3));
+            Assert.IsFalse(KulFreedLake.ExtraFish(false, 0.0), "only on a freed lake");
+
+            int extras = 0;
+            for (int seed = 0; seed < 400; seed++)
+            {
+                var plain = new IceFishingSession(seed, false, false);
+                plain.Tick(IceFishingSession.MaxBiteDelay + 0.01f);
+                plain.Press();
+                Assert.AreEqual(IceFishingState.Caught, plain.State, "seed " + seed);
+                Assert.IsFalse(plain.ExtraFish, "never a second fish on a plain lake");
+
+                var freed = new IceFishingSession(seed, false, false, IceBait.None, true);
+                Assert.IsTrue(freed.LakeFreed);
+                freed.Tick(IceFishingSession.MaxBiteDelay + 0.01f);
+                freed.Press();
+                Assert.AreEqual(IceFishingState.Caught, freed.State, "seed " + seed);
+                extras += freed.ExtraFish ? 1 : 0;
+            }
+
+            Assert.That(extras, Is.InRange(40, 130), "about one fish in five comes with a second (" + extras + "/400)");
+        }
+
+        // ---------------- 68 -> 65 · the water bomb on the Grande Tremor's spill ----------------
+
+        [Test]
+        public void WaterBomb_CrustHoldsTheHeroOverTheTremorsSpill()
+        {
+            HinokuraLavaDiverter[] diverters = OverworldLayouts.HinokuraLavaDiverters;
+            HinokuraLavaDiverter d = diverters[0];
+            Assert.IsTrue(HinokuraGreatTremorRules.SpillBurns(d.Spill, d.Spill, false));
+            Assert.IsFalse(HinokuraGreatTremorRules.SpillBurns(d.Spill, d.Spill, true), "standing on the crust");
+            Assert.IsFalse(HinokuraGreatTremorRules.SpillBurns(d.Spill, d.Spill + new Vector2(HinokuraGreatTremorRules.SpillRadius + 1f, 0f), false), "out of the pool");
+
+            // Window 3, surge 0 arrives at 46 s and its pool burns until 86 s, on the gate ChannelOf(3, 0); surge 1 has not arrived yet.
+            const long window = 3;
+            double during = HinokuraGreatTremorRules.SurgeAt[0] + HinokuraGreatTremorRules.SurgeSeconds + 5d;
+            Assert.IsTrue(HinokuraGreatTremorRules.SpillBurning(0, during));
+            Assert.IsFalse(HinokuraGreatTremorRules.SpillBurning(1, during));
+            int gate = HinokuraGreatTremorRules.ChannelOf(window, 0);
+            Vector2 pool = diverters[gate].Spill;
+            Vector2 edge = pool + new Vector2(HinokuraGreatTremorRules.SpillRadius + WaterBombRules.Radius - 0.1f, 0f);
+            Assert.IsTrue(HinokuraGreatTremorRules.SplashReachesSpill(diverters, window, during, edge, WaterBombRules.Radius));
+            Assert.IsFalse(HinokuraGreatTremorRules.SplashReachesSpill(diverters, window, during,
+                pool + new Vector2(HinokuraGreatTremorRules.SpillRadius + WaterBombRules.Radius + 0.5f, 0f), WaterBombRules.Radius));
+            Assert.IsFalse(HinokuraGreatTremorRules.SplashReachesSpill(diverters, window, 30d, pool, WaterBombRules.Radius), "no surge has arrived yet");
+            Assert.IsFalse(HinokuraGreatTremorRules.SplashReachesSpill(null, window, during, pool, WaterBombRules.Radius));
+            for (int other = 0; other < diverters.Length; other++)
+            {
+                if (other != gate)
+                {
+                    Assert.IsFalse(HinokuraGreatTremorRules.SplashReachesSpill(diverters, window, during, diverters[other].Spill, WaterBombRules.Radius),
+                        "a gate the lava did not come down holds no pool");
+                }
+            }
+
+            // The crust is the board's splash at the hero's feet; dried, the pool burns again.
+            var splash = new WaterSplash(pool, 10.0);
+            Assert.IsFalse(HinokuraGreatTremorRules.SpillBurns(pool, pool, WaterBombRules.Covers(splash, pool, 15.0)));
+            Assert.IsTrue(HinokuraGreatTremorRules.SpillBurns(pool, pool, WaterBombRules.Covers(splash, pool, 10.0 + WaterBombRules.Seconds + 1.0)), "dried: it burns again");
+        }
+
         // ---------------- items, shops, texts ----------------
 
         [Test]
@@ -202,12 +303,16 @@ namespace Rapadura.Tests
             foreach (CharacterId hero in Cousins)
             {
                 Assert.IsNotNull(IceBaitTexts.CalledLineFor(hero), hero.ToString());
+                Assert.IsNotNull(IceBaitTexts.FreedLineFor(hero), hero.ToString());
                 Assert.IsNotNull(WaterBombTexts.LineFor(hero), hero.ToString());
             }
 
             Assert.IsNull(IceBaitTexts.CalledLineFor(null));
             StringAssert.Contains("{0}", IceBaitTexts.Get(null, IceBaitTexts.Tug));
             StringAssert.Contains("{0}", WaterBombTexts.Get(null, WaterBombTexts.Wake));
+            StringAssert.Contains("{0}", IceBaitTexts.Get(null, IceBaitTexts.LakeFreed));
+            StringAssert.Contains("{0}", IceBaitTexts.Get(null, IceBaitTexts.ExtraFish));
+            Assert.AreNotEqual(WaterBombTexts.Spill, WaterBombTexts.Get(null, WaterBombTexts.Spill), "the spill has a text");
         }
     }
 }

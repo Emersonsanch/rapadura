@@ -99,6 +99,9 @@ namespace Rapadura.Gameplay.Mounts
         FreedSmokeHorse = 44,
         TameNinkiNanka = 45,
         LivingEmberBoar = 46,
+
+        // The legendary of the map sheets (MountLegendCatalog, MountLegendRecipes). Appended only.
+        LightSkiff = 47,
     }
 
     /// <summary>The effect family of a mount ability (§12.2). M1 implements Dash, LootMagnet and Fear; M3 wave 1 the walkers' kinds (MountWaveAbilities).</summary>
@@ -165,6 +168,9 @@ namespace Rapadura.Gameplay.Mounts
         SmokeCloud,
         ShyDive,
         EmberForge,
+
+        // The legendary of the map sheets (MountLegendAbilities). Appended only: assets store the int.
+        LightCrossing,
     }
 
     /// <summary>Where the hero is, as far as riding goes (§2.1, §2.5).</summary>

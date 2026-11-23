@@ -159,6 +159,41 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
 
         public static bool InSpill(Vector2 spill, Vector2 hero) => Vector2.Distance(spill, hero) <= SpillRadius;
 
+        /// <summary>
+        /// Whether the spill burns the hero: in the pool and not standing on the crust of a live Bomba de Água (68, <see cref="WaterBombRules"/>,
+        /// <paramref name="underSplash"/> = <see cref="WaterBombBoard.Covers"/> at the hero's spot).
+        /// </summary>
+        public static bool SpillBurns(Vector2 spill, Vector2 hero, bool underSplash) => !underSplash && InSpill(spill, hero);
+
+        /// <summary>
+        /// Whether a splash of <paramref name="splashRadius"/> at <paramref name="point"/>, <paramref name="secondsIn"/> into window
+        /// <paramref name="windowIndex"/>, reaches the pool of a gate whose surge has arrived and may still be spilling (whether that stone was
+        /// turned is the driver's: a fed forge leaves no pool, the crust then just has nothing to hold).
+        /// </summary>
+        public static bool SplashReachesSpill(HinokuraLavaDiverter[] diverters, long windowIndex, double secondsIn, Vector2 point, float splashRadius)
+        {
+            if (diverters == null || diverters.Length == 0)
+            {
+                return false;
+            }
+
+            for (int surge = 0; surge < SurgeCount; surge++)
+            {
+                if (!SpillBurning(surge, secondsIn))
+                {
+                    continue;
+                }
+
+                HinokuraLavaDiverter diverter = diverters[Mathf.Clamp(ChannelOf(windowIndex, surge), 0, diverters.Length - 1)];
+                if (Vector2.Distance(diverter.Spill, point) <= SpillRadius + splashRadius)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         public static float Burn(float current, float max) => ProfundoHazardRules.Bite(current, max, BurnFraction, BurnFloorFraction);
 
         public static int GoldFor(int fed) => Mathf.Clamp(fed, 0, SurgeCount) * GoldPerForge;

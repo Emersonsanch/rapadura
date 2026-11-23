@@ -240,7 +240,7 @@ namespace Rapadura.Tests
         {
             Assert.AreEqual(3, MountCatalog.Starters.Count);
             Assert.AreEqual(3 + MountWaveCatalog.Specs.Count + MountSkyCatalog.Specs.Count + MountFarRegionCatalog.Specs.Count + MountMidRegionCatalog.Specs.Count
-                + MountSheetCatalog.Specs.Count + MountBossCatalog.Specs.Count,
+                + MountSheetCatalog.Specs.Count + MountBossCatalog.Specs.Count + MountLegendCatalog.Specs.Count,
                 MountCatalog.Specs.Count);
             foreach (string id in new[] { MountCatalog.Pony, MountCatalog.BigDog, MountCatalog.PackDonkey })
             {
@@ -678,8 +678,8 @@ namespace Rapadura.Tests
         [Test]
         public void Codex_ListsThe31_WithTexts()
         {
-            Assert.AreEqual(56, MountCodex.Count, "the 30 of §3 + the Grifo da Coluna (§3.8) + the 8 of §3.9 + the 5 of §3.10 + the 6 of §3.12 + the 6 of §3.13");
-            Assert.AreEqual(56, MountCodex.Entries.Select(e => e.MountId).Distinct().Count());
+            Assert.AreEqual(57, MountCodex.Count, "the 30 of §3 + the Grifo da Coluna (§3.8) + the 8 of §3.9 + the 5 of §3.10 + the 6 of §3.12 + the 6 of §3.13 + the Barquinha de Luz (§3.14)");
+            Assert.AreEqual(57, MountCodex.Entries.Select(e => e.MountId).Distinct().Count());
             var keys = new HashSet<string>(MountTexts.Entries.Select(e => e.Key));
             foreach (MountCodexEntry entry in MountCodex.Entries)
             {

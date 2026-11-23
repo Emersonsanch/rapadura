@@ -70,11 +70,7 @@ namespace Rapadura.Tests
             new Placement(Costa, Rhino, "savana_dos_auroques", "rinocerontes_de_po", Peccary, Golem),
 
             // The gharials of 31 (lago, charcos, maré) are the Gavial do Lodo since the twenty-fourth pass (WestOwnBeastsPlacementTests).
-            new Placement(Delta, Crocodile, "pantano_aberto", "crocodilos_de_musgo", SandSnake),
-            new Placement(Delta, Crocodile, "ilhas_que_andam", "crocodilos_das_ilhas", SandSnake),
-            new Placement(Delta, Crocodile, "raizes_afogadas", "gaviais_sombra", SandSnake),
-            new Placement(Delta, Crocodile, "coracao_do_lodo", "gaviais_sombra_do_lodo", SandSnake),
-            new Placement(Delta, Crocodile, "olho_do_lodo", "gaviais_do_olho", SandSnake),
+            // The Crocodilo de Musgo (33) and the Gavial-Sombra (35) are their own beasts since the twenty-seventh pass (WestOwn2BeastsPlacementTests).
             // The Ninki Nanka's young (34) are the Ninki Nanka Filhote since the twenty-fourth pass (WestOwnBeastsPlacementTests).
             new Placement(Delta, Monkey, "figueiral_das_raizes", "macacos_do_figueiral", Baboon),
             new Placement(Delta, Monkey, "floresta_de_mare", "macacos_da_mare", Baboon),

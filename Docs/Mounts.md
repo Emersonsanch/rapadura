@@ -469,6 +469,31 @@ os vaus como o Sapo-Gigante, que já é Incomum na mesma região. Ninguém voa.
   bicho andando para fora da arena.
 - **Testes:** `MountBossTests`.
 
+### 3.14 A lendária das fichas: a Barquinha de Luz (no código, 2026-11-23)
+
+Uma montaria em `MountLegendCatalog`, exata no orçamento Lendário do §2.4 (26). É a **Barquinha de Luz** da ficha 76
+(`Docs/Mapas100.md` §6: "anda sobre água e luz; flutua 1 m"), uma barquinha das Barcas de Luz (bíblia §3.16) que Apep
+engoliu quando bebeu o rio; quando Apep é vencida e cospe o rio, a barquinha sai junto, **muito raramente**.
+
+| Id | Nome | Região (ficha) | Tipo | Raridade | Vel. | Def. | Vida | Fôlego | Pts | Carga | Habilidade | Como consegue | Favorito |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| `mount_light_skiff` | Barquinha de Luz / *Little Light Skiff* | 13 Rio das Doze Horas (76) | aquático, flutua 1 m | Lendário | 1,75 | +6% | 200 | 170 | 26 | 180 | **Travessia de Luz:** por 8 s o primo e o grupo a até 10 m andam 20% mais rápido, a luz abre 12 m, e os bichos comuns dentro dela perdem o primo por 2 s; chefe não. Recarga 60 s | Drop de Apep (chefe do mundo do 76, 0,3%, dia ou noite) | Maithe |
+
+- **Decisões:** fonte só pelo chefe (o topo da faixa Lendária do §2.1, 0,3%); **sem Fitas do Laço** (Lendária nunca sai de
+  Fita, §3.5), nada vende, nenhuma missão dá. Tipo **aquático** (abre o barco e os vaus como os outros nadadores); o
+  "voador baixo" da ficha fica só no visual: ela **flutua 1 m** (`MountLegendRules.Float`, 0,3 m em cidade e casa como os
+  voadores, balanço lento; menos com "reduzir movimento"), sem asas e sem voo livre (o voo livre é do Cavalo-Estrela).
+- **Efeito novo** (`MountLegendAbilities`, regras em `MountLegendRules`; o `MountBossAbilities` passa adiante o tipo que não
+  conhece): `LightCrossing`, no fim de `MountAbilityKind`. Nada de dano (§2.2).
+- **Modelo:** `MountLegendRecipes` (`MountVisualRecipe.LightSkiff` = 47): casco raso e largo de tábuas marfim com faixa de
+  ouro, proa levantada (pescoço e cabeça), joia de luz na proa e quatro pernas curtas de luz que fazem de remos. No
+  `MountActor` ela não usa o motor de passos: flutua (`MountLegendRules.Floats`).
+- **Cena de libertar:** a mesma `MountBossFreeing` dos chefes (coluna de luz dourada onde Apep caiu e a fala
+  `ui.mount.boss.freed.mount_light_skiff`, PT/EN).
+- **Limites:** sem modelo de barco próprio (é o corpo de quadrúpede lido como casco); flutuar é só visual (a colisão é a de
+  sempre).
+- **Testes:** `MountLegendTests`.
+
 ### 3.7 Checagem de unicidade
 
 30 IDs distintos, 30 nomes distintos e 30 habilidades com nome e efeito distintos, conferidos por script (inclusive

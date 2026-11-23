@@ -174,6 +174,7 @@ namespace Rapadura.Gameplay.Inventory
             { "mount_freed_smoke_horse", 160f },
             { "mount_ninki_nanka", 220f },
             { "mount_living_ember_boar", 200f },
+            { "mount_light_skiff", 180f }, // the Barquinha de Luz (MountLegendCatalog): a little boat, a fair hold
         };
 
         // ------------------------------------------------------------------

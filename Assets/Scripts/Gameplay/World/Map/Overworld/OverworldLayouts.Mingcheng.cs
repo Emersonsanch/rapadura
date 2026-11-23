@@ -133,6 +133,12 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             // lantern) and the Íbis de Luz Apagada (42, was the hawk).
             public const string TerracottaArcher = "enemy_desert_terracotta_archer";
             public const string LightIbis = "enemy_mountain_dimmed_light_ibis";
+            // The twenty-seventh pass (WestOwn2BeastRecipes, OverworldLayouts.WestOwn2Beasts): the Névoa do Shen (Vale da Névoa) and the Bolha de
+            // Hundun (46), both the ill-wind mist before, and the Lanterna de Charada Apagada (41, the broken lantern); the mist and the broken
+            // lantern left Mingcheng by day.
+            public const string ShenMist = "enemy_mountain_shen_mist";
+            public const string HundunBubble = "enemy_mountain_hundun_bubble";
+            public const string RiddleLantern = "enemy_desert_riddle_lantern";
         }
 
         private static OverworldLayout MingchengRegion()
@@ -396,9 +402,12 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             // Lanterna [rápido], the Grou de Papel [distância] (its own beast now, WideBeasts), the Soldado de Terracota Apagado [tanque].
             aneis.Fauna.Add(Fauna("raposas_de_cauda_lanterna", "[rápido]", T(N(Ming.Fox, 3), N(Ming.PaperCrane, 1)), T(V(Ming.Fox, 2), S(moon, 1)), 4));
             aneis.Fauna.Add(Fauna("grous_de_papel", "[distância]", T(N(Ming.PaperCrane, 3), N(Ming.Fox, 1)), T(V(Ming.PaperCrane, 2), S(owl, 1)), 3));
+            // The Lanterna de Charada Apagada [distância] (its own beast now, WestOwn2Beasts): the festival lanterns nobody guessed, over the rings
+            // and with the cranes of the villages.
+            aneis.Fauna.Add(Fauna("lanternas_de_charada", "[distância]", T(N(Ming.RiddleLantern, 3), N(Ming.PaperCrane, 1)), T(V(Ming.RiddleLantern, 3), S(moon, 1)), 3));
             vilas.Fauna.Add(Fauna("leoes_de_pedra", "[tanque]", T(N(Ming.Lion, 3), N(Ming.Fox, 1)), T(V(Ming.Lion, 2), V(Ming.Fox, 1)), 3, null, 30f));
             vilas.Fauna.Add(Fauna("raposas_das_vilas", "[rápido]", T(N(Ming.Fox, 3), N(Ming.Duck, 1)), T(V(Ming.Fox, 2), S(owl, 1)), 4));
-            vilas.Fauna.Add(Fauna("grous_das_vilas", "[distância]", T(N(Ming.PaperCrane, 3), N(Ming.Kite, 1)), T(V(Ming.PaperCrane, 2), S(moon, 1)), 3));
+            vilas.Fauna.Add(Fauna("grous_das_vilas", "[distância]", T(N(Ming.PaperCrane, 3), N(Ming.RiddleLantern, 1)), T(V(Ming.PaperCrane, 2), S(moon, 1)), 3));
 
             // Caminho dos Leões (41): the lions of the spirit way, terracotta soldiers on watch, foxes.
             leoes.Fauna.Add(Fauna("leoes_do_caminho", "[tanque]", T(N(Ming.Lion, 3), N(Ming.PaperCrane, 1)), T(V(Ming.Lion, 2), S(owl, 1)), 3, null, 30f));
@@ -466,10 +475,10 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             nian.Fauna.Add(Fauna("filhotes_de_nian", "[elite]", T(N(Ming.Nian, 3), N(Ming.Stone, 1)), T(V(Ming.Nian, 3), S(werewolf, 1)), 3, null, 32f));
             nian.Fauna.Add(Fauna("morcegos_do_nian", "[enxame]", T(N(Ming.Bats, 3), N(Ming.Crow, 1)), T(V(Ming.Bats, 2), S(bats, 2)), 5));
 
-            // Cristas dos Pinheiros and Vale da Névoa: wolves in the pines, crows, the mist.
+            // Cristas dos Pinheiros and Vale da Névoa: wolves in the pines, crows, the Névoa do Shen [controle] (its own beast now, WestOwn2Beasts).
             pinheiros.Fauna.Add(Fauna("lobos_dos_pinheiros", "[rápido]", T(N(Ming.Horse, 3), N(Ming.Crow, 1)), T(V(Ming.Horse, 2), S(werewolf, 1)), 4));
             pinheiros.Fauna.Add(Fauna("corvos_dos_pinheiros", "[distância]", T(N(Ming.Crow, 3), N(Ming.Monkey, 1)), T(V(Ming.Crow, 2), S(owl, 1)), 4));
-            nevoa.Fauna.Add(Fauna("neblinas_do_vale", "[controle]", T(N(Ming.Smoke, 3), N(Ming.Crow, 1)), T(V(Ming.Smoke, 2), S(owl, 1)), 4));
+            nevoa.Fauna.Add(Fauna("neblinas_do_vale", "[controle]", T(N(Ming.ShenMist, 3), N(Ming.Crow, 1)), T(V(Ming.ShenMist, 2), S(owl, 1)), 4));
             nevoa.Fauna.Add(Fauna("macacos_da_nevoa", "[rápido]", T(N(Ming.Monkey, 3), N(Ming.Horse, 1)), T(V(Ming.Monkey, 2), S(werewolf, 1)), 3, null, 28f));
 
             // Muralha das Mil Torres (45): the Soldado de Terracota [tanque], the Arqueiro de Terracota [distância] (its own beast now, HighlandBeasts),
@@ -484,10 +493,10 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             portao.Fauna.Add(Fauna("arqueiros_do_portao", "[distância]", T(N(Ming.TerracottaArcher, 3), N(Ming.Horse, 1)), T(V(Ming.TerracottaArcher, 2), S(bats, 1)), 4));
 
             // Cidadela dos Quatro Gulosos (46): the Servos de Taotie [tanque] (the terracotta soldier), the Bolhas de Hundun [controle]
-            // (the ill-wind mist), the Filhotes de Qiongqi [rápido] (the wolf), the Guarda de Taowu [elite] (the stone lion); no boss yet.
+            // (their own beast now, WestOwn2Beasts; the ill-wind mist before), the Filhotes de Qiongqi [rápido] (the wolf), the Guarda de Taowu [elite] (the stone lion); no boss yet.
             cidadela.Fauna.Add(Fauna("servos_de_taotie", "[tanque]", T(N(Ming.Terracotta, 3), N(Ming.Lion, 1)), T(V(Ming.Terracotta, 2), S(werewolf, 1)), 3, null, 30f));
-            cidadela.Fauna.Add(Fauna("bolhas_de_hundun", "[controle]", T(N(Ming.Smoke, 3), N(Ming.Kite, 1)), T(V(Ming.Smoke, 3), S(owl, 1)), 4));
-            cidadela.Fauna.Add(Fauna("filhotes_de_qiongqi", "[rápido]", T(N(Ming.Horse, 3), N(Ming.Smoke, 1)), T(V(Ming.Horse, 2), S(werewolf, 1)), 4));
+            cidadela.Fauna.Add(Fauna("bolhas_de_hundun", "[controle]", T(N(Ming.HundunBubble, 3), N(Ming.RiddleLantern, 1)), T(V(Ming.HundunBubble, 3), S(owl, 1)), 4));
+            cidadela.Fauna.Add(Fauna("filhotes_de_qiongqi", "[rápido]", T(N(Ming.Horse, 3), N(Ming.HundunBubble, 1)), T(V(Ming.Horse, 2), S(werewolf, 1)), 4));
             cidadela.Fauna.Add(Fauna("guarda_de_taowu", "[elite]", T(N(Ming.Lion, 3), N(Ming.Terracotta, 1)), T(V(Ming.Lion, 3), S(bats, 1)), 3, null, 32f));
         }
     }

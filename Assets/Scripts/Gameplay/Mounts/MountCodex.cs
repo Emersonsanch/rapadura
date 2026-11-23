@@ -81,7 +81,7 @@ namespace Rapadura.Gameplay.Mounts
             (MountFarRegionCatalog.MesektetIbis, ItemRarity.Rare, BiomeType.Desert, "Royal Ibis of Mesektet", "Íbis Real de Mesektet", "Help Djedi with the scorpions on the Mesektet Quay.", "Ajude o Djedi com os escorpiões do Cais de Mesektet."),
             (MountFarRegionCatalog.AuroraReindeer, ItemRarity.Epic, BiomeType.Mountain, "Aurora Reindeer", "Rena da Aurora", "Help Pera with the bears on the canals of the White Moon Harbor.", "Ajude o Pera com os ursos nos canais do Porto da Lua Branca."),
             (MountFarRegionCatalog.LacquerLion, ItemRarity.Epic, BiomeType.Mountain, "Lacquer Guardian Lion", "Leão-Guardião de Laca", "Help Sango with the ember gulls on the Hinokura lighthouse.", "Ajude a Sango com as gaivotas-brasa no farol de Hinokura."),
-            (MountFarRegionCatalog.Mushhushshu, ItemRarity.Epic, BiomeType.Desert, "Tame Mushussu", "Mušhuššu Manso", "Help Sin-leqi-unninni with the beetles on the tablets of Dur-Jarras.", "Ajude o Sin-leqi-unninni com os besouros nas tábuas de Dur-Jarras."),
+            (MountFarRegionCatalog.Mushhushshu, ItemRarity.Epic, BiomeType.Desert, "Tame Mushussu", "Mušhuššu Manso", "Help Sin-leqi-unninni with the locusts on the tablets of Dur-Jarras.", "Ajude o Sin-leqi-unninni com os gafanhotos nas tábuas de Dur-Jarras."),
 
             // Regions 5–9 (MountMidRegionCatalog, Docs/Mounts.md §3.10).
             (MountMidRegionCatalog.TarchonFrog, ItemRarity.Uncommon, BiomeType.Forest, "Tarchon Giant Frog", "Sapo-Gigante de Tarchon", "Larthia's baskets, on the Tarchon stilts.", "A cestaria da Larthia, nas Palafitas de Tarchon."),
@@ -105,6 +105,10 @@ namespace Rapadura.Gameplay.Mounts
             (MountBossCatalog.FreedSmokeHorse, ItemRarity.Rare, BiomeType.Mountain, "Freed Smoke Horse", "Cavalo de Fumaça Liberto", "The Smoke Horse of Soslan's racetracks, freed.", "O Cavalo de Fumaça das pistas de Soslan, libertado."),
             (MountBossCatalog.TameNinkiNanka, ItemRarity.Epic, BiomeType.Forest, "Tame Ninki Nanka", "Ninki Nanka Mansa", "The shy dragoness of the bog, once freed… very rare.", "A dragoa tímida do charco, depois de libertada… muito rara."),
             (MountBossCatalog.LivingEmberBoar, ItemRarity.Epic, BiomeType.Mountain, "Living Ember Boar", "Javali de Brasa Viva", "Swallowed by the Ember Glutton with the forges' fire… very rare.", "Engolido pelo Glutão de Brasa junto com o fogo das forjas… muito raro."),
+
+            // The legendary of the map sheets (MountLegendCatalog, Docs/Mounts.md §3.14).
+            (MountLegendCatalog.LightSkiff, ItemRarity.Legendary, BiomeType.Desert, "Little Light Skiff", "Barquinha de Luz",
+                "Caught in Apep's coils on the sandbank, waiting for the river to come back… very, very rare.", "Presa nas dobras de Apep no banco de areia, esperando o rio voltar… muito, muito rara."),
         };
 
         public static readonly IReadOnlyList<MountCodexEntry> Entries = Rows.Select(r => new MountCodexEntry(r.Id, r.Rarity, r.Region)).ToList();

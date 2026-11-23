@@ -221,6 +221,13 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             public const string MudShark = "enemy_desert_mud_shark";
             public const string SmokeRay = "enemy_cave_smoke_ray";
             public const string DimmedHeron = "enemy_forest_dimmed_heron";
+            // The twenty-seventh pass (WestOwn2BeastRecipes, OverworldLayouts.WestOwn2Beasts): the Chacal-Listrado Apagado (25–26, was the jackal),
+            // the Hiena de Fumaça (26, the jackal and the wolf), the Carneiro de Pedra Apagado (27, the golem's numbers) and the Dingonek (29, the
+            // werewolf's numbers, it prowls Kilwa at night) are their own beasts now.
+            public const string StripedJackal = "enemy_desert_striped_jackal";
+            public const string SmokeHyena = "enemy_desert_smoke_hyena";
+            public const string StoneRam = "enemy_mountain_dimmed_stone_ram";
+            public const string Dingonek = "enemy_forest_dingonek";
         }
 
         private static OverworldLayout Costa()
@@ -551,8 +558,8 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             recife.Fauna.Add(Fauna("moreias", "[rápido]", T(N(MidBeasts.Moray, 3), N(Coast.Gull, 1)), T(V(MidBeasts.Moray, 2), S(plankton, 1)), 4));
             recife.Fauna.Add(Fauna("gaivotas_do_recife", "[rápido] [distância]", T(N(Coast.Gull, 3), N(Coast.LanternFish, 1)), T(V(Coast.Gull, 2), S(plankton, 1)), 4, null, 22f));
 
-            // Dunas das Casuarinas: jackals and sand snakes, scorpions under the casuarinas.
-            dunas.Fauna.Add(Fauna("chacais_das_dunas", "[rápido]", T(N(Coast.Jackal, 3), N(Coast.Gull, 1)), T(V(Coast.Jackal, 2), S(mngwa, 1)), 4));
+            // Dunas das Casuarinas: the Chacal-Listrado Apagado [rápido] (its own beast now, WestOwn2Beasts) and sand snakes, scorpions under the casuarinas.
+            dunas.Fauna.Add(Fauna("chacais_das_dunas", "[rápido]", T(N(Coast.StripedJackal, 3), N(Coast.Gull, 1)), T(V(Coast.StripedJackal, 2), S(mngwa, 1)), 4));
             dunas.Fauna.Add(Fauna("cobras_das_dunas", "[controle]", T(N(Coast.SandSnake, 2), N(Coast.Scorpion, 2)), T(V(Coast.SandSnake, 2), V(Coast.Scorpion, 1)), 4));
 
             // Coqueiral: the coconut crabs climb the palms, gulls steal the copra.
@@ -560,7 +567,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             coqueiral.Fauna.Add(Fauna("gaivotas_da_copra", "[rápido]", T(N(Coast.Gull, 3), N(Coast.Potoo, 1)), T(V(Coast.Gull, 2), S(NightVariantRules.MaeDaLua, 1)), 4, null, 22f));
 
             // Praia dos Dhows: gulls on the hulls, crabs under them, spiders in the nets.
-            dhows.Fauna.Add(Fauna("gaivotas_dos_dhows", "[rápido]", T(N(Coast.Gull, 3), N(Coast.Jackal, 1)), T(V(Coast.Gull, 2), V(Coast.Jackal, 1)), 4, null, 22f));
+            dhows.Fauna.Add(Fauna("gaivotas_dos_dhows", "[rápido]", T(N(Coast.Gull, 3), N(Coast.StripedJackal, 1)), T(V(Coast.Gull, 2), V(Coast.StripedJackal, 1)), 4, null, 22f));
             dhows.Fauna.Add(Fauna("caranguejos_dos_cascos", "[tanque] [controle]", T(N(Coast.Crab, 3), N(MidBeasts.SmokeUrchin, 1)), T(V(Coast.Crab, 2), S(NightVariantRules.RasgaMortalha, 1)), 4));
 
             // Cravais: peccaries rooting under the clove trees, spiders in the rows.
@@ -580,11 +587,12 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             baixios.Fauna.Add(Fauna("peixes_lanterna", "[distância]", T(N(Coast.LanternFish, 3), N(Coast.SandSnake, 1)), T(V(Coast.LanternFish, 2), S(plankton, 1)), 4));
 
             // Savana dos Auroques (26): the Leão do Capim Apagado [rápido] (the wolf's body), the Rinoceronte-de-Pó [tanque]
-            // (peccary and ushabti), the Ave-Relâmpago [distância] (the ember vulture); the smoke hyenas at night.
-            auroques.Fauna.Add(Fauna("leoes_do_capim", "[rápido]", T(N(Coast.Lion, 3), N(Coast.Jackal, 1)), T(V(Coast.Lion, 2), S(mngwa, 1)), 4));
-            auroques.Fauna.Add(Fauna("rinocerontes_de_po", "[tanque]", T(N(Coast.Rhino, 3), N(Coast.Jackal, 1)), T(V(Coast.Rhino, 2), S(NightVariantRules.Queixada, 1)), 3, null, 30f));
+            // (peccary and ushabti), the Ave-Relâmpago [distância] (the ember vulture); the Hiena de Fumaça [enxame] and the Chacal-Listrado
+            // Apagado (their own beasts now, WestOwn2Beasts; the hyenas come out in a pack at night).
+            auroques.Fauna.Add(Fauna("leoes_do_capim", "[rápido]", T(N(Coast.Lion, 3), N(Coast.StripedJackal, 1)), T(V(Coast.Lion, 2), S(mngwa, 1)), 4));
+            auroques.Fauna.Add(Fauna("rinocerontes_de_po", "[tanque]", T(N(Coast.Rhino, 3), N(Coast.StripedJackal, 1)), T(V(Coast.Rhino, 2), S(NightVariantRules.Queixada, 1)), 3, null, 30f));
             auroques.Fauna.Add(Fauna("aves_relampago", "[distância]", T(N(MidBeasts.LightningBird, 3), N(Coast.Hawk, 1)), T(V(MidBeasts.LightningBird, 2), S(NightVariantRules.RasgaMortalha, 1)), 3));
-            acacias.Fauna.Add(Fauna("hienas_de_fumaca", "[enxame] [rápido]", T(N(Coast.Jackal, 3), N(Coast.Wolf, 1)), T(V(Coast.Jackal, 3), S(mngwa, 1)), 5));
+            acacias.Fauna.Add(Fauna("hienas_de_fumaca", "[enxame] [rápido]", T(N(Coast.SmokeHyena, 3), N(Coast.StripedJackal, 1)), T(V(Coast.SmokeHyena, 3), S(mngwa, 1)), 5));
             acacias.Fauna.Add(Fauna("aves_das_acacias", "[distância]", T(N(MidBeasts.LightningBird, 2), N(Coast.Hawk, 2)), T(V(MidBeasts.LightningBird, 1), V(Coast.Hawk, 1), S(NightVariantRules.RasgaMortalha, 1)), 4));
 
             // Bosque dos Baobás: baboons in the baobabs, potoos on the branches.
@@ -599,6 +607,8 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             // Chacal de Areia Negra [enxame] (the three their own beasts now, CoastOwnBeasts), the broken lanterns of the chapels.
             meroe.Fauna.Add(Fauna("ushabtis_kushitas", "[tanque]", T(N(CoastOwnBeasts.KushiteUshabti, 3), N(Coast.Lantern, 1)), T(V(CoastOwnBeasts.KushiteUshabti, 2), V(Coast.Lantern, 1)), 3, null, 30f));
             meroe.Fauna.Add(Fauna("escorpioes_rei", "[rápido]", T(N(CoastOwnBeasts.YoungScorpionKing, 3), N(CoastOwnBeasts.BlackSandJackal, 1)), T(V(CoastOwnBeasts.YoungScorpionKing, 2), S(plankton, 1)), 4));
+            // The Carneiro de Pedra Apagado [elite] (its own beast now, WestOwn2Beasts): off its plinth on the avenue, more of them at night.
+            meroe.Fauna.Add(Fauna("carneiros_de_pedra", "[elite]", T(N(Coast.StoneRam, 3), N(CoastOwnBeasts.KushiteUshabti, 1)), T(V(Coast.StoneRam, 3), V(CoastOwnBeasts.KushiteUshabti, 1)), 3, null, 32f));
             meroe.Fauna.Add(Fauna("chacais_de_areia_negra", "[enxame]", T(N(CoastOwnBeasts.BlackSandJackal, 3), N(Coast.SandSnake, 1)), T(V(CoastOwnBeasts.BlackSandJackal, 2), S(mngwa, 1)), 5));
 
             // Falésias do Norte: hawks and baboons on the headland, the rolling stones.
@@ -628,10 +638,12 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             lagoaGrande.Fauna.Add(Fauna("margens_da_lagoa", "[tanque] [rápido]", T(N(Coast.Crab, 2), N(Coast.Gull, 2)), T(V(Coast.Crab, 1), V(Coast.Gull, 2)), 4));
 
             // Kilwa Afundada (29): the Ushabti de Coral [tanque] (its own beast now, WideBeasts), the Polvo Ladrão [controle] (its own beast now,
-            // CoastOwnBeasts), the Raia de Fumaça [rápido] (its own beast now, WestOwnBeasts); the dingonek prowls at night (the werewolf's body).
+            // CoastOwnBeasts), the Raia de Fumaça [rápido] (its own beast now, WestOwnBeasts), the Dingonek [elite] (its own beast now, WestOwn2Beasts,
+            // the werewolf's numbers): it guards a ford of its own by day and prowls the rays' streets at night.
             kilwa.Fauna.Add(Fauna("ushabtis_de_kilwa", "[tanque]", T(N(Coast.CoralUshabti, 3), N(CoastOwnBeasts.ThiefOctopus, 1)), T(V(Coast.CoralUshabti, 2), V(CoastOwnBeasts.ThiefOctopus, 1)), 3, null, 30f));
             kilwa.Fauna.Add(Fauna("polvos_ladroes", "[controle]", T(N(CoastOwnBeasts.ThiefOctopus, 3), N(Coast.Crab, 1)), T(V(CoastOwnBeasts.ThiefOctopus, 2), S(plankton, 1)), 4));
-            kilwa.Fauna.Add(Fauna("raias_de_fumaca", "[rápido]", T(N(Coast.SmokeRay, 3), N(Coast.Gull, 1)), T(V(Coast.SmokeRay, 2), S(mngwa, 1)), 4));
+            kilwa.Fauna.Add(Fauna("raias_de_fumaca", "[rápido]", T(N(Coast.SmokeRay, 3), N(Coast.Gull, 1)), T(V(Coast.SmokeRay, 2), V(Coast.Dingonek, 1)), 4));
+            kilwa.Fauna.Add(Fauna("dingoneks", "[elite]", T(N(Coast.Dingonek, 3), N(Coast.SmokeRay, 1)), T(V(Coast.Dingonek, 3), S(mngwa, 1)), 3, null, 32f));
 
             // Palácio de Husuni (29): coral ushabtis, crows on the arches, the hermit crabs (the coconut crab) round the
             // octagonal pool, the broken lanterns.

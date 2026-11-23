@@ -144,12 +144,9 @@ namespace Rapadura.Tests
         [TestCase(Costa, "cobras_das_dunas", SandSnake)]
         [TestCase(Costa, "peixes_lanterna", LanternFish)]
         [TestCase(Costa, "gaivotas_ladras", Gull)]
-        [TestCase(Delta, "crocodilos_de_musgo", Crocodile)]
-        [TestCase(Delta, "gaviais_sombra_do_lodo", Crocodile)]
         [TestCase(Delta, "gavioes_da_garganta", Crow)]
-        [TestCase(Ming, "neblinas_do_vale", Mist)]
-        [TestCase(Ming, "bolhas_de_hundun", Mist)]
-        [TestCase(Ming, "grous_das_vilas", Lantern)]
+        // The Crocodilo de Musgo (33), the Gavial-Sombra (35), the Névoa do Shen, the Bolha de Hundun (46) and the riddle lanterns with the village
+        // cranes (41) took the rest of those roles in the twenty-seventh pass (WestOwn2BeastsPlacementTests).
         public void TheOtherMapsOfTheRegion_KeepTheirStandIn(string region, string group, string standIn)
         {
             OverworldFauna fauna = OverworldLayouts.Get(region).Zones.SelectMany(z => z.Fauna).FirstOrDefault(f => f.Id == group);

@@ -326,11 +326,12 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             degelo.Fauna.Add(Fauna("neblinas_do_degelo", "[controle]", T(N(Teto.CrestMist, 3), N(Teto.SnowChough, 1)), T(V(Teto.CrestMist, 2), S(owl, 1)), 4));
             degelo.Fauna.Add(Fauna("pedras_do_degelo", "[controle]", T(N(Teto.MoraineRoller, 3), N(Teto.Marmot, 1)), T(V(Teto.MoraineRoller, 2), V(Teto.Marmot, 1)), 3, null, 28f));
 
-            // Encosta dos Zimbros and Pastagens dos Iaques: bears in the junipers, wild yaks [tanque], wolves.
+            // Encosta dos Zimbros and Pastagens dos Iaques: bears in the junipers, wild yaks [tanque], the packs of the Lobo de Gelo (the
+            // twenty-seventh pass, OverworldLayouts.WestOwn2Beasts; the forest wolf before, it stays with the yaks).
             zimbros.Fauna.Add(Fauna("ursos_dos_zimbros", "[tanque]", T(N(Teto.Bear, 3), N(Teto.SnowChough, 1)), T(V(Teto.Bear, 2), S(werewolf, 1)), 3, null, 30f));
-            zimbros.Fauna.Add(Fauna("lobos_dos_zimbros", "[rápido]", T(N(Teto.Wolf, 3), N(Teto.Marmot, 1)), T(V(Teto.Wolf, 2), S(werewolf, 1)), 4));
+            zimbros.Fauna.Add(Fauna("lobos_dos_zimbros", "[rápido]", T(N(MidBeasts.IceWolf, 3), N(Teto.Marmot, 1)), T(V(MidBeasts.IceWolf, 2), S(werewolf, 1)), 4));
             iaques.Fauna.Add(Fauna("iaques_selvagens", "[tanque]", T(N(Teto.Yak, 3), N(Teto.Wolf, 1)), T(V(Teto.Yak, 2), S(herd, 1), V(Teto.Wolf, 1)), 3, null, 28f));
-            iaques.Fauna.Add(Fauna("lobos_das_pastagens", "[rápido]", T(N(Teto.Wolf, 3), N(Teto.Marmot, 1)), T(V(Teto.Wolf, 2), S(werewolf, 1)), 4));
+            iaques.Fauna.Add(Fauna("lobos_das_pastagens", "[rápido]", T(N(MidBeasts.IceWolf, 3), N(Teto.Marmot, 1)), T(V(MidBeasts.IceWolf, 2), S(werewolf, 1)), 4));
 
             // Lago Turquesa: mists on the water, vultures, marmots on the shore.
             lago.Fauna.Add(Fauna("neblinas_do_lago", "[controle]", T(N(Teto.CrestMist, 3), N(Teto.RoyalHawk, 1)), T(V(Teto.CrestMist, 2), S(owl, 1)), 4));
@@ -348,7 +349,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             geladas.Fauna.Add(Fauna("pedras_das_calhas", "[controle]", T(N(Teto.MoraineRoller, 3), N(Teto.CrestMist, 1)), T(V(Teto.MoraineRoller, 2), S(owl, 1)), 3, null, 28f));
 
             // Campos de Neve and Terraços Altos (36, the cold): ice wolves, the bear, choughs in the snow.
-            neves.Fauna.Add(Fauna("lobos_das_neves", "[rápido]", T(N(Teto.Wolf, 3), N(Teto.SnowChough, 1)), T(V(Teto.Wolf, 2), S(werewolf, 1)), 4));
+            neves.Fauna.Add(Fauna("lobos_das_neves", "[rápido]", T(N(MidBeasts.IceWolf, 3), N(Teto.SnowChough, 1)), T(V(MidBeasts.IceWolf, 2), S(werewolf, 1)), 4));
             neves.Fauna.Add(Fauna("ursos_das_neves", "[tanque]", T(N(Teto.Bear, 3), N(Teto.Wolf, 1)), T(V(Teto.Bear, 2), S(werewolf, 1)), 3, null, 30f));
             altos.Fauna.Add(Fauna("gralhas_dos_terracos_altos", "[rápido]", T(N(MidBeasts.RedBilledChough, 3), N(Teto.MoraineRoller, 1)), T(V(MidBeasts.RedBilledChough, 2), S(owl, 1)), 4));
             altos.Fauna.Add(Fauna("pedras_dos_terracos", "[controle]", T(N(Teto.MoraineRoller, 3), N(Teto.Wolf, 1)), T(V(Teto.MoraineRoller, 2), V(Teto.Wolf, 1)), 3, null, 28f));

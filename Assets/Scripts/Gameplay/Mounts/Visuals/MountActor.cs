@@ -43,6 +43,10 @@ namespace Rapadura.Gameplay.Mounts.Visuals
 
         // Flyers (MountType.Voador, MountFlightRules): hover, wing beat, legs tucked. Visual only.
         private bool _flyer;
+
+        // Floaters (the Barquinha de Luz, MountLegendRules.Floats): a metre over the ground, a slow bob, no gait. Visual only.
+        private bool _floater;
+        private float _floatTime;
         private Transform _wingLeft;
         private Transform _wingRight;
         private Transform _wingTipLeft;
@@ -92,7 +96,7 @@ namespace Rapadura.Gameplay.Mounts.Visuals
         public bool FlightAllowed { get; set; } = true;
 
         /// <summary>Current height of the flyer's model above its root (world units), 0 for walkers.</summary>
-        public float HoverHeight => _flyer && _hover > 0f ? _hover * _scale : 0f;
+        public float HoverHeight => (_flyer || _floater) && _hover > 0f ? _hover * _scale : 0f;
 
         /// <summary>Whether the "Voo da Coluna" arc is running.</summary>
         public bool IsSoaring => _soarRemaining > 0f;
@@ -141,6 +145,15 @@ namespace Rapadura.Gameplay.Mounts.Visuals
                 {
                     FindDeep(_visual, "Leg_FL"), FindDeep(_visual, "Leg_FR"), FindDeep(_visual, "Leg_HL"), FindDeep(_visual, "Leg_HR"),
                 };
+                _lastPosition = transform.position;
+                _lastYaw = transform.eulerAngles.y;
+                return;
+            }
+
+            _floater = MountLegendRules.Floats(recipe);
+            if (_floater)
+            {
+                // The skiff never touches the ground: no gait engine, it just floats (MountLegendRules.Float).
                 _lastPosition = transform.position;
                 _lastYaw = transform.eulerAngles.y;
                 return;
@@ -305,6 +318,13 @@ namespace Rapadura.Gameplay.Mounts.Visuals
             if (_flyer)
             {
                 TickFlight(dt, reduced, worldSpeed01, position);
+            }
+            else if (_floater)
+            {
+                _floatTime += dt;
+                _hover = MountLegendRules.Float(_floatTime, FlightAllowed, reduced);
+                _visual.localPosition = new Vector3(0f, _hover, 0f);
+                _visual.localRotation = Quaternion.Euler(-4f * worldSpeed01 * motion, 0f, 0f);
             }
             else if (_legs != null)
             {

@@ -78,6 +78,16 @@ namespace Rapadura.Gameplay.Mounts
         public const string NinkiNanka = Rapadura.Gameplay.Enemies.RegionBossRules.NinkiNankaId;
         public const string EmberGlutton = Rapadura.Gameplay.Enemies.RegionBossRules.EmberGluttonId;
 
+        // The legendary of the map sheets (MountLegendCatalog, Docs/Mounts.md §3.14): Apep, world boss of Region 13 (map 76).
+        public const string Apep = Rapadura.Gameplay.Enemies.RegionBossRules.ApepId;
+
+        /// <summary>
+        /// The ribbon store key of the Fitas de Corrida that Shulgi pays for the Corrida de Shulgi in Aratta (ShulgiRaceRules, map 26):
+        /// not an enemy, so no death ever adds to it; the race does, and its row in <see cref="Ribbons"/> trades 25 of them for the
+        /// Auroque de Aratta.
+        /// </summary>
+        public const string ShulgiRace = "race_aratta_shulgi";
+
         public const int RareRibbonCost = 25;
         public const int EpicRibbonCost = 80;
 
@@ -112,6 +122,9 @@ namespace Rapadura.Gameplay.Mounts
             new MountDropEntry(SmokeStallion, MountBossCatalog.FreedSmokeHorse, 0.02f),
             new MountDropEntry(NinkiNanka, MountBossCatalog.TameNinkiNanka, 0.008f),
             new MountDropEntry(EmberGlutton, MountBossCatalog.LivingEmberBoar, 0.008f),
+
+            // The legendary Apep keeps in her coils (MountLegendCatalog): 0.3%, the top of the Legendary band (§2.1); no Fitas (Legendary never).
+            new MountDropEntry(Apep, MountLegendCatalog.LightSkiff, 0.003f),
         };
 
         public static readonly IReadOnlyList<MountRibbonRecipe> Ribbons = new[]
@@ -124,6 +137,9 @@ namespace Rapadura.Gameplay.Mounts
             new MountRibbonRecipe(SmokeStallion, MountBossCatalog.FreedSmokeHorse, null),
             new MountRibbonRecipe(NinkiNanka, null, MountBossCatalog.TameNinkiNanka),
             new MountRibbonRecipe(EmberGlutton, null, MountBossCatalog.LivingEmberBoar),
+
+            // The Fitas de Corrida of Shulgi's race (ShulgiRaceRules): 25 for the Auroque de Aratta, like a boss's Rare.
+            new MountRibbonRecipe(ShulgiRace, MountSheetCatalog.ArattaAurochs, null),
         };
 
         /// <summary>Default availability: the species is in <see cref="MountCatalog"/>.</summary>

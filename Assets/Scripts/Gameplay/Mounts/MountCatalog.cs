@@ -61,9 +61,9 @@ namespace Rapadura.Gameplay.Mounts
         public const string FaroDeTesouro = "faro_de_tesouro";
         public const string ZurroEspantaBicho = "zurro_espanta_bicho";
 
-        /// <summary>Every playable species: the three M1 starters, then M3 wave 1 (<see cref="MountWaveCatalog"/>), then the flyers (<see cref="MountSkyCatalog"/>), the Regions 10–16 (<see cref="MountFarRegionCatalog"/>), the Regions 5–9 (<see cref="MountMidRegionCatalog"/>) the six more of the map sheets (<see cref="MountSheetCatalog"/>) and the boss mounts with the last two sheet ones (<see cref="MountBossCatalog"/>).</summary>
+        /// <summary>Every playable species: the three M1 starters, then M3 wave 1 (<see cref="MountWaveCatalog"/>), then the flyers (<see cref="MountSkyCatalog"/>), the Regions 10–16 (<see cref="MountFarRegionCatalog"/>), the Regions 5–9 (<see cref="MountMidRegionCatalog"/>) the six more of the map sheets (<see cref="MountSheetCatalog"/>), the boss mounts with the last two sheet ones (<see cref="MountBossCatalog"/>) and the legendary of the sheets (<see cref="MountLegendCatalog"/>).</summary>
         public static readonly IReadOnlyList<MountSpec> Specs = StarterSpecs().Concat(MountWaveCatalog.Specs).Concat(MountSkyCatalog.Specs).Concat(MountFarRegionCatalog.Specs)
-            .Concat(MountMidRegionCatalog.Specs).Concat(MountSheetCatalog.Specs).Concat(MountBossCatalog.Specs).ToList();
+            .Concat(MountMidRegionCatalog.Specs).Concat(MountSheetCatalog.Specs).Concat(MountBossCatalog.Specs).Concat(MountLegendCatalog.Specs).ToList();
 
         /// <summary>The three M1 starters (§13 M1).</summary>
         public static IReadOnlyList<MountSpec> Starters => Specs.Take(3).ToList();

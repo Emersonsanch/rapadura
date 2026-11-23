@@ -356,6 +356,16 @@ namespace Rapadura.Gameplay.Enemies.Visuals
             { "enemy_desert_dimmed_scarecrow", ProceduralEnemyKind.DimmedScarecrow },
             { "enemy_mountain_crooked_ray", ProceduralEnemyKind.CrookedRay },
             { "enemy_forest_grey_wolf", ProceduralEnemyKind.GreyWolf },
+            // Twenty-seventh pass (WestOwn2BeastRecipes): the roles of the Costa, the Delta and Mingcheng still borrowed after the twenty-fourth.
+            { "enemy_forest_dingonek", ProceduralEnemyKind.Dingonek },
+            { "enemy_desert_striped_jackal", ProceduralEnemyKind.StripedJackal },
+            { "enemy_desert_smoke_hyena", ProceduralEnemyKind.SmokeHyena },
+            { "enemy_mountain_dimmed_stone_ram", ProceduralEnemyKind.StoneRam },
+            { "enemy_forest_moss_crocodile", ProceduralEnemyKind.MossCrocodile },
+            { "enemy_forest_shadow_gharial", ProceduralEnemyKind.ShadowGharial },
+            { "enemy_mountain_shen_mist", ProceduralEnemyKind.ShenMist },
+            { "enemy_mountain_hundun_bubble", ProceduralEnemyKind.HundunBubble },
+            { "enemy_desert_riddle_lantern", ProceduralEnemyKind.RiddleLantern },
             // Twenty-first pass (NorthOwnBeastRecipes): the most-seen roles of Farnkesh, the Mar Gelado and Hinokura that still borrowed another beast.
             { "enemy_mountain_flying_stone", ProceduralEnemyKind.FlyingStone },
             { "enemy_mountain_gorge_ays", ProceduralEnemyKind.GorgeAys },
@@ -584,6 +594,8 @@ namespace Rapadura.Gameplay.Enemies.Visuals
             ProceduralEnemyKind.StoneGuardUshabti, ProceduralEnemyKind.AzBandit, ProceduralEnemyKind.DimmedArgali, ProceduralEnemyKind.SnowChough, ProceduralEnemyKind.TerracottaArcher, ProceduralEnemyKind.LightIbis,
             ProceduralEnemyKind.MudShark, ProceduralEnemyKind.SmokeRay, ProceduralEnemyKind.DimmedHeron, ProceduralEnemyKind.MudGharial, ProceduralEnemyKind.NinkiHatchling, ProceduralEnemyKind.RottenRoot,
             ProceduralEnemyKind.FishLantern, ProceduralEnemyKind.SmokeBoatman, ProceduralEnemyKind.MandarinDuck, ProceduralEnemyKind.DimmedScarecrow, ProceduralEnemyKind.CrookedRay, ProceduralEnemyKind.GreyWolf,
+            ProceduralEnemyKind.Dingonek, ProceduralEnemyKind.StripedJackal, ProceduralEnemyKind.SmokeHyena, ProceduralEnemyKind.StoneRam, ProceduralEnemyKind.MossCrocodile, ProceduralEnemyKind.ShadowGharial,
+            ProceduralEnemyKind.ShenMist, ProceduralEnemyKind.HundunBubble, ProceduralEnemyKind.RiddleLantern,
             ProceduralEnemyKind.FlyingStone, ProceduralEnemyKind.GorgeAys, ProceduralEnemyKind.TrappedLightning, ProceduralEnemyKind.IceFish, ProceduralEnemyKind.LanternEel, ProceduralEnemyKind.TundraMosquito,
             ProceduralEnemyKind.DimmedNarwhal, ProceduralEnemyKind.StormGull, ProceduralEnemyKind.WitchFish, ProceduralEnemyKind.ObsidianOctopus, ProceduralEnemyKind.RagingSpark, ProceduralEnemyKind.LivingAsh,
             ProceduralEnemyKind.ShadowSalamander, ProceduralEnemyKind.CoilScorpion, ProceduralEnemyKind.DimmedUshabti, ProceduralEnemyKind.BoiledShadow, ProceduralEnemyKind.MudCrocodile, ProceduralEnemyKind.CrackedUshabti,
@@ -1496,6 +1508,33 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                     break;
                 case ProceduralEnemyKind.GreyWolf:
                     WestOwnBeastRecipes.BuildGreyWolf(blueprint);
+                    break;
+                case ProceduralEnemyKind.Dingonek:
+                    WestOwn2BeastRecipes.BuildDingonek(blueprint);
+                    break;
+                case ProceduralEnemyKind.StripedJackal:
+                    WestOwn2BeastRecipes.BuildStripedJackal(blueprint);
+                    break;
+                case ProceduralEnemyKind.SmokeHyena:
+                    WestOwn2BeastRecipes.BuildSmokeHyena(blueprint);
+                    break;
+                case ProceduralEnemyKind.StoneRam:
+                    WestOwn2BeastRecipes.BuildStoneRam(blueprint);
+                    break;
+                case ProceduralEnemyKind.MossCrocodile:
+                    WestOwn2BeastRecipes.BuildMossCrocodile(blueprint);
+                    break;
+                case ProceduralEnemyKind.ShadowGharial:
+                    WestOwn2BeastRecipes.BuildShadowGharial(blueprint);
+                    break;
+                case ProceduralEnemyKind.ShenMist:
+                    WestOwn2BeastRecipes.BuildShenMist(blueprint);
+                    break;
+                case ProceduralEnemyKind.HundunBubble:
+                    WestOwn2BeastRecipes.BuildHundunBubble(blueprint);
+                    break;
+                case ProceduralEnemyKind.RiddleLantern:
+                    WestOwn2BeastRecipes.BuildRiddleLantern(blueprint);
                     break;
                 case ProceduralEnemyKind.FlyingStone:
                     NorthOwnBeastRecipes.BuildFlyingStone(blueprint);

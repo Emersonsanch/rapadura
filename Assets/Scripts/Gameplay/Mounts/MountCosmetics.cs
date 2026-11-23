@@ -21,14 +21,21 @@ namespace Rapadura.Gameplay.Mounts
         public readonly int Price;
         public readonly ItemRarity Rarity;
 
-        public MountCosmeticSpec(string cosmeticId, MountCosmeticSlot slot, EnemySwatch swatch, int price, ItemRarity rarity)
+        /// <summary>Fitas de Corrida it costs at Shulgi's post in Aratta (ShulgiRaceRules); 0 for the Selaria's gold pieces.</summary>
+        public readonly int RaceRibbons;
+
+        public MountCosmeticSpec(string cosmeticId, MountCosmeticSlot slot, EnemySwatch swatch, int price, ItemRarity rarity, int raceRibbons = 0)
         {
             CosmeticId = cosmeticId;
             Slot = slot;
             Swatch = swatch;
             Price = price;
             Rarity = rarity;
+            RaceRibbons = raceRibbons;
         }
+
+        /// <summary>Sold for gold at the Selaria do Haras (the race pieces are only traded for Fitas de Corrida).</summary>
+        public bool SoldForGold => RaceRibbons <= 0;
 
         public string NameKey => "mount.cosmetic." + CosmeticId + ".name";
     }
@@ -48,7 +55,14 @@ namespace Rapadura.Gameplay.Mounts
             new MountCosmeticSpec("blanket_chita_florida", MountCosmeticSlot.Blanket, EnemySwatch.WarCape, 25, ItemRarity.Common),
             new MountCosmeticSpec("blanket_xadrez_quadrilha", MountCosmeticSlot.Blanket, EnemySwatch.CaveMoss, 25, ItemRarity.Common),
             new MountCosmeticSpec("blanket_la_pico", MountCosmeticSlot.Blanket, EnemySwatch.GolemSnow, 120, ItemRarity.Rare),
+
+            // The Corrida de Shulgi (Aratta, map 26): traded only for Fitas de Corrida at Shulgi's post (ShulgiRaceRules.Offers).
+            new MountCosmeticSpec("blanket_fitas_de_aratta", MountCosmeticSlot.Blanket, EnemySwatch.Crystal, 0, ItemRarity.Uncommon, raceRibbons: 6),
+            new MountCosmeticSpec("saddle_junco_de_aratta", MountCosmeticSlot.Saddle, EnemySwatch.Sandstone, 0, ItemRarity.Rare, raceRibbons: 10),
         };
+
+        /// <summary>The pieces the Selaria sells for gold.</summary>
+        public static IEnumerable<MountCosmeticSpec> ForGold => All.Where(c => c.SoldForGold);
 
         public static MountCosmeticSpec Get(string cosmeticId)
         {

@@ -81,6 +81,14 @@ namespace Rapadura.Gameplay.Mounts
                 }
             }
 
+            foreach ((string _, string legendId) in MountLegendCatalog.BossSources)
+            {
+                if (legendId == mountId)
+                {
+                    return "ui.mount.boss.freed." + mountId;
+                }
+            }
+
             return null;
         }
 
@@ -165,7 +173,7 @@ namespace Rapadura.Gameplay.Mounts
                     return GroupBuff(ability, at, "forja_acesa", StatType.CriticalDamage, MountAudio.Cowbell, MountBossTexts.ToastForge);
             }
 
-            return null;
+            return MountLegendAbilities.Execute(ability, ctx, effects);
         }
 
         private static string Tail(MountAbilityDefinition ability, MountAbilityContext ctx, Vector3 at)
@@ -421,6 +429,7 @@ namespace Rapadura.Gameplay.Mounts
                 case MountBossCatalog.FreedSmokeHorse: return new Color(0.8f, 0.8f, 0.85f, 0.9f);
                 case MountBossCatalog.TameNinkiNanka: return new Color(0.45f, 0.9f, 0.8f, 0.9f);
                 case MountBossCatalog.LivingEmberBoar: return new Color(1f, 0.6f, 0.25f, 0.9f);
+                case MountLegendCatalog.LightSkiff: return new Color(1f, 0.95f, 0.7f, 0.95f);
                 default: return new Color(1f, 0.92f, 0.65f, 0.9f);
             }
         }

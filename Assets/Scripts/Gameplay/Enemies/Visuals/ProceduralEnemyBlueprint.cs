@@ -579,6 +579,27 @@ namespace Rapadura.Gameplay.Enemies.Visuals
         /// <summary>Lobo-Cinzento (51): a grey steppe wolf, its fur blown the wrong way by the Destroying Wind; jaw and tail.</summary>
         GreyWolf = 531,
 
+        // The twenty-seventh pass of beasts (bible §3.2.1): the roles of Regions 5, 6 and 8, the Costa, the Delta and Mingcheng, still played
+        // by another beast after the twenty-fourth (WestOwn2BeastRecipes).
+        /// <summary>Dingonek (29): the scaly river beast of the Kenyan tales, tusks down from the upper jaw, prowling drowned Kilwa at night; jaw and tail.</summary>
+        Dingonek = 570,
+        /// <summary>Chacal-Listrado Apagado (25–26): a side-striped jackal of the dunes and the savanna, the white tail-tip gone grey; jaw and tail.</summary>
+        StripedJackal = 571,
+        /// <summary>Hiena de Fumaça (26): a spotted hyena gone to smoke over the shoulders, out by night in the acacias; jaw and tail.</summary>
+        SmokeHyena = 572,
+        /// <summary>Carneiro de Pedra Apagado (27): a ram statue of Meroë's avenues that walks at night; the head drops on the windup.</summary>
+        StoneRam = 573,
+        /// <summary>Crocodilo de Musgo (33): a crocodile of the open swamp grown over with moss and reed; jaw and tail.</summary>
+        MossCrocodile = 574,
+        /// <summary>Gavial-Sombra (35): a gharial of the black mire half gone to shadow; jaw and tail.</summary>
+        ShadowGharial = 575,
+        /// <summary>Névoa do Shen (Vale da Névoa): the mirage breath of the shen, a clam of the old books; squashes on the windup and the pearl flares.</summary>
+        ShenMist = 576,
+        /// <summary>Bolha de Hundun (46): a faceless bubble of Hundun's chaos; squashes on the windup and the swallowed light flares.</summary>
+        HundunBubble = 577,
+        /// <summary>Lanterna de Charada Apagada (41): a festival riddle lantern gone out; leans back on the windup and the light flares.</summary>
+        RiddleLantern = 578,
+
         // The twenty-first pass of beasts (bible §3.2.1): the most-seen roles of Regions 10–12, Farnkesh, the Mar Gelado and Hinokura, still
         // played by another beast (NorthOwnBeastRecipes).
         /// <summary>Pedra Voadora (57): a scree stone held up by the ill wind in a ring of grey dust; squashes on the windup and its core flares.</summary>

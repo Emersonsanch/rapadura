@@ -36,6 +36,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         private float _nextTremorOwedTry;
         private float _nextTremorHint;
         private float _nextBurn;
+        private int _spillHeldSaid = -1;
 
         private void TickTremor(Vector2 local, DateTime utc)
         {
@@ -89,9 +90,13 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             }
         }
 
+        private static Rapadura.Core.Localization.LocalizationManager ServiceLocatorLocalization() =>
+            Rapadura.Core.DI.ServiceLocator.TryGet(out Rapadura.Core.Localization.LocalizationManager localization) ? localization : null;
+
         private void ResetTremor(long index)
         {
             _tremorIndex = index;
+            _spillHeldSaid = -1;
             _tremorSettled = false;
             for (int i = 0; i < HinokuraGreatTremorRules.SurgeCount; i++)
             {
@@ -198,6 +203,19 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
                 if (!HinokuraGreatTremorRules.InSpill(diverter.Spill, local))
                 {
                     continue;
+                }
+
+                // A Bomba de Água (68) hardens the spill under the hero's feet: no burn while the crust lasts.
+                bool crust = WaterBombBoard.Covers(_hinokuraOrigin + local, Time.timeAsDouble);
+                if (!HinokuraGreatTremorRules.SpillBurns(diverter.Spill, local, crust))
+                {
+                    if (_spillHeldSaid != surge)
+                    {
+                        _spillHeldSaid = surge;
+                        SayText(WaterBombTexts.Get(ServiceLocatorLocalization(), WaterBombTexts.Spill));
+                    }
+
+                    return;
                 }
 
                 _nextBurn = Time.time + HinokuraGreatTremorRules.BurnEverySeconds;

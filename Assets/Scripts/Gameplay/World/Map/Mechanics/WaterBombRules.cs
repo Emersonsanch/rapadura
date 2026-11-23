@@ -24,6 +24,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
     ///   the Tartaruga-Vulcão's wake (68): every hot spot inside goes cold at once, and new ones do not take there while it lasts
     ///   Echeyde's eruption route (67): no burn inside the splash
     ///   the Caldera's heat (70): the splash counts as a cold stone (the meter falls to zero)
+    ///   the Grande Tremor's spill (65): the pool on the road does not burn whoever stands on the crust
     /// </code>
     /// The tamed lava channels and the lakes of lava are scenery (they never burn and are not walked), so "lava em ponte" is the crust over the lava
     /// that does burn. The splash holds no controls and needs no save.

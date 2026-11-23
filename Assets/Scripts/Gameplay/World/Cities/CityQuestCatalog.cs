@@ -117,7 +117,7 @@ namespace Rapadura.Gameplay.World.Cities
     /// landing of the barque, then Djedi the magician wants the black scorpions out of the sands by the quay and pays with a runic
     /// lamp (the night that never ends, 73–74).
     /// Dur-Jarras (map 77): Utnapishtim asks the cousins to chase the dimmed brick lions off the canals, then Sin-leqi-unninni wants
-    /// the beetles out of the reed shelves of the tablets and pays with a reed boat (the flood, and the pitch of map 79).
+    /// the bitumen locusts out of the reed shelves of the tablets and pays with a reed boat (the flood, and the pitch of map 79).
     /// Fortaleza da Última Lâmpada (map 83): Pamour asks the cousins to chase the bats off the lamps of the rampart, then Makarios wants the dimmed
     /// ushabti off the road of his letters and pays with a runic lamp (the dark of map 88).
     /// Cais da Coluna (map 91): Ammo wants the stowaway shadows out of the bales of his last caravan, then Adda wants the dimmed birds off the jars of the Roda Celeste and pays with a storm cloak.
@@ -270,10 +270,11 @@ namespace Rapadura.Gameplay.World.Cities
                 new[] { new RegionObjectiveSpec("clear_the_rails", QuestObjectiveType.KillEnemyType, "enemy_mountain_stone_golem", 4) },
                 new[] { new RegionRewardSpec("item_oleo_fogo_eterno", 1), new RegionRewardSpec("item_gold", 70) })),
 
-            // -- Aratta: Enmerkar, the chief builder, then Shulgi, the runner. The desert jackals stand in for the Leão do Capim
-            // Apagado and the baboons for the beasts that block the course of the Corrida de Shulgi (Docs/Mapas100.md 26). --
+            // -- Aratta: Enmerkar, the chief builder, then Shulgi, the runner. The jackals of the grass are the Chacal-Listrado Apagado of the
+            // savanna (its own beast since the twenty-seventh pass, the desert jackal before) and the baboons the beasts that block the course of
+            // the Corrida de Shulgi (Docs/Mapas100.md 26). --
             new CityQuestSpec(CityCatalog.Aratta, "enmerkar", new RegionQuestSpec(ArattaJackals, BiomeType.Forest, null, 900,
-                new[] { new RegionObjectiveSpec("drive_off_grass_jackals", QuestObjectiveType.KillEnemyType, "enemy_desert_jackal", 6) },
+                new[] { new RegionObjectiveSpec("drive_off_grass_jackals", QuestObjectiveType.KillEnemyType, "enemy_desert_striped_jackal", 6) },
                 new[] { new RegionRewardSpec("item_health_potion", 4), new RegionRewardSpec("item_mana_potion", 3), new RegionRewardSpec("item_gold", 75) })),
             new CityQuestSpec(CityCatalog.Aratta, "shulgi", new RegionQuestSpec(ArattaRace, BiomeType.Forest, ArattaJackals, 980,
                 new[] { new RegionObjectiveSpec("clear_the_course", QuestObjectiveType.KillEnemyType, "enemy_mountain_baboon", 5) },
@@ -316,10 +317,10 @@ namespace Rapadura.Gameplay.World.Cities
                 new[] { new RegionObjectiveSpec("clear_the_board", QuestObjectiveType.KillEnemyType, "enemy_mountain_crest_mist", 6) },
                 new[] { new RegionRewardSpec("item_capa_tempestade", 1), new RegionRewardSpec("item_gold", 140) })),
 
-            // -- Mingcheng: Bögü, then Lin Deng. The stone golem stands in for the Leão de Pedra Apagado of the ficha (Docs/Mapas100.md
-            // 41: the guardian statues of the gates) and the lantern fish for the Lanterna-Peixe of the Canal das Lanternas (43). --
+            // -- Mingcheng: Bögü, then Lin Deng. The Leão de Pedra Apagado of the ficha (Docs/Mapas100.md 41: the guardian statues of the gates)
+            // is its own beast now (the stone golem left the plain), and the lantern fish is the Lanterna-Peixe of the Canal das Lanternas (43). --
             new CityQuestSpec(CityCatalog.Mingcheng, "bogu", new RegionQuestSpec(MingchengLions, BiomeType.Forest, null, 1700,
-                new[] { new RegionObjectiveSpec("clear_the_gates", QuestObjectiveType.KillEnemyType, "enemy_mountain_stone_golem", 7) },
+                new[] { new RegionObjectiveSpec("clear_the_gates", QuestObjectiveType.KillEnemyType, "enemy_forest_stone_lion", 7) },
                 new[] { new RegionRewardSpec("item_health_potion", 5), new RegionRewardSpec("item_mana_potion", 5), new RegionRewardSpec("item_gold", 150) })),
             new CityQuestSpec(CityCatalog.Mingcheng, "lin_deng", new RegionQuestSpec(MingchengCanal, BiomeType.Forest, MingchengLions, 1800,
                 new[] { new RegionObjectiveSpec("clear_the_canal", QuestObjectiveType.KillEnemyType, "enemy_cave_fish_lantern", 6) }, // the Lanterna-Peixe (WestOwnBeastRecipes)
@@ -352,22 +353,22 @@ namespace Rapadura.Gameplay.World.Cities
                 new[] { new RegionObjectiveSpec("chase_the_crows", QuestObjectiveType.KillEnemyType, "enemy_cave_smoke_messenger", 6) },
                 new[] { new RegionRewardSpec("item_grampos_escalada", 1), new RegionRewardSpec("item_gold", 180) })),
 
-            // -- Arvoredo de Haripushpa: Haripushpa, then Aryaman Puhr. The spider stands in for the Besouro-Casca of the ficha
-            // (Docs/Mapas100.md 50); the Pica-Pau de Fumaça is its own beast now (LentRoleBeastRecipes). --
+            // -- Arvoredo de Haripushpa: Haripushpa, then Aryaman Puhr. The Besouro-Casca of the ficha (Docs/Mapas100.md 50) and the
+            // Pica-Pau de Fumaça are their own beasts now (LentRoleBeastRecipes; the spider left the grove). --
             new CityQuestSpec(CityCatalog.Arvoredo, "haripushpa", new RegionQuestSpec(ArvoredoBarkEaters, BiomeType.Forest, null, 2400,
-                new[] { new RegionObjectiveSpec("clear_the_bark", QuestObjectiveType.KillEnemyType, "enemy_forest_spider", 7) },
+                new[] { new RegionObjectiveSpec("clear_the_bark", QuestObjectiveType.KillEnemyType, "enemy_mountain_bark_beetle", 7) },
                 new[] { new RegionRewardSpec("item_health_potion", 5), new RegionRewardSpec("item_mana_potion", 5), new RegionRewardSpec("item_gold", 190) })),
             new CityQuestSpec(CityCatalog.Arvoredo, "aryaman", new RegionQuestSpec(ArvoredoSmokeBirds, BiomeType.Forest, ArvoredoBarkEaters, 2500,
                 new[] { new RegionObjectiveSpec("chase_the_smoke_birds", QuestObjectiveType.KillEnemyType, "enemy_mountain_smoke_woodpecker", 6) },
                 new[] { new RegionRewardSpec("item_runa_cura", 3), new RegionRewardSpec("item_gold", 190) })),
 
             // -- Vale dos Sátiros: Midas, then Gordias. The firefly swarm stands in for the Abelha Dourada of the ficha
-            // (Docs/Mapas100.md 53) and the jackal for the Raposa da Vinha. --
+            // (Docs/Mapas100.md 53); the Raposa da Vinha is its own beast now (the jackal left the vale). --
             new CityQuestSpec(CityCatalog.ValeDosSatiros, "midas", new RegionQuestSpec(ValeGoldenBees, BiomeType.Forest, null, 2600,
                 new[] { new RegionObjectiveSpec("chase_the_bees", QuestObjectiveType.KillEnemyType, "enemy_desert_firefly_swarm", 8) },
                 new[] { new RegionRewardSpec("item_health_potion", 5), new RegionRewardSpec("item_mana_potion", 5), new RegionRewardSpec("item_gold", 200) })),
             new CityQuestSpec(CityCatalog.ValeDosSatiros, "gordias", new RegionQuestSpec(ValeVineFoxes, BiomeType.Forest, ValeGoldenBees, 2700,
-                new[] { new RegionObjectiveSpec("chase_the_foxes", QuestObjectiveType.KillEnemyType, "enemy_desert_jackal", 7) },
+                new[] { new RegionObjectiveSpec("chase_the_foxes", QuestObjectiveType.KillEnemyType, "enemy_forest_vine_fox", 7) },
                 new[] { new RegionRewardSpec("item_runa_vento", 3), new RegionRewardSpec("item_gold", 200) })),
 
             // -- Farnkesh: Shad-Ohrmizd, then Tadi. The Abutre do Pico of the ficha (Docs/Mapas100.md 54, its own beast now, FarStandInBeastRecipes)
@@ -379,22 +380,22 @@ namespace Rapadura.Gameplay.World.Cities
                 new[] { new RegionObjectiveSpec("clear_the_mist", QuestObjectiveType.KillEnemyType, "enemy_mountain_ill_wind_mist", 6) },
                 new[] { new RegionRewardSpec("item_capa_tempestade", 1), new RegionRewardSpec("item_gold", 210) })),
 
-            // -- Porto da Lua Branca: Yirkap, then Pera. The thieving gull stands in for the Gaivota-do-Gelo of the ficha
-            // (Docs/Mapas100.md 59) and the brown bear, dimmed, for the Urso-Polar Apagado of the Canais de Gelo (60). --
+            // -- Porto da Lua Branca: Yirkap, then Pera. The Gaivota-do-Gelo of the ficha (Docs/Mapas100.md 59) and the Urso-Polar Apagado
+            // of the Canais de Gelo (60) are their own beasts now (the thieving gull and the brown bear left the north). --
             new CityQuestSpec(CityCatalog.PortoDaLuaBranca, "yirkap", new RegionQuestSpec(PortoGulls, BiomeType.Forest, null, 3000,
-                new[] { new RegionObjectiveSpec("chase_the_gulls", QuestObjectiveType.KillEnemyType, "enemy_forest_thief_gull", 8) },
+                new[] { new RegionObjectiveSpec("chase_the_gulls", QuestObjectiveType.KillEnemyType, "enemy_mountain_ice_gull", 8) },
                 new[] { new RegionRewardSpec("item_health_potion", 5), new RegionRewardSpec("item_mana_potion", 5), new RegionRewardSpec("item_gold", 220) })),
             new CityQuestSpec(CityCatalog.PortoDaLuaBranca, "pera", new RegionQuestSpec(PortoBears, BiomeType.Forest, PortoGulls, 3100,
-                new[] { new RegionObjectiveSpec("chase_the_bears", QuestObjectiveType.KillEnemyType, "enemy_mountain_brown_bear", 6) },
+                new[] { new RegionObjectiveSpec("chase_the_bears", QuestObjectiveType.KillEnemyType, "enemy_mountain_polar_bear", 6) },
                 new[] { new RegionRewardSpec("item_roupa_termica", 1), new RegionRewardSpec("item_gold", 220) })),
 
-            // -- Hinokura: Akane, then Sango. The coconut crab stands in for the Caranguejo-Vulcão of the ficha (Docs/Mapas100.md
-            // 65) and the ember vulture for its Gaivota-Brasa, until the region's own creatures exist. --
+            // -- Hinokura: Akane, then Sango. The Caranguejo-Vulcão of the ficha (Docs/Mapas100.md 65) and its Gaivota-Brasa are the
+            // region's own beasts now (the coconut crab and the ember vulture left the archipelago). --
             new CityQuestSpec(CityCatalog.Hinokura, "akane", new RegionQuestSpec(HinokuraCrabs, BiomeType.Forest, null, 3200,
-                new[] { new RegionObjectiveSpec("chase_the_crabs", QuestObjectiveType.KillEnemyType, "enemy_forest_coconut_crab", 8) },
+                new[] { new RegionObjectiveSpec("chase_the_crabs", QuestObjectiveType.KillEnemyType, "enemy_mountain_volcano_crab", 8) },
                 new[] { new RegionRewardSpec("item_health_potion", 5), new RegionRewardSpec("item_mana_potion", 5), new RegionRewardSpec("item_gold", 230) })),
             new CityQuestSpec(CityCatalog.Hinokura, "sango", new RegionQuestSpec(HinokuraEmberGulls, BiomeType.Forest, HinokuraCrabs, 3300,
-                new[] { new RegionObjectiveSpec("chase_the_gulls", QuestObjectiveType.KillEnemyType, "enemy_desert_ember_vulture", 6) },
+                new[] { new RegionObjectiveSpec("chase_the_gulls", QuestObjectiveType.KillEnemyType, "enemy_mountain_ember_gull", 6) },
                 new[] { new RegionRewardSpec("item_barco_junco", 1), new RegionRewardSpec("item_gold", 230) })),
 
             // -- Cais de Mesektet: Sinuhe, then Djedi. The Crocodilo do Rio Escuro of the ficha (Docs/Mapas100.md 71) and the Escorpião
@@ -406,31 +407,31 @@ namespace Rapadura.Gameplay.World.Cities
                 new[] { new RegionObjectiveSpec("chase_the_scorpions", QuestObjectiveType.KillEnemyType, "enemy_forest_black_scorpion", 6) },
                 new[] { new RegionRewardSpec("item_lamparina_runica", 1), new RegionRewardSpec("item_gold", 240) })),
 
-            // -- Dur-Jarras: Utnapishtim, then Sin-leqi-unninni. The stone lion stands in for the Leão de Tijolo Apagado of the ficha
-            // (Docs/Mapas100.md 77) and the bark beetle for its Gafanhoto de Betume, until the region's own creatures exist. --
+            // -- Dur-Jarras: Utnapishtim, then Sin-leqi-unninni. The Leão de Tijolo Apagado of the ficha (Docs/Mapas100.md 77) and its
+            // Gafanhoto de Betume are the region's own beasts now (the stone lion and the bark beetle left the Margens). --
             new CityQuestSpec(CityCatalog.DurJarras, "utnapishtim", new RegionQuestSpec(DurJarrasLions, BiomeType.Forest, null, 3600,
-                new[] { new RegionObjectiveSpec("chase_the_lions", QuestObjectiveType.KillEnemyType, "enemy_forest_stone_lion", 8) },
+                new[] { new RegionObjectiveSpec("chase_the_lions", QuestObjectiveType.KillEnemyType, "enemy_forest_brick_lion", 8) },
                 new[] { new RegionRewardSpec("item_health_potion", 5), new RegionRewardSpec("item_mana_potion", 5), new RegionRewardSpec("item_gold", 250) })),
             new CityQuestSpec(CityCatalog.DurJarras, "sin_leqi_unninni", new RegionQuestSpec(DurJarrasBeetles, BiomeType.Forest, DurJarrasLions, 3700,
-                new[] { new RegionObjectiveSpec("chase_the_beetles", QuestObjectiveType.KillEnemyType, "enemy_mountain_bark_beetle", 6) },
+                new[] { new RegionObjectiveSpec("chase_the_beetles", QuestObjectiveType.KillEnemyType, "enemy_forest_bitumen_locust", 6) },
                 new[] { new RegionRewardSpec("item_barco_junco", 1), new RegionRewardSpec("item_gold", 250) })),
 
             // -- Fortaleza da Última Lâmpada: Pamour, then Makarios. The Morcego da Treva of the ficha (Docs/Mapas100.md 83) is its own beast now
-            // (FarStandInBeastRecipes); the rope ushabti still stands in for its Ushabti Apagado. --
+            // (FarStandInBeastRecipes), and its Ushabti Apagado is the Ushabti Apagado da Muralha (the rope ushabti left the Limiar). --
             new CityQuestSpec(CityCatalog.FortalezaUltimaLampada, "pamour_lampadas", new RegionQuestSpec(UltimaLampadaBats, BiomeType.Forest, null, 3800,
                 new[] { new RegionObjectiveSpec("chase_the_bats", QuestObjectiveType.KillEnemyType, "enemy_forest_dark_bat", 8) },
                 new[] { new RegionRewardSpec("item_health_potion", 5), new RegionRewardSpec("item_mana_potion", 5), new RegionRewardSpec("item_gold", 260) })),
             new CityQuestSpec(CityCatalog.FortalezaUltimaLampada, "makarios_cartas", new RegionQuestSpec(UltimaLampadaUshabti, BiomeType.Forest, UltimaLampadaBats, 3900,
-                new[] { new RegionObjectiveSpec("chase_the_ushabti", QuestObjectiveType.KillEnemyType, "enemy_mountain_rope_ushabti", 6) },
+                new[] { new RegionObjectiveSpec("chase_the_ushabti", QuestObjectiveType.KillEnemyType, "enemy_mountain_rampart_ushabti", 6) },
                 new[] { new RegionRewardSpec("item_lamparina_runica", 1), new RegionRewardSpec("item_gold", 260) })),
 
             // -- Cais da Coluna: Ammo, then Adda. The Sombra Clandestina of the ficha (Docs/Mapas100.md 91) is its own beast now (BorrowedRoleBeastRecipes);
-            // the dimmed ibis still stands in for its Ave de Nuvem Apagada. --
+            // its Ave de Nuvem Apagada too (the dimmed ibis left the Céu). --
             new CityQuestSpec(CityCatalog.CaisDaColuna, "ammo_caravaneiro", new RegionQuestSpec(CaisColunaStowaways, BiomeType.Forest, null, 4000,
                 new[] { new RegionObjectiveSpec("chase_the_stowaways", QuestObjectiveType.KillEnemyType, "enemy_forest_stowaway_shadow", 8) },
                 new[] { new RegionRewardSpec("item_health_potion", 5), new RegionRewardSpec("item_mana_potion", 5), new RegionRewardSpec("item_gold", 270) })),
             new CityQuestSpec(CityCatalog.CaisDaColuna, "adda_roda", new RegionQuestSpec(CaisColunaBirds, BiomeType.Forest, CaisColunaStowaways, 4200,
-                new[] { new RegionObjectiveSpec("chase_the_birds", QuestObjectiveType.KillEnemyType, "enemy_forest_dimmed_ibis", 6) },
+                new[] { new RegionObjectiveSpec("chase_the_birds", QuestObjectiveType.KillEnemyType, "enemy_forest_dimmed_cloud_bird", 6) },
                 new[] { new RegionRewardSpec("item_capa_tempestade", 1), new RegionRewardSpec("item_gold", 280) })),
 
             // ================= On the road (regions 9–16): the same givers, each quest at a zone of the region and a level =================
