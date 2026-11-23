@@ -73,8 +73,8 @@ namespace Rapadura.Tests
         {
             new Placement(Ming, Lion, "vilas_do_anel", "leoes_de_pedra", Leads, Golem),
             new Placement(Ming, Lion, "caminho_dos_leoes", "leoes_do_caminho", Leads, Golem),
-            new Placement(Ming, Lion, "torres_brancas", "guardioes_de_cal", Leads, Golem),
-            new Placement(Ming, Lion, "colinas_dos_espelhos", "guardioes_das_colinas", Leads, Golem),
+            // The guardians of the Torres Brancas and the Colinas dos Espelhos (42) are the Guardião de Cal since the twenty-eighth pass
+            // (PeaksOwnBeastsPlacementTests).
             new Placement(Ming, Lion, "caminho_dos_leoes", "soldados_do_caminho", Joins, Golem),
             new Placement(Ming, Lion, "fossos_de_terracota", "soldados_de_terracota", Joins, Golem),
             new Placement(Ming, Lion, "vale_dos_guerreiros", "cavalos_do_vale", Joins, Golem),

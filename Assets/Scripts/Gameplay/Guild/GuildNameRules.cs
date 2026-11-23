@@ -73,6 +73,20 @@ namespace Rapadura.Gameplay.Guild
             }
         }
 
+        /// <summary>Takes a word added with <see cref="AddContainsWord"/> / <see cref="AddWholeWord"/> back out of both lists
+        /// (the lists are static: tests undo what they add so nothing leaks into the next test).</summary>
+        public static bool RemoveWord(string word)
+        {
+            bool removed = ContainsWordList.Remove(word) | WholeWordList.Remove(word);
+            if (removed)
+            {
+                _containsNormalized = null;
+                _wholeNormalized = null;
+            }
+
+            return removed;
+        }
+
         /// <summary>Trims and collapses any run of whitespace to one space. Null → "".</summary>
         public static string Clean(string text)
         {
@@ -163,7 +177,7 @@ namespace Rapadura.Gameplay.Guild
             string cleaned = Clean(text);
             if (cleaned.Length == 0)
             {
-                return allowEmpty ? GuildRefusal.None : GuildRefusal.TextTooLong;
+                return allowEmpty ? GuildRefusal.None : GuildRefusal.TextEmpty;
             }
 
             if (cleaned.Length > maxLength)

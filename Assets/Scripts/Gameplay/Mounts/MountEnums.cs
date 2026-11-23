@@ -102,6 +102,9 @@ namespace Rapadura.Gameplay.Mounts
 
         // The legendary of the map sheets (MountLegendCatalog, MountLegendRecipes). Appended only.
         LightSkiff = 47,
+
+        // The aquatic mount of Kirta (MountReefCatalog, MountReefRecipes). Appended only.
+        KirtaHippocamp = 48,
     }
 
     /// <summary>The effect family of a mount ability (§12.2). M1 implements Dash, LootMagnet and Fear; M3 wave 1 the walkers' kinds (MountWaveAbilities).</summary>
@@ -171,6 +174,9 @@ namespace Rapadura.Gameplay.Mounts
 
         // The legendary of the map sheets (MountLegendAbilities). Appended only: assets store the int.
         LightCrossing,
+
+        // The aquatic mount of Kirta (MountReefAbilities). Appended only: assets store the int.
+        ReefSong,
     }
 
     /// <summary>Where the hero is, as far as riding goes (§2.1, §2.5).</summary>

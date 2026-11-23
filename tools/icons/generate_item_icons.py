@@ -1302,6 +1302,21 @@ def r_whistle(col):
     return lambda ic: whistle(ic, col)
 
 
+def r_apito_concha(ic):
+    # O Apito de Concha (Kirta, ficha 28): búzio cor de coral com a ponta furada para apitar e a fita verde-água do Hipocampo.
+    shell = (240, 186, 156)
+    ic.poly([(34, 46), (70, 26), (104, 44), (100, 76), (78, 100), (52, 98), (32, 74)], shell)
+    ic.poly([(70, 40), (100, 50), (96, 74), (78, 92), (66, 70)], CORAL_PINK)
+    for (x, y, r) in ((36, 40, 15), (25, 28, 10), (17, 19, 6)):
+        ic.ngon(x, y, r, 9, darker(shell, 0.12))
+    ic.ngon(14, 16, 3, 8, NIGHT, shade=False, outline=False)
+    for (x0, y0, x1, y1) in ((44, 58, 60, 36), (46, 80, 70, 52), (60, 94, 78, 70)):
+        ic.stroke([(x0, y0), (x1, y1)], 2, darker(shell, 0.35))
+    ic.stroke([(82, 98), (94, 108), (88, 116)], 2.4, BROWN)
+    ic.poly([(84, 110), (98, 110), (104, 124), (84, 124)], TURQUOISE)
+    ic.ngon(92, 108, 5, 6, GOLD)
+
+
 def r_asas(col, tier, accent=None, glowy=False):
     return lambda ic: wings(ic, col, tier, accent, glowy)
 
@@ -1618,6 +1633,7 @@ RECIPES = {
     "item_whistle_mount_pinto_horse": r_whistle(SKY),
     "item_whistle_mount_pony": r_whistle((170, 110, 60)),
     "item_whistle_mount_rhea": r_whistle((60, 60, 60)),
+    "item_whistle_mount_kirta_hippocamp": r_apito_concha,
 }
 
 

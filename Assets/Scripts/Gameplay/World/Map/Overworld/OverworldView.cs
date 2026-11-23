@@ -39,6 +39,12 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         private const float ZoneTick = 0.1f;
         private const float WarningCooldown = 2.5f;
 
+        /// <summary>How often (s) the built towns check whether the save asks for another look of their recipe (<see cref="Mechanics.CityTownVariantRules"/>).</summary>
+        private const float VariantTick = 0.5f;
+
+        /// <summary>A town swaps to a look with a new solid only once the hero stands this far (m) from it (never inside a new lamp post).</summary>
+        private const float VariantHeroClearance = 0.6f;
+
         /// <summary>A town whose ground comes this close to the hero (m) is built...</summary>
         public const float TownLoadRadius = 170f;
 
@@ -69,6 +75,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         private readonly Dictionary<OverworldSettlement, CityTownView> _townOf = new Dictionary<OverworldSettlement, CityTownView>();
         private readonly List<OverworldSettlement> _townDrop = new List<OverworldSettlement>();
         private readonly Dictionary<OverworldSettlement, GameObject> _townAnchors = new Dictionary<OverworldSettlement, GameObject>();
+        private readonly Dictionary<OverworldSettlement, int> _townVariant = new Dictionary<OverworldSettlement, int>();
         private readonly TownMeshBuilder _builder = new TownMeshBuilder();
 
         private GameObject _enemyPrefab;
@@ -82,6 +89,9 @@ namespace Rapadura.Gameplay.World.Map.Overworld
         private float _nextWarning;
         private Vector2 _lastAllowed;
         private bool _hasLastAllowed;
+        private float _nextVariant;
+        private WorldMapProgress _progress;
+        private System.Func<string, long> _readMark;
 
         public OverworldLayout Layout { get; private set; }
 
@@ -253,11 +263,74 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             var anchor = new GameObject("Ow_Town_" + settlement.Id).transform;
             anchor.SetParent(_townRoot, false);
             anchor.localPosition = new Vector3(settlement.Offset.x, 0f, settlement.Offset.y);
-            CityTownView town = CityTownView.Build(settlement.Town, anchor, "ow:" + Layout.Id + ":" + settlement.Id);
+
+            // The look the save asks for (Kirta's mother coral, Tarchon's festive lanterns): built straight in that variant.
+            int variant = SavedVariant(settlement);
+            string key = TownKey(settlement);
+            CityTownView town = CityTownView.Build(OverworldTownVariants.LayoutFor(settlement, variant), anchor, key, OverworldTownVariants.PropsKey(key, variant));
             RemoveCityGates(town);
             _towns.Add(town);
             _townOf[settlement] = town;
             _townAnchors[settlement] = anchor.gameObject;
+            _townVariant[settlement] = variant;
+        }
+
+        private string TownKey(OverworldSettlement settlement) => "ow:" + Layout.Id + ":" + settlement.Id;
+
+        /// <summary>The variant of <paramref name="settlement"/>'s recipe the save asks for (0 with no save or no variants).</summary>
+        private int SavedVariant(OverworldSettlement settlement)
+        {
+            if (!Mechanics.CityTownVariantRules.HasVariants(settlement.Id))
+            {
+                return 0;
+            }
+
+            // Looked up each time (a dictionary hit): a new game or a loaded save may bring another progress.
+            if (!ServiceLocator.TryGet(out WorldMapProgress progress) || progress == null)
+            {
+                return 0;
+            }
+
+            _progress = progress;
+            _readMark ??= ReadMark;
+            return Mechanics.CityTownVariantRules.VariantFor(settlement.Id, _readMark);
+        }
+
+        private long ReadMark(string key) => _progress != null ? _progress.GetTimeMark(key) : 0L;
+
+        /// <summary>
+        /// The built towns whose look changed in the save since they were built (a coral lit, a trol back home) swap to it in place: only
+        /// the merged props, plus the colliders and night lights when those differ (<see cref="CityTownView.ApplyLayout"/>). A swap that
+        /// would put a new solid on the hero waits until they step aside.
+        /// </summary>
+        private void UpdateTownVariants(Vector2 at)
+        {
+            foreach (KeyValuePair<OverworldSettlement, CityTownView> pair in _townOf)
+            {
+                OverworldSettlement settlement = pair.Key;
+                CityTownView town = pair.Value;
+                if (town == null || !Mechanics.CityTownVariantRules.HasVariants(settlement.Id))
+                {
+                    continue;
+                }
+
+                int want = SavedVariant(settlement);
+                if (_townVariant.TryGetValue(settlement, out int have) && have == want)
+                {
+                    continue;
+                }
+
+                CityLayout next = OverworldTownVariants.LayoutFor(settlement, want);
+                if (OverworldTownVariants.BlocksHero(town.Layout, next, at - settlement.Offset, VariantHeroClearance))
+                {
+                    continue;
+                }
+
+                bool colliders = !OverworldTownVariants.SameSolids(town.Layout, next);
+                bool relight = !OverworldTownVariants.SameLamps(town.Layout, next);
+                town.ApplyLayout(next, OverworldTownVariants.PropsKey(TownKey(settlement), want), colliders, relight);
+                _townVariant[settlement] = want;
+            }
         }
 
         /// <summary>
@@ -284,6 +357,8 @@ namespace Rapadura.Gameplay.World.Map.Overworld
                     _townAnchors.Remove(settlement);
                     Destroy(anchor);
                 }
+
+                _townVariant.Remove(settlement);
             }
 
             OverworldSettlement nearest = null;
@@ -398,6 +473,12 @@ namespace Rapadura.Gameplay.World.Map.Overworld
                 UnloadFar(at);
                 UpdateTowns(at, false);
                 UpdateSpawners(at);
+            }
+
+            if (Time.unscaledTime >= _nextVariant)
+            {
+                _nextVariant = Time.unscaledTime + VariantTick;
+                UpdateTownVariants(at);
             }
 
             // At most one new chunk per frame (nearest first): the frame never pays for the whole ring at once.

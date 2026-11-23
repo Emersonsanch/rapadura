@@ -29,12 +29,14 @@
   sem trocar de cena.
 - **Cidades:** as 27 cidades do `Docs/Mapas100.md` §1 estão no `CityCatalog`: 4 hubs, 12 de raça e 11 de região tardia.
   Todas ficam dentro do mundo contínuo e usam a própria receita (`CityTownRecipes.*`). Os postos são `K.Outpost`, sem respawn.
-- **Bichos próprios:** 227, todos com asset em `Resources/Enemies`: os 130 das tabelas da bíblia §3.2.1, mais 12 das Regiões 1–4
+- **Bichos próprios:** 232, todos com asset em `Resources/Enemies`: os 130 das tabelas da bíblia §3.2.1, mais 12 das Regiões 1–4
   (`068253c`, `EarlyStandInBeastRecipes`), 12 das Regiões 5–9, na estrada da história do meio (`8ad5046`,
   `MidStandInBeastRecipes`), e 12 das Regiões 10–16 (`07a4770`, `FarStandInBeastRecipes`), no lugar dos emprestados mais
-  vistos, e mais 61 no lugar de papéis ainda emprestados (2026-11-16 em diante): 12 `NorthOwnBeastRecipes`, 12 `DeepOwnBeastRecipes`, 11
-  `EarlyOwnBeastRecipes`, 12 `WestOwnBeastRecipes`, 5 `EarlyOwn2BeastRecipes` (a Águia da Tempestade do 18 é a do Farnkesh) e 9
-  `WestOwn2BeastRecipes` (2026-11-23, Costa 25–29, Delta 33 e 35, Mingcheng 41, 46 e Vale da Névoa; kinds 570–578). A leva
+  vistos, e mais 66 no lugar de papéis ainda emprestados (2026-11-16 em diante): 12 `NorthOwnBeastRecipes`, 12 `DeepOwnBeastRecipes`, 11
+  `EarlyOwnBeastRecipes`, 12 `WestOwnBeastRecipes`, 5 `EarlyOwn2BeastRecipes` (a Águia da Tempestade do 18 é a do Farnkesh), 9
+  `WestOwn2BeastRecipes` (2026-11-23, Costa 25–29, Delta 33 e 35, Mingcheng 41, 46 e Vale da Névoa; kinds 570–578) e 5
+  `PeaksOwnBeastRecipes` (2026-11-23, Guardião de Cal 42, Servo de Taotie e Filhote de Qiongqi 46, Eco Apagado e Sino Rachado 56; kinds
+  590–594; os Ecos também nascem do medidor de barulho das Ermidas). A leva
   `DeepOwn2` (Regiões 13–15) ainda está sendo feita e vai somar aqui. Somam-se a eles os 19 bichos de base dos 4 biomas. Ainda há papéis de ficha feitos por bicho
   emprestado (eram cerca de 125 antes destas 6 levas; contagem por região abaixo).
 - **Mecânicas:** 132 arquivos em `Gameplay/World/Map/Mechanics/`, todos commitados, com pelo menos uma mecânica por região.
@@ -196,7 +198,7 @@ de uma ficha feito por um bicho de outra região ou do bioma.
 |---|---|
 | Cidade | Sangkent (capital), dentro do mundo |
 | Mundo contínuo | Feito, ao norte da Serra (`OverworldLayouts.Teto.cs`) |
-| Bichos próprios | 8: Urso-Pardo do Pamir, Iaque Selvagem, Irbis, Almas, Marmota Gigante e mais 3 (2026-11-11): Gralha-de-Bico-Vermelho (36), Abutre-Barbudo Apagado (37), Lobo de Gelo (38) (`8ad5046`; desde 2026-11-23 também nos lobos dos zimbros, das pastagens e da neve, no lugar do lobo da floresta). Ainda emprestados, cerca de 11 papéis (Argali, ushabtis de calha, Fenda Viva, Gralha das Neves…) |
+| Bichos próprios | 8: Urso-Pardo do Pamir, Iaque Selvagem, Irbis, Almas, Marmota Gigante e mais 3 (2026-11-11): Gralha-de-Bico-Vermelho (36), Abutre-Barbudo Apagado (37), Lobo de Gelo (38) (`8ad5046`; desde 2026-11-23 também nos lobos dos zimbros, das pastagens e da neve, no lugar do lobo da floresta). Ainda emprestados, cerca de 11 papéis (Argali, ushabtis de calha, Fenda Viva, Gralha das Neves…). *(2026-11-23: conferido nas fichas 37 e 38: o Ushabti de Calha e a Fenda Viva já têm corpo próprio, `HighlandOwnBeastRecipes` e `BorrowedRoleBeastRecipes`, assim como o Argali e a Gralha das Neves; nenhum papel do 37 e do 38 segue emprestado.)* |
 | Mecânicas feitas | Avalanches com sino de 20 s nas 4 calhas (37, `TetoAvalancheRules`); descida de carrinho de ~48 s pegando faíscas, com recorde salvo e prêmio do dia (37, `TetoCartRules`); medidor de frio na Geleira, cheio deixa o passo ×0,85, as 5 fogueiras zeram (38, `GlacierColdRules`); 4 cata-ventos no Forte dos Ventos, alinhados fazem vento a favor ou contra (39, `WindVaneRules`) e quebram ou levam mais longe as rajadas do Senhor do Cata-Vento (39, 2026-11-23, `VaneValleyWindRules`) |
 | Mecânicas faltantes | Os 7 terraços (36); ranking online e modelo do carrinho (37); medidor de frio na tela (38); projéteis a favor do vento indo mais longe (39); 40 sem mecânica própria |
 | Chefe do mundo | Aydahar (40, Nv 98): sopro em linha, vida ×1,2 (`068253c`). Loot próprio e troféu |
@@ -211,7 +213,7 @@ de uma ficha feito por um bicho de outra região ou do bioma.
 |---|---|
 | Cidade | Mingcheng (capital) e Torres Brancas (raça), dentro do mundo |
 | Mundo contínuo | Feito, ao norte do Zarafshan (`OverworldLayouts.Mingcheng.cs`). 43–46 fechados no catálogo |
-| Bichos próprios | 8: Leão de Pedra, Raposa de Cauda Lanterna, Soldado de Terracota, Tartaruga de Pedra, Búfalo de Lama, Filhote de Nian, Carpa-Dragão Apagada (43) e Cavalo de Terracota (45) (`8ad5046`). Ainda emprestados, cerca de 10: Grou de Papel, Espelho Quebrado, Espantalho… De `WestOwnBeastRecipes` (2026-11-16): Raio Torto (42), Lanterna-Peixe e Barqueiro de Fumaça (43), Pato-Mandarim Ladrão e Espantalho Apagado (44); o peixe-lanterna e a gaivota saíram de Mingcheng. De `WestOwn2BeastRecipes` (2026-11-23): Lanterna de Charada Apagada (41), Névoa do Shen (Vale da Névoa) e Bolha de Hundun (46); a neblina do vento ruim e a lanterna quebrada saíram de Mingcheng de dia. |
+| Bichos próprios | 8: Leão de Pedra, Raposa de Cauda Lanterna, Soldado de Terracota, Tartaruga de Pedra, Búfalo de Lama, Filhote de Nian, Carpa-Dragão Apagada (43) e Cavalo de Terracota (45) (`8ad5046`). Ainda emprestados, cerca de 10: Grou de Papel, Espelho Quebrado, Espantalho… De `WestOwnBeastRecipes` (2026-11-16): Raio Torto (42), Lanterna-Peixe e Barqueiro de Fumaça (43), Pato-Mandarim Ladrão e Espantalho Apagado (44); o peixe-lanterna e a gaivota saíram de Mingcheng. De `WestOwn2BeastRecipes` (2026-11-23): Lanterna de Charada Apagada (41), Névoa do Shen (Vale da Névoa) e Bolha de Hundun (46); a neblina do vento ruim e a lanterna quebrada saíram de Mingcheng de dia. De `PeaksOwnBeastRecipes` (2026-11-23): Guardião de Cal (42), Servo de Taotie e Filhote de Qiongqi (46); falta a Guarda de Taowu (ainda o Leão de Pedra). |
 | Mecânicas feitas | Muralha andável com faróis e corredor de luz (45); mundo do reflexo nos arrozais (44) |
 | Mecânicas faltantes | 9 anéis e portões por hora (41); Relógio de Espelhos (42); 4 eclusas (43); palácios e o que cada um come (46) |
 | Chefe do mundo | Quatro Gulosos (46, Nv 140): um apetite por semana e outro à noite. Taotie derrama oferendas de moedas e avisa antes de engolir; Qiongqi inverte os passos por 3 s (`HeroControlMirror`, teto de 4 s). Loot próprio (Bronze Antigo dos Vasos) e troféu |
@@ -241,9 +243,9 @@ de uma ficha feito por um bicho de outra região ou do bioma.
 |---|---|
 | Cidade | Farnkesh (capital) e Vale dos Sátiros (raça), dentro do mundo |
 | Mundo contínuo | Feito, ao norte da Estepe (`OverworldLayouts.Farnkesh.cs`) |
-| Bichos próprios | 14 (12 e mais Abutre do Pico (54) e Pipa-Sombra (55), `07a4770`). Ainda emprestados, cerca de 8 papéis: Sino Rachado, Raio Preso, Eco Apagado, Ays, Redemoinho, Ventania, Pedra Voadora… |
+| Bichos próprios | 14 (12 e mais Abutre do Pico (54) e Pipa-Sombra (55), `07a4770`). Ainda emprestados, cerca de 8 papéis: Sino Rachado, Raio Preso, Eco Apagado, Ays, Redemoinho, Ventania, Pedra Voadora… De `PeaksOwnBeastRecipes` (2026-11-23): Eco Apagado e Sino Rachado (56); os Ecos também nascem do medidor de barulho (`HermitageEchoRules`, no máximo 2 vivos); a neblina e a lanterna quebrada saíram do 56 de dia. |
 | Mecânicas feitas | Rajadas nas pontes e na Garganta (55, 57); cestos de corda (54–57); medidor de silêncio nas Ermidas, barulho chama o Eco (56, `FarnkeshSilenceRules`), com skills silenciosas e barulhentas de cada primo (2026-11-23, `SilentSkillRules`); correntes de planar às ilhas de nuvem (58); dourado, a água do Pactolo que para O Ouro de Midas e o Baile do Vale (53, 2026-11-16/23, `PactoloGildRules`, `MidasWashRules`, `SatyrDanceRules`) |
-| Mecânicas faltantes | Pináculos em alturas de verdade (54); os Ecos como bichos e o medidor na UI (56); vento contra ×0,7 e pedras-abrigo (57); chão de nuvem e ajuda da Huma (58); pontes sem chão |
+| Mecânicas faltantes | Pináculos em alturas de verdade (54); o medidor na UI e o Eco repetir o último golpe do herói (56; os Ecos como bichos entraram em 2026-11-23); vento contra ×0,7 e pedras-abrigo (57); chão de nuvem e ajuda da Huma (58); pontes sem chão |
 | Chefe do mundo | O Rei-Vendaval (58) |
 | Chefe de mapa | Feitos 4: O Cortador de Cordas (55, Nv 160) e O Sino que Não Para (56, Nv 168, badalada com eco), no mundo contínuo desde `5b6dcb7`; O Ouro de Midas (53); e O Rei dos Ays (57, Nv 180: a rajada corre pela linha da garganta a partir dele, subindo numa vez e descendo na outra; atrás dele ou de lado é seguro); o evento Vendaval (54, `70a3a73`) roda de hora em hora, aos :50 |
 | Montaria | Bode Dourado de Gordias (53). Falta o Filhote de Huma |
@@ -302,7 +304,7 @@ de uma ficha feito por um bicho de outra região ou do bioma.
 | Cidade | Dur-Jarras, dentro do mundo |
 | Mundo contínuo | Feito, ao norte do Mar Gelado (`OverworldLayouts.Mistura.cs`) |
 | Bichos próprios | 18 (12 e mais Homem-Escorpião, Lince do Cedro, Abelha-Resina e, de `07a4770`, Pedra de Diorito e Ave do Ombro (81) e Pássaro-Sonho (82)). Ainda emprestados, 6: Lagarto do Instante, Ushabti de Relógio, Bagre Negro, Fumaça de Piche, Tremor, Água que Apaga |
-| Mecânicas feitas | Bolhas de tempo (78); acender o piche (79); o ombro que respira (81) |
+| Mecânicas feitas | Bolhas de tempo (78); acender o piche (79); o ombro que respira (81); de noite, Sombras Atrasadas levantando atrás dos bichos caídos (78), o Betume Vivo saindo das poças apagadas e a Fumaça de Piche estourando com o fogo e acendendo as poças (79) (2026-11-23, `LateShadowEchoRules`, `NightTarRules`, `PitchSmokeIgniteRules`) |
 | Mecânicas faltantes | Degraus do zigurate e evento da Cheia (77); ataques acelerados nas bolhas (78); os sete mantos (80); Ullikummi crescendo (81); acordar/sonhar (82) |
 | Chefe do mundo | O Sonho da Destruição (82). Faltam Hahya e Ohya juntos e a versão sonho do mapa |
 | Chefe de mapa | Feitos 4: O Instante Perdido (78, Nv 316: só o lugar do aviso anterior é seguro), O Rei do Piche (79), Hobabish (80, Nv 336: até 7 mantos no chão) e Ullikummi (81, Nv 346: cada batida alcança mais longe). O evento Cheia (77, toda hora às :13, com os degraus do zigurate) está feito |
@@ -332,8 +334,8 @@ de uma ficha feito por um bicho de outra região ou do bioma.
 | Cidade | Cais da Coluna, dentro do mundo |
 | Mundo contínuo | Feito, 2400 × 3600 m, sexta fileira (`OverworldLayouts.Ceu.cs`), 35 áreas |
 | Bichos próprios | 15 (12 e mais Corda de Fumaça e, de `07a4770`, Lanterna Fugitiva (92) e Vento de Órbita (95); os arcontes reaproveitam o Arconte Menor da R15). Ainda emprestados, cerca de 14: Faísca Confusa, Sombra Clandestina, Sombra que Pisa as Flores, Sombra Nadadora, Corrente Errada, Rachadura do Céu, Gota de Treva… |
-| Mecânicas feitas | Correnteza do Rio de Luz entre boias acesas (92, `CeuRiverRules`); Barca da Lua só à noite (93); segurar o céu nas 5 rachaduras (99); sentar ao lado da cadeira do Vô Jorge, uma história por dia (100) |
-| Mecânicas faltantes | Pouca gravidade e Chegada da Caravana (91); andar livre sobre a luz e as sombras mexendo no percurso (92); lua crescendo e lanternas (93); jarras e esferas que giram (94–95); plantar luz (96); carregar lanternas entre as barcas (97); faíscas escoltadas; pilares em grupo (99, online); pose sentada e história do dia no save (100) |
+| Mecânicas feitas | Correnteza do Rio de Luz entre boias acesas (92, `CeuRiverRules`); Barca da Lua só à noite (93); segurar o céu nas 5 rachaduras (99); sentar ao lado da cadeira do Vô Jorge, uma história por dia (100); desde 2026-11-23: faíscas teimosas do porão convencidas e levadas às lanternas, lua cheia e festa do convés (93, `MoonDeckSparkRules`), rachaduras mais fortes à noite (99) e a história do dia guardada no save, com as cinco ouvidas (100) |
+| Mecânicas faltantes | Pouca gravidade e Chegada da Caravana (91); andar livre sobre a luz e as sombras mexendo no percurso (92); o "sempre noite" do convés (93); jarras e esferas que giram (94–95); plantar luz (96); carregar lanternas entre as barcas (97); faíscas escoltadas; pilares em grupo (99, online); pose sentada e Sombras de Saudade (100) |
 | Chefe do mundo | Āz, a Capitã Cobiçosa (96). A Arca nunca mata (tira no máximo vida − 1). Loot próprio (Semente de Luz de Āz) e troféu (Estátua de Āz devolvendo a arca). Falta a Arca Resgatada +5. Falta a revanche de Saklas e Namrael na forma do céu (95) |
 | Chefe de mapa | Feitos 6: O Remador Perdido (92, Nv 440), O Clandestino Grande (93), O Arconte da Roda (94, Nv 460), A Sombra da Vela (97), O Último Arconte do Degrau (98, Nv 492) e A Rachadura Grande (99, Nv 498). A Sombra da Vela (97, feita: Nv 486, a retranca varre um lado do mastro, estibordo e bombordo alternando; colado no mastro, além da ponta ou do outro lado é seguro); o evento Chegada da Caravana (91, :57 a :02, com pouca gravidade no mapa) está feito |
 | Montaria | Nenhuma (o Cavalo-Estrela da ficha é de temporada e online) |

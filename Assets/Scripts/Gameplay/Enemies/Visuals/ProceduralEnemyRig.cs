@@ -373,6 +373,7 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                 case ProceduralEnemyKind.FishLantern:
                 case ProceduralEnemyKind.DimmedScarecrow:
                 case ProceduralEnemyKind.RiddleLantern:
+                case ProceduralEnemyKind.CrackedBell:
                 {
                     // Stands and sways a little; it leans back on the windup and its broken line flares before the words fly.
                     float r = StepAttack(deltaTime, 4f, 2.5f);
@@ -511,6 +512,7 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                 case ProceduralEnemyKind.CrookedRay:
                 case ProceduralEnemyKind.ShenMist:
                 case ProceduralEnemyKind.HundunBubble:
+                case ProceduralEnemyKind.DimmedEcho:
                 case ProceduralEnemyKind.CocoonCaterpillar:
                 case ProceduralEnemyKind.StickyMist:
                 case ProceduralEnemyKind.DimmedThornRose:
@@ -801,6 +803,7 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                 case ProceduralEnemyKind.SmokeHyena:
                 case ProceduralEnemyKind.MossCrocodile:
                 case ProceduralEnemyKind.ShadowGharial:
+                case ProceduralEnemyKind.QiongqiCub:
                 case ProceduralEnemyKind.MudEel:
                 case ProceduralEnemyKind.AshWolf:
                 case ProceduralEnemyKind.GrottoSpider:
@@ -922,6 +925,8 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                 case ProceduralEnemyKind.GiantDimmedUshabti:
                 case ProceduralEnemyKind.SmokeBoatman:
                 case ProceduralEnemyKind.RampartUshabti:
+                case ProceduralEnemyKind.TaotieServant:
+                case ProceduralEnemyKind.LimeGuardian:
                 {
                     // Waits with its hoe; both arms go up and the hoe comes down like on the fields of the other world (Hinokura: the
                     // lacquer ushabti's tongs, the furnace ogre's hammer, the slag giant's fists).

@@ -72,8 +72,8 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         {
             ReleaseSummonCorpses();
             TickPendingShadows(local, night);
-            FadeSummoned(_shadows, local, LateShadowEchoRules.Fades, night, true);
-            FadeSummoned(_nightTars, local, NightTarRules.Fades, night, false);
+            FadeSummoned(_shadows, local, ShadowFades, night, true);
+            FadeSummoned(_nightTars, local, TarFades, night, false);
             TickNightPools(local, night);
             TickLitSmokes(local);
         }
@@ -373,6 +373,10 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         }
 
         private delegate bool FadeRule(bool night, float heroDistance);
+
+        // Cached: a method group passed every frame would allocate a new delegate each time (C# 9 does not cache them).
+        private static readonly FadeRule ShadowFades = LateShadowEchoRules.Fades;
+        private static readonly FadeRule TarFades = NightTarRules.Fades;
 
         private void FadeSummoned(List<GameObject> summoned, Vector2 local, FadeRule fades, bool night, bool shadows)
         {

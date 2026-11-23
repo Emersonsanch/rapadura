@@ -175,6 +175,7 @@ namespace Rapadura.Gameplay.Inventory
             { "mount_ninki_nanka", 220f },
             { "mount_living_ember_boar", 200f },
             { "mount_light_skiff", 180f }, // the Barquinha de Luz (MountLegendCatalog): a little boat, a fair hold
+            { "mount_kirta_hippocamp", 110f }, // the Hipocampo de Kirta (MountReefCatalog): a swimmer, a light pack (the frog 100, the buffalo 300)
         };
 
         // ------------------------------------------------------------------

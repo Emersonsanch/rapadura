@@ -26,6 +26,9 @@ namespace Rapadura.Gameplay.World.Cities.Town
 
         private readonly List<CityResidentPost> _posts = new List<CityResidentPost>();
         private readonly List<CityExitTrigger> _exits = new List<CityExitTrigger>();
+        private readonly List<GameObject> _propRenderers = new List<GameObject>();
+        private GameObject _colliders;
+        private int _solidColliderCount;
 
         public CityLayout Layout { get; private set; }
         public SpawnPoint Respawn { get; private set; }
@@ -39,8 +42,11 @@ namespace Rapadura.Gameplay.World.Cities.Town
 
         public CityResidentPost PostOf(string lotId) => _posts.Find(p => p.LotId == lotId);
 
-        /// <summary>Builds the whole town under a new root (at the world origin, y = 0).</summary>
-        public static CityTownView Build(CityLayout layout, Transform parent = null, string cacheKey = null)
+        /// <summary>
+        /// Builds the whole town under a new root (at the world origin, y = 0). <paramref name="propsKey"/> (default: the cache key) keys the
+        /// merged prop meshes alone, so a variant of the recipe (<see cref="ApplyLayout"/>) shares the ground and the buildings.
+        /// </summary>
+        public static CityTownView Build(CityLayout layout, Transform parent = null, string cacheKey = null, string propsKey = null)
         {
             var root = new GameObject(RootPrefix + layout.CityId);
             if (parent != null)
@@ -51,11 +57,66 @@ namespace Rapadura.Gameplay.World.Cities.Town
             NonSolidPropZone.Ensure(root);
             CityTownView view = root.AddComponent<CityTownView>();
             view.Layout = layout;
-            view.BuildAll(cacheKey ?? layout.CityId);
+            view.BuildAll(cacheKey ?? layout.CityId, propsKey ?? cacheKey ?? layout.CityId);
             return view;
         }
 
-        private void BuildAll(string cacheKey)
+        /// <summary>
+        /// Swaps the built town to another variant of the same recipe (same lots and buildings, Docs/Cities.md: the progress-driven looks):
+        /// rebuilds only the merged props under <paramref name="propsKey"/>, the colliders when <paramref name="rebuildColliders"/> (the new ones
+        /// are made before the old ones go, so the hero never stands on nothing) and the night lights when <paramref name="relight"/>. The
+        /// ground, the buildings, the keepers, the safe zone and the exits are left as they are.
+        /// </summary>
+        public void ApplyLayout(CityLayout layout, string propsKey, bool rebuildColliders, bool relight)
+        {
+            Layout = layout;
+            foreach (GameObject go in _propRenderers)
+            {
+                if (go == null)
+                {
+                    continue;
+                }
+
+                MeshFilter filter = go.GetComponent<MeshFilter>();
+                RendererCount--;
+                TriangleCount -= filter != null && filter.sharedMesh != null ? (int)(filter.sharedMesh.GetIndexCount(0) / 3) : 0;
+                Destroy(go);
+            }
+
+            _propRenderers.Clear();
+            BuildProps(propsKey, Layout.Style);
+            if (rebuildColliders)
+            {
+                GameObject old = _colliders;
+                ColliderCount -= _solidColliderCount;
+                BuildColliders();
+                if (old != null)
+                {
+                    Destroy(old);
+                }
+            }
+
+            if (relight)
+            {
+                BuildLights();
+            }
+        }
+
+        private void BuildProps(string propsKey, TownStyle style)
+        {
+            Material material = TownPalette.SharedMaterial;
+            for (int chunk = 0; chunk < 5; chunk++)
+            {
+                int captured = chunk;
+                Mesh mesh = TownMeshCache.Get("props:" + propsKey + ":" + chunk, b => BuildPropChunk(b, captured, style));
+                if (mesh.vertexCount > 0)
+                {
+                    _propRenderers.Add(AddRenderer(chunk == 4 ? "Backdrop" : "Props_" + chunk, mesh, material, Vector3.zero, 0f, chunk == 4 ? ShadowCastingMode.Off : ShadowCastingMode.On));
+                }
+            }
+        }
+
+        private void BuildAll(string cacheKey, string propsKey)
         {
             Material material = TownPalette.SharedMaterial;
             TownStyle style = Layout.Style;
@@ -78,15 +139,7 @@ namespace Rapadura.Gameplay.World.Cities.Town
             }
 
             // Props, merged by quadrant (+ the backdrop beyond the walk bounds).
-            for (int chunk = 0; chunk < 5; chunk++)
-            {
-                int captured = chunk;
-                Mesh mesh = TownMeshCache.Get("props:" + cacheKey + ":" + chunk, b => BuildPropChunk(b, captured, style));
-                if (mesh.vertexCount > 0)
-                {
-                    AddRenderer(chunk == 4 ? "Backdrop" : "Props_" + chunk, mesh, material, Vector3.zero, 0f, chunk == 4 ? ShadowCastingMode.Off : ShadowCastingMode.On);
-                }
-            }
+            BuildProps(propsKey, style);
 
             BuildKeepers(material, style);
             BuildColliders();
@@ -131,7 +184,7 @@ namespace Rapadura.Gameplay.World.Cities.Town
             }
         }
 
-        private void AddRenderer(string objectName, Mesh mesh, Material material, Vector3 position, float yaw, ShadowCastingMode shadows)
+        private GameObject AddRenderer(string objectName, Mesh mesh, Material material, Vector3 position, float yaw, ShadowCastingMode shadows)
         {
             var go = new GameObject(objectName);
             go.transform.SetParent(transform, false);
@@ -146,6 +199,7 @@ namespace Rapadura.Gameplay.World.Cities.Town
             renderer.reflectionProbeUsage = ReflectionProbeUsage.Off;
             RendererCount++;
             TriangleCount += mesh != null ? (int)(mesh.GetIndexCount(0) / 3) : 0;
+            return go;
         }
 
         // ------------------------------------------------------------------
@@ -198,6 +252,8 @@ namespace Rapadura.Gameplay.World.Cities.Town
             var go = new GameObject("Colliders");
             go.transform.SetParent(transform, false);
             go.isStatic = true;
+            _colliders = go;
+            int before = ColliderCount;
 
             float e = Layout.GroundHalfExtent;
             AddBox(go, new Vector3(0f, -0.5f, 0f), new Vector3(e * 2f, 1f, e * 2f));
@@ -233,6 +289,7 @@ namespace Rapadura.Gameplay.World.Cities.Town
             AddBox(go, new Vector3(w.center.x, h * 0.5f, w.yMin - t * 0.5f), new Vector3(w.width + t * 2f, h, t));
             AddBox(go, new Vector3(w.xMax + t * 0.5f, h * 0.5f, w.center.y), new Vector3(t, h, w.height));
             AddBox(go, new Vector3(w.xMin - t * 0.5f, h * 0.5f, w.center.y), new Vector3(t, h, w.height));
+            _solidColliderCount = ColliderCount - before;
         }
 
         private void AddBox(GameObject go, Vector3 center, Vector3 size)
@@ -281,7 +338,15 @@ namespace Rapadura.Gameplay.World.Cities.Town
 
         private void BuildLights()
         {
-            NightLights = gameObject.AddComponent<CityNightLights>();
+            if (NightLights == null)
+            {
+                NightLights = gameObject.AddComponent<CityNightLights>();
+            }
+            else
+            {
+                NightLights.ClearLights();
+            }
+
             NightLights.MinimumNight = Layout.AmbientNight;
             var candidates = new List<Vector3>();
             foreach (CityProp prop in Layout.Props)

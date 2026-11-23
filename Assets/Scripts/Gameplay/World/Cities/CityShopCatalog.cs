@@ -597,6 +597,8 @@ namespace Rapadura.Gameplay.World.Cities
                 // and the Bolha de Ar Engarrafada for Kilwa Afundada (29), whose return city this is.
                 new CityShopEntry("item_concha_respiravel", 450, 2),
                 new CityShopEntry("item_bolha_ar", 500, 2),
+                // The Apito de Concha (ficha 28): the whistle of the Hipocampo de Kirta, the aquatic mount of the reef (MountReefCatalog).
+                new CityShopEntry("item_whistle_mount_kirta_hippocamp", 145, -1),
                 // The rotation: what the reef gives back as the coral is relit.
                 new CityShopEntry("item_fish_peixe_dourado", 60, 3, rotating: true),
                 new CityShopEntry("item_fiber", 1, 20, rotating: true),

@@ -16,6 +16,9 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         public const string EchoHits = "ui.farnkesh_silence.echo_hits";
         public const string EchoMissed = "ui.farnkesh_silence.echo_missed";
 
+        /// <summary>An Eco Apagado rose on the mark (<see cref="HermitageEchoRules"/>).</summary>
+        public const string EchoRises = "ui.farnkesh_silence.echo_rises";
+
         private static List<LocalizationEntry> _entries;
         private static Dictionary<string, string> _fallback;
 
@@ -28,7 +31,8 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             new LocalizationEntry(WarnNear, "Too much noise: an Echo is about to answer", "Barulho demais: um Eco vai responder"),
             new LocalizationEntry(EchoMarks, "An Echo answers! Step out of the ring", "Um Eco responde! Saia do círculo"),
             new LocalizationEntry(EchoHits, "The Echo throws your own noise back at you", "O Eco devolve o seu próprio barulho"),
-            new LocalizationEntry(EchoMissed, "The Echo strikes the empty stone and fades", "O Eco bate na pedra vazia e some"),
+            new LocalizationEntry(EchoMissed, "The Echo strikes the empty stone", "O Eco bate na pedra vazia"),
+            new LocalizationEntry(EchoRises, "The Echo steps out of the stone and comes after you", "O Eco sai da pedra e vem atrás de você"),
         };
 
         public static string Get(LocalizationManager manager, string key)

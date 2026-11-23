@@ -635,6 +635,12 @@ namespace Rapadura.Gameplay.Content
             EnemyName("enemy_mountain_shen_mist", "Shen's Mist", "Névoa do Shen"),
             EnemyName("enemy_mountain_hundun_bubble", "Hundun Bubble", "Bolha de Hundun"),
             EnemyName("enemy_desert_riddle_lantern", "Dimmed Riddle Lantern", "Lanterna de Charada Apagada"),
+            // Twenty-eighth pass (PeaksOwnBeastRecipes): the roles of Mingcheng and of the Ermidas Suspensas still borrowed after the twenty-seventh.
+            EnemyName("enemy_mountain_dimmed_echo", "Dimmed Echo", "Eco Apagado"),
+            EnemyName("enemy_desert_cracked_bell", "Cracked Bell", "Sino Rachado"),
+            EnemyName("enemy_forest_taotie_servant", "Taotie Servant", "Servo de Taotie"),
+            EnemyName("enemy_forest_qiongqi_cub", "Qiongqi Cub", "Filhote de Qiongqi"),
+            EnemyName("enemy_forest_lime_guardian", "Lime Guardian", "Guardião de Cal"),
             // Twenty-second pass (DeepOwnBeastRecipes): the roles of the Rio, the Mistura and the Limiar Profundo that still borrowed another beast.
             EnemyName("enemy_desert_shadow_salamander", "Shadow Salamander", "Salamandra de Sombra"),
             EnemyName("enemy_desert_coil_scorpion", "Coil Scorpion", "Escorpião dos Anéis"),

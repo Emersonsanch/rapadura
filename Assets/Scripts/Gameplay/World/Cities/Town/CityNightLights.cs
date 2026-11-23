@@ -33,7 +33,7 @@ namespace Rapadura.Gameplay.World.Cities.Town
         {
             var go = new GameObject("TownLight");
             go.transform.SetParent(transform, false);
-            go.transform.position = position;
+            go.transform.localPosition = position; // layout (town-local) coordinates: the town root sits at its world anchor in the continuous world
             var light = go.AddComponent<Light>();
             light.type = LightType.Point;
             light.color = new Color(1f, 0.72f, 0.4f);
@@ -43,6 +43,20 @@ namespace Rapadura.Gameplay.World.Cities.Town
             light.renderMode = LightRenderMode.Auto;
             light.enabled = false;
             _lights.Add(light);
+        }
+
+        /// <summary>Removes every light (the town is being relit for another variant of its recipe, <see cref="CityTownView.ApplyLayout"/>).</summary>
+        public void ClearLights()
+        {
+            foreach (Light light in _lights)
+            {
+                if (light != null)
+                {
+                    Destroy(light.gameObject);
+                }
+            }
+
+            _lights.Clear();
         }
 
         private void OnEnable()

@@ -1,6 +1,7 @@
 using Rapadura.Core.DI;
 using Rapadura.Core.Events;
 using Rapadura.Core.Localization;
+using Rapadura.Gameplay.Characters;
 using Rapadura.Gameplay.Mounts;
 using Rapadura.Gameplay.World.Map;
 using Rapadura.UI.HUD;
@@ -98,6 +99,14 @@ namespace Rapadura.UI.Mounts
             ServiceLocator.TryGet(out LocalizationManager localization);
             string key = evt.Source == MountCollection.SourceDrop ? MountWaveTexts.DropToast : MountTexts.GrantedToast;
             OnNotice(MountTexts.Format(localization, key, MountTexts.MountName(localization, MountCatalog.Get(evt.MountId))));
+
+            // The Hipocampo de Kirta (Apito de Concha): the cousin being played says their own line, remembering Vó Edna or Vô Jorge.
+            CharacterId? rider = MountRideCare.Rider;
+            string arrival = MountReefRules.ArrivalLineFor(evt.MountId, rider);
+            if (arrival != null)
+            {
+                OnNotice(CharacterRegistry.Get(rider.Value).DisplayName + ": " + MountTexts.Get(localization, arrival));
+            }
         }
 
         /// <summary>"Primeira Sela": Vó Edna hands over the pony, Lavine names him, Maithe pretends not to care, then the how-to.</summary>

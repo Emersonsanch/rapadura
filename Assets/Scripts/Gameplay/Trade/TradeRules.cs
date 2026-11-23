@@ -1,6 +1,7 @@
 using System;
 using System.Globalization;
 using Rapadura.Gameplay.Refining;
+using Rapadura.Gameplay.Social;
 using Rapadura.Gameplay.World.Cities;
 
 namespace Rapadura.Gameplay.Trade
@@ -204,9 +205,16 @@ namespace Rapadura.Gameplay.Trade
         }
 
         /// <summary>Whether <paramref name="a"/> may open a trade with <paramref name="b"/> standing <paramref name="distance"/> m away.</summary>
-        public static TradeRefusal CanOpen(TradePresence a, TradePresence b, float distance)
+        /// <param name="bBlocks">B's block list (<see cref="PlayerBlockRules"/>); null = blocks nobody. B blocked A →
+        /// <see cref="TradeRefusal.PartnerUnavailable"/>, the same answer as an absent partner, so the block stays private.</param>
+        public static TradeRefusal CanOpen(TradePresence a, TradePresence b, float distance, PlayerBlockList bBlocks = null)
         {
             if (string.IsNullOrEmpty(a.PlayerId) || string.IsNullOrEmpty(b.PlayerId) || !a.Available || !b.Available)
+            {
+                return TradeRefusal.PartnerUnavailable;
+            }
+
+            if (!PlayerBlockRules.CanContact(bBlocks, a.PlayerId, SocialContactKind.TradeRequest))
             {
                 return TradeRefusal.PartnerUnavailable;
             }

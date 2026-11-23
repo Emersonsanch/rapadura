@@ -19,9 +19,10 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
     /// pace (measured from how far they moved), the mount and the blows given or taken (<see cref="HeroCombatClock"/>) fill a noise meter, shown
     /// as an arc round the hero's feet; full, an Echo marks the ground where the hero stands and strikes it 1.5 s later as a hazard on PlayerStats
     /// that never kills. Added to the overworld root, idle unless the layout holds the Farnkesh region; never takes the controls and reads no
-    /// button. The meter is not saved (it empties on its own); the save keeps the day the hermitages' warning was last given.
+    /// button. The meter is not saved (it empties on its own); the save keeps the day the hermitages' warning was last given. Since 2026-11-23
+    /// the strike also raises an Eco Apagado on the mark (<see cref="HermitageEchoRules"/>, <c>FarnkeshSilenceMechanicsDriver.Echoes.cs</c>).
     /// </summary>
-    public sealed class FarnkeshSilenceMechanicsDriver : MonoBehaviour, IRegionMechanics
+    public sealed partial class FarnkeshSilenceMechanicsDriver : MonoBehaviour, IRegionMechanics
     {
         private const string PlayerTag = "Player";
         private const string ToldKey = "farnkesh.silence.told";
@@ -74,6 +75,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         private void Start()
         {
             OverworldView view = GetComponent<OverworldView>();
+            _view = view;
             _layout = view != null ? view.Layout : null;
             OverworldZone anchor = _layout?.Zone(OverworldLayouts.FarnkeshAnchorZoneId);
             if (anchor == null)
@@ -90,6 +92,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         private void OnEnable()
         {
             _combat.Attach();
+            AttachEchoes();
             if (!_castSubscribed)
             {
                 _castSubscribed = true;
@@ -127,6 +130,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         private void OnDisable()
         {
             _combat.Detach();
+            DetachEchoes();
             if (_castSubscribed)
             {
                 _castSubscribed = false;
@@ -151,6 +155,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
                 return;
             }
 
+            ReleaseEchoCorpses();
             Vector3 position = _player.position;
             Vector2 world = new Vector2(position.x, position.z);
             Vector2 local = world - _origin;
@@ -264,6 +269,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             _markedAt = -1f;
             _meter = HermitageStillBellRules.AfterEcho(_bellStilled);
             HideRing();
+            RaiseEcho(_mark);
             if (FarnkeshSilenceRules.StrikeHits(_mark, world))
             {
                 float amount = FarnkeshSilenceRules.StrikeAmount(_stats.CurrentHealth, _stats.MaxHealth);
@@ -328,6 +334,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             _castNoise = 0f;
             _markedAt = -1f;
             HideRing();
+            DismissEchoes();
             if (_arc != null)
             {
                 _arc.enabled = false;

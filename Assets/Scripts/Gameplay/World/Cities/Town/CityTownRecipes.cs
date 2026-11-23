@@ -32,15 +32,26 @@ namespace Rapadura.Gameplay.World.Cities.Town
         private static readonly Dictionary<string, CityLayout> Cache = new Dictionary<string, CityLayout>();
 
         /// <summary>The layout of <paramref name="cityId"/>'s walkable town (null for an unknown city).</summary>
-        public static CityLayout LayoutFor(string cityId, bool mascateToday = false)
+        public static CityLayout LayoutFor(string cityId, bool mascateToday = false) => LayoutFor(cityId, mascateToday, 0);
+
+        /// <summary>
+        /// The layout of <paramref name="cityId"/>'s walkable town in the look the save <paramref name="timeMark"/> asks for
+        /// (<see cref="Rapadura.Gameplay.World.Map.Mechanics.CityTownVariantRules.VariantFor"/>: Kirta's corals lit, Tarchon's lantern pairs;
+        /// null = a fresh save), so the city mode builds the same town the continuous world shows.
+        /// </summary>
+        public static CityLayout LayoutForSave(string cityId, bool mascateToday, System.Func<string, long> timeMark) =>
+            LayoutFor(cityId, mascateToday, Rapadura.Gameplay.World.Map.Mechanics.CityTownVariantRules.VariantFor(cityId, timeMark));
+
+        /// <summary>The layout of <paramref name="cityId"/>'s walkable town in <paramref name="variant"/> (0 for a town without variants).</summary>
+        public static CityLayout LayoutFor(string cityId, bool mascateToday, int variant)
         {
-            string key = cityId + (mascateToday ? "+mascate" : string.Empty);
+            string key = CacheKey(cityId, mascateToday, variant);
             if (Cache.TryGetValue(key, out CityLayout cached))
             {
                 return cached;
             }
 
-            CityTownRecipe recipe = RecipeFor(cityId, mascateToday);
+            CityTownRecipe recipe = RecipeFor(cityId, mascateToday, variant);
             if (recipe == null)
             {
                 return null;
@@ -53,7 +64,20 @@ namespace Rapadura.Gameplay.World.Cities.Town
 
         public static void ClearCache() => Cache.Clear();
 
-        public static CityTownRecipe RecipeFor(string cityId, bool mascateToday = false)
+        /// <summary>
+        /// The cache (and town mesh) key of <paramref name="cityId"/> with the caravaneer today and in <paramref name="variant"/>: variant 0 keeps
+        /// the plain key, so towns without variants are cached as before.
+        /// </summary>
+        public static string CacheKey(string cityId, bool mascateToday, int variant) =>
+            cityId + (variant != 0 ? "#v" + variant : string.Empty) + (mascateToday ? "+mascate" : string.Empty);
+
+        public static CityTownRecipe RecipeFor(string cityId, bool mascateToday = false) => RecipeFor(cityId, mascateToday, 0);
+
+        /// <summary>
+        /// The recipe of <paramref name="cityId"/> in <paramref name="variant"/> (a town without variants ignores it), with the caravaneer's
+        /// stall added on top when <paramref name="mascateToday"/>: the daily stall and the progress-driven look are independent.
+        /// </summary>
+        public static CityTownRecipe RecipeFor(string cityId, bool mascateToday, int variant)
         {
             CitySpec city = CityCatalog.Get(cityId);
             if (city == null)
@@ -61,7 +85,8 @@ namespace Rapadura.Gameplay.World.Cities.Town
                 return null;
             }
 
-            CityTownRecipe recipe = HandRecipe(cityId) ?? Default(city);
+            CityTownRecipe recipe = (variant != 0 ? Rapadura.Gameplay.World.Map.Mechanics.CityTownVariantRules.RecipeFor(cityId, variant) : null)
+                ?? HandRecipe(cityId) ?? Default(city);
             if (mascateToday)
             {
                 AddMascate(recipe);

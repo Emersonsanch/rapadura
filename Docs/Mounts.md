@@ -494,6 +494,34 @@ engoliu quando bebeu o rio; quando Apep é vencida e cospe o rio, a barquinha sa
   sempre).
 - **Testes:** `MountLegendTests`.
 
+### 3.15 A aquática de Kirta: o Hipocampo e o Apito de Concha (no código, 2026-11-23)
+
+**No jogo (2026-11-23).** Uma montaria em `MountReefCatalog`, exata no orçamento Incomum do §2.4 (12). É o **Apito de
+Concha** da ficha 28 (`Docs/Mapas100.md`, Kirta: "Apito de Concha para montarias aquáticas"): uma concha do recife que o
+Danel fura para apitar e que chama o **Hipocampo de Kirta**, o cavalo-marinho do povo-do-mar (os hipocampos das moedas
+fenícias da costa do Levante, vizinhos de Ugarit).
+
+| Id | Nome | Região (ficha) | Tipo | Raridade | Vel. | Def. | Vida | Fôlego | Pts | Carga | Habilidade | Como consegue | Favorito |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| `mount_kirta_hippocamp` | Hipocampo de Kirta / *Kirta Hippocamp* | 5 Costa (28) | aquático | Incomum | 1,45 | +3% | 150 | 140 | 12 | 110 | **Canto do Recife:** a concha canta: por 6 s uma luz de coral abre 10 m em volta e quem do grupo está a até 6 m cura 1,5% da vida máxima por segundo (9% no total). Recarga 40 s | Apito de Concha (`item_whistle_mount_kirta_hippocamp`), 145 de ouro, linha fixa nas Ferramentas de Mergulho do Danel (Kirta) | — |
+
+- **Decisões:** o Apito de Concha é o apito de uma montaria nova, não um item que serve a todas as aquáticas (todo apito do
+  jogo é o de uma montaria; comprar resgata, `MountCollection.RedeemWhistle`). Incomum, então vende na cidade da região
+  (§5.1, faixa 140–150) e nunca cai de bicho nem de Fita (`MountDropRules` não tem linha dele). Tipo **aquático**: abre o
+  barco, a maré alta do recife e o charco como o Sapo e a Tartaruga. Um pouco lento em terra, firme e de bom fôlego. A cura
+  é 3/4 da aura do Unicórnio (Rara, 2%/s), na cor do coral reaceso, que no mapa cura 2%/s fora de combate.
+- **Efeito novo** (`MountReefAbilities`, regras puras em `MountReefRules`; o `MountLegendAbilities` passa adiante o tipo
+  que não conhece): `ReefSong`, no fim de `MountAbilityKind`; usa a luz (`StartLamp`) e a aura de cura (`StartHealAura`)
+  de sempre. Nada de dano (§2.2).
+- **Falas dos primos:** quando o Hipocampo chega (`MountHud`, `MountReefRules.ArrivalLineFor`), o primo jogado diz a sua
+  fala, lembrando da Vó Edna ou do Vô Jorge (5 falas PT/EN em `MountReefTexts`).
+- **Modelo:** `MountReefRecipes` (`MountVisualRecipe.KirtaHippocamp` = 48): peito de cavalo, pescoço erguido, rabo longo e
+  grosso de peixe, pernas curtas, orelhas de barbatana, escamas verde-cobre, barriga de madrepérola, crina de coral.
+- **Item:** `Resources/Items/item_whistle_mount_kirta_hippocamp.asset` (ícone gerado: búzio cor de coral com fita
+  verde-água, `tools/icons/generate_item_icons.py`).
+- **Limites:** não nada de verdade (anda como os outros aquáticos); sem favorito (como os outros Incomuns de apito).
+- **Testes:** `MountReefTests` (e a contagem do Caderno em `MountTests`: 58).
+
 ### 3.7 Checagem de unicidade
 
 30 IDs distintos, 30 nomes distintos e 30 habilidades com nome e efeito distintos, conferidos por script (inclusive

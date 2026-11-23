@@ -252,6 +252,7 @@ namespace Rapadura.Gameplay.Mounts
             entries.AddRange(MountSheetTexts.Entries); // Regions 1–4, 5 and 7: six more mounts of the map sheets.
             entries.AddRange(MountBossTexts.Entries); // Four boss mounts and the last two map-sheet ones (Regions 1 and 6).
             entries.AddRange(MountLegendTexts.Entries); // The legendary of the map sheets: the Barquinha de Luz (Apep, 76).
+            entries.AddRange(MountReefTexts.Entries); // Kirta's aquatic mount: the Hipocampo and its Apito de Concha (28).
             foreach (var m in Mounts)
             {
                 entries.Add(new LocalizationEntry("mount." + m.Id + ".name", m.NameEn, m.NamePt));

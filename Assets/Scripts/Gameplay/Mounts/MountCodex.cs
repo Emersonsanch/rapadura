@@ -109,6 +109,10 @@ namespace Rapadura.Gameplay.Mounts
             // The legendary of the map sheets (MountLegendCatalog, Docs/Mounts.md §3.14).
             (MountLegendCatalog.LightSkiff, ItemRarity.Legendary, BiomeType.Desert, "Little Light Skiff", "Barquinha de Luz",
                 "Caught in Apep's coils on the sandbank, waiting for the river to come back… very, very rare.", "Presa nas dobras de Apep no banco de areia, esperando o rio voltar… muito, muito rara."),
+
+            // Kirta's aquatic mount (MountReefCatalog, Docs/Mounts.md §3.15).
+            (MountReefCatalog.KirtaHippocamp, ItemRarity.Uncommon, BiomeType.Forest, "Kirta Hippocamp", "Hipocampo de Kirta",
+                "The Conch Whistle, at Danel's diving tools in Kirta.", "O Apito de Concha, nas ferramentas de mergulho do Danel, em Kirta."),
         };
 
         public static readonly IReadOnlyList<MountCodexEntry> Entries = Rows.Select(r => new MountCodexEntry(r.Id, r.Rarity, r.Region)).ToList();

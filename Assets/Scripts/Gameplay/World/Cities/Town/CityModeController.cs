@@ -102,10 +102,13 @@ namespace Rapadura.Gameplay.World.Cities.Town
 
             HideArena();
 
-            bool mascate = CityShopService.ShopsOpenIn(city, CityShopService.Now, ServiceLocator.TryGet(out WorldMapProgress map) ? map : null)
-                .Contains(CityShopCatalog.MascateBento);
-            Layout = CityTownRecipes.LayoutFor(CityId, mascate);
-            Town = CityTownView.Build(Layout, null, CityId + (mascate ? "+mascate" : string.Empty));
+            WorldMapProgress map = ServiceLocator.TryGet(out WorldMapProgress found) ? found : null;
+            bool mascate = CityShopService.ShopsOpenIn(city, CityShopService.Now, map).Contains(CityShopCatalog.MascateBento);
+
+            // The look the save asks for (Kirta's corals lit, Tarchon's lantern pairs), like the continuous world builds it.
+            int variant = Rapadura.Gameplay.World.Map.Mechanics.CityTownVariantRules.VariantFor(CityId, map != null ? (System.Func<string, long>)(key => map.GetTimeMark(key)) : null);
+            Layout = CityTownRecipes.LayoutFor(CityId, mascate, variant);
+            Town = CityTownView.Build(Layout, null, CityTownRecipes.CacheKey(CityId, mascate, variant));
             SceneManager.MoveGameObjectToScene(Town.gameObject, gameObject.scene);
 
             SyncEnvironment(city);

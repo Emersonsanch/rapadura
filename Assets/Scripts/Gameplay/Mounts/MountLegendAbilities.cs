@@ -47,7 +47,7 @@ namespace Rapadura.Gameplay.Mounts
 
     /// <summary>
     /// What the ability of <see cref="MountLegendCatalog"/> does in the arena; called by <see cref="MountBossAbilities.Execute"/> for the kinds it
-    /// does not handle. Returns the toast key, or null.
+    /// does not handle (and passing on to <see cref="MountReefAbilities"/> the kinds it does not know). Returns the toast key, or null.
     /// </summary>
     public static class MountLegendAbilities
     {
@@ -55,7 +55,7 @@ namespace Rapadura.Gameplay.Mounts
         {
             if (ability.Kind != MountAbilityKind.LightCrossing)
             {
-                return null;
+                return MountReefAbilities.Execute(ability, ctx, effects);
             }
 
             // Travessia de Luz: the skiff rows on its own light: the cousin and the group around get light feet, the light opens round

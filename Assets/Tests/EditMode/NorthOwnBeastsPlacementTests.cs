@@ -157,7 +157,7 @@ namespace Rapadura.Tests
 
         [TestCase(Fark, "neblinas_do_vento_ruim", Mist)]
         [TestCase(Fark, "ventanias", Mist)]
-        [TestCase(Fark, "sinos_rachados", Lantern)]
+        // The Sino Rachado (sinos_rachados) is its own beast since the twenty-eighth pass (PeaksOwnBeastsPlacementTests).
         [TestCase(Gelo, "lucios_gigantes", Pike)]
         [TestCase(Gelo, "focas_leopardo", Seal)]
         [TestCase(Gelo, "gaivotas_do_gelo", IceGull)]

@@ -139,6 +139,11 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             public const string ShenMist = "enemy_mountain_shen_mist";
             public const string HundunBubble = "enemy_mountain_hundun_bubble";
             public const string RiddleLantern = "enemy_desert_riddle_lantern";
+            // The twenty-eighth pass (PeaksOwnBeastRecipes, OverworldLayouts.PeaksOwnBeasts): the Servo de Taotie (46, was the terracotta
+            // soldier), the Filhote de Qiongqi (46, was the forest wolf) and the Guardião de Cal (42, was the stone lion).
+            public const string TaotieServant = "enemy_forest_taotie_servant";
+            public const string QiongqiCub = "enemy_forest_qiongqi_cub";
+            public const string LimeGuardian = "enemy_forest_lime_guardian";
         }
 
         private static OverworldLayout MingchengRegion()
@@ -456,14 +461,14 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             guerreiros.Fauna.Add(Fauna("cavalos_do_vale", "[rápido]", T(N(MidBeasts.TerracottaHorse, 3), N(Ming.Lion, 1)), T(V(MidBeasts.TerracottaHorse, 2), S(werewolf, 1)), 4));
 
             // Jardins em Terraço and Torres Brancas (42): the Espelho Quebrado [distância] (its own beast now), the Íbis de Luz
-            // Apagada [rápido] (its own beast now, HighlandBeasts; it throws like the hawk it replaced), the Guardião de Cal [tanque] (the golem), the Raio Torto [controle] (its own beast now, WestOwnBeasts).
+            // Apagada [rápido] (its own beast now, HighlandBeasts; it throws like the hawk it replaced), the Guardião de Cal [tanque] (its own beast now, PeaksOwnBeasts; the stone lion before), the Raio Torto [controle] (its own beast now, WestOwnBeasts).
             jardins.Fauna.Add(Fauna("ibis_de_luz", "[rápido]", T(N(Ming.LightIbis, 3), N(Ming.Mirror, 1)), T(V(Ming.LightIbis, 2), S(moon, 1)), 4));
             jardins.Fauna.Add(Fauna("espelhos_quebrados", "[distância]", T(N(Ming.Mirror, 3), N(Ming.LightIbis, 1)), T(V(Ming.Mirror, 2), S(owl, 1)), 4));
-            torres.Fauna.Add(Fauna("guardioes_de_cal", "[tanque]", T(N(Ming.Lion, 3), N(Ming.CrookedRay, 1)), T(V(Ming.Lion, 2), V(Ming.CrookedRay, 1)), 3, null, 30f));
+            torres.Fauna.Add(Fauna("guardioes_de_cal", "[tanque]", T(N(Ming.LimeGuardian, 3), N(Ming.CrookedRay, 1)), T(V(Ming.LimeGuardian, 2), V(Ming.CrookedRay, 1)), 3, null, 30f));
             torres.Fauna.Add(Fauna("raios_tortos", "[controle]", T(N(Ming.CrookedRay, 3), N(Ming.Mirror, 1)), T(V(Ming.CrookedRay, 2), S(owl, 1)), 4));
             torres.Fauna.Add(Fauna("espelhos_das_torres", "[distância]", T(N(Ming.Mirror, 3), N(Ming.Lion, 1)), T(V(Ming.Mirror, 2), S(bats, 1)), 4));
             espelhos.Fauna.Add(Fauna("espelhos_do_atalho", "[distância]", T(N(Ming.Mirror, 3), N(Ming.CrookedRay, 1)), T(V(Ming.Mirror, 2), S(owl, 1)), 4));
-            espelhos.Fauna.Add(Fauna("guardioes_das_colinas", "[tanque]", T(N(Ming.Lion, 3), N(Ming.LightIbis, 1)), T(V(Ming.Lion, 2), S(bats, 1)), 3, null, 30f));
+            espelhos.Fauna.Add(Fauna("guardioes_das_colinas", "[tanque]", T(N(Ming.LimeGuardian, 3), N(Ming.LightIbis, 1)), T(V(Ming.LimeGuardian, 2), S(bats, 1)), 3, null, 30f));
 
             // Ravinas de Loess: scorpions in the yellow earth, vultures, sand snakes.
             loess.Fauna.Add(Fauna("escorpioes_do_loess", "[controle]", T(N(Ming.Scorpion, 3), N(Ming.Carp, 1)), T(V(Ming.Scorpion, 2), S(owl, 1)), 4));
@@ -492,11 +497,12 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             portao.Fauna.Add(Fauna("filhotes_do_portao", "[elite]", T(N(Ming.Nian, 3), N(Ming.Terracotta, 1)), T(V(Ming.Nian, 3), S(werewolf, 1)), 3, null, 32f));
             portao.Fauna.Add(Fauna("arqueiros_do_portao", "[distância]", T(N(Ming.TerracottaArcher, 3), N(Ming.Horse, 1)), T(V(Ming.TerracottaArcher, 2), S(bats, 1)), 4));
 
-            // Cidadela dos Quatro Gulosos (46): the Servos de Taotie [tanque] (the terracotta soldier), the Bolhas de Hundun [controle]
-            // (their own beast now, WestOwn2Beasts; the ill-wind mist before), the Filhotes de Qiongqi [rápido] (the wolf), the Guarda de Taowu [elite] (the stone lion); no boss yet.
-            cidadela.Fauna.Add(Fauna("servos_de_taotie", "[tanque]", T(N(Ming.Terracotta, 3), N(Ming.Lion, 1)), T(V(Ming.Terracotta, 2), S(werewolf, 1)), 3, null, 30f));
+            // Cidadela dos Quatro Gulosos (46): the Servos de Taotie [tanque] and the Filhotes de Qiongqi [rápido] (their own beasts now,
+            // PeaksOwnBeasts; the terracotta soldier and the wolf before), the Bolhas de Hundun [controle] (their own beast now, WestOwn2Beasts;
+            // the ill-wind mist before), the Guarda de Taowu [elite] (the stone lion); no boss yet.
+            cidadela.Fauna.Add(Fauna("servos_de_taotie", "[tanque]", T(N(Ming.TaotieServant, 3), N(Ming.Lion, 1)), T(V(Ming.TaotieServant, 2), S(werewolf, 1)), 3, null, 30f));
             cidadela.Fauna.Add(Fauna("bolhas_de_hundun", "[controle]", T(N(Ming.HundunBubble, 3), N(Ming.RiddleLantern, 1)), T(V(Ming.HundunBubble, 3), S(owl, 1)), 4));
-            cidadela.Fauna.Add(Fauna("filhotes_de_qiongqi", "[rápido]", T(N(Ming.Horse, 3), N(Ming.HundunBubble, 1)), T(V(Ming.Horse, 2), S(werewolf, 1)), 4));
+            cidadela.Fauna.Add(Fauna("filhotes_de_qiongqi", "[rápido]", T(N(Ming.QiongqiCub, 3), N(Ming.HundunBubble, 1)), T(V(Ming.QiongqiCub, 2), S(werewolf, 1)), 4));
             cidadela.Fauna.Add(Fauna("guarda_de_taowu", "[elite]", T(N(Ming.Lion, 3), N(Ming.Terracotta, 1)), T(V(Ming.Lion, 3), S(bats, 1)), 3, null, 32f));
         }
     }

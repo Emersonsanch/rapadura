@@ -366,6 +366,12 @@ namespace Rapadura.Gameplay.Enemies.Visuals
             { "enemy_mountain_shen_mist", ProceduralEnemyKind.ShenMist },
             { "enemy_mountain_hundun_bubble", ProceduralEnemyKind.HundunBubble },
             { "enemy_desert_riddle_lantern", ProceduralEnemyKind.RiddleLantern },
+            // Twenty-eighth pass (PeaksOwnBeastRecipes): the roles of Mingcheng and of the Ermidas Suspensas still borrowed after the twenty-seventh.
+            { "enemy_mountain_dimmed_echo", ProceduralEnemyKind.DimmedEcho },
+            { "enemy_desert_cracked_bell", ProceduralEnemyKind.CrackedBell },
+            { "enemy_forest_taotie_servant", ProceduralEnemyKind.TaotieServant },
+            { "enemy_forest_qiongqi_cub", ProceduralEnemyKind.QiongqiCub },
+            { "enemy_forest_lime_guardian", ProceduralEnemyKind.LimeGuardian },
             // Twenty-first pass (NorthOwnBeastRecipes): the most-seen roles of Farnkesh, the Mar Gelado and Hinokura that still borrowed another beast.
             { "enemy_mountain_flying_stone", ProceduralEnemyKind.FlyingStone },
             { "enemy_mountain_gorge_ays", ProceduralEnemyKind.GorgeAys },
@@ -596,6 +602,7 @@ namespace Rapadura.Gameplay.Enemies.Visuals
             ProceduralEnemyKind.FishLantern, ProceduralEnemyKind.SmokeBoatman, ProceduralEnemyKind.MandarinDuck, ProceduralEnemyKind.DimmedScarecrow, ProceduralEnemyKind.CrookedRay, ProceduralEnemyKind.GreyWolf,
             ProceduralEnemyKind.Dingonek, ProceduralEnemyKind.StripedJackal, ProceduralEnemyKind.SmokeHyena, ProceduralEnemyKind.StoneRam, ProceduralEnemyKind.MossCrocodile, ProceduralEnemyKind.ShadowGharial,
             ProceduralEnemyKind.ShenMist, ProceduralEnemyKind.HundunBubble, ProceduralEnemyKind.RiddleLantern,
+            ProceduralEnemyKind.DimmedEcho, ProceduralEnemyKind.CrackedBell, ProceduralEnemyKind.TaotieServant, ProceduralEnemyKind.QiongqiCub, ProceduralEnemyKind.LimeGuardian,
             ProceduralEnemyKind.FlyingStone, ProceduralEnemyKind.GorgeAys, ProceduralEnemyKind.TrappedLightning, ProceduralEnemyKind.IceFish, ProceduralEnemyKind.LanternEel, ProceduralEnemyKind.TundraMosquito,
             ProceduralEnemyKind.DimmedNarwhal, ProceduralEnemyKind.StormGull, ProceduralEnemyKind.WitchFish, ProceduralEnemyKind.ObsidianOctopus, ProceduralEnemyKind.RagingSpark, ProceduralEnemyKind.LivingAsh,
             ProceduralEnemyKind.ShadowSalamander, ProceduralEnemyKind.CoilScorpion, ProceduralEnemyKind.DimmedUshabti, ProceduralEnemyKind.BoiledShadow, ProceduralEnemyKind.MudCrocodile, ProceduralEnemyKind.CrackedUshabti,
@@ -1535,6 +1542,21 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                     break;
                 case ProceduralEnemyKind.RiddleLantern:
                     WestOwn2BeastRecipes.BuildRiddleLantern(blueprint);
+                    break;
+                case ProceduralEnemyKind.DimmedEcho:
+                    PeaksOwnBeastRecipes.BuildDimmedEcho(blueprint);
+                    break;
+                case ProceduralEnemyKind.CrackedBell:
+                    PeaksOwnBeastRecipes.BuildCrackedBell(blueprint);
+                    break;
+                case ProceduralEnemyKind.TaotieServant:
+                    PeaksOwnBeastRecipes.BuildTaotieServant(blueprint);
+                    break;
+                case ProceduralEnemyKind.QiongqiCub:
+                    PeaksOwnBeastRecipes.BuildQiongqiCub(blueprint);
+                    break;
+                case ProceduralEnemyKind.LimeGuardian:
+                    PeaksOwnBeastRecipes.BuildLimeGuardian(blueprint);
                     break;
                 case ProceduralEnemyKind.FlyingStone:
                     NorthOwnBeastRecipes.BuildFlyingStone(blueprint);

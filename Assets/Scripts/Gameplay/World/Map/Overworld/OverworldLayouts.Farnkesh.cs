@@ -178,6 +178,10 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             public const string Spider = "enemy_forest_spider";
             public const string Marmot = "enemy_mountain_giant_marmot";
             public const string Monkey = "enemy_forest_thief_monkey";
+            // The twenty-eighth pass (PeaksOwnBeastRecipes, OverworldLayouts.PeaksOwnBeasts): the Eco Apagado (56, was the ill-wind mist) and
+            // the Sino Rachado (56, was the broken lantern) are their own beasts now; the mist and the lantern keep their other roles here.
+            public const string Echo = "enemy_mountain_dimmed_echo";
+            public const string CrackedBell = "enemy_desert_cracked_bell";
         }
 
         private static OverworldLayout FarnkeshRegion()
@@ -448,11 +452,12 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             ermidaBaixa.Fauna.Add(Fauna("pipas_sombra", "[distância]", T(N(Fark.ShadowKite, 3), N(Fark.Ushabti, 1)), T(V(Fark.ShadowKite, 2), S(bats, 2)), 3));
             ermidaBaixa.Fauna.Add(Fauna("ushabtis_da_ermida", "[tanque]", T(N(Fark.Ushabti, 3), N(Fark.CandleBat, 1)), T(V(Fark.Ushabti, 2), S(bats, 1)), 3, null, 30f));
 
-            // Ermidas Suspensas and Pináculo do Sino (56): the Eco Apagado [controle] (the ill-wind mist), the Gato-de-Pallas Apagado
-            // [rápido], the Sino Rachado [distância] (the broken lantern), the Gralha [enxame] (a flock of alpine choughs).
-            ermidas.Fauna.Add(Fauna("ecos_apagados", "[controle]", T(N(Fark.Mist, 3), N(Fark.Cat, 1)), T(V(Fark.Mist, 3), S(owl, 1)), 4));
-            ermidas.Fauna.Add(Fauna("sinos_rachados", "[distância]", T(N(Fark.Kite, 3), N(Fark.Mist, 1)), T(V(Fark.Kite, 2), S(bats, 1)), 3));
-            sino.Fauna.Add(Fauna("gatos_de_pallas", "[rápido]", T(N(Fark.Cat, 3), N(Fark.Kite, 1)), T(V(Fark.Cat, 2), S(werewolf, 1)), 4));
+            // Ermidas Suspensas and Pináculo do Sino (56): the Eco Apagado [controle] and the Sino Rachado [distância] (their own beasts now,
+            // PeaksOwnBeasts; the Ecos also rise from the noise meter), the Gato-de-Pallas Apagado [rápido], the Gralha [enxame] (a flock of
+            // alpine choughs).
+            ermidas.Fauna.Add(Fauna("ecos_apagados", "[controle]", T(N(Fark.Echo, 3), N(Fark.Cat, 1)), T(V(Fark.Echo, 3), S(owl, 1)), 4));
+            ermidas.Fauna.Add(Fauna("sinos_rachados", "[distância]", T(N(Fark.CrackedBell, 3), N(Fark.Echo, 1)), T(V(Fark.CrackedBell, 2), S(bats, 1)), 3));
+            sino.Fauna.Add(Fauna("gatos_de_pallas", "[rápido]", T(N(Fark.Cat, 3), N(Fark.CrackedBell, 1)), T(V(Fark.Cat, 2), S(werewolf, 1)), 4));
             sino.Fauna.Add(Fauna("gralhas_das_ermidas", "[enxame]", T(N(Fark.Chough, 3), N(Fark.Cat, 1)), T(V(Fark.Chough, 2), S(bats, 2)), 5));
 
             // Garganta dos Ays, Gruta Abrigo, Escarpa dos Ventos (57): the Ays [rápido] (seen in the wind's dust),

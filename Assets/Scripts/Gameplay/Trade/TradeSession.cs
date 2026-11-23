@@ -153,7 +153,9 @@ namespace Rapadura.Gameplay.Trade
         /// Opens a trade between <paramref name="a"/> (asked) and <paramref name="b"/> (accepted) standing
         /// <paramref name="distance"/> m apart. <paramref name="tradeId"/> comes from the server (unique; it is the key of the log).
         /// </summary>
-        public static TradeRefusal TryOpen(string tradeId, TradePresence a, TradePresence b, float distance, double now, out TradeSession session)
+        /// <param name="bBlocks">B's block list; null = blocks nobody (see <see cref="TradeRules.CanOpen"/>).</param>
+        public static TradeRefusal TryOpen(string tradeId, TradePresence a, TradePresence b, float distance, double now, out TradeSession session,
+            Social.PlayerBlockList bBlocks = null)
         {
             session = null;
             if (string.IsNullOrEmpty(tradeId))
@@ -161,7 +163,7 @@ namespace Rapadura.Gameplay.Trade
                 return TradeRefusal.SessionClosed;
             }
 
-            TradeRefusal refusal = TradeRules.CanOpen(a, b, distance);
+            TradeRefusal refusal = TradeRules.CanOpen(a, b, distance, bBlocks);
             if (refusal != TradeRefusal.None)
             {
                 return refusal;

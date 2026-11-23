@@ -118,6 +118,14 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
 
         private void OpenDoor()
         {
+            // The door opens once for good: with no room for its petals, wait (instead of opening and losing them).
+            if (!PetalsFit(ZarafshanPavilionRules.FirstOpenPetals))
+            {
+                _nextPavilionHint = Time.unscaledTime + HintCooldown;
+                SayPavilion(MihrshahPavilionTexts.BagFull);
+                return;
+            }
+
             long now = Math.Max(1L, DateTimeOffset.UtcNow.ToUnixTimeSeconds());
             _doorLocal = now;
             _doorMark = now;
@@ -174,7 +182,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             }
 
             _nextPavilionHint = Time.unscaledTime + HintCooldown;
-            if (GivePetals(ZarafshanPavilionRules.DailyPetals) <= 0)
+            if (!PetalsFit(ZarafshanPavilionRules.DailyPetals) || GivePetals(ZarafshanPavilionRules.DailyPetals) <= 0)
             {
                 SayPavilion(MihrshahPavilionTexts.BagFull);
                 return;
@@ -187,6 +195,13 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             }
 
             SayPavilion(MihrshahPavilionTexts.AltarGave);
+        }
+
+        /// <summary>True when all <paramref name="count"/> petals fit in the bag (no bag or no petal item: nothing to lose, the give says so).</summary>
+        private bool PetalsFit(int count)
+        {
+            ItemDefinition petal = ItemDatabase.GetById(ZarafshanPavilionRules.PetalItemId);
+            return petal == null || _bag == null || _bag.CanFit(petal, count);
         }
 
         /// <summary>Puts up to <paramref name="count"/> petals in the bag; how many went in.</summary>

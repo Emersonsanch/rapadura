@@ -26,8 +26,9 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
     /// Scene side of the Reinos do Céu mechanics (the rules are <see cref="CeuMoonBarqueRules"/>, <see cref="CeuSkyHoldRules"/> and <see cref="CeuPorchRules"/>): added to the
     /// overworld root, idle unless the layout holds the region and the hero stands in it. The Barca da Lua takes the controls for 2.5 s at most, handing them back on
     /// arrival, on death or if anything else moves the hero; holding the sky and sitting on the porch never take them at all.
-    /// When each crack reopens is saved per slot in <see cref="WorldMapProgress"/>, so reloading cannot unseal one and heal again. The porch keeps nothing: the story comes from the UTC clock and
-    /// sitting is a rest with no daily limit or prize, so there is no state to save.
+    /// When each crack reopens is saved per slot in <see cref="WorldMapProgress"/>, so reloading cannot unseal one and heal again (by night the hold is longer and the
+    /// seal shorter, 2026-11-23). The porch keeps, on its own events only (2026-11-23), the line where a sitting was cut short that UTC day and the mask of the
+    /// stories told to the end; the story itself still comes from the UTC clock and sitting is a rest with no daily limit or prize.
     /// </summary>
     public sealed partial class CeuMechanicsDriver : MonoBehaviour, IRegionMechanics
     {
@@ -115,11 +116,13 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         {
             _heroState.Attach();
             EventBus.Subscribe<EnemyDiedEvent>(OnAzDied);
+            HookMoonDeck();
         }
 
         private void OnDisable()
         {
             EventBus.Unsubscribe<EnemyDiedEvent>(OnAzDied);
+            UnhookMoonDeck();
             EndRide(false);
             _hold.Cancel();
             _porch.Cancel();
@@ -159,6 +162,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             {
                 _hold.Cancel();
                 _porch.Cancel();
+                _sparks.Cancel();
                 return;
             }
 
@@ -166,8 +170,9 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             TimeOfDayManager clock = Clock();
             bool isNight = clock != null && TimeOfDayManager.GetPhase(clock.CurrentHour) == TimeOfDayPhase.Night;
             int spot = TickBarque(local, isNight, clock);
-            spot = TickCracks(local, unix, spot);
+            spot = TickCracks(local, unix, spot, isNight);
             spot = TickPorch(local, unix, isNight, spot);
+            spot = TickMoonDeck(local, spot);
             if (spot < 0)
             {
                 _hintSpot = -1;
@@ -395,7 +400,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         // Holding the sky
         // ------------------------------------------------------------------
 
-        private int TickCracks(Vector2 local, long unix, int spot)
+        private int TickCracks(Vector2 local, long unix, int spot, bool isNight)
         {
             bool nearLookout = (local - OverworldLayouts.MaoAbertaOffset).sqrMagnitude < CrackViewRange * CrackViewRange;
             ShowCracks(nearLookout, unix);
@@ -403,7 +408,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             if (active >= 0)
             {
                 bool inReach = (OverworldLayouts.SkyCracks[active] - local).sqrMagnitude <= CeuSkyHoldRules.Reach * CeuSkyHoldRules.Reach;
-                HandleHold(_hold.Tick(Time.deltaTime, inReach, unix), active, unix);
+                HandleHold(_hold.Tick(Time.deltaTime, inReach, unix, isNight), active, unix, isNight);
             }
 
             int crack = CeuSkyHoldRules.NearestCrack(OverworldLayouts.SkyCracks, local);
@@ -428,13 +433,17 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
                 if (Interacted && !isSealed && _hold.TryRaise(crack, unix))
                 {
                     Say(CeuMechanicsTexts.CrackHold);
+                    if (isNight)
+                    {
+                        Say2(CeuRound2Texts.CrackNight);
+                    }
                 }
             }
 
             return crack;
         }
 
-        private void HandleHold(CeuSkyEvent happened, int crack, long unix)
+        private void HandleHold(CeuSkyEvent happened, int crack, long unix, bool isNight)
         {
             switch (happened)
             {
@@ -445,7 +454,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
                 case CeuSkyEvent.Drip:
                     if (_stats != null)
                     {
-                        float amount = CeuSkyHoldRules.DripAmount(_stats.CurrentHealth, _stats.MaxHealth);
+                        float amount = CeuSkyHoldRules.DripAmount(_stats.CurrentHealth, _stats.MaxHealth, isNight);
                         if (amount > 0f)
                         {
                             _stats.ApplyHazardDamage(amount);
@@ -456,7 +465,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
                     break;
 
                 case CeuSkyEvent.Sealed:
-                    SealCrack(crack, unix);
+                    SealCrack(crack, unix, _hold.LastSealAtNight);
                     break;
 
                 case CeuSkyEvent.Faded:
@@ -472,7 +481,10 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             return left > 0L && left <= CeuSkyHoldRules.SealSeconds;
         }
 
-        public static void StoreSeal(WorldMapProgress progress, int crack, long now) => progress?.SetTimeMark(CrackMarkKeys[crack], now + CeuSkyHoldRules.SealSeconds);
+        public static void StoreSeal(WorldMapProgress progress, int crack, long now) => StoreSeal(progress, crack, now, false);
+
+        /// <summary>Saves a seal made by day or by night (a night seal lasts <see cref="CeuSkyHoldRules.NightSealSeconds"/>).</summary>
+        public static void StoreSeal(WorldMapProgress progress, int crack, long now, bool night) => progress?.SetTimeMark(CrackMarkKeys[crack], now + CeuSkyHoldRules.SealSecondsFor(night));
 
         private bool IsCrackSealed(int crack, long unix) => ServiceLocator.TryGet(out WorldMapProgress progress) ? CrackSealedIn(progress, crack, unix) : _hold.IsSealed(crack, unix);
 
@@ -487,12 +499,12 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             return count;
         }
 
-        private void SealCrack(int crack, long unix)
+        private void SealCrack(int crack, long unix, bool night)
         {
-            StoreSeal(ServiceLocator.TryGet(out WorldMapProgress progress) ? progress : null, crack, unix);
+            StoreSeal(ServiceLocator.TryGet(out WorldMapProgress progress) ? progress : null, crack, unix, night);
             if (_stats != null && _stats.IsAlive)
             {
-                _stats.Heal(CeuSkyHoldRules.SealHeal(_stats.MaxHealth));
+                _stats.Heal(CeuSkyHoldRules.SealHeal(_stats.MaxHealth, night));
             }
 
             Vector2 center = OverworldLayouts.SkyCracks[crack];
@@ -509,7 +521,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
                     continue;
                 }
 
-                float bite = CeuSkyHoldRules.SealBite(enemy.Health.MaxHealth, enemy.IsBoss);
+                float bite = CeuSkyHoldRules.SealBite(enemy.Health.MaxHealth, enemy.IsBoss, night);
                 if (bite > 0f)
                 {
                     enemy.Health.ApplyDamage(bite, ElementType.Holy, _player.gameObject);
@@ -523,6 +535,10 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             }
 
             Say(skyWhole ? CeuMechanicsTexts.SkyWhole : CeuMechanicsTexts.SealLines[crack]);
+            if (night)
+            {
+                Say2(CeuRound2Texts.SealNight);
+            }
         }
 
         private void ShowCracks(bool near, long unix)
@@ -609,8 +625,17 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             InteractPromptRegistry.Ping(Time.unscaledTime);
             if (Interacted || sitsByTouch)
             {
-                _porch.Begin(CeuPorchRules.StoryIndex(unix), isNight);
+                _porchDay = CeuPorchRules.UtcDay(unix);
+                int resume = ServiceLocator.TryGet(out WorldMapProgress progress) && progress != null
+                    ? CeuPorchRules.ResumeLine(progress.GetTimeMark(CeuPorchRules.ResumeMarkKey), _porchDay)
+                    : 0;
+                _porch.Begin(CeuPorchRules.StoryIndex(unix), isNight, resume);
                 _lastHealth = _stats != null ? _stats.CurrentHealth : -1f;
+                if (resume > 0)
+                {
+                    Say2(CeuRound2Texts.PorchResume);
+                }
+
                 SayLine();
                 EventBus.Publish(new RockingChairSatEvent());
             }
@@ -629,9 +654,11 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
                 case CeuPorchEvent.Finished:
                     EventBus.Publish(new Rapadura.Gameplay.Achievements.RegionFeatEvent(Rapadura.Gameplay.Achievements.RegionFeats.CeuPorchStory));
                     Say(CeuMechanicsTexts.PorchEnd);
+                    KeepStory(_porch.Story);
                     break;
                 case CeuPorchEvent.Interrupted:
                     Say(CeuMechanicsTexts.PorchBroken);
+                    KeepLine(_porch.Line);
                     break;
             }
 
@@ -647,6 +674,52 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
                 }
 
                 _lastHealth = _stats.CurrentHealth;
+            }
+        }
+
+        private long _porchDay;
+
+        /// <summary>A sitting cut short: the line it stopped at is kept for the rest of the UTC day (written only on this event).</summary>
+        private void KeepLine(int line)
+        {
+            if (line <= 0 || line >= CeuPorchRules.LinesPerStory || !ServiceLocator.TryGet(out WorldMapProgress progress) || progress == null)
+            {
+                return;
+            }
+
+            progress.SetTimeMark(CeuPorchRules.ResumeMarkKey, CeuPorchRules.EncodeResume(_porchDay, line));
+            Say2(CeuRound2Texts.PorchKeptStop);
+        }
+
+        /// <summary>A story told to the end: the kept line is cleared, the story goes into the mask, and the fifth brings Vô Jorge's memory once.</summary>
+        private void KeepStory(int story)
+        {
+            if (!ServiceLocator.TryGet(out WorldMapProgress progress) || progress == null)
+            {
+                return;
+            }
+
+            if (progress.GetTimeMark(CeuPorchRules.ResumeMarkKey) > 0L)
+            {
+                progress.SetTimeMark(CeuPorchRules.ResumeMarkKey, 0L);
+            }
+
+            int mask = CeuPorchRules.WithStory((int)progress.GetTimeMark(CeuPorchRules.HeardMarkKey), story);
+            progress.SetTimeMark(CeuPorchRules.HeardMarkKey, mask);
+            ServiceLocator.TryGet(out LocalizationManager localization);
+            SayText(CeuRound2Texts.Format(localization, CeuRound2Texts.PorchKept, CeuPorchRules.HeardCount(mask)));
+            if (!CeuPorchRules.AllHeard(mask) || progress.GetTimeMark(CeuPorchRules.AllHeardMarkKey) > 0L)
+            {
+                return;
+            }
+
+            progress.SetTimeMark(CeuPorchRules.AllHeardMarkKey, 1L);
+            Say2(CeuRound2Texts.AllStoriesMemory);
+            Say2(CeuRound2Texts.AllStoriesRadio);
+            string cousin = CeuRound2Texts.LineFor(CeuRound2Texts.Moment.AllStories, Selected());
+            if (cousin != null)
+            {
+                Say2(cousin);
             }
         }
 
@@ -760,6 +833,8 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             {
                 Hide(beam);
             }
+
+            QuietMoonDeck();
         }
 
         private static void Hide(LineRenderer line)

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Rapadura.Core.DI;
 using Rapadura.Core.Localization;
 using Rapadura.Gameplay.Characters;
@@ -50,18 +51,32 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
 
         private void LightStage(WorldMapProgress progress, GreatForgeStage stage)
         {
+            // The stage pays at once: check the whole reward fits before anything is burnt, so a full bag never loses it
+            // (before, the delivery was taken, the stage lit for good and the reward dropped with only a "bag full" line).
+            var reward = new List<KeyValuePair<ItemDefinition, int>>();
+            foreach ((string itemId, int count) in stage.Reward)
+            {
+                ItemDefinition item = ItemDatabase.GetById(itemId);
+                if (item != null)
+                {
+                    reward.Add(new KeyValuePair<ItemDefinition, int>(item, count));
+                }
+            }
+
+            if (!_bag.CanFitAll(reward))
+            {
+                Say(CityServiceTexts.BagFull);
+                return;
+            }
+
             foreach ((string itemId, int count) in stage.Delivery)
             {
                 _bag.RemoveById(itemId, count);
             }
 
-            foreach ((string itemId, int count) in stage.Reward)
+            foreach (KeyValuePair<ItemDefinition, int> pair in reward)
             {
-                ItemDefinition item = ItemDatabase.GetById(itemId);
-                if (item != null && _bag.AddItem(item, count) > 0)
-                {
-                    Say(CityServiceTexts.BagFull);
-                }
+                _bag.AddItem(pair.Key, pair.Value);
             }
 
             progress?.SetDailyMark(GreatForgeRules.StageKey, stage.Number);

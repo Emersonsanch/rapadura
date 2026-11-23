@@ -162,6 +162,8 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
 
         public static bool Lit(float now) => ZarafshanPavilionRules.PetalLit(LitAt, now);
 
+        /// <summary>Also on each Play (domain reload is off: a stale time from the last session would light it again).</summary>
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         public static void Clear() => LitAt = float.NegativeInfinity;
     }
 }

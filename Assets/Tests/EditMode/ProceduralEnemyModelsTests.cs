@@ -537,6 +537,21 @@ namespace Rapadura.Tests
             { ProceduralEnemyKind.SaltSerpent, new[] { ProceduralEnemyParts.Body, ProceduralEnemyParts.Head, ProceduralEnemyParts.Jaw, ProceduralEnemyParts.Tail } },
             { ProceduralEnemyKind.DimmedBlackEagle, new[] { ProceduralEnemyParts.Body, ProceduralEnemyParts.Head, ProceduralEnemyParts.Jaw, ProceduralEnemyParts.WingLeft, ProceduralEnemyParts.WingRight, ProceduralEnemyParts.Tail } },
             { ProceduralEnemyKind.ColdSalamander, new[] { ProceduralEnemyParts.Body, ProceduralEnemyParts.Head, ProceduralEnemyParts.Jaw, ProceduralEnemyParts.Tail, "Leg_FL", "Shin_FL", "Foot_FL", "Leg_HR", "Shin_HR", "Foot_HR" } },
+            // The twenty-seventh pass (WestOwn2BeastRecipes) and the twenty-eighth (PeaksOwnBeastRecipes).
+            { ProceduralEnemyKind.Dingonek, new[] { ProceduralEnemyParts.Body, ProceduralEnemyParts.Head, ProceduralEnemyParts.Jaw, ProceduralEnemyParts.Tail, "Leg_FL", "Shin_FL", "Foot_FL", "Leg_HR", "Shin_HR", "Foot_HR" } },
+            { ProceduralEnemyKind.StripedJackal, new[] { ProceduralEnemyParts.Body, ProceduralEnemyParts.Head, ProceduralEnemyParts.Jaw, ProceduralEnemyParts.Tail, "Leg_FL", "Shin_FL", "Foot_FL", "Leg_HR", "Shin_HR", "Foot_HR" } },
+            { ProceduralEnemyKind.SmokeHyena, new[] { ProceduralEnemyParts.Body, ProceduralEnemyParts.Head, ProceduralEnemyParts.Jaw, ProceduralEnemyParts.Tail, "Leg_FL", "Shin_FL", "Foot_FL", "Leg_HR", "Shin_HR", "Foot_HR" } },
+            { ProceduralEnemyKind.StoneRam, new[] { ProceduralEnemyParts.Body, ProceduralEnemyParts.Head, ProceduralEnemyParts.Jaw, ProceduralEnemyParts.Tail, "Leg_FL", "Shin_FL", "Foot_FL", "Leg_HR", "Shin_HR", "Foot_HR" } },
+            { ProceduralEnemyKind.MossCrocodile, new[] { ProceduralEnemyParts.Body, ProceduralEnemyParts.Head, ProceduralEnemyParts.Jaw, ProceduralEnemyParts.Tail, "Leg_FL", "Shin_FL", "Foot_FL", "Leg_HR", "Shin_HR", "Foot_HR" } },
+            { ProceduralEnemyKind.ShadowGharial, new[] { ProceduralEnemyParts.Body, ProceduralEnemyParts.Head, ProceduralEnemyParts.Jaw, ProceduralEnemyParts.Tail, "Leg_FL", "Shin_FL", "Foot_FL", "Leg_HR", "Shin_HR", "Foot_HR" } },
+            { ProceduralEnemyKind.ShenMist, new[] { ProceduralEnemyParts.Body, ProceduralEnemyParts.StolenLight } },
+            { ProceduralEnemyKind.HundunBubble, new[] { ProceduralEnemyParts.Body, ProceduralEnemyParts.StolenLight } },
+            { ProceduralEnemyKind.RiddleLantern, new[] { ProceduralEnemyParts.Body, ProceduralEnemyParts.StolenLight } },
+            { ProceduralEnemyKind.DimmedEcho, new[] { ProceduralEnemyParts.Body, ProceduralEnemyParts.StolenLight } },
+            { ProceduralEnemyKind.CrackedBell, new[] { ProceduralEnemyParts.Body, ProceduralEnemyParts.StolenLight } },
+            { ProceduralEnemyKind.TaotieServant, new[] { ProceduralEnemyParts.Body, ProceduralEnemyParts.Head, ProceduralEnemyParts.ArmLeft, ProceduralEnemyParts.ArmRight } },
+            { ProceduralEnemyKind.QiongqiCub, new[] { ProceduralEnemyParts.Body, ProceduralEnemyParts.Head, ProceduralEnemyParts.Jaw, ProceduralEnemyParts.Tail, "Leg_FL", "Shin_FL", "Foot_FL", "Leg_HR", "Shin_HR", "Foot_HR" } },
+            { ProceduralEnemyKind.LimeGuardian, new[] { ProceduralEnemyParts.Body, ProceduralEnemyParts.Head, ProceduralEnemyParts.ArmLeft, ProceduralEnemyParts.ArmRight } },
         };
 
         /// <summary>Legs per kind; every one a Leg_ (hip) → Shin_ (knee) → Foot_ chain for ProceduralLegLocomotion.</summary>
@@ -627,6 +642,9 @@ namespace Rapadura.Tests
             { ProceduralEnemyKind.RampartUshabti, 0 }, { ProceduralEnemyKind.GateSmoke, 0 }, { ProceduralEnemyKind.RuinWhirlwind, 0 }, { ProceduralEnemyKind.DarkCrawler, 6 },
             { ProceduralEnemyKind.MudEel, 0 }, { ProceduralEnemyKind.CocoonCaterpillar, 0 }, { ProceduralEnemyKind.ThreadJackdaw, 0 }, { ProceduralEnemyKind.StickyMist, 0 }, { ProceduralEnemyKind.DimmedThornRose, 0 }, { ProceduralEnemyKind.AshWolf, 4 }, { ProceduralEnemyKind.GrottoSpider, 0 }, { ProceduralEnemyKind.BladeStone, 0 }, { ProceduralEnemyKind.StoneLizard, 4 }, { ProceduralEnemyKind.KarezRat, 4 }, { ProceduralEnemyKind.WaterScorpion, 0 },
             { ProceduralEnemyKind.ThirstyRoot, 0 }, { ProceduralEnemyKind.CrystalScorpion, 0 }, { ProceduralEnemyKind.SaltSerpent, 0 }, { ProceduralEnemyKind.DimmedBlackEagle, 0 }, { ProceduralEnemyKind.ColdSalamander, 4 },
+            { ProceduralEnemyKind.Dingonek, 4 }, { ProceduralEnemyKind.StripedJackal, 4 }, { ProceduralEnemyKind.SmokeHyena, 4 }, { ProceduralEnemyKind.StoneRam, 4 }, { ProceduralEnemyKind.MossCrocodile, 4 }, { ProceduralEnemyKind.ShadowGharial, 4 },
+            { ProceduralEnemyKind.ShenMist, 0 }, { ProceduralEnemyKind.HundunBubble, 0 }, { ProceduralEnemyKind.RiddleLantern, 0 },
+            { ProceduralEnemyKind.DimmedEcho, 0 }, { ProceduralEnemyKind.CrackedBell, 0 }, { ProceduralEnemyKind.TaotieServant, 0 }, { ProceduralEnemyKind.QiongqiCub, 4 }, { ProceduralEnemyKind.LimeGuardian, 0 },
         };
 
         [Test]

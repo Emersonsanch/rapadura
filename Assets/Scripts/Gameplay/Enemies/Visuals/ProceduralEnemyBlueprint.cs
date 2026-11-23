@@ -600,6 +600,19 @@ namespace Rapadura.Gameplay.Enemies.Visuals
         /// <summary>Lanterna de Charada Apagada (41): a festival riddle lantern gone out; leans back on the windup and the light flares.</summary>
         RiddleLantern = 578,
 
+        // The twenty-eighth pass of beasts (bible §3.2.1): the roles of Mingcheng (42, 46) and of the Ermidas Suspensas of Farnkesh (56) still
+        // played by another beast after the twenty-seventh (PeaksOwnBeastRecipes). Kinds 590–599 (580–589 left to the passes running beside it).
+        /// <summary>Eco Apagado (56): an Answer that lost its Call, risen from the noise of the cliff; squashes on the windup and the heard sound flares.</summary>
+        DimmedEcho = 590,
+        /// <summary>Sino Rachado (56): a cracked bronze bell of the hermitages adrift on its rope; leans back on the windup and the clapper flares.</summary>
+        CrackedBell = 591,
+        /// <summary>Servo de Taotie (46): a bronze ding vessel walking on its three legs; the handle arms go up on the windup.</summary>
+        TaotieServant = 592,
+        /// <summary>Filhote de Qiongqi (46): the cub of the winged tiger of the Shanhai jing; jaw and tail.</summary>
+        QiongqiCub = 593,
+        /// <summary>Guardião de Cal (42): a lime-plastered guard of the white spires with the bow of Ta-Seti; both arms go up on the windup.</summary>
+        LimeGuardian = 594,
+
         // The twenty-first pass of beasts (bible §3.2.1): the most-seen roles of Regions 10–12, Farnkesh, the Mar Gelado and Hinokura, still
         // played by another beast (NorthOwnBeastRecipes).
         /// <summary>Pedra Voadora (57): a scree stone held up by the ill wind in a ring of grey dust; squashes on the windup and its core flares.</summary>

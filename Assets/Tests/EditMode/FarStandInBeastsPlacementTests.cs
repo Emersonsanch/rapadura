@@ -118,9 +118,10 @@ namespace Rapadura.Tests
         public void EachBeast_SpawnsInItsGroupsClearings_AtTheAreasLevels([ValueSource(nameof(All))] Placement placement) =>
             checks.EachBeast_SpawnsInItsGroupsClearings_AtTheAreasLevels(placement);
 
-        [TestCase(Fark, "sinos_rachados", BrokenLantern)]
+        [TestCase(Fark, "neblinas_do_vento_ruim", BrokenLantern)]
         // The Raio Preso, the Mosquito da Tundra and the Faísca Raivosa have their own beasts since the twenty-first pass
-        // (NorthOwnBeastsPlacementTests).
+        // (NorthOwnBeastsPlacementTests), the Sino Rachado since the twenty-eighth (PeaksOwnBeastsPlacementTests); the broken lantern still
+        // flies with the ill-wind fogs of the Pontes de Vento.
         public void TheSheetsThatSharedTheConstant_KeepTheirStandIn(string region, string group, string standIn)
         {
             OverworldFauna fauna = OverworldLayouts.Get(region).Zones.SelectMany(z => z.Fauna).FirstOrDefault(f => f.Id == group);

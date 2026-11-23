@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Rapadura.Gameplay.Characters;
+using Rapadura.Gameplay.Social;
 
 namespace Rapadura.Gameplay.Party
 {
@@ -24,8 +25,10 @@ namespace Rapadura.Gameplay.Party
         /// <summary>Seconds an invite waits for an answer.</summary>
         public const double InviteSeconds = 60d;
 
+        /// <param name="inviteeBlocks">The invitee's block list (<see cref="PlayerBlockRules"/>); null = blocks nobody. Blocked →
+        /// <see cref="PartyRefusal.InvalidPlayer"/>, the same answer as a missing player, so the block stays private.</param>
         public static PartyResult Invite(PartyState party, string inviterId, string inviteeId, CharacterId? inviteeCousin,
-            bool inviteeInAnyParty, double now)
+            bool inviteeInAnyParty, double now, PlayerBlockList inviteeBlocks = null)
         {
             if (party == null || party.IsDisbanded)
             {
@@ -50,6 +53,11 @@ namespace Rapadura.Gameplay.Party
             if (inviterId == inviteeId)
             {
                 return PartyResult.Refused(PartyRefusal.CannotTargetSelf, party.LeaderId);
+            }
+
+            if (!PlayerBlockRules.CanContact(inviteeBlocks, inviterId, SocialContactKind.PartyInvite))
+            {
+                return PartyResult.Refused(PartyRefusal.InvalidPlayer, party.LeaderId);
             }
 
             if (party.IsMember(inviteeId) || inviteeInAnyParty)

@@ -65,7 +65,7 @@ namespace Rapadura.Gameplay.Guild
         /// <summary>Another guild has the same <see cref="GuildNameRules.NameKey"/>.</summary>
         NameTaken = 20,
 
-        /// <summary>Motto, notice or message of the day over its limit (or empty where text is required).</summary>
+        /// <summary>Motto, notice or message of the day over its limit.</summary>
         TextTooLong = 21,
 
         /// <summary>Motto, notice or message of the day caught by the word filter.</summary>
@@ -126,6 +126,9 @@ namespace Rapadura.Gameplay.Guild
 
         /// <summary>Duration / score target out of range.</summary>
         WarInvalidTerms = 41,
+
+        /// <summary>A notice needs some text.</summary>
+        TextEmpty = 42,
     }
 
     /// <summary>Ranks, highest last-to-first: a higher value outranks a lower one. Never renumber.</summary>
@@ -450,6 +453,18 @@ namespace Rapadura.Gameplay.Guild
             if (_bankLog.Count > BankLogInMemory)
             {
                 _bankLog.RemoveAt(0);
+            }
+        }
+
+        internal void ReplaceLastLog(GuildBankLogEntry entry)
+        {
+            if (_bankLog.Count > 0)
+            {
+                _bankLog[_bankLog.Count - 1] = entry;
+            }
+            else
+            {
+                _bankLog.Add(entry);
             }
         }
 

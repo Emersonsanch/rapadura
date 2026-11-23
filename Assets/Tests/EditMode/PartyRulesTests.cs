@@ -274,8 +274,15 @@ namespace Rapadura.Tests
 
             var family = ((CharacterId[])Enum.GetValues(typeof(CharacterId))).Select((c, i) => At("p" + i, 10, i, cousin: c)).ToArray();
             List<PartyXpShare> full = PartyXpRules.Split(100, 0, 1, family, Vector3.zero);
-            Assert.IsTrue(full.All(s => s.FamilyComplete && s.SiblingBond));
-            Assert.IsTrue(full.All(s => s.Experience == 51)); // 44 × 1,10 × 1,05
+            Assert.IsTrue(full.All(s => s.FamilyComplete));
+            // Lavine is cousin to all and sibling to nobody (DuoStrikeRules.AreSiblings): no Laço de Irmãos for her.
+            int lavine = Array.IndexOf((CharacterId[])Enum.GetValues(typeof(CharacterId)), CharacterId.Lavine);
+            for (int i = 0; i < full.Count; i++)
+            {
+                bool sibling = i != lavine;
+                Assert.AreEqual(sibling, full[i].SiblingBond, full[i].PlayerId);
+                Assert.AreEqual(sibling ? 51 : 48, full[i].Experience, full[i].PlayerId); // 44 × 1,10 × 1,05 / 44 × 1,10
+            }
 
             // The sibling must be at the fight, not just in the roster.
             List<PartyXpShare> apart = PartyXpRules.Split(100, 0, 1,
