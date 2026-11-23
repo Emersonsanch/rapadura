@@ -67,13 +67,21 @@ namespace Rapadura.Gameplay.PvP
         /// <summary>In a duel, a challenge, another queue entry or a match.</summary>
         public readonly bool Busy;
 
-        public ArenaQueueMember(string id, int rating, int level, PkStanding standing = PkStanding.Clean, bool busy = false)
+        /// <summary>
+        /// Level the queue and <see cref="ArenaRules.MinLevel"/> read: the "nível efetivo" of a reset hero
+        /// (<c>RebirthRules.EffectiveLevel</c>, Network.md §15), never below <see cref="Level"/>. Equal to it when not given.
+        /// </summary>
+        public readonly int EffectiveLevel;
+
+        public ArenaQueueMember(string id, int rating, int level, PkStanding standing = PkStanding.Clean, bool busy = false,
+            int effectiveLevel = 0)
         {
             Id = id;
             Rating = rating;
             Level = level;
             Standing = standing;
             Busy = busy;
+            EffectiveLevel = Math.Max(level, effectiveLevel);
         }
     }
 
@@ -363,7 +371,7 @@ namespace Rapadura.Gameplay.PvP
                     return PvpRefusal.Busy;
                 }
 
-                if (m.Level < MinLevel)
+                if (m.EffectiveLevel < MinLevel)
                 {
                     return PvpRefusal.LevelTooLow;
                 }

@@ -164,7 +164,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         private bool PayDance(int amount)
         {
             ItemDefinition gold = ItemDatabase.GetById(DanceGoldItemId);
-            return gold != null && _bag != null && _bag.AddItem(gold, amount) == 0;
+            return gold != null && _bag != null && _bag.CanFit(gold, amount) && _bag.AddItem(gold, amount) == 0;
         }
 
         private void ApplyDanceBuff(float value)

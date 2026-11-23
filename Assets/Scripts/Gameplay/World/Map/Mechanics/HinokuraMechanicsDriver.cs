@@ -327,11 +327,30 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             SayText(HinokuraMechanicsTexts.Format(localization, HinokuraMechanicsTexts.GluttonRecoils, lit));
         }
 
+        // Definition id read once per definition (Object.name allocates a new string on every read).
+        private static readonly System.Collections.Generic.Dictionary<EnemyDefinition, string> GluttonDefinitionIds = new System.Collections.Generic.Dictionary<EnemyDefinition, string>();
+
+        private static string GluttonDefinitionId(EnemyDefinition definition)
+        {
+            if (definition == null)
+            {
+                return null;
+            }
+
+            if (!GluttonDefinitionIds.TryGetValue(definition, out string id))
+            {
+                id = definition.name;
+                GluttonDefinitionIds[definition] = id;
+            }
+
+            return id;
+        }
+
         private static EnemyController FindGlutton()
         {
             foreach (EnemyController enemy in EnemyController.EnabledEnemies)
             {
-                if (enemy != null && enemy.Definition != null && enemy.Definition.name == RegionBossRules.EmberGluttonId && enemy.Health != null && enemy.Health.IsAlive)
+                if (enemy != null && GluttonDefinitionId(enemy.Definition) == RegionBossRules.EmberGluttonId && enemy.Health != null && enemy.Health.IsAlive)
                 {
                     return enemy;
                 }

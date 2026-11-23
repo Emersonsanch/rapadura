@@ -158,10 +158,11 @@ Uma segunda cidade dentro de uma região (Docs/Mapas100.md §3.3) fica **fora** 
   sorte, picareta e a Lamparina Rúnica (após o chefe das Cavernas). Também fixos: as **Asas de Lona do Takhsich** (420 ouro; vestidas nas costas
   dão o pulo duplo da exigência do 24, Ninho de Mahaway) e a **Garrafa de Ar Sereno** (30 ouro; +20% de recuperação de
   vigor por 60 s; 2 vêm também na missão do Takhsich). O 22 não tem exigência. O Ammo nunca para lá. (A Banca de Troca e
-  a feira que muda de galeria ainda faltam.)
+  a feira que muda de galeria entraram em 2026-11-23, linha abaixo.)
 - **Missões da cidade:** Takhsich pede 6 aranhas tirando as teias dos tubos de ar (a Aranha-Tecelã faz a Lagarta de
   Pedra; 4 poções de mana + Lamparina + 65 ouro, 760 XP); depois Farnkhund pede 4 golens fora dos trilhos (o Ushabti
   de Pedra faz a Toupeira-Gigante; Óleo do Fogo Eterno + 70 ouro, 840 XP). Testes: `CityTunnelMarketTests`.
+- **No jogo (2026-11-23): Banca de Troca, feira que muda de galeria e o Engarrafador ajudante** (`TunnelMarketStallRules`, `CityStallsTexts`, `CityStallsMechanicsDriver` + `.Tunnel.cs`, tela `CityServicePanel`; teste `CityStallsRound3Tests`): [E] na porta da Shayn (rua Leste) abre a **Banca de Troca da Shayn**: 3 de um material por 2 de outro do mesmo tipo, sem ouro, 10 trocas por dia UTC; os tipos são pedra/fibra, madeira/erva, minério de ferro/seda de aranha/presa de lobo, ferro/ferrão de escorpião e lasca de golem/asa de morcego (dentro de um tipo o mais caro vale no máximo 1,5× o mais barato, então 2 nunca vendem por mais que os 3 dados). A **Feira da Galeria** fica a 70 m do cruzamento, numa galeria por dia do jogo (nunca a mesma dois dias seguidos), marcada por um facho âmbar; entrar no mercado diz em qual galeria está. Cada galeria vende dois pacotes do que ela cava, ~30% mais baratos que no cruzamento, cada um uma vez por dia do jogo: Norte 2 Lamparinas a Óleo 40 e Óleo do Fogo Eterno 140; Leste 3 Garrafas de Ar Sereno 63 e Amuleto da Sorte 17; Sul 10 Minérios de Ferro 35 e Picareta 12; Oeste 4 Poções de Vida 42 e 4 de Mana 39. Com **O Engarrafador Guloso** vencido (Caderno), ele ajuda na feira: 2 Garrafas de Ar Sereno de graça por dia UTC. Falas da Shayn, da Miwnay, do Engarrafador e de cada primo (Vó Edna e Vô Jorge nelas). Marcas no save só na troca, na compra e no presente. Decisão: troca por tipo de valor em vez de "qualquer material" (senão 3 pedras viravam 2 asas de morcego para vender); a feira anda por dia do jogo (20 min), como a ficha pede, e o presente do Engarrafador é por dia UTC.
 
 As duas cidades de raça da Costa das Monções (região 5) não têm bioma no mapa-múndi: o `CitySpec.Region` é emprestado
 (Floresta, sempre desbloqueada), como o de Taa Pwani, e por isso o `ApplyDefeatIn` sempre acorda na praça delas. Cada uma
@@ -231,10 +232,11 @@ fica em y = 0 dentro de um círculo de ~22 m com 3 saídas de rua, no lugar que 
   dourado, fibra, carne, Amuleto da Sorte, Pedra da Bênção e arco de caça. Como Kirta fica no próprio mapa 28, a Concha
   continua também no Bazar da Mwana (Taa Pwani) para a ida. O Ammo nunca para lá. No jogo (2026-11-23): o **Apito de
   Concha** também é linha fixa (145 de ouro, só aqui): o apito do **Hipocampo de Kirta**, a montaria aquática do recife
-  (`MountReefCatalog`, Docs/Mounts.md §3.15). (Andar no fundo e reacender o coral por faísca: ficha 28 do Mapas100.)
+  (`MountReefCatalog`, Docs/Mounts.md §3.15). (Andar no fundo e reacender o coral por faísca: ficha 28 do Mapas100; o mergulhador do dia da Pughat: linha abaixo.)
 - **Missões da cidade:** o rei Kirta pede 6 bolotas de lodo no recife (o Lodo de Gruta faz a Água-Viva de Lodo; 4 poções
   de vida + 4 de mana + 90 ouro, 1040 XP); depois Pughat pede 5 peixes-lanterna longe da gruta dos mergulhadores (o
   Peixe-Lanterna faz o Peixe-Leão Apagado; **Bolha de Ar** + 100 ouro, 1120 XP). Testes: `CityKirtaTests`.
+- **No jogo (2026-11-23): o mergulhador do dia da Pughat** (`KirtaDiverRescueRules`, `CityStallsMechanicsDriver.Kirta.cs`, teste `CityStallsRound3Tests`): todo dia UTC o Lodo prende um mergulhador do recife (Yassib, Thitmanat, Ilhu ou Pabil, nomes do épico de Kirta) numa das bolhas das duas caminhadas pelo fundo (nunca nas pontas; nunca a mesma bolha dois dias seguidos); um facho verde-água sobe da bolha e a Pughat, na porta dela, diz quem e onde (e, se for no abismo à noite, que os tubarões fecham o sul até o dia). Passar a até 5 m da bolha pelo fundo solta o mergulhador: 75 de ouro + 1 Pedra da Bênção no fundo da lagoa, 110 de ouro + 1 Pedra da Bênção + 1 Bolha de Ar Engarrafada no abismo (tudo ou nada; mochila cheia, ele espera a próxima passada). Fala de cada primo. Marca no save só ao soltar. Decisão: é o motivo para descer pelo fundo todo dia (as trilhas fazem o mesmo caminho a pé); o abismo paga mais porque pede a Bolha do Danel e o dia.
 - **No jogo (2026-11-23): o coral-mãe segue o recife** (`KirtaMotherCoralRules`, `CityTownRecipes.Kirta(int)`, `TownKit.CoralMother`): a receita leva os corais do recife acesos como variante do coral-mãe; 3 dos 7 galhos acesos no começo (a metade leste de sempre), +1 galho por coral, e com os 5 o tronco e a borda do poço também voltam (inteiro). No mundo contínuo, anel em volta do coral-mãe do cinza ao rosa conforme os acesos, e Pughat/Kirta falam do novo galho na primeira passada depois de cada coral (`kirta.mother.seen`). Teste `KirtaTarchonTownTests`. No jogo (2026-11-23): o mundo contínuo monta Kirta já na variante do save e troca o coral-mãe ao vivo quando um coral acende (`CityTownVariantRules`, `OverworldTownVariants`, `CityTownView.ApplyLayout`, só as malhas de enfeite; teste `CityTownVariantTests`).
 
 **Palafitas de Tarchon** (trols, mapa 33; cidade de retorno de 33–34):
@@ -657,7 +659,8 @@ Roda Celeste, Esferas dos Arcontes, Jardim de Luz, Barca do Sol). Testes em `Cit
 - **Missões da cidade:** Yirkap pede 8 gaivotas ladras fora dos varais (a Gaivota Ladra faz a Gaivota-do-Gelo da ficha;
   poções + 220 ouro, 3000 XP); depois Pera pede 6 ursos fora do gelo dos canais (o Urso-Pardo, apagado, faz o Urso-Polar do
   60; **Roupa Térmica** + 220 ouro, 3100 XP). Testes: `CityPortoDaLuaBrancaTests`.
-- **Falta:** rotas e lojas que mudam com a lua, o evento Noite Polar, a Barca da Lua atracando e o G4 da Lavine (Lua
+- **No jogo (2026-11-23): Balcão da Lua do Makarios** (`PortoMoonStallRules`, `CityStallsMechanicsDriver.Porto.cs`, tela `CityServicePanel`; teste `CityStallsRound3Tests`): [E] na porta do Makarios (rua Leste) abre um balcão cujos pacotes seguem a lua das `MoonCanalRules` (8 dias do jogo): 2 por lua, ~30% abaixo do Pamour, cada um uma vez por dia do jogo; a lua nova traz a Lamparina Rúnica (110) e Runas de Clareza, a crescente Chá de Gengibre e Iscas de Prata do Kul, o quarto crescente Corda e Pedras da Bênção, a gibosa Mantas de Lã e Runas de Vento, **a cheia 2 Pedras da Alma (48)** e o Amuleto da Sorte, a minguante Garrafas de Ar Sereno e a Roupa Térmica (700), o quarto minguante Passagem de Dhow (220) e Barco de Junco (450), a velha Grampos (760) e Capa de Tempestade (880). A tela diz a lua de amanhã. Fala de cada primo na compra. Marca no save só na compra.
+- **Falta:** rotas que mudam com a lua (as lojas: Balcão da Lua, 2026-11-23), o evento Noite Polar, a Barca da Lua atracando e o G4 da Lavine (Lua
   Branca). (Já existem, 2026-11-11: os canais que congelam e abrem com a lua, `MoonCanalRules`; a Rena da Aurora; e os
   Móveis da Casa da Lua Branca, conjunto de casa.)
 
@@ -705,7 +708,8 @@ Roda Celeste, Esferas dos Arcontes, Jardim de Luz, Barca do Sol). Testes em `Cit
 - **Missões da cidade:** Akane pede 8 caranguejos fora dos varais de laca (o Caranguejo-do-Coco faz o Caranguejo-Vulcão da
   ficha; poções + 230 ouro, 3200 XP); depois Sango pede 6 gaivotas-brasa fora do Barco-Farol (o Abutre de Brasa faz a
   Gaivota-Brasa; **Barco de Junco** + 230 ouro, 3300 XP). Testes: `CityHinokuraTests`.
-- **Falta:** o bônus de refino da forja acesa do dia, os pátios do palácio no alto, o G4 do Ícaro (Forja de Hinokura) e o
+- **No jogo (2026-11-23): a forja do dia** (`HinokuraDayForgeRules`, `RefineService.ForgeBonus`, `CityStallsMechanicsDriver.Hinokura.cs`, teste `CityStallsRound3Tests`): todo dia UTC uma das três forjas das comportas é a forja do dia (nunca a mesma dois dias seguidos); enquanto ela arde (comporta aberta, 20 min ou até o Tremor apagar) todo refino que pode falhar ganha +5%, somado à Grande Forja e nunca acima de 95%. Na Forja de Hinokura da praça o Kurogane diz qual é e quanto falta; no mundo contínuo um aviso quando ela pega (com a fala do primo) e quando apaga. Nada novo no save: lê as marcas das comportas. Decisão: só o refino (conserto e fusão seguem com os preços de cada cidade); vale em qualquer ferreiro enquanto arde, e o risco é o Tremor no caminho de volta.
+- **Falta:** os pátios do palácio no alto, o G4 do Ícaro (Forja de Hinokura) e o
   conjunto Palácio de Laca. (Já existem, 2026-11-11: os mapas 65–70 no catálogo e no overworld, as comportas e o Tremor,
   `HinokuraForgeRules`, e o Leão-Guardião de Laca.)
 

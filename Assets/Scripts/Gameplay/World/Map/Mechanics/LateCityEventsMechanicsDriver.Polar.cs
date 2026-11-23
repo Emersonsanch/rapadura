@@ -33,6 +33,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         private readonly List<GameObject> _darks = new List<GameObject>();
         private readonly List<KeyValuePair<GameObject, float>> _corpses = new List<KeyValuePair<GameObject, float>>();
         private GameObject _prefab;
+        private float _nextDarkLookup; // no arena prefab or enemy asset yet: look again at most every 2 s, not every frame
         private EnemyDefinition _darkDefinition;
         private Transform[] _lanternTargets;
         private LineRenderer[] _lanternBeams;
@@ -346,6 +347,11 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
                 return false;
             }
 
+            if ((_prefab == null || _darkDefinition == null) && Time.unscaledTime < _nextDarkLookup)
+            {
+                return false;
+            }
+
             if (_prefab == null)
             {
                 EncounterArenaController encounter = FindAnyObjectByType<EncounterArenaController>(FindObjectsInactive.Include);
@@ -355,6 +361,11 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             if (_darkDefinition == null)
             {
                 _darkDefinition = Resources.Load<EnemyDefinition>($"{EncounterPayload.EnemyResourcesFolder}/{PortoPolarNightRules.ShadowEnemyId}");
+            }
+
+            if (_prefab == null || _darkDefinition == null)
+            {
+                _nextDarkLookup = Time.unscaledTime + 2f;
             }
 
             if (_lanternTargets == null)

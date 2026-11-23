@@ -124,11 +124,30 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             _washStoppedSeen = MidasWashBoard.Stopped;
         }
 
+        // Definition id read once per definition (Object.name allocates a new string on every read).
+        private static readonly System.Collections.Generic.Dictionary<EnemyDefinition, string> MidasDefinitionIds = new System.Collections.Generic.Dictionary<EnemyDefinition, string>();
+
+        private static string MidasDefinitionId(EnemyDefinition definition)
+        {
+            if (definition == null)
+            {
+                return null;
+            }
+
+            if (!MidasDefinitionIds.TryGetValue(definition, out string id))
+            {
+                id = definition.name;
+                MidasDefinitionIds[definition] = id;
+            }
+
+            return id;
+        }
+
         private static EnemyController FindMidasStatue()
         {
             foreach (EnemyController enemy in EnemyController.EnabledEnemies)
             {
-                if (enemy != null && enemy.Definition != null && enemy.Definition.name == PactoloGildRules.MidasGoldEnemyId && enemy.Health != null && enemy.Health.IsAlive)
+                if (enemy != null && MidasDefinitionId(enemy.Definition) == PactoloGildRules.MidasGoldEnemyId && enemy.Health != null && enemy.Health.IsAlive)
                 {
                     return enemy;
                 }

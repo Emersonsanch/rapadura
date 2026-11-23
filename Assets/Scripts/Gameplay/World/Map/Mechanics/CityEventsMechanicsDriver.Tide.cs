@@ -25,6 +25,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         private readonly List<GameObject> _filhos = new List<GameObject>();
         private readonly List<KeyValuePair<GameObject, float>> _corpses = new List<KeyValuePair<GameObject, float>>();
         private GameObject _prefab;
+        private float _nextTideLookup; // no arena prefab or enemy asset yet: look again at most every 2 s, not every frame
         private EnemyDefinition _filhoDefinition;
         private Transform[] _ghatTargets;
         private LineRenderer[] _shoreBeams;
@@ -193,6 +194,11 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
                 return false;
             }
 
+            if ((_prefab == null || _filhoDefinition == null) && Time.unscaledTime < _nextTideLookup)
+            {
+                return false;
+            }
+
             if (_prefab == null)
             {
                 EncounterArenaController encounter = FindAnyObjectByType<EncounterArenaController>(FindObjectsInactive.Include);
@@ -202,6 +208,11 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             if (_filhoDefinition == null)
             {
                 _filhoDefinition = Resources.Load<EnemyDefinition>($"{EncounterPayload.EnemyResourcesFolder}/{JhilpurMudTideRules.FilhoEnemyId}");
+            }
+
+            if (_prefab == null || _filhoDefinition == null)
+            {
+                _nextTideLookup = Time.unscaledTime + 2f;
             }
 
             if (_ghatTargets == null)

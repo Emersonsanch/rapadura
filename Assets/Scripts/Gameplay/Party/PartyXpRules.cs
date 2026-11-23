@@ -18,7 +18,14 @@ namespace Rapadura.Gameplay.Party
         /// <summary>Offline, on another map or in another instance: never eligible, whatever the position says.</summary>
         public readonly bool Away;
 
-        public PartyKillMember(string playerId, int level, bool alive, Vector3 position, CharacterId? cousin = null, bool away = false)
+        /// <summary>
+        /// Level the anti power-leveling band reads: the "nível efetivo" of a reset hero (<c>RebirthRules.EffectiveLevel</c>,
+        /// Network.md §15), never below <see cref="Level"/>. Equal to it when not given. The member's own XP stays on <see cref="Level"/>.
+        /// </summary>
+        public readonly int EffectiveLevel;
+
+        public PartyKillMember(string playerId, int level, bool alive, Vector3 position, CharacterId? cousin = null, bool away = false,
+            int effectiveLevel = 0)
         {
             PlayerId = playerId;
             Level = level;
@@ -26,7 +33,11 @@ namespace Rapadura.Gameplay.Party
             Position = position;
             Cousin = cousin;
             Away = away;
+            EffectiveLevel = Math.Max(level, effectiveLevel);
         }
+
+        /// <summary><see cref="EffectiveLevel"/> floored at 1: the band level and the weight in the level sum.</summary>
+        public int BandLevel => Math.Max(1, EffectiveLevel);
     }
 
     /// <summary>Why a member got no share of a kill (texts: <see cref="PartyTexts.XpCutKey"/>). Never renumber.</summary>
@@ -75,6 +86,11 @@ namespace Rapadura.Gameplay.Party
     ///           × família (PartyFamilyRules: ×1,10 Família Completa, ×1,05 Laço de Irmãos)
     /// fora da faixa: parte 0, mas o nível continua na soma (a XP dele queima)
     /// </code>
+    /// <b>Reset (Network.md §15).</b> The band, its lowest reference and the weight of each member in Σ nível use the
+    /// member's <see cref="PartyKillMember.EffectiveLevel"/> (a reset hero back at level 1 keeps its level-400 gear); the
+    /// member's own numerator (nível_i) and the level-difference cut stay on the current <see cref="PartyKillMember.Level"/>.
+    /// So a reset hero carrying a lowbie burns like the level-400 it really is (the lowbie keeps 10/410, not 10/11), and
+    /// with no reset hero in the party every number is exactly as before.
     /// Why the band burns instead of redistributing: a level-80 carrying a level-10 neither earns anything from the kill nor
     /// hands its share to the lowbie, who keeps only its own small proportional part (10/90 of the pool), so
     /// "power-leveling" pays nobody. Each member's result is before its own session multipliers (fôlego, descansado,
@@ -157,9 +173,9 @@ namespace Rapadura.Gameplay.Party
             {
                 if (IsEligible(member, killPosition))
                 {
-                    int level = Math.Max(1, member.Level);
-                    lowest = Math.Min(lowest, level);
-                    levelSum += level;
+                    int bandLevel = member.BandLevel;
+                    lowest = Math.Min(lowest, bandLevel);
+                    levelSum += bandLevel;
                     presentCousins.Add(member.Cousin);
                 }
             }
@@ -167,7 +183,7 @@ namespace Rapadura.Gameplay.Party
             int inBand = 0;
             foreach (PartyKillMember member in members)
             {
-                if (IsEligible(member, killPosition) && IsInLevelBand(member.Level, lowest))
+                if (IsEligible(member, killPosition) && IsInLevelBand(member.BandLevel, lowest))
                 {
                     inBand++;
                 }
@@ -180,7 +196,7 @@ namespace Rapadura.Gameplay.Party
             foreach (PartyKillMember member in members)
             {
                 PartyXpCut cut = CutOf(member, killPosition);
-                if (cut == PartyXpCut.None && !IsInLevelBand(member.Level, lowest))
+                if (cut == PartyXpCut.None && !IsInLevelBand(member.BandLevel, lowest))
                 {
                     cut = PartyXpCut.OutOfLevelBand;
                 }

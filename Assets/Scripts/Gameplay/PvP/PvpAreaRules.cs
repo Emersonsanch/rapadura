@@ -65,10 +65,14 @@ namespace Rapadura.Gameplay.PvP
             return !SafeZoneRules.IsSafe(zone) && !IsProtected(region) && level >= OpenPvpMinLevel;
         }
 
-        /// <summary>Open PvP between two players: both must qualify where each one stands.</summary>
+        /// <summary>
+        /// Open PvP between two players: both must qualify where each one stands, by <see cref="PvpCombatant.EffectiveLevel"/>
+        /// (a reset hero back at level 1 with its old gear still counts as the level it reached; Network.md §15).
+        /// </summary>
         public static bool OpenPvpBetween(PvpCombatant attacker, PvpCombatant target)
         {
-            return OpenPvpAllowed(attacker.Region, attacker.Zone, attacker.Level) && OpenPvpAllowed(target.Region, target.Zone, target.Level);
+            return OpenPvpAllowed(attacker.Region, attacker.Zone, attacker.EffectiveLevel)
+                && OpenPvpAllowed(target.Region, target.Zone, target.EffectiveLevel);
         }
 
         /// <summary>Guild war (declared by the guild front) counts outside cities and outside the protected regions; no level gate here.</summary>

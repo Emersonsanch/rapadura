@@ -221,8 +221,14 @@ namespace Rapadura.Gameplay.PvP
         public readonly string ArenaMatchId;
         public readonly int ArenaTeam;
 
+        /// <summary>
+        /// Level the open-PvP gate reads (<see cref="PvpAreaRules.OpenPvpMinLevel"/>): the "nível efetivo" of a reset hero
+        /// (<c>RebirthRules.EffectiveLevel</c>, Network.md §15), never below <see cref="Level"/>. Equal to it when not given.
+        /// </summary>
+        public readonly int EffectiveLevel;
+
         public PvpCombatant(string id, ZoneKind zone, MapRegion region, int level, DuelState duel = null,
-            string arenaMatchId = null, int arenaTeam = 0)
+            string arenaMatchId = null, int arenaTeam = 0, int effectiveLevel = 0)
         {
             Id = id;
             Zone = zone;
@@ -231,6 +237,7 @@ namespace Rapadura.Gameplay.PvP
             Duel = duel;
             ArenaMatchId = arenaMatchId;
             ArenaTeam = arenaTeam;
+            EffectiveLevel = level > effectiveLevel ? level : effectiveLevel;
         }
 
         public bool InSealedDuel => Duel != null && Duel.IsSealed && Duel.IsParticipant(Id);

@@ -18,13 +18,20 @@ namespace Rapadura.Gameplay.TimedEvents
         /// <summary>At the event's gate now (party members elsewhere stay behind).</summary>
         public readonly bool Present;
 
-        public TimedEventEntrant(string playerId, int level, int tickets, long gold, bool present = true)
+        /// <summary>
+        /// Level the room band reads: the "nível efetivo" of a reset hero (<c>RebirthRules.EffectiveLevel</c>, Network.md §15),
+        /// never below <see cref="Level"/>, so old gear goes to the room of the level it was earned at. Equal to it when not given.
+        /// </summary>
+        public readonly int EffectiveLevel;
+
+        public TimedEventEntrant(string playerId, int level, int tickets, long gold, bool present = true, int effectiveLevel = 0)
         {
             PlayerId = playerId;
             Level = level;
             Tickets = tickets;
             Gold = gold;
             Present = present;
+            EffectiveLevel = Math.Max(level, effectiveLevel);
         }
     }
 
@@ -362,7 +369,7 @@ namespace Rapadura.Gameplay.TimedEvents
             out int roomIndex, out TimedEventPayment payment)
         {
             payment = default;
-            TimedEventRefusal band = RoomFor(set.Definition, entrant.Level, out roomIndex);
+            TimedEventRefusal band = RoomFor(set.Definition, entrant.EffectiveLevel, out roomIndex);
             if (band != TimedEventRefusal.None)
             {
                 return band;

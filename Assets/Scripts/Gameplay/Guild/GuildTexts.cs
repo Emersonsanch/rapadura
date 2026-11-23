@@ -116,6 +116,8 @@ namespace Rapadura.Gameplay.Guild
             (GuildRefusal.WarNotParticipant, "Your guild is not in that war.", "Sua guilda não está nessa guerra."),
             (GuildRefusal.WarInvalidTerms, "Duration 1–72 h and a kill target up to 500.", "Duração de 1 a 72 h e meta de até 500 abates."),
             (GuildRefusal.TextEmpty, "Write something first.", "Escreva algo primeiro."),
+            (GuildRefusal.ItemHasOwnData, "Generated, refined or worn pieces cannot go into the bank; it keeps only plain items.",
+                "Peças geradas, refinadas ou gastas não entram no banco; ele só guarda itens comuns."),
         };
 
         private static readonly (GuildRank Rank, string En, string Pt)[] RankTexts =

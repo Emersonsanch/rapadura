@@ -123,11 +123,12 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             _risen.Clear();
         }
 
-        private void ReleaseEchoCorpses()
+        /// <summary>Clears the fallen Ecos whose few seconds are over; <paramref name="all"/> (the driver going away) clears every one now.</summary>
+        private void ReleaseEchoCorpses(bool all = false)
         {
             for (int i = _risenCorpses.Count - 1; i >= 0; i--)
             {
-                if (_risenCorpses[i].Key == null || Time.time >= _risenCorpses[i].Value)
+                if (all || _risenCorpses[i].Key == null || Time.time >= _risenCorpses[i].Value)
                 {
                     if (_risenCorpses[i].Key != null)
                     {

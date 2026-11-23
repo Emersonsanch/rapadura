@@ -29,6 +29,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         private readonly List<GameObject> _scarabs = new List<GameObject>();
         private readonly List<KeyValuePair<GameObject, float>> _corpses = new List<KeyValuePair<GameObject, float>>();
         private GameObject _prefab;
+        private float _nextScarabLookup; // no arena prefab or enemy asset yet: look again at most every 2 s, not every frame
         private EnemyDefinition _scarabDefinition;
         private Transform[] _postTargets;
         private LineRenderer[] _postBeams;
@@ -293,6 +294,11 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
                 return false;
             }
 
+            if ((_prefab == null || _scarabDefinition == null) && Time.unscaledTime < _nextScarabLookup)
+            {
+                return false;
+            }
+
             if (_prefab == null)
             {
                 EncounterArenaController encounter = FindAnyObjectByType<EncounterArenaController>(FindObjectsInactive.Include);
@@ -302,6 +308,11 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             if (_scarabDefinition == null)
             {
                 _scarabDefinition = Resources.Load<EnemyDefinition>($"{EncounterPayload.EnemyResourcesFolder}/{MesektetLateBarqueRules.GuardEnemyId}");
+            }
+
+            if (_prefab == null || _scarabDefinition == null)
+            {
+                _nextScarabLookup = Time.unscaledTime + 2f;
             }
 
             if (_postTargets == null)

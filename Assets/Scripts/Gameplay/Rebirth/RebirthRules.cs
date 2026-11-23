@@ -26,8 +26,12 @@ namespace Rapadura.Gameplay.Rebirth
     ///
     /// <para><b>Eco da Luz:</b> below <see cref="RebirthState.PeakLevel"/> kill XP is ×<see cref="EchoXpMultiplier"/> (4), so a
     /// cycle back to 400 takes ~120 h of hunting instead of ~460 h. Kill XP only (quests are kept finished and not offered
-    /// again) and it stops at the old level, so it never speeds anyone past where they were. Party XP still applies its
-    /// 20-level band (<c>PartyXpRules</c>), so a reset hero cannot be carried by a level-400 party either.</para>
+    /// again) and it stops at the old level, so it never speeds anyone past where they were. Party XP cannot carry a reset
+    /// hero either: its own part is its current level over the sum of the members' effective levels (<c>PartyXpRules</c>).</para>
+    ///
+    /// <para><b>Nível efetivo.</b> Items have no level requirement and a reset keeps them, so every online gate that sorts
+    /// players by level (arena, open PvP, event rooms, the party band) reads <see cref="EffectiveLevel"/> =
+    /// <c>max(level, PeakLevel)</c> once the hero has reset (Network.md §15).</para>
     ///
     /// <para><b>NG+ and reset.</b> The single-player Nova Jornada+ (<c>NewGamePlusRules</c>) resets the <i>world</i> of a
     /// save (story beats, bosses, region quests) and scales enemies by the save's cycle; in a shared online world neither is
@@ -140,6 +144,12 @@ namespace Rapadura.Gameplay.Rebirth
         {
             return Math.Max(0, UnlockedBonusPoints(totalBonusPoints, toLevel) - UnlockedBonusPoints(totalBonusPoints, fromLevel));
         }
+
+        /// <summary>
+        /// Level the online gates read (arena, open PvP, event rooms, party band): <see cref="RebirthState.EffectiveLevel"/>;
+        /// <paramref name="level"/> itself for a null record or a hero that never reset.
+        /// </summary>
+        public static int EffectiveLevel(RebirthState state, int level) => state == null ? level : state.EffectiveLevel(level);
 
         public static bool IsEchoActive(RebirthState state, int level) => state != null && state.HasEverReset && level < state.PeakLevel;
 

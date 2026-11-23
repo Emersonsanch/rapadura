@@ -129,6 +129,12 @@ namespace Rapadura.Gameplay.Guild
 
         /// <summary>A notice needs some text.</summary>
         TextEmpty = 42,
+
+        /// <summary>
+        /// The piece carries its own data (generated roll, refine, options, worn durability): the bank keeps only id and count,
+        /// so it would lose them (<see cref="GuildBankRules.CarriesOwnData"/>).
+        /// </summary>
+        ItemHasOwnData = 43,
     }
 
     /// <summary>Ranks, highest last-to-first: a higher value outranks a lower one. Never renumber.</summary>

@@ -200,7 +200,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         private bool Pay(int amount)
         {
             ItemDefinition gold = ItemDatabase.GetById(GoldItemId);
-            if (gold == null || _bag == null || _bag.AddItem(gold, amount) > 0)
+            if (gold == null || _bag == null || !_bag.CanFit(gold, amount) || _bag.AddItem(gold, amount) > 0)
             {
                 Say(NartesMechanicsTexts.BagFull);
                 return false;

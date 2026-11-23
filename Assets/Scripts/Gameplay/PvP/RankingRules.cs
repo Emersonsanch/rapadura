@@ -193,5 +193,15 @@ namespace Rapadura.Gameplay.PvP
 
         /// <summary>Whether a board is cleared at a season change.</summary>
         public static bool ResetsWithSeason(RankingBoard board) => board != RankingBoard.Level;
+
+        /// <summary>
+        /// A copy of <paramref name="e"/> with the season's event points and the time they were reached (the Events board's
+        /// tie-break). Every other field is kept. Fed by <c>TimedEvents.TimedEventSeasonPoints</c> (Docs/Network.md §14).
+        /// </summary>
+        public static RankingEntry WithEventPoints(RankingEntry e, long eventPoints, double reachedAt)
+        {
+            return new RankingEntry(e.PlayerId, e.Name, e.Level, e.Experience, e.PvpRating, e.PvpWins, e.PvpMatches, e.PvpPlaced,
+                Math.Max(0L, eventPoints), reachedAt, e.Resets, e.GrandResets);
+        }
     }
 }

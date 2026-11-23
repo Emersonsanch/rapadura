@@ -1,3 +1,6 @@
+using Rapadura.Gameplay.Inventory;
+using Rapadura.Gameplay.Items;
+
 namespace Rapadura.Gameplay.Guild
 {
     /// <summary>
@@ -139,6 +142,41 @@ namespace Rapadura.Gameplay.Guild
 
             guild.SetItemCount(itemId, have + count);
             return Log(guild, member, GuildBankAction.DepositItem, itemId, count, have + count, now);
+        }
+
+        /// <summary>
+        /// <see cref="DepositItem(GuildState, string, string, int, bool, double)"/> for one bag entry: refused with
+        /// <see cref="GuildRefusal.ItemHasOwnData"/> when the entry carries data the bank cannot keep (<see cref="CarriesOwnData"/>).
+        /// </summary>
+        public static GuildResult DepositItem(GuildState guild, string playerId, InventorySlotData slot, ItemDefinition item, int count, bool itemTradable,
+            double now)
+        {
+            if (CarriesOwnData(slot, item))
+            {
+                return GuildRules.Refused(guild, GuildRefusal.ItemHasOwnData);
+            }
+
+            return DepositItem(guild, playerId, slot != null ? slot.itemId : null, count, itemTradable, now);
+        }
+
+        /// <summary>
+        /// True when the bag entry is more than its id and count: a generated roll (affixes, name, rarity), refine, MU
+        /// options or sockets (<see cref="InventorySlotData.HasGeneratedData"/>), or durability below the item's maximum.
+        /// The bank stores only <c>itemId</c> + count, so such a piece would come out plain and new.
+        /// </summary>
+        public static bool CarriesOwnData(InventorySlotData slot, ItemDefinition item)
+        {
+            if (slot == null || slot.IsEmpty)
+            {
+                return false;
+            }
+
+            if (slot.HasGeneratedData)
+            {
+                return true;
+            }
+
+            return item != null && item.HasDurability && slot.currentDurability < item.MaxDurability;
         }
 
         public static GuildResult WithdrawItem(GuildState guild, string playerId, string itemId, int count, double now)

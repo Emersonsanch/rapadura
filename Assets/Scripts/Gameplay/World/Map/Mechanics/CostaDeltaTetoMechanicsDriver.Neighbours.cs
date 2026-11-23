@@ -38,7 +38,20 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         private bool _wispLanternInBag;
         private bool[] _neighbourAwake;
         private int[] _neighbourDays;
+        private string[] _neighbourMarkKeys;
         private float _nextWispBagCheck;
+
+        /// <summary>The daily-mark key of each neighbour, built once (no string per neighbour per frame).</summary>
+        private static string[] NeighbourMarkKeys(TarchonNeighbour[] neighbours)
+        {
+            var keys = new string[neighbours.Length];
+            for (int i = 0; i < neighbours.Length; i++)
+            {
+                keys[i] = TarchonLanternRules.MarkKey(neighbours[i].Id);
+            }
+
+            return keys;
+        }
 
         private void TickNeighbours(Vector2 local)
         {
@@ -59,9 +72,10 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             int today = GameDay();
             bool[] awake = _neighbourAwake ??= new bool[neighbours.Length];
             int[] days = _neighbourDays ??= new int[neighbours.Length];
+            string[] markKeys = _neighbourMarkKeys ??= NeighbourMarkKeys(neighbours);
             for (int i = 0; i < neighbours.Length; i++)
             {
-                days[i] = progress != null ? progress.GetDailyMark(TarchonLanternRules.MarkKey(neighbours[i].Id)) : 0;
+                days[i] = progress != null ? progress.GetDailyMark(markKeys[i]) : 0;
                 awake[i] = TarchonLanternRules.AwakeToday(days[i], today);
             }
 

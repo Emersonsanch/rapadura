@@ -427,7 +427,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             }
 
             ItemDefinition gold = ItemDatabase.GetById(NuggetItemId);
-            if (gold == null || _bag == null || _bag.AddItem(gold, nuggets) > 0)
+            if (gold == null || _bag == null || !_bag.CanFit(gold, nuggets) || _bag.AddItem(gold, nuggets) > 0)
             {
                 SayText(TetoCartTexts.Get(localization, TetoCartTexts.BagFull), 1.4f);
                 return;

@@ -157,12 +157,15 @@ namespace Rapadura.Gameplay.Refining
 
         /// <summary>
         /// The refine chance the lit Grande Forja of the Salões de Bronze adds for this save
-        /// (<see cref="World.Map.Mechanics.GreatForgeRules.RefineBonus"/>; 0 without a save).
+        /// (<see cref="World.Map.Mechanics.GreatForgeRules.RefineBonus"/>; 0 without a save), plus Hinokura's forge of the day while it burns
+        /// (<see cref="World.Map.Mechanics.HinokuraDayForgeRules"/>).
         /// </summary>
         public static float ForgeBonus()
         {
             Rapadura.Core.DI.ServiceLocator.TryGet(out World.Map.WorldMapProgress progress);
-            return World.Map.Mechanics.GreatForgeRules.RefineBonus(World.Map.Mechanics.GreatForgeRules.StagesLit(progress));
+            // + Hinokura's forge of the day while it burns (HinokuraDayForgeRules, +5 %; the cap stays RefineRules.MaxChance).
+            return World.Map.Mechanics.GreatForgeRules.RefineBonus(World.Map.Mechanics.GreatForgeRules.StagesLit(progress))
+                + World.Map.Mechanics.HinokuraDayForgeRules.RefineBonus(progress, System.DateTimeOffset.UtcNow.ToUnixTimeSeconds());
         }
 
         public static RefinePreview Preview(InventoryManager bag, RefineTarget target, bool useCharm)

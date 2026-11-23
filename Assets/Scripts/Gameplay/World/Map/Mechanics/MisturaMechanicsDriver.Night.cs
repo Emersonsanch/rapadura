@@ -56,6 +56,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         private readonly Dictionary<int, float> _smokeLastLit = new Dictionary<int, float>();
         private float[] _tarReadyAt;
         private GameObject _summonPrefab;
+        private float _nextSummonLookup; // no arena prefab or enemy asset yet: look again at most every 2 s, not every frame
         private EnemyDefinition _shadowDefinition;
         private EnemyDefinition _tarDefinition;
         private bool _nightBeastsUp;
@@ -330,6 +331,11 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
                 return false;
             }
 
+            if ((_summonPrefab == null || definition == null) && Time.unscaledTime < _nextSummonLookup)
+            {
+                return false;
+            }
+
             if (_summonPrefab == null)
             {
                 EncounterArenaController encounter = FindAnyObjectByType<EncounterArenaController>(FindObjectsInactive.Include);
@@ -339,6 +345,11 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             if (definition == null)
             {
                 definition = Resources.Load<EnemyDefinition>($"{EncounterPayload.EnemyResourcesFolder}/{enemyId}");
+            }
+
+            if (_summonPrefab == null || definition == null)
+            {
+                _nextSummonLookup = Time.unscaledTime + 2f;
             }
 
             return _summonPrefab != null && definition != null;

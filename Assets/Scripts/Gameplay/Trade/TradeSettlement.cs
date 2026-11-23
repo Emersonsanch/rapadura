@@ -360,7 +360,7 @@ namespace Rapadura.Gameplay.Trade
         /// <see cref="InventoryManager.TryAddCopy"/> do (plain stacks first in grid order, then the first free area of the
         /// footprint, MU scan order), on plain data so the server runs it too.
         /// </summary>
-        private sealed class TradeBag
+        internal sealed class TradeBag
         {
             private readonly InventorySlotData[] _slots;
             private readonly int _columns;

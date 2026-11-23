@@ -65,7 +65,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
 
             GriffinGift gift = GriffinGiftRules.GiftFor(hero.Value);
             ItemDefinition item = ItemDatabase.GetById(gift.ItemId);
-            if (item == null || _bag == null || _bag.AddItem(item, gift.Quantity) > 0)
+            if (item == null || _bag == null || !_bag.CanFit(item, gift.Quantity) || _bag.AddItem(item, gift.Quantity) > 0)
             {
                 SayText(GriffinGiftTexts.Get(localization, GriffinGiftTexts.BagFull));
                 return;

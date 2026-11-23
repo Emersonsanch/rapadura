@@ -121,6 +121,16 @@ namespace Rapadura.Gameplay.Rebirth
         public int TotalBonusPoints => RebirthRules.TotalBonusPoints(EffectiveResets);
 
         public bool HasEverReset => EffectiveResets > 0;
+
+        /// <summary>
+        /// "Nível efetivo" (Network.md §15): <c>max(level, PeakLevel)</c> for a hero that has reset, else <paramref name="level"/>.
+        /// A reset keeps the equipment (<see cref="RebirthPart.Items"/>) and items have no level requirement, so every gate
+        /// that sorts players by level (arena minimum and queue, open PvP, event rooms, the party's anti power-leveling band)
+        /// reads this instead of the bare level. <see cref="PeakLevel"/> is the highest level reached before any reset of
+        /// this record and is never lowered (not even by a grand reset, which also keeps the gear). XP and stats stay on the
+        /// current level.
+        /// </summary>
+        public int EffectiveLevel(int level) => HasEverReset ? Math.Max(level, PeakLevel) : level;
     }
 
     /// <summary>The character as the server sees it at the moment of the request (filled from its own records).</summary>

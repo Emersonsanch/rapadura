@@ -138,6 +138,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             }
 
             Leave();
+            ReleaseEchoCorpses(true);
         }
 
         private void OnDestroy()
