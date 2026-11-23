@@ -1412,13 +1412,14 @@ namespace Rapadura.Gameplay.World.Cities
             }
 
             localization.LoadEntries(All.Where(entry => !localization.HasKey(entry.Key)).ToList());
+            CityDailyQuestTexts.EnsureLoaded(localization);
         }
 
         /// <summary>pt-BR text of <paramref name="key"/> without a manager, or null.</summary>
         public static string GetFallback(string key)
         {
             LocalizationEntry entry = All.FirstOrDefault(e => e.Key == key);
-            return entry?.PtBR;
+            return entry?.PtBR ?? CityDailyQuestTexts.GetFallback(key);
         }
     }
 }

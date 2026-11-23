@@ -20,9 +20,11 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
     /// the Salões de Bronze (one free rune a day), the Lira do Touro in Aratta (the song of the day: light feet for 5 min) and the war drum of
     /// the Tambor Rubro (the Têmpera do Tambor while the drums play). Added to the overworld root; each point exists only when the layout holds
     /// its region. The song is a short StaminaRegen-style effect refreshed while it applies, so it ends by itself (on a mount, in a fight, or if
-    /// the driver stops); the Têmpera is one 10-minute effect. The only saves are the two daily marks. The hero keeps the controls.
+    /// the driver stops); the Têmpera is one 10-minute effect. The only saves are the daily marks. The hero keeps the controls.
+    /// Also the Corrida de Shulgi and Shulgi's ribbon post in Aratta (<see cref="ShulgiRaceRules"/>, CityServicesMechanicsDriver.Race.cs) and
+    /// the mouth of the Grande Forja in the Salões de Bronze (<see cref="GreatForgeRules"/>, CityServicesMechanicsDriver.Forge.cs).
     /// </summary>
-    public sealed class CityServicesMechanicsDriver : MonoBehaviour, IRegionMechanics
+    public sealed partial class CityServicesMechanicsDriver : MonoBehaviour, IRegionMechanics
     {
         private const string PlayerTag = "Player";
         private const string SongSource = "city_lyre_song";
@@ -40,6 +42,9 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             Rune,
             Lyre,
             Temper,
+            RaceStart,
+            RibbonPost,
+            Forge,
         }
 
         private struct ServicePoint
@@ -70,7 +75,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         public Rect[] MechanicsAreas => _areas;
 
         /// <inheritdoc/>
-        public bool MechanicsBusy => Time.time < _songUntil;
+        public bool MechanicsBusy => Time.time < _songUntil || _race != null;
 
         private void Start()
         {
@@ -82,6 +87,13 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
                 ServiceKind.Lyre, CityServiceRules.LyreReach);
             AddPoint(layout, OverworldLayouts.AreiasAnchorZoneId, OverworldLayouts.TamborRubroOffset + CityTownRecipes.TamborRubroTemperDrum,
                 ServiceKind.Temper, CityServiceRules.TemperReach);
+            AddPoint(layout, OverworldLayouts.CostaAnchorZoneId, OverworldLayouts.ShulgiRaceStart, ServiceKind.RaceStart, ShulgiRaceRules.StartReach);
+            AddPoint(layout, OverworldLayouts.CostaAnchorZoneId, OverworldLayouts.ShulgiRibbonPost, ServiceKind.RibbonPost, ShulgiRaceRules.TradeReach);
+            AddPoint(layout, OverworldLayouts.KaggenAnchorZoneId, OverworldLayouts.SaloesOffset + CityTownRecipes.BronzeHallsForgeMouth,
+                ServiceKind.Forge, GreatForgeRules.Reach);
+            OverworldZone costa = layout?.Zone(OverworldLayouts.CostaAnchorZoneId);
+            _raceOrigin = costa != null ? costa.Origin : Vector2.zero;
+            _raceLayout = layout;
             if (_points.Count == 0)
             {
                 enabled = false;
@@ -107,7 +119,16 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         private void OnDisable()
         {
             SetSong(false);
+            AbandonRace();
             _hintPoint = -1;
+        }
+
+        private void OnDestroy()
+        {
+            if (_lineMaterial != null)
+            {
+                Destroy(_lineMaterial);
+            }
         }
 
         private void Update()
@@ -120,6 +141,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             bool alive = _stats == null || _stats.IsAlive;
             bool inCombat = InCombat();
             TickSong(alive, inCombat);
+            TickRace(alive);
             if (!alive || _controller.Input == null)
             {
                 _hintPoint = -1;
@@ -130,6 +152,11 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             int at = -1;
             for (int i = 0; i < _points.Count; i++)
             {
+                if (_race != null && _points[i].Kind == ServiceKind.RaceStart)
+                {
+                    continue;
+                }
+
                 if (CityServiceRules.InReach(_points[i].World, hero, _points[i].Reach))
                 {
                     at = i;
@@ -165,6 +192,15 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
                     break;
                 case ServiceKind.Lyre:
                     UseLyre(today, inCombat);
+                    break;
+                case ServiceKind.RaceStart:
+                    StartRace(inCombat);
+                    break;
+                case ServiceKind.RibbonPost:
+                    UseRibbons();
+                    break;
+                case ServiceKind.Forge:
+                    UseForge(today);
                     break;
                 default:
                     UseTemper(today, inCombat);
@@ -210,6 +246,12 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
                     return CityServiceTexts.RunePrompt;
                 case ServiceKind.Lyre:
                     return CityServiceTexts.LyrePrompt;
+                case ServiceKind.RaceStart:
+                    return CityServiceTexts.RacePrompt;
+                case ServiceKind.RibbonPost:
+                    return CityServiceTexts.RibbonPrompt;
+                case ServiceKind.Forge:
+                    return CityServiceTexts.ForgePrompt;
                 default:
                     return CityServiceTexts.TemperPrompt;
             }
@@ -229,12 +271,17 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
                 return;
             }
 
+            // Once the Grande Forja's Bigorna is lit, Puzur engraves two (GreatForgeRules.RunesPerDay).
+            int runes = GreatForgeRules.RunesPerDay(GreatForgeRules.StagesLit(progress));
             ItemDefinition rune = ItemDatabase.GetById(CityServiceRules.RuneOf(today));
-            if (rune == null || _bag == null || _bag.AddItem(rune, 1) > 0)
+            int left = rune != null && _bag != null ? _bag.AddItem(rune, runes) : runes;
+            if (left >= runes)
             {
                 Say(CityServiceTexts.BagFull);
                 return;
             }
+
+            runes -= left;
 
             progress?.SetDailyMark(CityServiceRules.RuneDailyKey, (int)today);
             CharacterId? cousin = Hero();
@@ -244,7 +291,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             }
 
             ServiceLocator.TryGet(out LocalizationManager localization);
-            SayAbove(string.Format(CityServiceTexts.Get(localization, CityServiceTexts.RuneReceived), rune.DisplayName, 1));
+            SayAbove(string.Format(CityServiceTexts.Get(localization, CityServiceTexts.RuneReceived), rune.DisplayName, runes));
         }
 
         // ------------------------------------------------------------------

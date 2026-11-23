@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using Rapadura.Core.Events;
+using Rapadura.Gameplay.Combat;
 using Rapadura.Gameplay.Enemies;
 using Rapadura.Gameplay.Skills;
 using Rapadura.Gameplay.World.Map.Overworld;
@@ -9,7 +11,9 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
     /// <summary>
     /// The calves' glow of the Charco do Ninki Nanka (34, <see cref="NinkiGazeRules"/>), on the same driver as the Delta's islands: each calf near
     /// the hero shines on its own beat (a golden halo over it), and a hero who faces one while it glows gets a 3 s slow on the BuffController,
-    /// once per glow. The beat comes from the calf's instance, so each one shines at its own moment. Deals no damage and never takes the controls.
+    /// once per glow. The beat comes from the calf's instance, so each one shines at its own moment. The dragon's own "não olhe" blow (the map
+    /// boss) slows the same way (<see cref="NinkiGazeRules.DragonGazeSlows"/>, heard from the <see cref="DamageAppliedEvent"/> of her poison hit).
+    /// Deals no damage and never takes the controls.
     /// </summary>
     public sealed partial class CostaDeltaTetoMechanicsDriver
     {
@@ -103,6 +107,26 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
                 {
                     _halos[i].enabled = false;
                 }
+            }
+        }
+
+        private void HookDragonGaze() => EventBus.Subscribe<DamageAppliedEvent>(OnDragonGaze);
+
+        private void UnhookDragonGaze() => EventBus.Unsubscribe<DamageAppliedEvent>(OnDragonGaze);
+
+        /// <summary>The dragon's poison blow landed on the hero who faced her: the same shame slow as a calf's glow.</summary>
+        private void OnDragonGaze(DamageAppliedEvent evt)
+        {
+            if (_player == null || _stats == null || evt.Target != _player.gameObject || evt.Source == null)
+            {
+                return;
+            }
+
+            EnemyController dragon = evt.Source.GetComponent<EnemyController>();
+            string id = dragon != null && dragon.Definition != null ? dragon.Definition.name : null;
+            if (NinkiGazeRules.DragonGazeSlows(id, evt.Element == ElementType.Poison, _stats.IsAlive))
+            {
+                Shame();
             }
         }
 

@@ -148,3 +148,17 @@ Dinheiro e contas:
 **Backend e servidor:** [Nakama](https://github.com/heroiclabs/nakama) · [instalação e bancos](https://heroiclabs.com/docs/nakama/getting-started/install/linux/) · [preços da UGS](https://unity.com/products/gaming-services/pricing) · [Unity Dedicated Server](https://docs.unity.com/en-us/engine/6000.3/manual/platform-specific/dedicated-server/build) · [Licenciamento do CockroachDB](https://www.cockroachlabs.com/docs/dev/licensing-faqs)
 
 **Limites desta pesquisa:** comparativos de preço de PlayFab, VPS e banda vêm de sites de terceiros. Números de CCU são declarados pelos próprios projetos. Nenhum desempenho foi medido neste jogo ainda.
+
+## 10. Grupo (party): regras puras prontas (2026-11-23)
+
+Código em `Assets/Scripts/Gameplay/Party/`, C# puro (só `Vector3` da Unity) e sem rede. O servidor mantém um `PartyState` por grupo e chama as mesmas funções. O cliente só mostra o texto do motivo (`PartyTexts`). Testes: `PartyRulesTests`.
+
+| Regra | Arquivo | Decisão |
+|---|---|---|
+| Convite, aceite, recusa e expiração; sair, expulsar, passar a liderança | `PartyRules` | Até 5 membros. Convite vale 60 s. Só o líder convida, expulsa, passa a liderança e escolhe o loot. Quando o líder sai, assume o membro mais antigo. Grupo com menos de 2 membros e sem convite pendente se desfaz. Nada lança exceção: o resultado traz um `PartyRefusal`. |
+| XP do grupo | `PartyXpRules.Split` | Ganha quem está vivo, no mesmo mapa e a até **40 m** do abate. Pote = XP do abate × **1,0 / 1,2 / 1,5 / 1,8 / 2,2** (1 a 5 presentes), dividido **pelo nível** como no MU. Depois vem o corte de sempre por diferença de nível (`EnemyLevelScaling`), por membro. **Faixa de 20 níveis:** quem está mais de 20 acima do menor presente não ganha nada, e o nível dele continua na soma (a parte queima). Assim, carregar um personagem baixo não rende para ninguém. Um grupo de 1 dá exatamente a XP do single-player, que não muda. Os multiplicadores pessoais (fôlego, descansado, NG+, mestre) o servidor aplica depois, por jogador. |
+| Loot do grupo | `PartyLootRules` | Os drops continuam sorteados uma vez por abate (`EnemyLootRoller`); a regra só escolhe o dono de cada um. **Livre**: qualquer presente pega. **Rodízio**: o próximo presente pela ordem de entrada, com cursor no `PartyState`. **Por necessidade**: Necessidade > Ganância, rolagem de 1 a 100 com seed do servidor + índice do drop; empate fica com o mais antigo; se todos passam, fica livre. **O líder distribui**: a escolha do líder se o escolhido estiver presente, senão o líder guarda; líder ausente cai no rodízio. Depois de 30 s qualquer presente pode pegar um drop com dono. |
+| Bônus de família | `PartyFamilyRules` | O membro tem um "primo da classe" opcional, porque a decisão 12.1 segue aberta. **Família Completa** (os 5 primos presentes na luta): +10% de XP para todos. **Laço de Irmãos** (Maithe+Ícaro ou Joaquim+Maria presentes): +5% para os dois. Os bônus acumulam (no máximo +15,5%). |
+| Sem fogo amigo | `PartyCombatRules.CanHarm` | `SafeZoneRules.CanAttack` e, além dele, jogador nunca fere membro do próprio grupo, nem em área de PvP. Para duelar, é preciso sair do grupo. |
+
+Falta: mensagens de rede, HUD dos membros, chat de grupo, procurar grupo, reviver companheiro, entrar junto em chefe e evento, e o Golpe em dupla com um membro real.

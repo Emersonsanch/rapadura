@@ -1943,12 +1943,12 @@ Cada primo possui uma cadeia de 4 etapas que aprofunda seu trauma, sua maturidad
 ### 12.3 Funcionalidades estilo MU Online
 - [ ] Cidade-hub compartilhada (a Vila da Vó Zefa) com outros jogadores, NPCs, loja, Baú e Fogão.
 - [ ] Mapas abertos por região, com inimigos que reaparecem (respawn) em vez das arenas isoladas; níveis mínimos por mapa.
-- [ ] **Grupo (party)** — pedido do usuário (2026-10-29):
-  - [ ] Convidar/aceitar/recusar/sair/expulsar; líder do grupo (passa a liderança); até 5 membros.
-  - [ ] XP dividida por proximidade (só quem está perto ganha) com bônus por membro; regras de loot escolhidas pelo líder (livre, rodízio, por necessidade, o líder distribui).
-  - [ ] Bônus "Família Completa" com os 5 primos diferentes e "Laço de Irmãos" com Maithe+Ícaro ou Joaquim+Maria no mesmo grupo; o Golpe em dupla usa um membro real do grupo.
+- [~] **Grupo (party)** — pedido do usuário (2026-10-29): regras puras prontas (data 2026-11-23); online pendente. Código em `Gameplay/Party/` (`PartyRules`, `PartyXpRules`, `PartyLootRules`, `PartyFamilyRules`, `PartyCombatRules`, `PartyTexts`), testes em `PartyRulesTests`; resumo em [`Docs/Network.md`](Docs/Network.md) §10.
+  - [~] Convidar/aceitar/recusar/sair/expulsar; líder do grupo (passa a liderança); até 5 membros. — regras puras prontas (data 2026-11-23); online pendente. Convite vale 60 s; saindo o líder, assume o membro mais antigo; grupo com menos de 2 se desfaz.
+  - [~] XP dividida por proximidade (só quem está perto ganha) com bônus por membro; regras de loot escolhidas pelo líder (livre, rodízio, por necessidade, o líder distribui). — regras puras prontas (data 2026-11-23); online pendente. Vivos a até 40 m; pote ×1,0/1,2/1,5/1,8/2,2 dividido pelo nível; quem passa 20 níveis do menor fica sem XP.
+  - [~] Bônus "Família Completa" com os 5 primos diferentes e "Laço de Irmãos" com Maithe+Ícaro ou Joaquim+Maria no mesmo grupo; o Golpe em dupla usa um membro real do grupo. — regras puras prontas (data 2026-11-23); online pendente. +10% e +5% de XP (presentes na luta); o Golpe em dupla com membro real ainda não.
   - [ ] Barras de vida dos membros no HUD, marcador no mapa, chat de grupo, procurar grupo (lista de quem quer grupo por região/nível).
-  - [ ] Sem fogo amigo; reviver companheiro caído; entrar junto nas lutas de chefe e nos eventos.
+  - [~] Sem fogo amigo; reviver companheiro caído; entrar junto nas lutas de chefe e nos eventos. — sem fogo amigo: regras puras prontas (data 2026-11-23); online pendente (`PartyCombatRules.CanHarm`, junto do `SafeZoneRules`). Reviver e entrar junto ainda não.
 - [ ] Chat (geral, grupo, clã, sussurro) com filtro de palavras e denúncia; emotes para o mobile.
 - [ ] **Troca entre jogadores** — pedido do usuário (2026-10-29):
   - [ ] Janela de troca cara a cara (só na cidade/zona segura ou perto um do outro): cada lado põe itens e ouro, os dois confirmam, qualquer mudança desfaz a confirmação, confirmação final com resumo.

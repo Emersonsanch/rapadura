@@ -90,6 +90,8 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         private void OnDisable()
         {
             EndRide(false);
+            EndDance(false);
+            ClearMidasWash();
             HideFeedback();
             _heroState.Detach();
             UnsubscribeGild();
@@ -120,19 +122,28 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             if (!OverworldLayouts.FarnkeshBounds.Contains(local))
             {
                 HideFeedback();
+                ForgetBridge();
                 if (_inGildRegion)
                 {
                     ClearGild();
+                    ClearMidasWash();
                 }
 
+                EndDance(false);
                 return;
             }
 
+            // 55 · a gust that took the hero off the planks drops them into the net (FarnkeshMechanicsDriver.BridgeFall.cs).
+            TickBridgeFall(local);
             TickGusts(local);
             TickStations(local);
 
             // 53 · the gilding of the Vale dos Sátiros, washed off in the Pactolo (FarnkeshMechanicsDriver.Gild.cs).
             TickGild(local);
+
+            // 53 · the Pactolo's water on O Ouro de Midas and the Baile do Vale (FarnkeshMechanicsDriver.Pactolo.cs, .Dance.cs).
+            TickMidasWash(local);
+            TickDance(local);
         }
 
         private bool FindPlayer()
@@ -195,6 +206,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             }
 
             GroundedPush.Shove(_character, push * Time.deltaTime);
+            NoteBridgePush(local, gust);
             if (_hitGust != gust)
             {
                 _hitGust = gust;

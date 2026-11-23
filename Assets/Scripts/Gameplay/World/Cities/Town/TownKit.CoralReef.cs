@@ -1,3 +1,4 @@
+using Rapadura.Gameplay.World.Map.Mechanics;
 using UnityEngine;
 
 namespace Rapadura.Gameplay.World.Cities.Town
@@ -201,22 +202,26 @@ namespace Rapadura.Gameplay.World.Cities.Town
         // ------------------------------------------------------------------
 
         /// <summary>
-        /// The mother coral in its pool: a rim of dim coral, the reef water, and the great branching coral: the west half still
-        /// grey from the Lodo, the east half relit (live coral that glows a little at night). Relighting it all is map 28's story.
+        /// The mother coral in its pool: a rim of dim coral, the reef water, and the great branching coral. At the start
+        /// (<paramref name="coralsLit"/> = 0) the west half is still grey from the Lodo and the east half relit (live coral that
+        /// glows a little at night); each coral of the reef relit (map 28, <see cref="KirtaMotherCoralRules"/>) relights one more
+        /// branch, east to west, and with all five the trunk and the rim are live coral again.
         /// </summary>
-        private static void CoralMother(TownMeshBuilder b, float s)
+        private static void CoralMother(TownMeshBuilder b, float s, int coralsLit = 0)
         {
             float r = CoralMotherRadius * s;
-            b.Ring(new Vector3(0f, 0.4f, 0f), r - 0.4f, r, 14, TownSwatch.CoralDim, TownSwatch.Pearl);
-            b.Cylinder(Vector3.zero, r, r, 0.4f, 14, TownSwatch.CoralDim);
+            bool whole = KirtaMotherCoralRules.Whole(coralsLit);
+            TownSwatch rim = whole ? TownSwatch.CoralLive : TownSwatch.CoralDim;
+            b.Ring(new Vector3(0f, 0.4f, 0f), r - 0.4f, r, 14, rim, TownSwatch.Pearl);
+            b.Cylinder(Vector3.zero, r, r, 0.4f, 14, rim);
             b.Disc(new Vector3(0f, 0.3f, 0f), r - 0.38f, 14, TownSwatch.Sea);
             var trunk = new Vector3(0f, 1.3f * s, 0f);
-            b.Log(new Vector3(0f, 0.3f, 0f), trunk, 0.28f * s, TownSwatch.CoralDim, 7);
-            for (int i = 0; i < 7; i++)
+            b.Log(new Vector3(0f, 0.3f, 0f), trunk, 0.28f * s, rim, 7);
+            for (int i = 0; i < KirtaMotherCoralRules.Branches; i++)
             {
                 float a = (i * 51.4f + 10f) * Mathf.Deg2Rad;
                 var dir = new Vector3(Mathf.Cos(a), 0f, Mathf.Sin(a));
-                bool lit = dir.x > 0.05f;
+                bool lit = KirtaMotherCoralRules.BranchLit(i, coralsLit);
                 TownSwatch coral = lit ? TownSwatch.CoralLive : TownSwatch.CoralDim;
                 Vector3 mid = trunk + dir * 0.7f * s + Vector3.up * (0.8f + (i % 2) * 0.3f) * s;
                 Vector3 tip = mid + dir * 0.5f * s + Vector3.up * (0.7f + (i % 3) * 0.25f) * s;

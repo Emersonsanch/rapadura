@@ -1,3 +1,4 @@
+using Rapadura.Gameplay.World.Cities.Town;
 using Rapadura.Gameplay.World.Map.Mechanics;
 using UnityEngine;
 
@@ -43,5 +44,24 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             new TarchonNeighbour("ravnthu", TarchonOffset + new Vector2(10f, 0.8f)),
             new TarchonNeighbour("fasti", TarchonOffset + new Vector2(-12f, -0.8f)),
         };
+
+        private static TarchonNeighbour[] s_tarchonCrowd;
+
+        /// <summary>The trols who come home as the neighbours wake (<see cref="TarchonCrowdRules"/>), in the Delta's coordinates, in the order they return.</summary>
+        public static TarchonNeighbour[] TarchonCrowd => s_tarchonCrowd ??= System.Array.ConvertAll(CityTownRecipes.TarchonCrowdSpots,
+            spot => new TarchonNeighbour(spot.Id, TarchonOffset + spot.Spot));
+
+        /// <summary>Where the hero stands to sell the freed wisps to Larthia (<see cref="LarthiaWispRules"/>): her shop's door approach, in the Delta's coordinates.</summary>
+        public static Vector2 TarchonLarthiaTrade
+        {
+            get
+            {
+                CityLot lot = CityTownRecipes.LayoutFor(CityTownRecipes.TarchonCityId)?.LotOfResident("larthia");
+                return TarchonOffset + (lot != null ? lot.DoorApproach : new Vector2(-9.7f, 2f));
+            }
+        }
+
+        /// <summary>The mother coral of Kirta's plaza (<see cref="KirtaMotherCoralRules"/>), in the Costa's coordinates.</summary>
+        public static Vector2 KirtaMotherCoralAt => KirtaOffset + CityTownRecipes.KirtaMotherCoral;
     }
 }

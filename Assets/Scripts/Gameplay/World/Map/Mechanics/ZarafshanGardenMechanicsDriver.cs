@@ -17,7 +17,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
     /// Zarafshan region; it works only inside the garden's walls. Never takes the controls and deals no damage; the freed sparks stay in the
     /// save (time marks).
     /// </summary>
-    public sealed class ZarafshanGardenMechanicsDriver : MonoBehaviour, IRegionMechanics
+    public sealed partial class ZarafshanGardenMechanicsDriver : MonoBehaviour, IRegionMechanics
     {
         private const string PlayerTag = "Player";
         private const float HintCooldown = 3f;
@@ -95,11 +95,17 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             }
         }
 
-        private void OnEnable() => _combat.Attach();
+        private void OnEnable()
+        {
+            _combat.Attach();
+            HookPetal();
+        }
 
         private void OnDisable()
         {
             _combat.Detach();
+            UnhookPetal();
+            LeavePavilion();
             Hide(_cages);
             Hide(_canals);
             _hintSpot = -1;
@@ -126,6 +132,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             {
                 Hide(_cages);
                 Hide(_canals);
+                LeavePavilion();
                 _hintSpot = -1;
                 _mendTick = 0f;
                 return;
@@ -133,6 +140,8 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
 
             ReadMarks();
             Show();
+            TickPavilion(local);
+            TickGardenNight(local);
             if (!_stats.IsAlive)
             {
                 return;
@@ -272,7 +281,16 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         private void TickMend(Vector2 local)
         {
             ZarafshanGardenSpark[] sparks = OverworldLayouts.MihrshahSparks;
-            bool pavilion = ZarafshanGardenRules.PavilionOpen(_freed, sparks.Length) && ZarafshanGardenRules.InPavilion(OverworldLayouts.MihrshahGardenCentre, local);
+            // The open door (ZarafshanPavilionRules): with the four canals running the pavilion still waits for its door before it mends.
+            MihrshahPavilionState state = PavilionState();
+            bool pavilion = ZarafshanPavilionRules.Mends(state, OverworldLayouts.MihrshahGardenCentre, local);
+            if (!pavilion && state == MihrshahPavilionState.Closed && ZarafshanGardenRules.InPavilion(OverworldLayouts.MihrshahGardenCentre, local)
+                && Time.unscaledTime >= _nextMendSay)
+            {
+                _nextMendSay = Time.unscaledTime + MendSayCooldown;
+                SayPavilion(MihrshahPavilionTexts.DoorShutMends);
+            }
+
             bool canal = !pavilion && ZarafshanGardenRules.LitCanalAt(sparks, _freed, local) >= 0;
             if (!pavilion && !canal)
             {

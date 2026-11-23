@@ -195,6 +195,8 @@ namespace Rapadura.Gameplay.Mounts
             new LocalizationEntry("mount.cosmetic.blanket_chita_florida.name", "Flowery silk blanket", "Manta de seda florida"),
             new LocalizationEntry("mount.cosmetic.blanket_xadrez_quadrilha.name", "Litema striped blanket", "Manta listrada de Litema"),
             new LocalizationEntry("mount.cosmetic.blanket_la_pico.name", "Kaggen Range wool blanket", "Manta de lã da Serra de Kaggen"),
+            new LocalizationEntry("mount.cosmetic.blanket_fitas_de_aratta.name", "Aratta ribbon blanket", "Manta de Fitas de Aratta"),
+            new LocalizationEntry("mount.cosmetic.saddle_junco_de_aratta.name", "Aratta reed saddle", "Sela de Junco de Aratta"),
 
             new LocalizationEntry(QuestTitle, "First Saddle", "Primeira Sela"),
             new LocalizationEntry(QuestDescription,

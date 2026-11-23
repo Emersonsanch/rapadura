@@ -285,7 +285,7 @@ namespace Rapadura.UI.Mounts
             }
 
             MountCollection collection = MountCollection.ResolveShared();
-            foreach (MountCosmeticSpec spec in MountCosmetics.All)
+            foreach (MountCosmeticSpec spec in MountCosmetics.ForGold)
             {
                 var row = new VisualElement();
                 row.AddToClassList("mount-codex-row");

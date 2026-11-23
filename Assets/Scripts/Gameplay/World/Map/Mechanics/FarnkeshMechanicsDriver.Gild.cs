@@ -70,6 +70,12 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
 
         private void OnGildDamage(DamageAppliedEvent e)
         {
+            // 53 · a hit taken ends the Baile do Vale (FarnkeshMechanicsDriver.Dance.cs).
+            if (_dance != null && _player != null && e.Target == _player.gameObject)
+            {
+                _danceHit = true;
+            }
+
             if (!_inGildRegion || _player == null || e.Target != _player.gameObject || e.Source == null)
             {
                 return;

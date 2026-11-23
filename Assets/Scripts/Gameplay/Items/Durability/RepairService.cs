@@ -109,7 +109,8 @@ namespace Rapadura.Gameplay.Items.Durability
         public static bool NeedsRepair(ItemDefinition item, InventorySlotData data) =>
             DurabilityRules.IsTracked(item) && data != null && data.currentDurability < item.MaxDurability;
 
-        public static RepairQuote Quote(InventoryManager bag, RefineTarget target)
+        /// <summary>One piece's repair; <paramref name="discount"/> (0…0.9) is the forge's, see <see cref="RepairDiscountRules"/>.</summary>
+        public static RepairQuote Quote(InventoryManager bag, RefineTarget target, float discount = 0f)
         {
             InventorySlotData data = RefineService.Resolve(bag, target);
             ItemDefinition item = data != null ? ItemDatabase.GetById(data.itemId) : null;
@@ -119,15 +120,15 @@ namespace Rapadura.Gameplay.Items.Durability
                 return new RepairQuote(item, data, 0f, 0f, 0, gold, RepairCheck.NotRepairable);
             }
 
-            int cost = DurabilityRules.RepairCost(item, data);
+            int cost = RepairDiscountRules.Apply(DurabilityRules.RepairCost(item, data), discount);
             RepairCheck check = cost <= 0 ? RepairCheck.NothingToRepair : gold < cost ? RepairCheck.NotEnoughGold : RepairCheck.Ok;
             return new RepairQuote(item, data, data.currentDurability, item.MaxDurability, cost, gold, check);
         }
 
         /// <summary>Pays and repairs one piece to full. False (nothing spent) when the quote's check fails.</summary>
-        public static bool TryRepair(InventoryManager bag, RefineTarget target, out int cost, out RepairCheck check)
+        public static bool TryRepair(InventoryManager bag, RefineTarget target, out int cost, out RepairCheck check, float discount = 0f)
         {
-            RepairQuote quote = Quote(bag, target);
+            RepairQuote quote = Quote(bag, target, discount);
             cost = quote.Cost;
             check = quote.Check;
             if (!quote.CanRepair || !bag.RemoveById(RefineItems.Gold, quote.Cost))
@@ -147,23 +148,23 @@ namespace Rapadura.Gameplay.Items.Durability
         }
 
         /// <summary>Gold to repair everything in <see cref="ListWorn"/>.</summary>
-        public static int RepairAllCost(InventoryManager bag, out int pieces)
+        public static int RepairAllCost(InventoryManager bag, out int pieces, float discount = 0f)
         {
             int total = 0;
             List<RefineTarget> worn = ListWorn(bag);
             pieces = worn.Count;
             foreach (RefineTarget target in worn)
             {
-                total += Quote(bag, target).Cost;
+                total += Quote(bag, target, discount).Cost;
             }
 
             return total;
         }
 
         /// <summary>Repairs every worn piece, all or nothing (not enough gold for all = nothing repaired).</summary>
-        public static bool TryRepairAll(InventoryManager bag, out int cost, out int pieces, out RepairCheck check)
+        public static bool TryRepairAll(InventoryManager bag, out int cost, out int pieces, out RepairCheck check, float discount = 0f)
         {
-            cost = RepairAllCost(bag, out pieces);
+            cost = RepairAllCost(bag, out pieces, discount);
             if (pieces == 0)
             {
                 check = RepairCheck.NothingToRepair;

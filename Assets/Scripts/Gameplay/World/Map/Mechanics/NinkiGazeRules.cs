@@ -18,7 +18,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
     /// para ela fica lento; virar de costas evita. Ela fica com vergonha"), pure and server-runnable. Every 12 s each Ninki Nanka calf shines:
     /// 1.2 s of warning, then 1 s of glow, each calf on its own beat. A hero within 14 m who faces it during the glow (within 60° either side of
     /// where the hero looks) is slowed 40 % for 3 s, once per glow; turning the back or the side saves, and pressed against it (under 1.5 m)
-    /// there is nothing to look at. The dragon herself keeps her own blow (the map boss).
+    /// there is nothing to look at. The dragon herself slows the same way when her own "não olhe" blow lands (<see cref="DragonGazeSlows"/>).
     /// <code>
     /// cycle 12 s: 9.8 dim · 1.2 warning · 1 glow · facing within 60° and 1.5–14 m → speed × 0.6 for 3 s, once per glow
     /// </code>
@@ -64,5 +64,12 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
 
         /// <summary>The PercentAdditive value of the slow on MoveSpeed (−0.4).</summary>
         public static float SlowBonus => SlowFactor - 1f;
+
+        /// <summary>
+        /// The dragon's own glow (2026-11-23, "a mesma lentidão no brilho da própria dragoa"): her "não olhe" blow (the map boss's ShyGaze, poison,
+        /// only for whoever faces her) slows like the calves' glow, ×0.6 for 3 s. Read from the blow itself: the poison hit from the dragon.
+        /// </summary>
+        public static bool DragonGazeSlows(string sourceEnemyId, bool poison, bool heroAlive) =>
+            poison && heroAlive && sourceEnemyId == Rapadura.Gameplay.Enemies.RegionBossRules.NinkiNankaId;
     }
 }

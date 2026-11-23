@@ -159,7 +159,13 @@ namespace Rapadura.Gameplay.Refining
         public static bool CanFail(int level) => BaseChance(level) < 1f && ClampLevel(level) < MaxLevel;
 
         /// <summary>Chance of <paramref name="level"/> → +1, with the Amuleto da Sorte when <paramref name="withCharm"/>.</summary>
-        public static float ChanceFor(int level, bool withCharm, bool luck = false)
+        public static float ChanceFor(int level, bool withCharm, bool luck = false) => ChanceFor(level, withCharm, luck, 0f);
+
+        /// <summary>
+        /// <see cref="ChanceFor(int, bool, bool)"/> plus <paramref name="forgeBonus"/>, the lit Grande Forja of the Salões de Bronze
+        /// (<c>GreatForgeRules.RefineBonus</c>): like the charm, only on rolls that can fail and never past <see cref="MaxChance"/>.
+        /// </summary>
+        public static float ChanceFor(int level, bool withCharm, bool luck, float forgeBonus)
         {
             float chance = BaseChance(level);
             if (!CanFail(level))
@@ -167,6 +173,7 @@ namespace Rapadura.Gameplay.Refining
                 return chance;
             }
 
+            bool boosted = withCharm || luck || forgeBonus > 0f;
             if (withCharm)
             {
                 chance += LuckCharmBonus;
@@ -177,7 +184,12 @@ namespace Rapadura.Gameplay.Refining
                 chance += LuckBonus;
             }
 
-            return withCharm || luck ? Math.Min(MaxChance, chance) : chance;
+            if (forgeBonus > 0f)
+            {
+                chance += forgeBonus;
+            }
+
+            return boosted ? Math.Min(MaxChance, chance) : chance;
         }
 
         /// <summary>Gold paid with the stone to refine from <paramref name="level"/> (the campaign price, hero level ≤ <see cref="FeeLevelStart"/>).</summary>
@@ -346,10 +358,14 @@ namespace Rapadura.Gameplay.Refining
             Resolve(level, withCharm, roll, luck, FeeLevelStart);
 
         /// <summary><see cref="Resolve(int, bool, double, bool)"/> reporting the gold of <see cref="FeeFor"/> at <paramref name="heroLevel"/>.</summary>
-        public static RefineAttempt Resolve(int level, bool withCharm, double roll, bool luck, int heroLevel)
+        public static RefineAttempt Resolve(int level, bool withCharm, double roll, bool luck, int heroLevel) =>
+            Resolve(level, withCharm, roll, luck, heroLevel, 0f);
+
+        /// <summary><see cref="Resolve(int, bool, double, bool, int)"/> with the Grande Forja's <paramref name="forgeBonus"/>.</summary>
+        public static RefineAttempt Resolve(int level, bool withCharm, double roll, bool luck, int heroLevel, float forgeBonus)
         {
             level = ClampLevel(level);
-            float chance = ChanceFor(level, withCharm, luck);
+            float chance = ChanceFor(level, withCharm, luck, forgeBonus);
             bool atCap = level >= MaxLevel;
             bool success = !atCap && roll < chance;
             int to = success ? level + 1 : atCap ? level : FailureLevel(level);
@@ -362,6 +378,10 @@ namespace Rapadura.Gameplay.Refining
         /// <summary><see cref="Attempt(int, bool, int, bool)"/> at <paramref name="heroLevel"/> (the fee of <see cref="FeeFor"/>).</summary>
         public static RefineAttempt Attempt(int level, bool withCharm, int seed, bool luck, int heroLevel) =>
             Resolve(level, withCharm, Roll(seed), luck, heroLevel);
+
+        /// <summary><see cref="Attempt(int, bool, int, bool, int)"/> with the Grande Forja's <paramref name="forgeBonus"/>.</summary>
+        public static RefineAttempt Attempt(int level, bool withCharm, int seed, bool luck, int heroLevel, float forgeBonus) =>
+            Resolve(level, withCharm, Roll(seed), luck, heroLevel, forgeBonus);
 
         /// <summary>One Pedra da Vida on <paramref name="option"/>: the new option level (unchanged on failure).</summary>
         public static int ResolveOption(int option, double roll)

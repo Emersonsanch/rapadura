@@ -938,7 +938,8 @@ namespace Rapadura.UI.WorldMap
         {
             // Built in code on this HUD's document (no UXML), like the carro de boi.
             _refineUI = _refineUI != null ? _refineUI : (GetComponent<VillageRefinePanel>() ?? gameObject.AddComponent<VillageRefinePanel>());
-            _refineUI.Open(BeginInventorySession());
+            // The city's forge may repair cheaper (Tambor Rubro: the Forja de Tambor, 20 % off; RepairDiscountRules).
+            _refineUI.Open(BeginInventorySession(), Rapadura.Gameplay.Items.Durability.RepairDiscountRules.ForCity(_city?.CityId));
         }
 
         // ------------------------------------------------------------------

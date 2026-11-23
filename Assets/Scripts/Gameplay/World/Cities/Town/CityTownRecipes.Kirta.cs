@@ -32,7 +32,14 @@ namespace Rapadura.Gameplay.World.Cities.Town
         /// <summary>Where the mother coral stands (on the south side of the plaza, between the cousins and the abyss).</summary>
         public static readonly Vector2 KirtaMotherCoral = new Vector2(0f, -4.4f);
 
-        public static CityTownRecipe Kirta()
+        /// <summary>Kirta as the game starts (no coral of the reef lit yet: the mother coral half grey).</summary>
+        public static CityTownRecipe Kirta() => Kirta(0);
+
+        /// <summary>
+        /// Kirta with <paramref name="coralsLit"/> corals of the reef relit (<c>KirtaCoralRules</c>): the mother coral of the plaza carries it
+        /// as its variant and relights one branch per coral, whole with the five (<see cref="Rapadura.Gameplay.World.Map.Mechanics.KirtaMotherCoralRules"/>).
+        /// </summary>
+        public static CityTownRecipe Kirta(int coralsLit)
         {
             var r = new CityTownRecipe
             {
@@ -74,7 +81,8 @@ namespace Rapadura.Gameplay.World.Cities.Town
                 ReefSpec(TownShopDressing.HuntingRack, wallHeight: 2.8f)));
 
             // ---- The plaza: the mother coral, lamps ----
-            r.PlazaProps.Add(At(CityPropKind.CoralMother, KirtaMotherCoral.x, KirtaMotherCoral.y));
+            r.PlazaProps.Add(At(CityPropKind.CoralMother, KirtaMotherCoral.x, KirtaMotherCoral.y, 0f, 1f,
+                Rapadura.Gameplay.World.Map.Mechanics.KirtaMotherCoralRules.Clamp(coralsLit)));
             foreach (float angle in new[] { 30f, 150f, 210f, 330f })
             {
                 r.PlazaProps.Add(new CityProp { Kind = CityPropKind.LampPost, Position = Polar(angle, 6.5f), Yaw = CityGeometry.YawFacing(-Polar(angle, 1f)) });

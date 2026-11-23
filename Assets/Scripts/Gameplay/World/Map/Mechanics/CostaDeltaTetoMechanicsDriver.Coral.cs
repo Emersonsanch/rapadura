@@ -33,11 +33,20 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         private float _coralTick;
         private float _nextCoralSay;
 
-        /// <summary>The corals hear the hero's fights (out of combat they mend) while the driver is on.</summary>
-        private void OnEnable() => _coralCombat.Attach();
+        /// <summary>
+        /// The corals hear the hero's fights (out of combat they mend) while the driver is on; the Ninki Nanka's own glow (Ninki partial) and the
+        /// freed Pescador de Luzes (FisherWisps partial) are heard from the same moment.
+        /// </summary>
+        private void OnEnable()
+        {
+            _coralCombat.Attach();
+            HookDragonGaze();
+            HookFisherWisps();
+        }
 
         private void TickCorals(Vector2 local)
         {
+            TickMotherCoral(local);
             KirtaCoral[] corals = OverworldLayouts.KirtaCorals;
             int near = KirtaCoralRules.Nearest(corals, local, CoralViewRange);
             if (near < 0)

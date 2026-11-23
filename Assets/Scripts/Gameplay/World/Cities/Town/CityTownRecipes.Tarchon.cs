@@ -33,7 +33,30 @@ namespace Rapadura.Gameplay.World.Cities.Town
         /// <summary>Where the Mastro dos Fogos-Fátuos stands (north of the plaza centre, in front of Tarchon's long house).</summary>
         public static readonly Vector2 TarchonWispMast = new Vector2(0f, 3.6f);
 
-        public static CityTownRecipe Tarchon()
+        /// <summary>
+        /// Where the trols who come home stand (Docs/Mapas100.md §3.3, "a cidade fica mais cheia": <c>TarchonCrowdRules</c>), in the order
+        /// they come back, as offsets from the plaza centre: off every lot, collider and door, on the plaza and the streets. Etruscan
+        /// praenomina of the inscriptions, like the town's own: Aule, Seianti, Thana, Sethre, Hasti and Tite.
+        /// </summary>
+        public static readonly (string Id, Vector2 Spot)[] TarchonCrowdSpots =
+        {
+            ("aule", new Vector2(-3.6f, -4.2f)),
+            ("seianti", new Vector2(3.6f, -4.2f)),
+            ("thana", new Vector2(-6.8f, -1.8f)),
+            ("sethre", new Vector2(6.8f, 1.9f)),
+            ("hasti", new Vector2(13.6f, -1.6f)),
+            ("tite", new Vector2(-1.8f, -6.8f)),
+        };
+
+        /// <summary>Tarchon as the game starts (nobody back home yet).</summary>
+        public static CityTownRecipe Tarchon() => Tarchon(0);
+
+        /// <summary>
+        /// Tarchon with <paramref name="returned"/> trols back home (<c>TarchonCrowdRules.Returned</c> of every neighbour ever woken): the plaza
+        /// hangs two more lanterns from the second one back and two more again from the fifth (<c>TarchonCrowdRules.LanternPairs</c>); the
+        /// trols themselves are figures of the mechanic at <see cref="TarchonCrowdSpots"/>.
+        /// </summary>
+        public static CityTownRecipe Tarchon(int returned)
         {
             var r = new CityTownRecipe
             {
@@ -88,6 +111,14 @@ namespace Rapadura.Gameplay.World.Cities.Town
             foreach (float angle in new[] { 30f, 150f, 210f, 330f })
             {
                 r.PlazaProps.Add(new CityProp { Kind = CityPropKind.LampPost, Position = Polar(angle, 6.5f), Yaw = CityGeometry.YawFacing(-Polar(angle, 1f)) });
+            }
+
+            // ---- The town fills up: more lanterns as the trols come home (north pair first, then the south pair) ----
+            int pairs = Rapadura.Gameplay.World.Map.Mechanics.TarchonCrowdRules.LanternPairs(returned);
+            float[] festive = { 60f, 120f, 240f, 300f };
+            for (int i = 0; i < pairs * 2; i++)
+            {
+                r.PlazaProps.Add(new CityProp { Kind = CityPropKind.LampPost, Position = Polar(festive[i], 6.5f), Yaw = CityGeometry.YawFacing(-Polar(festive[i], 1f)) });
             }
 
             // ---- Bog channels crossing the East and South streets, each with its plank boardwalk ----

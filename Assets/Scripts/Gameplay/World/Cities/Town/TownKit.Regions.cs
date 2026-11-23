@@ -93,7 +93,7 @@ namespace Rapadura.Gameplay.World.Cities.Town
                 case CityPropKind.StoneKraal: StoneKraal(b, s); return true;
                 case CityPropKind.BullLyre: BullLyre(b, s); return true;
                 case CityPropKind.Acacia: Acacia(b, s); return true;
-                case CityPropKind.CoralMother: CoralMother(b, s); return true;
+                case CityPropKind.CoralMother: CoralMother(b, s, prop.Variant); return true;
                 case CityPropKind.CoralSpire: CoralSpire(b, s); return true;
                 case CityPropKind.KelpGarden: KelpGarden(b, s); return true;
                 case CityPropKind.ShellBridge: ShellBridge(b, d); return true;

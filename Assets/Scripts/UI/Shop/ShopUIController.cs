@@ -6,7 +6,9 @@ using Rapadura.Core.Systems;
 using Rapadura.Gameplay.Content;
 using Rapadura.Gameplay.Inventory;
 using Rapadura.Gameplay.Items;
+using Rapadura.Gameplay.Items.Durability;
 using Rapadura.Gameplay.Shop;
+using Rapadura.Gameplay.World.Map.Mechanics;
 using Rapadura.UI.Common;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -220,6 +222,7 @@ namespace Rapadura.UI.Shop
                 return;
             }
 
+            AddRepairRow(shop, buyer);
             IReadOnlyList<ShopInventoryItem> catalog = shop.Catalog;
 
             for (int i = 0; i < catalog.Count; i++)
@@ -248,6 +251,49 @@ namespace Rapadura.UI.Shop
                 _buyListContainer.Add(row);
                 _spawnedBuyRows.Add(row);
             }
+        }
+
+        /// <summary>
+        /// A forge with a repair of its own (<see cref="RepairDiscountRules.OffersRepair"/>, the Forja de Tambor: 20 % off) opens with
+        /// "repair all" on top of its counter, through the same <see cref="RepairService"/> as the ferreiro window.
+        /// </summary>
+        private void AddRepairRow(ShopDefinition shop, InventoryManager buyer)
+        {
+            if (!RepairDiscountRules.OffersRepair(shop.ShopId))
+            {
+                return;
+            }
+
+            float discount = RepairDiscountRules.ForShop(shop.ShopId);
+            LocalizationManager localization = _localizer.Manager;
+            int cost = RepairService.RepairAllCost(buyer, out int pieces, discount);
+            string label = pieces > 0
+                ? CityTrainingTexts.Format(localization, CityTrainingTexts.ShopRepairRow, pieces, cost, RepairDiscountRules.Percent(discount))
+                : CityTrainingTexts.Get(localization, CityTrainingTexts.ShopRepairNothing);
+
+            var row = new Button(() => OnRepairClicked(discount)) { text = label, name = "shop-repair-all" };
+            row.AddToClassList("shop-row-button");
+            row.SetEnabled(pieces > 0 && buyer.GetTotalCount(RefineItemsGold) >= cost);
+            _buyListContainer.Add(row);
+            _spawnedBuyRows.Add(row);
+        }
+
+        private const string RefineItemsGold = Rapadura.Gameplay.Refining.RefineItems.Gold;
+
+        private void OnRepairClicked(float discount)
+        {
+            InventoryManager buyer = _shopManager != null && _shopManager.IsOpen ? _shopManager.BuyerInventory : null;
+            if (buyer == null)
+            {
+                return;
+            }
+
+            if (RepairService.TryRepairAll(buyer, out int cost, out int pieces, out RepairCheck _, discount))
+            {
+                Rapadura.Core.Logging.GameLogger.Info("Repair", $"{pieces} piece(s) repaired at {_shopManager.ActiveShop.ShopId} for {cost} gold ({RepairDiscountRules.Percent(discount)}% off).");
+            }
+
+            RefreshAll();
         }
 
         private void RebuildSellRows(ShopDefinition shop, InventoryManager buyer)

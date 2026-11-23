@@ -366,6 +366,8 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
                 Say(LimiarLakeTexts.HallSighs);
             }
 
+            // The night tremor (LimiarLakeMechanicsDriver.Tremor.cs): shaken lamps lose light; the sigh above blows them out next frame.
+            TickTremor(local, now);
             TickBeasts(local, now);
             if (!_stats.IsAlive || _controller.Input == null)
             {
@@ -469,6 +471,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             }
 
             _inHall = false;
+            LeaveTremor();
             Hide(_lampLines);
             if (_wasBurning != null)
             {

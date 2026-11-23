@@ -683,7 +683,8 @@ namespace Rapadura.Gameplay.World.Cities
             if (spec == null)
             {
                 // The late main story has a giver and a place like a city quest, and is found the same way (dialogue, quest log, saves).
-                return LateStoryCatalog.GetQuest(questId);
+                // ...and so are the town dailies (CityDailyQuestCatalog: Tarchon's wake of the neighbours).
+                return LateStoryCatalog.GetQuest(questId) ?? CityDailyQuestCatalog.GetQuest(questId);
             }
 
             if (Built.TryGetValue(questId, out QuestDefinition cached) && cached != null)
@@ -696,7 +697,8 @@ namespace Rapadura.Gameplay.World.Cities
             return definition;
         }
 
-        public static IEnumerable<QuestDefinition> GetAllQuests() => Quests.Select(q => GetQuest(q.QuestId)).Concat(LateStoryCatalog.GetAllQuests());
+        public static IEnumerable<QuestDefinition> GetAllQuests() => Quests.Select(q => GetQuest(q.QuestId)).Concat(LateStoryCatalog.GetAllQuests())
+            .Concat(CityDailyQuestCatalog.GetAllQuests());
 
         /// <summary>Registers every city quest with <paramref name="quests"/> (a quest restored from a save needs its rewards).</summary>
         public static void RegisterAll(QuestManager quests)

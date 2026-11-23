@@ -154,6 +154,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             root.AddComponent<Mechanics.LateCityEventsMechanicsDriver>();
             root.AddComponent<Mechanics.FinalCityEventsMechanicsDriver>();
             root.AddComponent<Mechanics.CityServicesMechanicsDriver>();
+            root.AddComponent<Mechanics.MesektetServicesMechanicsDriver>();
             root.AddComponent<Mechanics.RouteMechanicsDriver>();
             root.AddComponent<Mechanics.LateRouteMechanicsDriver>();
             root.AddComponent<Mechanics.MingchengRingGateMechanicsDriver>();

@@ -100,6 +100,7 @@ namespace Rapadura.Gameplay.Enemies
         private Vector2 _lure;
         private int _gusts;
         private VaneWind _wind;
+        private VaneValleyEffect _valleyGust;
         private int _covers;
         private int _cover;
 
@@ -568,6 +569,7 @@ namespace Rapadura.Gameplay.Enemies
             {
                 _wind = RegionBossRules.VaneWindFor(_gusts++);
                 warning = RegionBossTexts.VaneWindKey(_wind);
+                WarnValleyWind();
             }
             else if (signature == RegionBossSignature.GrowingEclipse)
             {
@@ -1027,7 +1029,10 @@ namespace Rapadura.Gameplay.Enemies
 
                 case RegionBossSignature.VaneGust:
                     DungeonShockwave.Spawn(transform.position, null, _controller.gameObject, 0f, 0f);
-                    if (RegionBossRules.VaneGustHits(_wind, Flat(transform.position), heroFlat))
+
+                    // 39: the valley's wind (the fort's four vanes) breaks the gust against it and carries the one with it (VaneValleyWindRules).
+                    if (VaneValleyWindRules.GustHits(_valleyGust, RegionBossRules.WindBlowsToward(_wind), Flat(transform.position), heroFlat,
+                            RegionBossRules.GustReach, RegionBossRules.GustLee))
                     {
                         victim.ApplyDamage(Damage(RegionBossRules.GustDamageFactor), ElementType.Wind, _controller.gameObject);
                     }
@@ -1045,6 +1050,13 @@ namespace Rapadura.Gameplay.Enemies
 
                 case RegionBossSignature.GoldenTouch:
                     DungeonShockwave.Spawn(transform.position, null, _controller.gameObject, 0f, 0f);
+
+                    // 53: the Pactolo's water poured on its hands (MidasWashRules): the touch does not answer while they are wet.
+                    if (MidasWashBoard.StopsTouch(Time.timeAsDouble))
+                    {
+                        break;
+                    }
+
                     if (_health != null && RegionBossRules.GoldenTouchHits(_healthAtWarning, _health.CurrentHealth, _health.MaxHealth, FlatDistance(hero.position, transform.position)))
                     {
                         victim.ApplyDamage(Damage(RegionBossRules.GoldDamageFactor), ElementType.Holy, _controller.gameObject);
@@ -1523,6 +1535,32 @@ namespace Rapadura.Gameplay.Enemies
             a.y = 0f;
             b.y = 0f;
             return Vector3.Distance(a, b);
+        }
+
+        /// <summary>
+        /// 39: what the valley's wind (the vanes as the save keeps them) does to the gust just warned: said over the boss; the first gust it
+        /// breaks also brings the cousin's line (one save mark, on that event).
+        /// </summary>
+        private void WarnValleyWind()
+        {
+            ServiceLocator.TryGet(out Rapadura.Gameplay.World.Map.WorldMapProgress progress);
+            Vector2 valley = VaneValleyWindRules.ValleyWind(progress != null ? key => progress.GetTimeMark(key) : (System.Func<string, long>)null);
+            _valleyGust = VaneValleyWindRules.EffectOn(RegionBossRules.WindBlowsToward(_wind), valley);
+            if (_valleyGust == VaneValleyEffect.None)
+            {
+                return;
+            }
+
+            ServiceLocator.TryGet(out LocalizationManager localization);
+            Vector3 above = transform.position + Vector3.up * 5.2f;
+            bool broken = _valleyGust == VaneValleyEffect.Broken;
+            DungeonFx.Say(above, PeaksSteppeRoundTexts.Get(localization, broken ? PeaksSteppeRoundTexts.VaneBroken : PeaksSteppeRoundTexts.VaneCarried));
+            if (broken && progress != null && progress.GetTimeMark(VaneValleyWindRules.FirstBrokenKey) <= 0L)
+            {
+                progress.SetTimeMark(VaneValleyWindRules.FirstBrokenKey, 1L);
+                DungeonFx.Say(above + Vector3.up * 0.8f, PeaksSteppeRoundTexts.Get(localization,
+                    PeaksSteppeRoundTexts.LineFor(PeaksSteppeRoundTexts.VaneLinePrefix, Rapadura.Gameplay.World.Map.MapRequirementHeroState.Capture(null).Hero)));
+            }
         }
 
         private static string Text(string key)

@@ -155,6 +155,16 @@ namespace Rapadura.Gameplay.Refining
             return stats != null ? stats.Level : 1;
         }
 
+        /// <summary>
+        /// The refine chance the lit Grande Forja of the Salões de Bronze adds for this save
+        /// (<see cref="World.Map.Mechanics.GreatForgeRules.RefineBonus"/>; 0 without a save).
+        /// </summary>
+        public static float ForgeBonus()
+        {
+            Rapadura.Core.DI.ServiceLocator.TryGet(out World.Map.WorldMapProgress progress);
+            return World.Map.Mechanics.GreatForgeRules.RefineBonus(World.Map.Mechanics.GreatForgeRules.StagesLit(progress));
+        }
+
         public static RefinePreview Preview(InventoryManager bag, RefineTarget target, bool useCharm)
         {
             InventorySlotData data = Resolve(bag, target);
@@ -173,7 +183,7 @@ namespace Rapadura.Gameplay.Refining
             int heroLevel = HeroLevelOf(bag);
 
             return new RefinePreview(item, data, level, option, stone, stones, RefineRules.FeeFor(level, heroLevel), gold, charms, life,
-                RefineRules.ChanceFor(level, charm, data != null && data.luck), canFail, RefineRules.FailureLevel(level),
+                RefineRules.ChanceFor(level, charm, data != null && data.luck, ForgeBonus()), canFail, RefineRules.FailureLevel(level),
                 RefineRules.Check(refinable, level, stones, gold, charm, charms, heroLevel),
                 RefineRules.CheckOption(refinable, option, life));
         }
@@ -210,7 +220,7 @@ namespace Rapadura.Gameplay.Refining
                 bag.RemoveById(RefineItems.LuckCharm, 1);
             }
 
-            attempt = RefineRules.Attempt(preview.Level, charm, seed, data.luck, HeroLevelOf(bag));
+            attempt = RefineRules.Attempt(preview.Level, charm, seed, data.luck, HeroLevelOf(bag), ForgeBonus());
             data.refineLevel = attempt.ToLevel;
             bag.NotifyItemDataChanged(target.IsEquipped ? target.EquipSlot : EquipmentSlot.None);
             EventBus.Publish(new ItemRefinedEvent(data.itemId, attempt));

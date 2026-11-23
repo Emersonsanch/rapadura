@@ -48,6 +48,11 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             bool alive = _stats.IsAlive;
             float height = phase == GarajonayFogPhase.Fog ? _player.position.y - OverworldRules.SurfaceAt(_layout, world) : 0f;
             float sight = GarajonayFogRules.SightFor(phase, height, inCity, alive);
+            if (LightPetalBoard.Lit(Time.time))
+            {
+                // A Pétala de Luz eaten (06, ZarafshanPavilionRules): its light keeps the fog from hiding the beasts for 3 minutes.
+                sight = BeastSightRules.NoLimit;
+            }
 
             if (phase != _fogPhase)
             {

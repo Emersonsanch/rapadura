@@ -73,11 +73,15 @@ Uma segunda cidade dentro de uma região (Docs/Mapas100.md §3.3) fica **fora** 
 - **Forja de Tambor** (semanal, 3 vagas que giram, tema Ferreiro): ferro, minério, poção de vida, Pedra da Bênção e a
   **Teriaga do Oásis** (exigência do 12, Trono de Namrael) fixas; giram martelo, machado, peitoral de couro, arco de
   caça, carne, ração de montaria e espada de ferro (esta após o chefe do Deserto). O 11 não tem exigência. O Ammo
-  nunca para lá. (O conserto 20% mais barato ainda falta.)
+  nunca para lá. (O conserto 20% mais barato: feito em 2026-11-23, linha abaixo.)
 - **No jogo (2026-11-16): Têmpera do Tambor** (`CityServiceRules`, `CityServicesMechanicsDriver`, `CityServiceTexts`,
   teste `CityServicesTests`): [E] a até 2,6 m do tambor de guerra do canto oeste do Salão Grande
   (`CityTownRecipes.TamborRubroTemperDrum`), só no minuto em que os tambores tocam (`DrumRhythmRules`), uma vez por dia
   UTC, fora de combate: +8% de dano de ataque por 10 min; fala do Tushratta para cada primo. De graça (decisão).
+- **No jogo (2026-11-23): conserto 20% mais barato** (`RepairDiscountRules`, `RepairService` com desconto, `ShopUIController`,
+  `VillageRefinePanel`, teste `CityTrainingServicesTests`): o balcão da Forja de Tambor abre com "Consertar tudo" (20% mais barato)
+  em cima das compras, no mundo contínuo e no hub; a janela do Ferreiro do hub aberta no Tambor Rubro também cobra 20% menos. O
+  desconto sai de cada peça (arredondado para cima, mínimo 1 de ouro).
 - **Missões da cidade:** Gurparanzah pede 6 escorpiões (o Escorpião das Areias faz o Escorpião-Rubro; 4 poções de vida +
   2 Pedras da Bênção + 45 ouro, 460 XP); depois Kessi pede 5 Gaviões de Brasa (o Gavião-de-Penacho faz o papel; Teriaga
   do Oásis + 55 ouro, 540 XP). Testes: `CityTamborRubroTests`.
@@ -106,12 +110,23 @@ Uma segunda cidade dentro de uma região (Docs/Mapas100.md §3.3) fica **fora** 
 - **Portões de Runa do Puzur** (semanal, 3 vagas que giram, tema Especialidade): poções de vida e mana, Pedra da
   Bênção, Pedra da Alma (após o chefe da Montanha) e as exigências da região fixas: **Picareta** e **Lamparina**
   (Picareta e Tocha do 17) e **Chá de Gengibre** (Resistência à Nevasca do 18); giram as runas de bronze (Clareza,
-  Couro, Cura, Vento, Cura Grande), ferro, minério e martelo. O Ammo nunca para lá. (As 5 etapas da Grande Forja ainda
-  faltam.)
+  Couro, Cura, Vento, Cura Grande), ferro, minério e martelo. O Ammo nunca para lá.
 - **No jogo (2026-11-16): a runa do dia do Puzur** (`CityServiceRules`, `CityServicesMechanicsDriver`,
   `CityServiceTexts`, teste `CityServicesTests`): [E] a até 2,4 m do pilar de runa da praça do lado do Puzur
   (`CityTownRecipes.BronzeHallsRuneStone`, o de 125°) dá de graça uma runa de bronze por dia UTC, a que o dia sorteia
   (Clareza, Couro, Cura ou Vento; a Cura Grande só à venda), marca diária no save; fala do Puzur para cada primo.
+- **No jogo (2026-11-23): as 5 etapas da Grande Forja** (`GreatForgeRules`, `CityServicesMechanicsDriver.Forge.cs`,
+  `CityServiceTexts`, ponto `CityTownRecipes.BronzeHallsForgeMouth`, teste `CityForgeAndRaceTests`): [E] a até 2,6 m da boca
+  da forja (2,6 m à frente dela) fala com a Napirasu. Versão offline da ficha ("pelas missões"): cada etapa espera o seu chefe
+  ou a missão da cidade, queima o que falta nos salões, paga na hora e deixa um serviço para sempre. **1 O Fole** (vencer O
+  Fole Apagado; 2 Pedras da Bênção + 80 de ouro; refino +2% de chance), **2 A Brasa** (missão do Untash + 10 minérios de
+  ferro e 10 madeiras; 4 ferros + 100; a forja dá 1 Pedra da Bênção por dia UTC), **3 A Bigorna** (missão do Shilhak + 6
+  ferros e 10 pedras; 1 Pedra da Alma + 120; o Puzur grava 2 runas por dia), **4 As Runas** (uma de cada runa de graça do
+  Puzur; 2 Pedras da Vida + 140; refino +4%), **5 O Cristal** (vencer Hahya, o Gigante Guerreiro, o chefe da Montanha, + 3 Pedras da Bênção e 5
+  ferros; 2 Amuletos da Sorte + 200; refino +5% e 2 Pedras da Bênção por dia). O bônus de refino vale em todo refino que pode
+  falhar (`RefineRules.ChanceFor` com `forgeBonus`, lido do save por `RefineService.ForgeBonus`), nunca passa de 95%. Falas
+  da Napirasu para cada primo (a Vó Edna e o doce de damasco) e dos primos na última etapa. Salvo como número de etapas
+  (`city.saloes_de_bronze.great_forge`). Online (as "Faíscas da Forja" do servidor inteiro) fica para a Fase 12.
 - **Missões da cidade:** Untash pede 5 golens de escória (o Ushabti de Pedra faz o Golem de Escória; 4 poções de vida
   + 2 Pedras da Bênção + 55 ouro, 620 XP); depois Shilhak pede 6 bandos de morcegos de brasa no veio (o Enxame de
   Morcegos faz o papel; Chá de Gengibre + 60 ouro, 700 XP). Testes: `CityBronzeHallsTests`.
@@ -172,12 +187,23 @@ fica em y = 0 dentro de um círculo de ~22 m com 3 saídas de rua, no lugar que 
 - **Respawn:** derrota nos mapas 26 e 27 acorda na praça de Aratta (`MapCatalog.RespawnCityFor` → `ApplyDefeatIn`).
 - **Alforje do Lugalbanda** (diário, 3 vagas que giram, tema Especialidade): poção de vida, Odre de Água e a **Relíquia dos
   Artífices** (exigência do 27, Pirâmides de Meroé) fixos; giram corda de escalada, poção de mana, carne, ração de
-  montaria, botas de couro, fibra e Amuleto da Sorte. O Ammo nunca para lá. (As Fitas de Corrida e o Auroque de
-  Aratta ainda faltam.)
+  montaria, botas de couro, fibra e Amuleto da Sorte. O Ammo nunca para lá.
 - **No jogo (2026-11-16): a Lira do Touro** (`CityServiceRules`, `CityServicesMechanicsDriver`, `CityServiceTexts`,
   teste `CityServicesTests`): [E] a até 2,6 m da lira da praça (`CityTownRecipes.ArattaBullLyre`), fora de combate,
   toca a canção do dia (5 canções sumérias, uma nova por dia UTC): +5% de velocidade de andar por 5 min, só a pé e fora
   de combate; tocar de novo renova; fala do primo. Versão solo do buff de grupo da ficha (decisão).
+- **No jogo (2026-11-23): a Corrida de Shulgi, as Fitas de Corrida e o Auroque** (`ShulgiRaceRules`,
+  `CityServicesMechanicsDriver.Race.cs`, percurso `OverworldLayouts.ShulgiRaceCourse`, pontos
+  `CityTownRecipes.ArattaRaceStart`/`ArattaRibbonPost`, teste `CityForgeAndRaceTests`): [E] entre os quatro postes de chifre
+  da rua Sul (fora de combate) dá a largada: contagem de 3 s e 8 fitas azuis (feixe e anel no chão) pela Savana dos Auroques,
+  ~860 m, chegada na estrada sul, 15 m fora do portão. Mesma sessão da corrida dos Nartes (`NartesRaceSession`: raio 9 m,
+  limite 300 s, desistência a 500 m). Ouro ≤ 110 s (galope bom), prata ≤ 135 s, bronze ≤ 170 s (a pé dá ~155 s): 3/2/1
+  **Fitas de Corrida**, +2 na primeira medalha do dia UTC. As Fitas ficam no estoque de fitas da coleção de montarias
+  (chave `race_aratta_shulgi`, salvas junto das Fitas do Laço e nunca misturadas com as de chefe). [E] no poste de fitas do
+  Shulgi (ao lado do poste de chifre leste da praça) troca, nesta ordem, o que ainda não tem: **Auroque de Aratta** por 25
+  (a linha `MountDropRules.Ribbons` dele, o preço Raro das Fitas do Laço; continua também prêmio da missão do Shulgi),
+  **Manta de Fitas de Aratta** por 6 e **Sela de Junco de Aratta** por 10 (cosméticos só por Fita, fora da Selaria). Falas do
+  Shulgi na largada e dos primos na troca, para cada primo.
 - **Missões da cidade:** Enmerkar pede 6 chacais no capim seco (o Chacal Apagado faz o Leão do Capim Apagado; 4 poções
   de vida + 3 de mana + 75 ouro, 900 XP); depois Shulgi pede 5 babuínos fora do percurso da corrida (Babuíno Apagado;
   2 Odres de Água + 90 ouro, 980 XP). Testes: `CityArattaTests`.
@@ -717,8 +743,12 @@ Roda Celeste, Esferas dos Arcontes, Jardim de Luz, Barca do Sol). Testes em `Cit
 - **Missões da cidade:** Sinuhe pede 8 crocodilos fora do cais da barca (o Crocodilo do Mangue faz o Crocodilo do Rio Escuro
   da ficha; poções + 240 ouro, 3400 XP); depois Djedi pede 6 escorpiões fora do banco de areia dos alunos (o Escorpião do
   deserto faz o Escorpião Negro de 73; **Lamparina Rúnica** + 240 ouro, 3500 XP). Testes: `CityMesektetTests`.
-- **Falta:** a noite permanente do rio, o evento A Barca Atrasou e os serviços de treino do Djedi e de Caderno do Setne
-  (hoje só falas). (Já existem, 2026-11-11: os mapas 71–76 no catálogo e no overworld; os doze píeres com a barca por hora,
+- **No jogo (2026-11-23): Djedi e Setne com tela** (`MesektetServiceRules`, `MesektetServicesMechanicsDriver`, `CityServicePanel`,
+  teste `CityTrainingServicesTests`): [E] na porta do Djedi abre os **Círculos de luz** (Lamparina +20% de mana, Horas +5% de
+  recarga, Escriba −8% de custo de mana; um por vez, 15 min; a primeira lição do dia grátis, depois 120 de ouro); [E] na porta do
+  Setne abre a **Estante do Caderno** (8 prateleiras de 25 a 300 páginas preenchidas, cada uma paga uma vez: ouro, Pedras da
+  Bênção, Pedra da Alma a partir de 100, Pedra da Vida na de 300).
+- **Falta:** (a noite permanente e A Barca Atrasou entraram em 2026-11-13; os serviços do Djedi e do Setne em 2026-11-23). (Já existem, 2026-11-11: os mapas 71–76 no catálogo e no overworld; os doze píeres com a barca por hora,
   `RioHourRules`, com hora de 3 min e não 12; a Íbis Real de Mesektet; o conjunto de equipamento Cais do Papiro e os Móveis
   do Cais do Papiro.)
 

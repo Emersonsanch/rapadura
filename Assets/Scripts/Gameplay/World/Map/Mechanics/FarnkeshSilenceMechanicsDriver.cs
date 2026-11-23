@@ -1,11 +1,14 @@
 using System;
 using Rapadura.Core.DI;
+using Rapadura.Core.Events;
 using Rapadura.Core.Localization;
 using Rapadura.Gameplay.Characters;
 using Rapadura.Gameplay.Combat;
+using Rapadura.Gameplay.Enemies;
 using Rapadura.Gameplay.Environment;
 using Rapadura.Gameplay.Mounts;
 using Rapadura.Gameplay.Player;
+using Rapadura.Gameplay.Skills;
 using Rapadura.Gameplay.World.Map.Overworld;
 using UnityEngine;
 
@@ -49,6 +52,14 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         private Vector2 _mark;
         private int _toldLocal;
 
+        // 56 · the silent skills (SilentSkillRules): the noise of the casts since the last frame and when the last quiet one was cast.
+        private float _castNoise;
+        private float _lastQuietCast = float.NegativeInfinity;
+        private bool _castSubscribed;
+
+        // 56 · the stilled bell (HermitageStillBellRules): read from the registry of the defeated on each walk onto the cliff.
+        private bool _bellStilled;
+
         private Rect[] _areas;
 
         /// <inheritdoc/>
@@ -76,11 +87,52 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             _areas = new[] { MechanicsDriverHub.WorldArea(OverworldLayouts.FarnkeshBounds, _origin) };
         }
 
-        private void OnEnable() => _combat.Attach();
+        private void OnEnable()
+        {
+            _combat.Attach();
+            if (!_castSubscribed)
+            {
+                _castSubscribed = true;
+                EventBus.Subscribe<SkillCastEvent>(OnSkillCast);
+            }
+        }
+
+        /// <summary>A skill the hero casts over the cliff: quiet ones calm the meter and hush the next blows, loud ones fill it (56).</summary>
+        private void OnSkillCast(SkillCastEvent evt)
+        {
+            if (!_inside || _player == null || evt.Caster != _player.gameObject || evt.Skill == null || _markedAt >= 0f)
+            {
+                return;
+            }
+
+            SkillNoise noise = SilentSkillRules.NoiseOf(evt.Skill.SkillId);
+            _castNoise += SilentSkillRules.CastNoise(noise, HermitageStillBellRules.Quiet(IsLavine(), IsNight(), _bellStilled));
+            if (noise == SkillNoise.Quiet)
+            {
+                _lastQuietCast = Time.time;
+                SayRound(PeaksSteppeRoundTexts.SkillQuiet);
+            }
+            else if (noise == SkillNoise.Loud)
+            {
+                SayRound(PeaksSteppeRoundTexts.SkillLoud);
+            }
+        }
+
+        private void SayRound(string key)
+        {
+            ServiceLocator.TryGet(out LocalizationManager localization);
+            CombatFxManager.SpawnLootWarningText(_player.position + Vector3.up * (FeedbackHeight + 0.7f), PeaksSteppeRoundTexts.Get(localization, key));
+        }
 
         private void OnDisable()
         {
             _combat.Detach();
+            if (_castSubscribed)
+            {
+                _castSubscribed = false;
+                EventBus.Unsubscribe<SkillCastEvent>(OnSkillCast);
+            }
+
             Leave();
         }
 
@@ -120,6 +172,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
                 _inside = true;
                 _combat.TakeHits();
                 Tell();
+                CheckBell();
             }
 
             float dt = Time.deltaTime;
@@ -170,9 +223,11 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             }
 
             FarnkeshPace pace = FarnkeshSilenceRules.PaceOf(speed, Mounted);
-            float quiet = FarnkeshSilenceRules.Quiet(IsLavine(), IsNight());
+            float quiet = HermitageStillBellRules.Quiet(IsLavine(), IsNight(), _bellStilled);
             float before = _meter;
-            _meter = FarnkeshSilenceRules.Step(_meter, pace, _combat.TakeHits(), quiet, dt);
+            int hits = SilentSkillRules.HitsHeard(_combat.TakeHits(), Time.time - _lastQuietCast);
+            _meter = Mathf.Clamp(FarnkeshSilenceRules.Step(_meter, pace, hits, quiet, dt) + _castNoise, 0f, FarnkeshSilenceRules.Max);
+            _castNoise = 0f;
             int warning = FarnkeshSilenceRules.WarningCrossed(before, _meter);
             if (warning == 1)
             {
@@ -207,7 +262,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             }
 
             _markedAt = -1f;
-            _meter = FarnkeshSilenceRules.AfterEcho;
+            _meter = HermitageStillBellRules.AfterEcho(_bellStilled);
             HideRing();
             if (FarnkeshSilenceRules.StrikeHits(_mark, world))
             {
@@ -246,11 +301,31 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             }
         }
 
+        /// <summary>
+        /// Whether O Sino que Não Para is stilled (56): asked once per walk onto the cliff; the first walk after it is beaten tells it, with the
+        /// cousin's line (one mark in the save, on that event).
+        /// </summary>
+        private void CheckBell()
+        {
+            _bellStilled = ServiceLocator.TryGet(out DefeatedEnemyRegistry registry) && registry != null && registry.IsDefeated(HermitageStillBellRules.BellEnemyId);
+            if (!_bellStilled || !ServiceLocator.TryGet(out WorldMapProgress progress) || progress.GetTimeMark(HermitageStillBellRules.FirstSilenceKey) > 0L)
+            {
+                return;
+            }
+
+            progress.SetTimeMark(HermitageStillBellRules.FirstSilenceKey, 1L);
+            ServiceLocator.TryGet(out LocalizationManager localization);
+            CombatFxManager.SpawnLootWarningText(_player.position + Vector3.up * (FeedbackHeight + 1.4f), PeaksSteppeRound2Texts.Get(localization, PeaksSteppeRound2Texts.BellStilled));
+            CombatFxManager.SpawnLootWarningText(_player.position + Vector3.up * (FeedbackHeight + 2.1f),
+                PeaksSteppeRound2Texts.Get(localization, PeaksSteppeRound2Texts.LineFor(PeaksSteppeRound2Texts.BellLinePrefix, MapRequirementHeroState.Capture(null).Hero)));
+        }
+
         /// <summary>Out of the hermitages: the meter and a pending Echo are dropped, the arcs hidden.</summary>
         private void Leave()
         {
             _inside = false;
             _meter = 0f;
+            _castNoise = 0f;
             _markedAt = -1f;
             HideRing();
             if (_arc != null)

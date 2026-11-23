@@ -767,6 +767,22 @@ namespace Rapadura.Gameplay.Mounts
             EventBus.Publish(new MountCollectionChangedEvent());
         }
 
+        /// <summary>
+        /// Takes <paramref name="amount"/> ribbons off <paramref name="key"/>'s store for something that is not a mount (the Aratta cosmetics
+        /// Shulgi trades for Fitas de Corrida, ShulgiRaceRules). False, and nothing taken, when there are not enough.
+        /// </summary>
+        public bool SpendRibbons(string key, int amount)
+        {
+            if (string.IsNullOrEmpty(key) || amount <= 0 || RibbonsOf(key) < amount)
+            {
+                return false;
+            }
+
+            _ribbons[key] = RibbonsOf(key) - amount;
+            EventBus.Publish(new MountCollectionChangedEvent());
+            return true;
+        }
+
         /// <summary>Trades the boss's Fitas do Laço for <paramref name="mountId"/> at the Haras (25 Rare / 80 Epic). Null when not allowed.</summary>
         public OwnedMount RedeemRibbons(string bossId, string mountId)
         {

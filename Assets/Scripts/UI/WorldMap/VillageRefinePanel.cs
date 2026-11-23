@@ -51,6 +51,8 @@ namespace Rapadura.UI.WorldMap
         private Button _closeButton;
 
         private InventoryManager _bag;
+        /// <summary>The city forge's repair discount (<see cref="RepairDiscountRules.ForCity"/>; 0.2 in the Tambor Rubro).</summary>
+        private float _repairDiscount;
         private bool _open;
         private RefineTarget? _pending;
         private readonly System.Random _seeds = new System.Random();
@@ -143,8 +145,8 @@ namespace Rapadura.UI.WorldMap
             _overlay = null;
         }
 
-        /// <summary>Opens the window on <paramref name="bag"/> (the hub's live carried inventory).</summary>
-        public void Open(InventoryManager bag)
+        /// <summary>Opens the window on <paramref name="bag"/> (the hub's live carried inventory); <paramref name="repairDiscount"/> is the city forge's.</summary>
+        public void Open(InventoryManager bag, float repairDiscount = 0f)
         {
             if (_open || bag == null || !EnsureOverlay())
             {
@@ -152,6 +154,7 @@ namespace Rapadura.UI.WorldMap
             }
 
             _bag = bag;
+            _repairDiscount = repairDiscount;
             _open = true;
             _pending = null;
             _statusLabel.text = string.Empty;
@@ -170,6 +173,7 @@ namespace Rapadura.UI.WorldMap
 
             _open = false;
             _bag = null;
+            _repairDiscount = 0f;
             _pending = null;
             GameplayPause.Release(this);
         }
@@ -285,9 +289,10 @@ namespace Rapadura.UI.WorldMap
             _charmToggle.label = RefineTexts.Get(localization, RefineTexts.UseCharm);
             DurabilityTexts.EnsureRegistered(localization);
             ItemOptionTexts.EnsureRegistered(localization);
-            int repairCost = RepairService.RepairAllCost(_bag, out int wornPieces);
+            int repairCost = RepairService.RepairAllCost(_bag, out int wornPieces, _repairDiscount);
             _repairAllButton.text = wornPieces > 0
                 ? DurabilityTexts.Format(localization, DurabilityTexts.RepairAllButton, wornPieces, repairCost)
+                    + Rapadura.Gameplay.World.Map.Mechanics.CityTrainingTexts.RepairDiscountSuffix(localization, _repairDiscount)
                 : DurabilityTexts.Get(localization, DurabilityTexts.NothingToRepair);
             _repairAllButton.SetEnabled(wornPieces > 0 && _bag.GetTotalCount(RefineItems.Gold) >= repairCost);
             _closeButton.text = RefineTexts.Get(localization, RefineTexts.Close);
@@ -385,7 +390,7 @@ namespace Rapadura.UI.WorldMap
         private void AddRepairAndSockets(RefineTarget target, RefinePreview preview, int index, LocalizationManager localization,
             VisualElement body, VisualElement actions)
         {
-            RepairQuote quote = RepairService.Quote(_bag, target);
+            RepairQuote quote = RepairService.Quote(_bag, target, _repairDiscount);
             if (quote.Check != RepairCheck.NotRepairable)
             {
                 body.Add(NewLabel(DurabilityTexts.Format(localization, DurabilityTexts.RowLine,
@@ -458,7 +463,7 @@ namespace Rapadura.UI.WorldMap
             LocalizationManager localization = Localization;
             InventorySlotData data = RefineService.Resolve(_bag, target);
             string name = data != null ? GeneratedItemName.Compose(ItemDatabase.GetById(data.itemId), data, localization) : string.Empty;
-            if (RepairService.TryRepair(_bag, target, out int cost, out RepairCheck check))
+            if (RepairService.TryRepair(_bag, target, out int cost, out RepairCheck check, _repairDiscount))
             {
                 Report(DurabilityTexts.Format(localization, DurabilityTexts.Repaired, name));
                 GameLogger.Info("Repair", $"{data?.itemId} repaired for {cost} gold.");
@@ -481,7 +486,7 @@ namespace Rapadura.UI.WorldMap
             }
 
             LocalizationManager localization = Localization;
-            if (RepairService.TryRepairAll(_bag, out int cost, out int pieces, out RepairCheck check))
+            if (RepairService.TryRepairAll(_bag, out int cost, out int pieces, out RepairCheck check, _repairDiscount))
             {
                 Report(DurabilityTexts.Format(localization, DurabilityTexts.RepairedAll, pieces, cost));
                 GameLogger.Info("Repair", $"{pieces} piece(s) repaired for {cost} gold.");

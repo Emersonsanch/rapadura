@@ -418,6 +418,9 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
                     _climb = new NartesChainClimb(_anchors.Length, _chainLength, along);
                     _saidTop = false;
                     Say(NartesMechanicsTexts.ChainEnter);
+
+                    // 52 · the chain at night glows up to the best ring ever (NartesMechanicsDriver.Night.cs).
+                    SayChainNight();
                 }
 
                 return;
@@ -444,6 +447,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             }
 
             _climb.Reach(along);
+            NoteChainBest();
             if (_climb.ReachedTop && !_saidTop)
             {
                 _saidTop = true;
@@ -452,7 +456,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
 
             WindGustPhase phase = NartesChainRules.PhaseAt(now);
             bool sheltered = NartesChainRules.IsSheltered(_anchors, local);
-            Vector2 push = across * NartesChainRules.GustSide(now) * NartesChainRules.PushSpeed;
+            Vector2 push = across * NartesChainRules.GustSide(now) * NartesChainRules.PushSpeed * ChainPushFactor();
             ShowGust(phase, push);
             SayGust(phase, sheltered);
             if (phase != WindGustPhase.Blowing || sheltered || !_character.enabled)
@@ -474,6 +478,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             {
                 _saidWarn = true;
                 Say(NartesMechanicsTexts.ChainWarn);
+                SayChainSnow();
             }
             else if (phase == WindGustPhase.Blowing && !sheltered && !_saidGust)
             {
@@ -551,7 +556,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             {
                 LineRenderer beacon = _anchorBeacons[i];
                 beacon.enabled = (_anchors[i] - local).sqrMagnitude < ChainViewRange * ChainViewRange;
-                beacon.startColor = beacon.endColor = _climb != null && i <= _climb.BestAnchor ? LitColor : IronColor;
+                beacon.startColor = beacon.endColor = (_climb != null && i <= _climb.BestAnchor) || ChainRingLit(i) ? LitColor : IronColor;
             }
         }
 

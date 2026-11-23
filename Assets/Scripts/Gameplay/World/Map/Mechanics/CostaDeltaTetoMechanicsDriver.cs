@@ -203,6 +203,8 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             // The lit fountains belong to this visit of the Delta: off with the driver (the hero left the region, the scene changed).
             LodoFountainBoard.Clear();
             _coralCombat.Detach();
+            UnhookDragonGaze();
+            UnhookFisherWisps();
             EndDhowRide(false);
             ClearTideSlow();
             ClearBogSlow();
@@ -283,6 +285,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
                 TickLodo(world - _deltaOrigin, redraw);
                 TickGaze(world - _deltaOrigin, now);
                 TickRootBridges(world - _deltaOrigin);
+                TickFisherWisps(world - _deltaOrigin);
                 TickNeighbours(world - _deltaOrigin);
             }
             else if (_inDelta)
@@ -526,6 +529,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             LeaveHouses();
             LeaveDhow();
             LeaveCorals();
+            LeaveMotherCoral();
             _flatHere = -1;
             ClearTideSlow();
             CostaTideFlat[] flats = OverworldLayouts.TideFlats;
@@ -676,6 +680,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         {
             LeaveGaze();
             LeaveRootBridges();
+            HideFisherWisps();
             LeaveTarchon();
             _islandHere = -1;
             _wasBog = false;

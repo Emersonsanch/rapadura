@@ -44,7 +44,8 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
         {
             bool inNight = OverworldLayouts.TarchonNightBounds.Contains(local);
             bool lantern = TarchonLanternRules.LanternLit(_lanternLitAt, Time.time);
-            TickTarchonNight(inNight, lantern);
+            // The lights the freed Pescador de Luzes let go (FisherWisps partial) clear the night mist like a lantern, for 10 min.
+            TickTarchonNight(inNight, lantern || FisherWispsClearNight());
 
             TarchonNeighbour[] neighbours = OverworldLayouts.TarchonNeighbours;
             if (!inNight || (local - OverworldLayouts.TarchonOffset).sqrMagnitude > NeighbourViewRange * NeighbourViewRange)
@@ -82,6 +83,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             DrawRing(MastKey, _deltaOrigin, mast, TarchonLanternRules.MastReach, LanternColor, anyDim && !lantern, true);
 
             int near = TarchonLanternRules.Nearest(neighbours, local, TarchonLanternRules.NeighbourReach);
+            TickTarchonTown(local, progress, today, days, near >= 0);
             if (near >= 0)
             {
                 TickNeighbour(near, neighbours[near], awake[near], lantern, local, progress, days, today);
@@ -136,6 +138,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             int count = TarchonLanternRules.AwakeCount(days, today);
             SayText(string.Format(TarchonLanternTexts.Get(localization, TarchonLanternTexts.Woke), count, TarchonLanternRules.NeighbourCount));
             SayNeighbour(TarchonLanternTexts.NeighbourLine(neighbour.Id), -0.5f);
+            OnNeighbourWoken(progress);
             if (firstToday)
             {
                 SayNeighbour(TarchonLanternTexts.LineFor(MapRequirementHeroState.Capture(null).Hero), -1f);
@@ -238,6 +241,7 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
             }
 
             Off(_lanternLine);
+            LeaveTarchonTown();
             if (_neighbourFigures != null)
             {
                 for (int i = 0; i < _neighbourFigures.Length; i++)

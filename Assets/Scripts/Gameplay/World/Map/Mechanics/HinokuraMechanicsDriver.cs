@@ -353,10 +353,12 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
                 return;
             }
 
-            float distance = RioFireRules.DistanceToFire(OverworldLayouts.CaldeiraLake, local);
+            // 70 · the night's lava and the Glutão's own fire join the lake (HinokuraMechanicsDriver.Fire.cs, CalderaFireRules).
+            float distance = CalderaLakeDistance(local);
+            float glutton = GluttonHeat(local);
             bool onStone = OnColdStone(local) || SplashHolds(local);
             float before = _heat;
-            _heat = HinokuraHeatRules.Step(_heat, distance, onStone, TeaActive(), Time.deltaTime);
+            _heat = CalderaFireRules.Step(_heat, distance, glutton, onStone, TeaActive(), Time.deltaTime);
             if (onStone && before >= HinokuraHeatRules.WarmAt)
             {
                 Say(HinokuraMechanicsTexts.HeatCooled);

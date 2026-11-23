@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Rapadura.Core.DI;
 using Rapadura.Core.Localization;
 using Rapadura.Gameplay.Environment;
+using Rapadura.Gameplay.Mounts;
 using Rapadura.Gameplay.Player;
 using Rapadura.Gameplay.World.Map.Overworld;
 using UnityEngine;
@@ -90,8 +91,13 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
                 SetDay(NartesDreamRules.HeardKey, today);
                 ServiceLocator.TryGet(out LocalizationManager localization);
                 string where = DreamsHerdGroveMirrorsTexts.Get(localization, DreamsHerdGroveMirrorsTexts.CompassKeys[NartesDreamRules.CompassOf(OverworldLayouts.FortimOffset, spots[spot])]);
-                SayText(string.Format(DreamsHerdGroveMirrorsTexts.Get(localization, DreamsHerdGroveMirrorsTexts.Dream),
-                    NartesDreamRules.ToldDistance(OverworldLayouts.FortimOffset, spots[spot]), where));
+
+                // 49 · with O Pesadelo da Tábua beaten the dream is good: told to 25 m, a fuller chest (GoodDreamRules).
+                bool good = DreamIsGood();
+                int told = GoodDreamRules.ToldDistance(OverworldLayouts.FortimOffset, spots[spot], good);
+                SayText(good
+                    ? PeaksSteppeRound2Texts.Format(localization, PeaksSteppeRound2Texts.GoodDream, told, where)
+                    : string.Format(DreamsHerdGroveMirrorsTexts.Get(localization, DreamsHerdGroveMirrorsTexts.Dream), told, where));
             }
 
             bool open = NartesDreamRules.Open(heard, LastDay(NartesDreamRules.ChestKey), today);
@@ -122,11 +128,25 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
                 SayRoute(DreamsHerdGroveMirrorsTexts.DreamPrompt);
             }
 
-            if (_controller.Input.InteractPressedThisFrame && Pay(NartesDreamRules.Purse))
+            if (!_controller.Input.InteractPressedThisFrame)
+            {
+                return;
+            }
+
+            bool goodDream = DreamIsGood();
+            int purse = GoodDreamRules.Purse(goodDream);
+            if (Pay(purse))
             {
                 SetDay(NartesDreamRules.ChestKey, today);
                 ServiceLocator.TryGet(out LocalizationManager localization);
-                SayText(string.Format(DreamsHerdGroveMirrorsTexts.Get(localization, DreamsHerdGroveMirrorsTexts.DreamFound), NartesDreamRules.Purse));
+                SayText(goodDream
+                    ? PeaksSteppeRound2Texts.Format(localization, PeaksSteppeRound2Texts.GoodDreamFound, purse)
+                    : string.Format(DreamsHerdGroveMirrorsTexts.Get(localization, DreamsHerdGroveMirrorsTexts.DreamFound), purse));
+                if (goodDream && ServiceLocator.TryGet(out WorldMapProgress progress) && progress.GetTimeMark(GoodDreamRules.FirstGoodDreamKey) <= 0L)
+                {
+                    progress.SetTimeMark(GoodDreamRules.FirstGoodDreamKey, 1L);
+                    SayText(PeaksSteppeRound2Texts.Get(localization, PeaksSteppeRound2Texts.LineFor(PeaksSteppeRound2Texts.DreamLinePrefix, MapRequirementHeroState.Capture(null).Hero)));
+                }
             }
         }
 
@@ -207,13 +227,41 @@ namespace Rapadura.Gameplay.World.Map.Mechanics
                 int horse = _following[k];
                 _following.RemoveAt(k);
                 SetDay(PrairieHerdRules.DayKey(horse), today);
+                long points = 0L;
                 if (progress != null)
                 {
-                    progress.SetTimeMark(PrairieHerdRules.PointsKey, progress.GetTimeMark(PrairieHerdRules.PointsKey) + 1L);
+                    points = progress.GetTimeMark(PrairieHerdRules.PointsKey) + 1L;
+                    progress.SetTimeMark(PrairieHerdRules.PointsKey, points);
                 }
 
                 SayText(string.Format(DreamsHerdGroveMirrorsTexts.Get(localization, DreamsHerdGroveMirrorsTexts.HorseDelivered), 1, PrairieHerdRules.PurseEach));
+
+                // 51 · now and then a heavenly horse came with the herd (PrairieHerdMountRules).
+                if (progress != null)
+                {
+                    TryGiveHerdMount(today, horse, points, localization);
+                }
             }
+        }
+
+        /// <summary>The herders give the heavenly horse of Ferghana when the delivery earns it (<see cref="PrairieHerdMountRules"/>); the mount collection keeps it.</summary>
+        private void TryGiveHerdMount(long today, int horse, long points, LocalizationManager localization)
+        {
+            MountCollection mounts = MountCollection.ResolveShared();
+            if (mounts == null)
+            {
+                return;
+            }
+
+            double roll = PrairieHerdMountRules.Roll(today, horse, points);
+            if (!PrairieHerdMountRules.Earns(mounts.Owns(PrairieHerdMountRules.MountId), points, roll)
+                || mounts.Grant(PrairieHerdMountRules.MountId, MountCollection.SourceEvent) == null)
+            {
+                return;
+            }
+
+            SayText(PeaksSteppeRoundTexts.Get(localization, PeaksSteppeRoundTexts.HerdMount));
+            SayText(PeaksSteppeRoundTexts.Get(localization, PeaksSteppeRoundTexts.LineFor(PeaksSteppeRoundTexts.HerdLinePrefix, MapRequirementHeroState.Capture(null).Hero)));
         }
 
         private void ShowHorse(int horse, Vector2 at, bool show)
