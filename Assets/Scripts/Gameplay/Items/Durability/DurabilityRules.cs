@@ -31,9 +31,11 @@ namespace Rapadura.Gameplay.Items.Durability
         /// <summary>
         /// The repair prices an item at most at this value (Docs/Balanco100a500.md §5.3, sugestão 3): the sets of Regions 13–16
         /// sell for 4 700–10 400 and, priced by that, the ~3 hits a kill takes cost 2–4× the gold a farming hour brings. With
-        /// the cap the worn set costs ~145–240 gold an hour at +9 (14–23% of the farm), every band from 100 to 500.
+        /// the cap the worn set costs ~145–240 gold an hour at +9 (14–23% of the farm), every band from 100 to 500. 200 → 210
+        /// (2026-11-23): the forest beasts of the twenty-eighth pass (PeaksOwnBeasts, no Pedra da Alma in the Forest) left 101–111
+        /// with 24.99% of its gold in destinations, under the 25% floor of tools/balance; +5% on the capped repair gives it back.
         /// </summary>
-        public const int RepairValueCap = 200;
+        public const int RepairValueCap = 210;
         /// <summary>A full repair (from 0) costs this share of the item's value, before the multipliers.</summary>
         public const float RepairValueFraction = 0.25f;
         /// <summary>Each refine level adds this share to the repair cost (+10 = ×2).</summary>

@@ -372,6 +372,16 @@ namespace Rapadura.Gameplay.Enemies.Visuals
             { "enemy_forest_taotie_servant", ProceduralEnemyKind.TaotieServant },
             { "enemy_forest_qiongqi_cub", ProceduralEnemyKind.QiongqiCub },
             { "enemy_forest_lime_guardian", ProceduralEnemyKind.LimeGuardian },
+            // Twenty-ninth pass (NorthOwn2BeastRecipes): the roles of the sheets 57–100 and the Guarda de Taowu (46) still borrowed after the twenty-eighth.
+            { "enemy_mountain_gale", ProceduralEnemyKind.Gale },
+            { "enemy_cave_ice_crack", ProceduralEnemyKind.IceCrack },
+            { "enemy_desert_living_crystal", ProceduralEnemyKind.LivingCrystal },
+            { "enemy_cave_ice_root", ProceduralEnemyKind.IceRoot },
+            { "enemy_cave_ember_carp", ProceduralEnemyKind.EmberCarp },
+            { "enemy_mountain_smoke_bamboo", ProceduralEnemyKind.SmokeBamboo },
+            { "enemy_mountain_fumarole", ProceduralEnemyKind.Fumarole },
+            { "enemy_mountain_living_bellows", ProceduralEnemyKind.LivingBellows },
+            { "enemy_forest_taowu_guard", ProceduralEnemyKind.TaowuGuard },
             // Twenty-first pass (NorthOwnBeastRecipes): the most-seen roles of Farnkesh, the Mar Gelado and Hinokura that still borrowed another beast.
             { "enemy_mountain_flying_stone", ProceduralEnemyKind.FlyingStone },
             { "enemy_mountain_gorge_ays", ProceduralEnemyKind.GorgeAys },
@@ -603,6 +613,7 @@ namespace Rapadura.Gameplay.Enemies.Visuals
             ProceduralEnemyKind.Dingonek, ProceduralEnemyKind.StripedJackal, ProceduralEnemyKind.SmokeHyena, ProceduralEnemyKind.StoneRam, ProceduralEnemyKind.MossCrocodile, ProceduralEnemyKind.ShadowGharial,
             ProceduralEnemyKind.ShenMist, ProceduralEnemyKind.HundunBubble, ProceduralEnemyKind.RiddleLantern,
             ProceduralEnemyKind.DimmedEcho, ProceduralEnemyKind.CrackedBell, ProceduralEnemyKind.TaotieServant, ProceduralEnemyKind.QiongqiCub, ProceduralEnemyKind.LimeGuardian,
+            ProceduralEnemyKind.Gale, ProceduralEnemyKind.IceCrack, ProceduralEnemyKind.LivingCrystal, ProceduralEnemyKind.IceRoot, ProceduralEnemyKind.EmberCarp, ProceduralEnemyKind.SmokeBamboo, ProceduralEnemyKind.Fumarole, ProceduralEnemyKind.LivingBellows, ProceduralEnemyKind.TaowuGuard,
             ProceduralEnemyKind.FlyingStone, ProceduralEnemyKind.GorgeAys, ProceduralEnemyKind.TrappedLightning, ProceduralEnemyKind.IceFish, ProceduralEnemyKind.LanternEel, ProceduralEnemyKind.TundraMosquito,
             ProceduralEnemyKind.DimmedNarwhal, ProceduralEnemyKind.StormGull, ProceduralEnemyKind.WitchFish, ProceduralEnemyKind.ObsidianOctopus, ProceduralEnemyKind.RagingSpark, ProceduralEnemyKind.LivingAsh,
             ProceduralEnemyKind.ShadowSalamander, ProceduralEnemyKind.CoilScorpion, ProceduralEnemyKind.DimmedUshabti, ProceduralEnemyKind.BoiledShadow, ProceduralEnemyKind.MudCrocodile, ProceduralEnemyKind.CrackedUshabti,
@@ -1557,6 +1568,33 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                     break;
                 case ProceduralEnemyKind.LimeGuardian:
                     PeaksOwnBeastRecipes.BuildLimeGuardian(blueprint);
+                    break;
+                case ProceduralEnemyKind.Gale:
+                    NorthOwn2BeastRecipes.BuildGale(blueprint);
+                    break;
+                case ProceduralEnemyKind.IceCrack:
+                    NorthOwn2BeastRecipes.BuildIceCrack(blueprint);
+                    break;
+                case ProceduralEnemyKind.LivingCrystal:
+                    NorthOwn2BeastRecipes.BuildLivingCrystal(blueprint);
+                    break;
+                case ProceduralEnemyKind.IceRoot:
+                    NorthOwn2BeastRecipes.BuildIceRoot(blueprint);
+                    break;
+                case ProceduralEnemyKind.EmberCarp:
+                    NorthOwn2BeastRecipes.BuildEmberCarp(blueprint);
+                    break;
+                case ProceduralEnemyKind.SmokeBamboo:
+                    NorthOwn2BeastRecipes.BuildSmokeBamboo(blueprint);
+                    break;
+                case ProceduralEnemyKind.Fumarole:
+                    NorthOwn2BeastRecipes.BuildFumarole(blueprint);
+                    break;
+                case ProceduralEnemyKind.LivingBellows:
+                    NorthOwn2BeastRecipes.BuildLivingBellows(blueprint);
+                    break;
+                case ProceduralEnemyKind.TaowuGuard:
+                    NorthOwn2BeastRecipes.BuildTaowuGuard(blueprint);
                     break;
                 case ProceduralEnemyKind.FlyingStone:
                     NorthOwnBeastRecipes.BuildFlyingStone(blueprint);

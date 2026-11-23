@@ -15,7 +15,7 @@ MonoBehaviour:
   _itemId: item_bau_de_ohyah
   _displayName: "Baú de Ohyah"
   _description: "Baú de pedra rachada que Ohyah largou ao cair. Guarda prêmios da força da Caçada em que ele caiu, e só um caçador por vez leva um para casa."
-  _icon: {fileID: 0}
+  _icon: {fileID: 21300000, guid: 944ded48a03e0bc4a1385944f0174c40, type: 3}
   _worldModelPrefab: {fileID: 0}
   _type: 0
   _category: 21

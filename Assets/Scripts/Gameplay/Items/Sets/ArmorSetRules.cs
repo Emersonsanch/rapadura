@@ -177,6 +177,10 @@ namespace Rapadura.Gameplay.Items.Sets
         {
             "enemy_forest_stone_lion", "enemy_forest_lantern_fox", "enemy_forest_terracotta_soldier", "enemy_forest_stone_turtle",
             "enemy_forest_mud_buffalo", "enemy_forest_nian_cub", "enemy_forest_dragon_carp", "enemy_forest_terracotta_horse",
+            // Three of the twenty-eighth pass (PeaksOwnBeastRecipes), the plain's own beasts in the roles it had lent (the Servo de Taotie,
+            // the Filhote de Qiongqi and the Guardião de Cal, in the soldier's, the wolf's and the lion's groups): with 33 species in the
+            // region the 8 alone took 1650 kills to farm the set, over the budget, and a set takes at most 12.
+            "enemy_forest_taotie_servant", "enemy_forest_qiongqi_cub", "enemy_forest_lime_guardian",
         });
 
         /// <summary>Ouro dos Kurgans (Região 9, Estepe dos Nartes).</summary>

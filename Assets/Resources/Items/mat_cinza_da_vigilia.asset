@@ -15,7 +15,7 @@ MonoBehaviour:
   _itemId: mat_cinza_da_vigilia
   _displayName: "Cinza da Vigília"
   _description: "Cinza fina das lamparinas que ficaram acesas a noite inteira na Vigília da Coluna. Serve para trocar e para criar, e sozinha não dá atributo. Cinco dela viram uma Vela da Vigília no Velário da Vila das Lamparinas."
-  _icon: {fileID: 0}
+  _icon: {fileID: 21300000, guid: e558e24d898c498afaffaa228d50f2d4, type: 3}
   _worldModelPrefab: {fileID: 0}
   _type: 0
   _category: 21

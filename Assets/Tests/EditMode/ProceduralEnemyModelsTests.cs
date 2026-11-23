@@ -552,6 +552,16 @@ namespace Rapadura.Tests
             { ProceduralEnemyKind.TaotieServant, new[] { ProceduralEnemyParts.Body, ProceduralEnemyParts.Head, ProceduralEnemyParts.ArmLeft, ProceduralEnemyParts.ArmRight } },
             { ProceduralEnemyKind.QiongqiCub, new[] { ProceduralEnemyParts.Body, ProceduralEnemyParts.Head, ProceduralEnemyParts.Jaw, ProceduralEnemyParts.Tail, "Leg_FL", "Shin_FL", "Foot_FL", "Leg_HR", "Shin_HR", "Foot_HR" } },
             { ProceduralEnemyKind.LimeGuardian, new[] { ProceduralEnemyParts.Body, ProceduralEnemyParts.Head, ProceduralEnemyParts.ArmLeft, ProceduralEnemyParts.ArmRight } },
+            // The twenty-ninth pass (NorthOwn2BeastRecipes).
+            { ProceduralEnemyKind.Gale, new[] { ProceduralEnemyParts.Body, ProceduralEnemyParts.StolenLight } },
+            { ProceduralEnemyKind.IceCrack, new[] { ProceduralEnemyParts.Body, ProceduralEnemyParts.StolenLight } },
+            { ProceduralEnemyKind.LivingCrystal, new[] { ProceduralEnemyParts.Body, ProceduralEnemyParts.StolenLight } },
+            { ProceduralEnemyKind.IceRoot, new[] { ProceduralEnemyParts.Body, ProceduralEnemyParts.StolenLight } },
+            { ProceduralEnemyKind.EmberCarp, new[] { ProceduralEnemyParts.Body, ProceduralEnemyParts.Head, ProceduralEnemyParts.Jaw, ProceduralEnemyParts.Tail } },
+            { ProceduralEnemyKind.SmokeBamboo, new[] { ProceduralEnemyParts.Body, ProceduralEnemyParts.StolenLight } },
+            { ProceduralEnemyKind.Fumarole, new[] { ProceduralEnemyParts.Body, ProceduralEnemyParts.StolenLight } },
+            { ProceduralEnemyKind.LivingBellows, new[] { ProceduralEnemyParts.Body, ProceduralEnemyParts.StolenLight } },
+            { ProceduralEnemyKind.TaowuGuard, new[] { ProceduralEnemyParts.Body, ProceduralEnemyParts.Head, ProceduralEnemyParts.Jaw, ProceduralEnemyParts.Tail, "Leg_FL", "Shin_FL", "Foot_FL", "Leg_HR", "Shin_HR", "Foot_HR" } },
         };
 
         /// <summary>Legs per kind; every one a Leg_ (hip) → Shin_ (knee) → Foot_ chain for ProceduralLegLocomotion.</summary>
@@ -645,6 +655,8 @@ namespace Rapadura.Tests
             { ProceduralEnemyKind.Dingonek, 4 }, { ProceduralEnemyKind.StripedJackal, 4 }, { ProceduralEnemyKind.SmokeHyena, 4 }, { ProceduralEnemyKind.StoneRam, 4 }, { ProceduralEnemyKind.MossCrocodile, 4 }, { ProceduralEnemyKind.ShadowGharial, 4 },
             { ProceduralEnemyKind.ShenMist, 0 }, { ProceduralEnemyKind.HundunBubble, 0 }, { ProceduralEnemyKind.RiddleLantern, 0 },
             { ProceduralEnemyKind.DimmedEcho, 0 }, { ProceduralEnemyKind.CrackedBell, 0 }, { ProceduralEnemyKind.TaotieServant, 0 }, { ProceduralEnemyKind.QiongqiCub, 4 }, { ProceduralEnemyKind.LimeGuardian, 0 },
+            { ProceduralEnemyKind.Gale, 0 }, { ProceduralEnemyKind.IceCrack, 0 }, { ProceduralEnemyKind.LivingCrystal, 0 }, { ProceduralEnemyKind.IceRoot, 0 }, { ProceduralEnemyKind.EmberCarp, 0 },
+            { ProceduralEnemyKind.SmokeBamboo, 0 }, { ProceduralEnemyKind.Fumarole, 0 }, { ProceduralEnemyKind.LivingBellows, 0 }, { ProceduralEnemyKind.TaowuGuard, 4 },
         };
 
         [Test]

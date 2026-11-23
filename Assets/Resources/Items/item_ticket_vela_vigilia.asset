@@ -15,7 +15,7 @@ MonoBehaviour:
   _itemId: item_ticket_vela_vigilia
   _displayName: "Vela da Vigília"
   _description: "Vela de cera clara com o pavio já torcido para a Coluna da Glória. Vale uma entrada na Vigília da Coluna, em qualquer sala. Cai rara de bichos comuns do nível 15 para cima, e o Velário da Vila das Lamparinas troca uma por 5 Cinzas da Vigília."
-  _icon: {fileID: 0}
+  _icon: {fileID: 21300000, guid: bfdeaaa8c6ce84329dac5a7cd47328c1, type: 3}
   _worldModelPrefab: {fileID: 0}
   _type: 5
   _category: 18

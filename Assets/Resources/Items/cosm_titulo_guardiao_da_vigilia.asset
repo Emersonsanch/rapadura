@@ -15,7 +15,7 @@ MonoBehaviour:
   _itemId: cosm_titulo_guardiao_da_vigilia
   _displayName: "Título: Guardião da Vigília"
   _description: "Título que aparece sobre o nome de quem guardou as lamparinas até a última onda. Prêmio raro da Vigília da Coluna. Só aparência, sem atributo."
-  _icon: {fileID: 0}
+  _icon: {fileID: 21300000, guid: 2c6a5d3a84a0e361eca95dd731cb69ed, type: 3}
   _worldModelPrefab: {fileID: 0}
   _type: 0
   _category: 21

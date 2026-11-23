@@ -144,6 +144,8 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             public const string TaotieServant = "enemy_forest_taotie_servant";
             public const string QiongqiCub = "enemy_forest_qiongqi_cub";
             public const string LimeGuardian = "enemy_forest_lime_guardian";
+            // The twenty-ninth pass (NorthOwn2BeastRecipes, OverworldLayouts.NorthOwn2Beasts): the Guarda de Taowu (46, was the stone lion).
+            public const string TaowuGuard = "enemy_forest_taowu_guard";
         }
 
         private static OverworldLayout MingchengRegion()
@@ -499,11 +501,11 @@ namespace Rapadura.Gameplay.World.Map.Overworld
 
             // Cidadela dos Quatro Gulosos (46): the Servos de Taotie [tanque] and the Filhotes de Qiongqi [rápido] (their own beasts now,
             // PeaksOwnBeasts; the terracotta soldier and the wolf before), the Bolhas de Hundun [controle] (their own beast now, WestOwn2Beasts;
-            // the ill-wind mist before), the Guarda de Taowu [elite] (the stone lion); no boss yet.
-            cidadela.Fauna.Add(Fauna("servos_de_taotie", "[tanque]", T(N(Ming.TaotieServant, 3), N(Ming.Lion, 1)), T(V(Ming.TaotieServant, 2), S(werewolf, 1)), 3, null, 30f));
+            // the ill-wind mist before), the Guarda de Taowu [elite] (its own beast now, NorthOwn2Beasts; the stone lion before); no boss yet.
+            cidadela.Fauna.Add(Fauna("servos_de_taotie", "[tanque]", T(N(Ming.TaotieServant, 3), N(Ming.TaowuGuard, 1)), T(V(Ming.TaotieServant, 2), S(werewolf, 1)), 3, null, 30f));
             cidadela.Fauna.Add(Fauna("bolhas_de_hundun", "[controle]", T(N(Ming.HundunBubble, 3), N(Ming.RiddleLantern, 1)), T(V(Ming.HundunBubble, 3), S(owl, 1)), 4));
             cidadela.Fauna.Add(Fauna("filhotes_de_qiongqi", "[rápido]", T(N(Ming.QiongqiCub, 3), N(Ming.HundunBubble, 1)), T(V(Ming.QiongqiCub, 2), S(werewolf, 1)), 4));
-            cidadela.Fauna.Add(Fauna("guarda_de_taowu", "[elite]", T(N(Ming.Lion, 3), N(Ming.Terracotta, 1)), T(V(Ming.Lion, 3), S(bats, 1)), 3, null, 32f));
+            cidadela.Fauna.Add(Fauna("guarda_de_taowu", "[elite]", T(N(Ming.TaowuGuard, 3), N(Ming.Terracotta, 1)), T(V(Ming.TaowuGuard, 3), S(bats, 1)), 3, null, 32f));
         }
     }
 }

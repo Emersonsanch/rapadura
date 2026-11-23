@@ -156,12 +156,11 @@ namespace Rapadura.Tests
         }
 
         [TestCase(Fark, "neblinas_do_vento_ruim", Mist)]
-        [TestCase(Fark, "ventanias", Mist)]
+        // The Ventania (ventanias) and the Rachadura (rachaduras) are their own beasts since the twenty-ninth pass (NorthOwn2BeastsPlacementTests).
         // The Sino Rachado (sinos_rachados) is its own beast since the twenty-eighth pass (PeaksOwnBeastsPlacementTests).
         [TestCase(Gelo, "lucios_gigantes", Pike)]
         [TestCase(Gelo, "focas_leopardo", Seal)]
         [TestCase(Gelo, "gaivotas_do_gelo", IceGull)]
-        [TestCase(Gelo, "rachaduras", Ooze)]
         public void TheOtherMapsOfTheRegion_KeepTheirStandIn(string region, string group, string standIn)
         {
             OverworldFauna fauna = OverworldLayouts.Get(region).Zones.SelectMany(z => z.Fauna).FirstOrDefault(f => f.Id == group);

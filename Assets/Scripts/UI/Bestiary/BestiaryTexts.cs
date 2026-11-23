@@ -310,6 +310,7 @@ namespace Rapadura.UI.Bestiary
 
             // -- Os papéis de Mingcheng e das Ermidas Suspensas que ainda usavam bicho emprestado depois dessa (own file too) --
             PeaksOwnBestiaryTexts.AddPages(entries);
+            NorthOwn2BestiaryTexts.AddPages(entries);
 
             // -- Papéis do Rio, da Mistura e do Limiar Profundo que ainda usavam bicho emprestado (own file too) --
             DeepOwnBestiaryTexts.AddPages(entries);

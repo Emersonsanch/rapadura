@@ -183,8 +183,13 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             public const string Bomb = "enemy_mountain_volcanic_bomb";
             public const string Pumice = "enemy_mountain_flying_pumice";
             public const string Shisa = "enemy_mountain_dimmed_shisa";
-            public const string Carp = "enemy_cave_lantern_fish";
-            public const string Smoke = "enemy_mountain_ill_wind_mist";
+            // The twenty-ninth pass (NorthOwn2BeastRecipes, OverworldLayouts.NorthOwn2Beasts): the Carpa de Brasa (66, was the lantern fish),
+            // the Bambu de Fumaça (66), the Fumarola (67, also the vapours of the springs, 65) and the Fole Vivo (69), all three the ill-wind
+            // mist before, are their own beasts now; the lantern fish and the mist left the archipelago.
+            public const string Carp = "enemy_cave_ember_carp";
+            public const string Bamboo = "enemy_mountain_smoke_bamboo";
+            public const string Fumarole = "enemy_mountain_fumarole";
+            public const string Bellows = "enemy_mountain_living_bellows";
             public const string Tanuki = "enemy_mountain_tanuki";
             public const string Tibicena = "enemy_mountain_tibicena";
             public const string GiantLizard = "enemy_mountain_giant_lava_lizard";
@@ -441,34 +446,34 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             hinokura.Fauna.Add(Fauna("lagartos_de_lava", "[rápido]", T(N(Fogo.Lizard, 3), N(Fogo.Crab, 1)), T(V(Fogo.Lizard, 2), S(owl, 1)), 4));
             praia.Fauna.Add(Fauna("caranguejos_vulcao", "[tanque]", T(N(Fogo.Crab, 3), N(Fogo.EmberGull, 1)), T(V(Fogo.Crab, 2), S(owl, 1)), 3, null, 30f));
             praia.Fauna.Add(Fauna("gaivotas_da_praia", "[distância]", T(N(Fogo.EmberGull, 3), N(Fogo.Crab, 1)), T(V(Fogo.EmberGull, 2), S(sparks, 1)), 3));
-            fumarolas.Fauna.Add(Fauna("pedras_pomes", "[enxame]", T(N(Fogo.Pumice, 3), N(Fogo.Smoke, 1)), T(V(Fogo.Pumice, 2), S(sparks, 1)), 5));
+            fumarolas.Fauna.Add(Fauna("pedras_pomes", "[enxame]", T(N(Fogo.Pumice, 3), N(Fogo.Fumarole, 1)), T(V(Fogo.Pumice, 2), S(sparks, 1)), 5));
             fumarolas.Fauna.Add(Fauna("caranguejos_das_fumarolas", "[tanque]", T(N(Fogo.Crab, 3), N(Fogo.Pumice, 1)), T(V(Fogo.Crab, 2), S(owl, 1)), 3, null, 30f));
             estreito.Fauna.Add(Fauna("caranguejos_do_degelo", "[tanque]", T(N(Fogo.Crab, 3), N(Fogo.Carp, 1)), T(V(Fogo.Crab, 2), S(moon, 1)), 3, null, 30f));
             estreito.Fauna.Add(Fauna("gaivotas_do_estreito", "[distância]", T(N(Fogo.EmberGull, 3), N(Fogo.Carp, 1)), T(V(Fogo.EmberGull, 2), S(owl, 1)), 3));
             canais.Fauna.Add(Fauna("lagartos_dos_canais", "[rápido]", T(N(Fogo.Lizard, 3), N(Fogo.Pumice, 1)), T(V(Fogo.Lizard, 3), S(sparks, 1)), 4));
             canais.Fauna.Add(Fauna("pedras_pomes_dos_canais", "[enxame]", T(N(Fogo.Pumice, 3), N(Fogo.Lizard, 1)), T(V(Fogo.Pumice, 2), S(sparks, 1)), 5));
-            fontes.Fauna.Add(Fauna("lagartos_das_fontes", "[rápido]", T(N(Fogo.Lizard, 3), N(Fogo.Smoke, 1)), T(V(Fogo.Lizard, 2), S(moon, 1)), 4));
-            fontes.Fauna.Add(Fauna("vapores_das_fontes", "[controle]", T(N(Fogo.Smoke, 3), N(Fogo.Crab, 1)), T(V(Fogo.Smoke, 2), S(sparks, 1)), 4));
+            fontes.Fauna.Add(Fauna("lagartos_das_fontes", "[rápido]", T(N(Fogo.Lizard, 3), N(Fogo.Fumarole, 1)), T(V(Fogo.Lizard, 2), S(moon, 1)), 4));
+            fontes.Fauna.Add(Fauna("vapores_das_fontes", "[controle]", T(N(Fogo.Fumarole, 3), N(Fogo.Crab, 1)), T(V(Fogo.Fumarole, 2), S(sparks, 1)), 4));
 
             // Jardins, Pinhais de Nuvem, Pontes Vermelhas (66): the Shisa Apagada [elite], the Carpa de Brasa [rápido]
-            // (the lantern fish), the Bambu de Fumaça [controle] (the ill-wind mist), the Tanuki Ladrão [rápido]; the
+            // and the Bambu de Fumaça [controle] (their own beasts now, NorthOwn2Beasts), the Tanuki Ladrão [rápido]; the
             // stone lanterns light up and the tanuki come out at night.
             jardins.Fauna.Add(Fauna("shisas_apagadas", "[elite]", T(N(Fogo.Shisa, 3), N(Fogo.Tanuki, 1)), T(V(Fogo.Shisa, 2), S(owl, 1)), 3, null, 32f));
             jardins.Fauna.Add(Fauna("tanukis_ladroes", "[rápido]", T(N(Fogo.Tanuki, 3), N(Fogo.Carp, 1)), T(V(Fogo.Tanuki, 3), S(moon, 1)), 4));
-            pinhais.Fauna.Add(Fauna("bambus_de_fumaca", "[controle]", T(N(Fogo.Smoke, 3), N(Fogo.Tanuki, 1)), T(V(Fogo.Smoke, 2), S(owl, 1)), 4));
-            pinhais.Fauna.Add(Fauna("tanukis_dos_pinhais", "[rápido]", T(N(Fogo.Tanuki, 3), N(Fogo.Smoke, 1)), T(V(Fogo.Tanuki, 3), S(moon, 1)), 4));
+            pinhais.Fauna.Add(Fauna("bambus_de_fumaca", "[controle]", T(N(Fogo.Bamboo, 3), N(Fogo.Tanuki, 1)), T(V(Fogo.Bamboo, 2), S(owl, 1)), 4));
+            pinhais.Fauna.Add(Fauna("tanukis_dos_pinhais", "[rápido]", T(N(Fogo.Tanuki, 3), N(Fogo.Bamboo, 1)), T(V(Fogo.Tanuki, 3), S(moon, 1)), 4));
             pontes.Fauna.Add(Fauna("carpas_de_brasa", "[rápido]", T(N(Fogo.Carp, 3), N(Fogo.Tanuki, 1)), T(V(Fogo.Carp, 2), S(sparks, 1)), 4));
             pontes.Fauna.Add(Fauna("shisas_das_pontes", "[elite]", T(N(Fogo.Shisa, 3), N(Fogo.Carp, 1)), T(V(Fogo.Shisa, 2), S(moon, 1)), 3, null, 32f));
 
             // Campos de Retama, Monte Echeyde, Malpaís (67): the Tibicena [rápido] (Guayota's black dogs, twice as many at
             // night), the Lagarto-Gigante de Lava [tanque], the Bomba Vulcânica [distância] (the ember vulture),
-            // the Fumarola [controle] (the ill-wind mist); the shepherds' wild goats (the smoke goat) on the broom.
+            // the Fumarola [controle] (its own beast now, NorthOwn2Beasts); the shepherds' wild goats (the smoke goat) on the broom.
             retama.Fauna.Add(Fauna("cabras_dos_pastores", "[rápido]", T(N(Fogo.Goat, 3), N(Fogo.Tibicena, 1)), T(V(Fogo.Tibicena, 2), S(werewolf, 1)), 4));
             retama.Fauna.Add(Fauna("tibicenas_da_retama", "[rápido]", T(N(Fogo.Tibicena, 3), N(Fogo.Goat, 1)), T(V(Fogo.Tibicena, 4), S(werewolf, 1)), 4));
             echeyde.Fauna.Add(Fauna("tibicenas", "[rápido]", T(N(Fogo.Tibicena, 3), N(Fogo.Bomb, 1)), T(V(Fogo.Tibicena, 4), S(werewolf, 1)), 4));
-            echeyde.Fauna.Add(Fauna("bombas_vulcanicas", "[distância]", T(N(Fogo.Bomb, 3), N(Fogo.Smoke, 1)), T(V(Fogo.Bomb, 2), S(sparks, 1)), 3));
+            echeyde.Fauna.Add(Fauna("bombas_vulcanicas", "[distância]", T(N(Fogo.Bomb, 3), N(Fogo.Fumarole, 1)), T(V(Fogo.Bomb, 2), S(sparks, 1)), 3));
             malpais.Fauna.Add(Fauna("lagartos_gigantes", "[tanque]", T(N(Fogo.GiantLizard, 3), N(Fogo.Tibicena, 1)), T(V(Fogo.GiantLizard, 2), S(werewolf, 1)), 3, null, 30f));
-            malpais.Fauna.Add(Fauna("fumarolas", "[controle]", T(N(Fogo.Smoke, 3), N(Fogo.GiantLizard, 1)), T(V(Fogo.Smoke, 2), S(sparks, 1)), 4));
+            malpais.Fauna.Add(Fauna("fumarolas", "[controle]", T(N(Fogo.Fumarole, 3), N(Fogo.GiantLizard, 1)), T(V(Fogo.Fumarole, 2), S(sparks, 1)), 4));
 
             // Canais Quentes, Recife de Obsidiana, Ilhotas de Vidro (68): the Polvo de Obsidiana [controle] (its own beast now, NorthBeasts), the Peixe-Lâmina
             // [rápido], the Coral de Brasa [distância], the Ouriço de Vidro [tanque] (its own
@@ -481,12 +486,12 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             ilhotas.Fauna.Add(Fauna("peixes_das_ilhotas", "[rápido]", T(N(Fogo.Blade, 3), N(Fogo.Coral, 1)), T(V(Fogo.Blade, 2), S(sparks, 1)), 4));
 
             // Muralhas Curvas, Castelo, Pátio, Escória Velha (69): the Ushabti de Laca [tanque], the
-            // Ogro-Fornalha [elite], the Fole Vivo [controle] (the ill-wind mist), the Faísca Raivosa [enxame] (its
+            // Ogro-Fornalha [elite], the Fole Vivo [controle] (its own beast now, NorthOwn2Beasts), the Faísca Raivosa [enxame] (its
             // own beast now, NorthBeasts); the nian cub by the furnaces, the crows on the walls; the bats at night (the furnaces burn hotter).
             muralhas.Fauna.Add(Fauna("ushabtis_de_laca", "[tanque]", T(N(Fogo.Ushabti, 3), N(Fogo.Crow, 1)), T(V(Fogo.Ushabti, 2), S(bats, 1)), 3, null, 30f));
             muralhas.Fauna.Add(Fauna("corvos_das_muralhas", "[distância]", T(N(Fogo.Crow, 3), N(Fogo.Ushabti, 1)), T(V(Fogo.Crow, 2), S(bats, 1)), 3));
             castelo.Fauna.Add(Fauna("ogros_fornalha", "[elite]", T(N(Fogo.Ogre, 3), N(Fogo.Ushabti, 1)), T(V(Fogo.Ogre, 2), S(bats, 1)), 3, null, 32f));
-            castelo.Fauna.Add(Fauna("foles_vivos", "[controle]", T(N(Fogo.Smoke, 3), N(Fogo.Spark, 1)), T(V(Fogo.Smoke, 2), S(sparks, 1)), 4));
+            castelo.Fauna.Add(Fauna("foles_vivos", "[controle]", T(N(Fogo.Bellows, 3), N(Fogo.Spark, 1)), T(V(Fogo.Bellows, 2), S(sparks, 1)), 4));
             patio.Fauna.Add(Fauna("faiscas_raivosas", "[enxame]", T(N(Fogo.Spark, 3), N(Fogo.Nian, 1)), T(V(Fogo.Spark, 3), S(sparks, 1)), 5));
             patio.Fauna.Add(Fauna("nians_das_fornalhas", "[rápido]", T(N(Fogo.Nian, 3), N(Fogo.Ogre, 1)), T(V(Fogo.Nian, 2), S(bats, 1)), 4));
             escoria.Fauna.Add(Fauna("ushabtis_da_escoria", "[tanque]", T(N(Fogo.Ushabti, 3), N(Fogo.Spark, 1)), T(V(Fogo.Ushabti, 2), S(bats, 1)), 3, null, 30f));

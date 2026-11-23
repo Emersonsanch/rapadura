@@ -374,6 +374,8 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                 case ProceduralEnemyKind.DimmedScarecrow:
                 case ProceduralEnemyKind.RiddleLantern:
                 case ProceduralEnemyKind.CrackedBell:
+                case ProceduralEnemyKind.LivingCrystal:
+                case ProceduralEnemyKind.SmokeBamboo:
                 {
                     // Stands and sways a little; it leans back on the windup and its broken line flares before the words fly.
                     float r = StepAttack(deltaTime, 4f, 2.5f);
@@ -513,6 +515,11 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                 case ProceduralEnemyKind.ShenMist:
                 case ProceduralEnemyKind.HundunBubble:
                 case ProceduralEnemyKind.DimmedEcho:
+                case ProceduralEnemyKind.Gale:
+                case ProceduralEnemyKind.IceCrack:
+                case ProceduralEnemyKind.IceRoot:
+                case ProceduralEnemyKind.Fumarole:
+                case ProceduralEnemyKind.LivingBellows:
                 case ProceduralEnemyKind.CocoonCaterpillar:
                 case ProceduralEnemyKind.StickyMist:
                 case ProceduralEnemyKind.DimmedThornRose:
@@ -590,6 +597,7 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                 case ProceduralEnemyKind.StoneTurtle:
                 case ProceduralEnemyKind.NianCub:
                 case ProceduralEnemyKind.BronzeWolf:
+                case ProceduralEnemyKind.TaowuGuard:
                 {
                     // Mingcheng's stone lion and stele turtle, the nian's cub, the kurgans' bronze wolf: the jaw gapes on the windup.
                     float r = StepAttack(deltaTime, 5f, 3f);
@@ -804,6 +812,7 @@ namespace Rapadura.Gameplay.Enemies.Visuals
                 case ProceduralEnemyKind.MossCrocodile:
                 case ProceduralEnemyKind.ShadowGharial:
                 case ProceduralEnemyKind.QiongqiCub:
+                case ProceduralEnemyKind.EmberCarp:
                 case ProceduralEnemyKind.MudEel:
                 case ProceduralEnemyKind.AshWolf:
                 case ProceduralEnemyKind.GrottoSpider:

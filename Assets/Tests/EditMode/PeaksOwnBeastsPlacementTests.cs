@@ -103,10 +103,9 @@ namespace Rapadura.Tests
         }
 
         [TestCase("neblinas_do_vento_ruim", Mist)]
-        [TestCase("ventanias", Mist)]
+        // The Ventania and the Guarda de Taowu are their own beasts since the twenty-ninth pass (NorthOwn2BeastsPlacementTests).
         [TestCase("neblinas_do_vento_ruim", Lantern)]
         [TestCase("leoes_de_pedra", Lion)]
-        [TestCase("guarda_de_taowu", Lion)]
         [TestCase("soldados_da_muralha", Terracotta)]
         [TestCase("lobos_dos_pinheiros", Wolf)]
         public void TheOtherSheetsOfTheRegions_KeepTheirStandIn(string group, string standIn)

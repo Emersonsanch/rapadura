@@ -193,7 +193,10 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             public const string WitchFish = "enemy_cave_witch_fish";
             public const string Bear = "enemy_mountain_polar_bear";
             public const string Eel = "enemy_desert_lantern_eel";
-            public const string Ooze = "enemy_cave_ooze";
+            // The twenty-ninth pass (NorthOwn2BeastRecipes, OverworldLayouts.NorthOwn2Beasts): the Rachadura (60) and the Raiz-Gelo (62), both
+            // the ooze before, and the Cristal Vivo (62, the broken lantern) are their own beasts now; the ooze and the lantern left the Mar Gelado.
+            public const string IceCrack = "enemy_cave_ice_crack";
+            public const string IceRoot = "enemy_cave_ice_root";
             public const string TwigBird = "enemy_mountain_twig_bird";
             public const string Hare = "enemy_mountain_stone_hare";
             public const string Reindeer = "enemy_mountain_clay_reindeer";
@@ -201,7 +204,7 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             public const string Kul = FarBeasts.LittleKul;
             public const string Mammoth = "enemy_mountain_burrow_mammoth";
             public const string Mole = "enemy_mountain_ice_mole";
-            public const string Crystal = "enemy_desert_broken_lantern";
+            public const string Crystal = "enemy_desert_living_crystal";
             public const string SeaWolf = "enemy_mountain_sea_wolf";
             public const string Floe = FarBeasts.DriftingFloe;
             public const string StormGull = "enemy_mountain_storm_gull";
@@ -455,14 +458,15 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             pastos.Fauna.Add(Fauna("renas_dos_pastos", "[tanque]", T(N(Gelo.Reindeer, 3), N(Gelo.Fox, 1)), T(V(Gelo.Reindeer, 2), S(owl, 1)), 3, null, 28f));
 
             // Canais de Gelo, Canais do Oeste, Gelo Rachado (60): the Peixe-Gelo [enxame], the Urso-Polar Apagado
-            // [tanque], the Enguia-Lanterna [distância] (both their own beasts now, NorthBeasts), the Rachadura [controle] (the ooze); the eels
+            // [tanque], the Enguia-Lanterna [distância] (both their own beasts now, NorthBeasts), the Rachadura [controle] (its own beast now,
+            // NorthOwn2Beasts; the ooze before); the eels
             // light up at night.
             canais.Fauna.Add(Fauna("peixes_gelo", "[enxame]", T(N(Gelo.IceFish, 3), N(Gelo.Eel, 1)), T(V(Gelo.IceFish, 2), S(moon, 1)), 5));
             canais.Fauna.Add(Fauna("enguias_lanterna", "[distância]", T(N(Gelo.Eel, 3), N(Gelo.IceFish, 1)), T(V(Gelo.Eel, 3), S(moon, 1)), 3));
             canaisOeste.Fauna.Add(Fauna("ursos_polares", "[tanque]", T(N(Gelo.Bear, 3), N(Gelo.IceFish, 1)), T(V(Gelo.Bear, 2), S(owl, 1)), 3, null, 30f));
-            canaisOeste.Fauna.Add(Fauna("peixes_gelo_do_oeste", "[enxame]", T(N(Gelo.IceFish, 3), N(Gelo.Ooze, 1)), T(V(Gelo.Eel, 2), S(moon, 1)), 5));
-            rachado.Fauna.Add(Fauna("rachaduras", "[controle]", T(N(Gelo.Ooze, 3), N(Gelo.Bear, 1)), T(V(Gelo.Ooze, 3), S(owl, 1)), 4));
-            rachado.Fauna.Add(Fauna("ursos_do_gelo_rachado", "[tanque]", T(N(Gelo.Bear, 3), N(Gelo.Ooze, 1)), T(V(Gelo.Bear, 2), S(werewolf, 1)), 3, null, 30f));
+            canaisOeste.Fauna.Add(Fauna("peixes_gelo_do_oeste", "[enxame]", T(N(Gelo.IceFish, 3), N(Gelo.IceCrack, 1)), T(V(Gelo.Eel, 2), S(moon, 1)), 5));
+            rachado.Fauna.Add(Fauna("rachaduras", "[controle]", T(N(Gelo.IceCrack, 3), N(Gelo.Bear, 1)), T(V(Gelo.IceCrack, 3), S(owl, 1)), 4));
+            rachado.Fauna.Add(Fauna("ursos_do_gelo_rachado", "[tanque]", T(N(Gelo.Bear, 3), N(Gelo.IceCrack, 1)), T(V(Gelo.Bear, 2), S(werewolf, 1)), 3, null, 30f));
 
             // Tundra de Omöl, Tundra do Sul, Lagos de Omöl (61): Omöl's clumsy creatures — the twig bird [distância], the
             // stone hare [rápido], the clay reindeer [tanque] — and the tundra mosquito [enxame]
@@ -475,12 +479,12 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             lagos.Fauna.Add(Fauna("aves_graveto_dos_lagos", "[distância]", T(N(Gelo.TwigBird, 3), N(Gelo.Reindeer, 1)), T(V(Gelo.TwigBird, 1), S(moon, 2)), 3));
 
             // Terra Congelada, Fiorde das Presas, Galerias dos Mamutes (62): the Mamute de Baixo da Terra [elite], the
-            // Toupeira-Gelo [enxame] (its own beast now, BorrowedBeasts), the Cristal Vivo [distância] (the broken lantern), the Raiz-Gelo [controle]
-            // (the ooze); the irbis on the fjord's ledges; the vampire bats at night.
+            // Toupeira-Gelo [enxame] (its own beast now, BorrowedBeasts), the Cristal Vivo [distância] and the Raiz-Gelo [controle] (their own
+            // beasts now, NorthOwn2Beasts; the broken lantern and the ooze before); the irbis on the fjord's ledges; the vampire bats at night.
             galerias.Fauna.Add(Fauna("mamutes_de_baixo_da_terra", "[elite]", T(N(Gelo.Mammoth, 3), N(Gelo.Mole, 1)), T(V(Gelo.Mammoth, 2), S(bats, 1)), 3, null, 32f));
-            galerias.Fauna.Add(Fauna("cristais_vivos", "[distância]", T(N(Gelo.Crystal, 3), N(Gelo.Ooze, 1)), T(V(Gelo.Crystal, 2), S(bats, 1)), 3));
-            terra.Fauna.Add(Fauna("toupeiras_gelo", "[enxame]", T(N(Gelo.Mole, 3), N(Gelo.Ooze, 1)), T(V(Gelo.Mole, 2), S(bats, 1)), 5));
-            terra.Fauna.Add(Fauna("raizes_gelo", "[controle]", T(N(Gelo.Ooze, 3), N(Gelo.Mole, 1)), T(V(Gelo.Ooze, 2), S(werewolf, 1)), 4));
+            galerias.Fauna.Add(Fauna("cristais_vivos", "[distância]", T(N(Gelo.Crystal, 3), N(Gelo.IceRoot, 1)), T(V(Gelo.Crystal, 2), S(bats, 1)), 3));
+            terra.Fauna.Add(Fauna("toupeiras_gelo", "[enxame]", T(N(Gelo.Mole, 3), N(Gelo.IceRoot, 1)), T(V(Gelo.Mole, 2), S(bats, 1)), 5));
+            terra.Fauna.Add(Fauna("raizes_gelo", "[controle]", T(N(Gelo.IceRoot, 3), N(Gelo.Mole, 1)), T(V(Gelo.IceRoot, 2), S(werewolf, 1)), 4));
             presas.Fauna.Add(Fauna("irbis_das_presas", "[rápido]", T(N(Gelo.Irbis, 3), N(Gelo.Mole, 1)), T(V(Gelo.Irbis, 2), S(werewolf, 1)), 4));
             presas.Fauna.Add(Fauna("mamutes_do_fiorde", "[elite]", T(N(Gelo.Mammoth, 3), N(Gelo.Crystal, 1)), T(V(Gelo.Mammoth, 2), S(bats, 1)), 3, null, 32f));
 

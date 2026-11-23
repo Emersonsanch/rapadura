@@ -15,7 +15,7 @@ MonoBehaviour:
   _itemId: cosm_aura_coluna_da_gloria
   _displayName: "Aura da Coluna da Glória"
   _description: "Um fio de luz que sobe dos pés do herói, como a Coluna da Glória levando o dia até a Lua. Prêmio raro da Vigília da Coluna. Só aparência, sem atributo."
-  _icon: {fileID: 0}
+  _icon: {fileID: 21300000, guid: f68dfcb014252e71f97782511f25417d, type: 3}
   _worldModelPrefab: {fileID: 0}
   _type: 0
   _category: 21

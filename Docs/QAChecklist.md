@@ -108,3 +108,112 @@
 - [ ] Perfil novo (ou "Reiniciar tutorial"): cada dica aparece uma vez — mapa ("Explorar"), primeiro inimigo, skills, loot, missão, nível 2, morte, noite, receita possível, "Conversar com…" (contorna o botão), "Vila" no Bosque do Zarafshan depois do prólogo (contorna o botão), primeiro material ("Materiais!") e primeiro atordoamento ("Atordoado!", só em encontro).
 - [ ] Nenhuma dica aparece sobre o prólogo/interlúdios/epílogo, o painel da Vila, a Loja/Bancada, uma conversa ou o banner "Prepare-se!"; a dica volta quando a tela fecha.
 - [ ] "Mostrar dicas" desligado: nada aparece; ligar de novo e "Reiniciar tutorial" trazem as dicas. Um `tutorial.json` de versão anterior carrega sem repetir as 9 dicas antigas (só as novas aparecem).
+
+## Rodada 2026-11-23 (não testada no Unity)
+> Commits `7b25f11`…`3159fbb` (6 checkpoints, 546 arquivos). Nada disso rodou no Editor. Ordem: compilar sem `error CS` → parte A → parte B. [E] = interagir (botão Usar no celular); 🌙 = de noite no relógio do jogo (esperar, ou `TimeOfDayManager.SetTime(22)`); M = janela de mapas para ir de uma zona a outra.
+
+### A. Testes EditMode a rodar (38 classes, ~536 `[Test]`)
+`[U]` = só roda no Unity (usa `Resources.Load`/`LoadAll` de assets de inimigo, item ou missão). As outras são regras puras.
+- [ ] **Online, Fase 12 (regras puras, `Docs/Network.md` §10–16):** `PartyRulesTests`, `TradeTests`, `GuildRulesTests`, `GuildBankOwnDataTests`, `PvpRulesTests`, `TimedEventsTests`, `RebirthRulesTests`, `EffectiveLevelTests`, `SocialRulesTests`. Não têm Play Mode: só a parte A.
+- [ ] **Cidades:** `CityServicesTests`, `CityTrainingServicesTests`, `CityStallsRound3Tests`, `CityTownVariantTests`, `CityModeTownVariantTests`, `CityForgeAndRaceTests` [U], `KirtaTarchonTownTests` [U], `QuestTargetsSpawnTests` [U].
+- [ ] **Mecânicas 01–56:** `PavilionDragonWispTremorTests` [U] (06, 20, 33, 34), `KirtaCoralTarchonNeighbourTests` [U] (28, 33), `PeaksSteppeRoundTests` (39, 51, 53, 56), `PeaksSteppeRound2Tests` (49, 52, 55, 56, 70).
+- [ ] **Mecânicas 57–100:** `BaitAndWaterBombTests` (alterado; 64, 65), `ApepSpitRiverTests` (76), `LateFaltaRound2Tests` [U] (78, 79, 93, 99, 100).
+- [ ] **Bichos próprios:** `WestOwn2BeastsTests` [U], `PeaksOwnBeastsTests` [U], `ProceduralEnemyModelsTests` [U] (alterado), `WestOwn2BeastsPlacementTests`, `PeaksOwnBeastsPlacementTests`; colocação alterada: `WestOwnBeastsPlacementTests`, `NorthOwnBeastsPlacementTests`, `HighlandOwnBeastsPlacementTests`, `MingchengNartesBeastsPlacementTests`, `LateRegionBeastsPlacementTests`, `FarStandInBeastsPlacementTests`.
+- [ ] **Montarias:** `MountTests` (alterado), `MountReefTests`, `MountLegendTests` [U].
+- [ ] Ainda sem commit (outro agente): `MarketTests`. Rodar se já estiver no commit testado.
+
+### B. Roteiro de Play Mode (caminhada pelo mundo contínuo)
+**Geral (em qualquer cidade do caminho)**
+- [ ] 🌙 Kirta, Tarchon, Hinokura e Tambor Rubro: as luzes da cidade ficam sobre os postes e lanternas da própria cidade, não juntas na origem do mundo nem deslocadas (`CityNightLights` em coordenada local).
+- [ ] Console sem `Exception` nem `MissingReference` ao entrar e sair de cada cidade abaixo.
+
+**20 · Salão de Tages**
+- [ ] 🌙 A cada 150 s: aviso "fique perto de uma lâmpada" e 5 s depois o tremor. Lâmpada sem herói a até 8 m perde 90 s; a que estava junto do herói segura.
+
+**11 · Tambor Rubro (Forja de Tambor)**
+- [ ] [E] no Tushratta: a primeira linha é "Consertar tudo: N peças (X de ouro, 20% mais barato aqui)", e o preço bate com 80% do Ferreiro do hub (arredondado para cima, mínimo 1).
+
+**06 · Jardim de Mihrshah (pavilhão)**
+- [ ] Com as 4 faíscas livres a porta (lado oeste) brilha. [E] a 3 m: 8 colunas acendem, caem 3 Pétalas de Luz e o primo fala.
+- [ ] **Mochila cheia** antes do [E] na porta: aviso de mochila cheia e a porta **não** abre (nada se perde); liberar espaço e abrir.
+- [ ] Altar (2,5 m): 1 Pétala por dia do jogo. Com a **mochila cheia**: aviso, e o dia não é gasto (esvaziar e pegar de novo no mesmo dia).
+- [ ] Dentro do pavilhão aberto: cura 6%/s fora de combate. Com a porta fechada, o aviso "abra pelo lado oeste".
+- [ ] 🌙 Sem pétala: bicho a mais de 9 m some. Comer a Pétala: +120 de vida e +60 de mana, e por 3 min todos ficam visíveis.
+- [ ] **Play duas vezes depois da Pétala:** comer a Pétala, parar o Play e dar Play de novo à noite. Os bichos voltam a sumir além de 9 m (sem luz herdada da sessão anterior).
+
+**17 · Salões de Bronze de Napirasu (Grande Forja)**
+- [ ] [E] na boca da forja: a tela mostra a etapa atual. Vencer O Fole Apagado e entregar: refino +2%, com o prêmio na hora.
+- [ ] **Mochila cheia** ao entregar uma etapa: aviso, e nada é cobrado. A entrega, a etapa e o prêmio ficam como estavam. Liberar espaço e entregar de novo.
+
+**22 · Mercado dos Túneis**
+- [ ] [E] na Shayn (rua Leste): troca 3 → 2 do mesmo tipo, sem ouro. A 11ª troca do dia UTC é recusada.
+- [ ] Ao entrar no mercado: aviso da galeria da feira e o facho âmbar a ~70 m. Os 2 pacotes saem ~30% mais baratos, uma vez por dia cada.
+
+**25–27 · Costa, Savana dos Auroques, Meroé**
+- [ ] Os bichos próprios aparecem no lugar dos emprestados: Chacal-Listrado Apagado (Dunas, Praia dos Dhows), Hiena de Fumaça (Acácias; 🌙 bando maior), Carneiro de Pedra (Meroé).
+- [ ] Corrida de Shulgi: [E] entre os postes de chifre (rua Sul), 8 fitas azuis, chegada na estrada sul. Ouro ≤110 s / prata ≤135 s / bronze ≤170 s pagam 3/2/1 Fitas (+2 na primeira do dia). No poste do Shulgi, 25 Fitas compram o Auroque.
+
+**28 · Kirta (corais e cidade)**
+- [ ] 5 corais apagados nas trilhas do recife. [E] a 3,5 m acende o coral (anel de 8 m, cura 2%/s fora de combate). O primo fala no 1º coral, e a Kirta fala quando os 5 estão acesos.
+- [ ] **Ordem dos corais:** o coral-mãe começa com 3 dos 7 galhos acesos, e cada coral acende mais um galho, **de leste para oeste**. Com os 5 acesos, o tronco e a borda do poço também acendem. O anel vai do cinza ao rosa.
+- [ ] Acender um coral com Kirta carregada: em ≤0,5 s o coral-mãe muda sem engasgo e sem mexer em casa, NPC ou colisor.
+- [ ] Sair do Play e entrar em Kirta pelo modo cidade (fora do mundo contínuo): o coral-mãe está igual ao save. A banca do Mascate continua lá.
+- [ ] O facho verde-água marca a bolha do mergulhador do dia (a Pughat diz onde). Passar a até 5 m pelo fundo solta ele: 75 de ouro + Pedra da Bênção. Com a mochila cheia ele espera a próxima passada.
+- [ ] Danel vende o Apito de Concha (145): o Hipocampo nada, e o Canto do Recife cura o grupo a 6 m.
+
+**29 · Kilwa Afundada**
+- [ ] Os dingoneks aparecem com uma Raia de Fumaça. 🌙 a forma da noite ronda as ruas das raias.
+
+**33 · Palafitas de Tarchon**
+- [ ] 5 trols apagados (anel cinza). [E] no Mastro dá a lanterna (120 s, uma por vez), e [E] ao lado de um trol acorda ele até o fim do dia. Com os 5 acordados, a Thanchvil paga 120.
+- [ ] **Ordem dos trols:** com 3/10/20/35/55/80 vizinhos acordados no total voltam Aule, Seianti, Thana, Sethre, Hasti e Tite, nessa ordem, cada um com gesto e fala só 1×.
+- [ ] As lanternas da praça: +2 no 2º trol que volta e +2 no 5º. Os colisores novos aparecem e os velhos continuam.
+- [ ] **Postes com o herói em cima:** ficar parado onde nasce um poste novo na hora em que o 2º (ou 5º) trol volta. A troca espera, e o poste só aparece depois que o herói sai (ele nunca fica preso dentro).
+- [ ] [E] na Cestaria: a Larthia paga 25 por fogo-fátuo (até 10 com o herói). Com 20 vendidos ela dá a Lanterna. A diária "Despertar os Vizinhos" aparece no diário.
+- [ ] 🌙 A névoa lilás esconde bicho além de 18 m, e a Lanterna na bolsa devolve a visão. Vencer o Pescador: nuvem de 6 fogos-fátuos (mana 5%/s no anel por 120 s) e 10 min de noite limpa.
+
+**34–35 · Ninki Nanka, Coração do Lodo**
+- [ ] O golpe "não olhe" da Ninki deixa o herói a ×0,6 por 3 s (não acumula), e os outros golpes dela não deixam lento. O Crocodilo de Musgo e o Gavial-Sombra aparecem nos lugares deles.
+
+**37–42 · Calhas, Geleira, Forte dos Ventos, Mingcheng, Amanirenas**
+- [ ] 39: com 3 ou 4 cata-ventos para o mesmo lado, a rajada contra o vento se quebra e a rajada a favor vai a 20 m. O aviso diz qual das duas vem.
+- [ ] Os bichos certos: o Ushabti de Calha (37), a Fenda Viva (38), a Lanterna de Charada nos Anéis (41) e o Guardião de Cal nas Torres (42).
+
+**46–53 · Cidadela, Fortim, Pradaria, Corrente, Vale dos Sátiros**
+- [ ] 46: o Servo de Taotie, o Filhote de Qiongqi (foge ferido) e a Bolha de Hundun.
+- [ ] 49: com O Pesadelo vencido, o Virogdad dá a distância arredondada a 25 m e o baú dá 70 pepitas (1× por dia).
+- [ ] 51: entregar cavalos no Poço da Taça. Na entrega que chega a 40 pontos sai o Cavalo Celeste certo, que nunca vem repetido.
+- [ ] 52 🌙: os elos até a argola mais alta brilham e a rajada empurra pela metade. Acima deles empurra ×1,3, e andando contra o herói ainda segura.
+- [ ] 53: [E] no Pactolo enche 3 derramadas. [E] a 6 m da estátua do Midas atordoa e desliga o toque de ouro por 6 s.
+- [ ] 53 🌙: [E] no palco pede o Baile. São 12 notas, e apertar sem parar não ganha (o tropeço dá −1).
+
+**55 · Pontes de Vento**
+- [ ] Andar sem capa no meio da ponte durante uma rajada: cai na rede, volta 12 m para trás e perde 8% da vida (nunca abaixo de 25%).
+- [ ] Parado segurando: não cai. Com a Capa de Tempestade, só cai quem está na beira. Sair da ponte andando, sem rajada, não conta como queda.
+- [ ] Com O Cortador de Cordas libertado: o herói volta ao ponto da rajada, sem dano e sem recuo. O primo fala na 1ª vez.
+
+**56 · Ermidas Suspensas**
+- [ ] As skills silenciosas (ex.: Flecha Precisa, Bênção da Vida) baixam o medidor 8, e as barulhentas sobem 12.
+- [ ] Encher o medidor: o Eco sai da pedra e persegue o herói (no máximo 2). Com O Sino vencido, o medidor enche mais devagar (~17,9 s correndo).
+
+**59 · Porto da Lua Branca · 64 · Fundo do Velho Kul**
+- [ ] [E] no Makarios: os 2 pacotes da lua, e a tela diz a lua de amanhã.
+- [ ] Vencer o Kul: por 30 min, raro ×1,5, buraco descansando 15 s e, dono da pesca, 20% de peixe dobrado. Com a mochila cheia, o aviso.
+
+**65 · Hinokura · 68 · Recife de Obsidiana · 70 · Caldeira**
+- [ ] O Kurogane diz qual é a forja do dia e quanto falta. Com ela ardendo, o refino mostra +5% (somado à Grande Forja, teto de 95%).
+- [ ] 68: em pé na casca da bomba de água sobre o transbordo, a lava não queima (20 s).
+- [ ] 70 🌙: o calor começa mais perto da margem (aviso 1× por noite).
+- [ ] **Glutão e forjas:** colado no Glutão de Brasa sem forja acesa, o medidor enche em ~20 s. Acender as 3 forjas de Hinokura e voltar: o calor dele cai a 1,25/s, o aviso da luta diz "3 forjas", e a 24 m dele o medidor esfria.
+
+**71 · Mesektet · 76 · Apep**
+- [ ] [E] na porta do Djedi: um círculo por vez, com a 1ª lição do dia de graça. [E] na porta do Setne: as prateleiras pelas páginas do Caderno.
+- [ ] Vencer Apep: 1 Pedra da Mistura (2 se perto da meia-noite). Com a **mochila cheia** as pedras ficam devidas e entram quando houver espaço.
+
+**78–79 · Deserto do Relógio, Poços de Betume**
+- [ ] 78 🌙: o bicho que cai deixa uma Sombra Atrasada em 2,5 s (no máximo 4). De dia somem todas.
+- [ ] 79 🌙: entrar na poça apagada cospe um Betume Vivo (no máximo 3). Uma skill de fogo na Fumaça de Piche estoura a fumaça e acende as poças a até 5 m.
+
+**93 · 99 · 100 · Céu**
+- [ ] 93: [E] numa Faísca Teimosa a 4 m e ficar 6 s sem bater convence ela. Ela segue até a lanterna da Proa, e a lua do convés cresce.
+- [ ] 99 🌙: o pilar pede 24 s, e selar cura 40%. 100: levantar no meio da história e sentar de novo no mesmo dia continua da mesma fala.

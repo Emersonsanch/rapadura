@@ -46,7 +46,7 @@ namespace Rapadura.Tests.EditMode
         {
             int capped = DurabilityRules.FullRepairCost(DurabilityRules.RepairValueCap, ItemRarity.Epic, 9, false);
             Assert.AreEqual(capped, DurabilityRules.FullRepairCost(10400, ItemRarity.Epic, 9, false), "a set piece of 10 400 repairs like one of the cap");
-            Assert.AreEqual(190, capped, "200 × 0.25 × 2 × 1.9");
+            Assert.AreEqual(200, capped, "210 × 0.25 × 2 × 1.9 = 199.5, rounded up");
             Assert.Less(DurabilityRules.FullRepairCost(100, ItemRarity.Epic, 9, false), capped, "below the cap the value still counts");
             Assert.AreEqual(25, DurabilityRules.FullRepairCost(100, ItemRarity.Common, 0, false), "campaign gear unchanged");
         }

@@ -15,7 +15,7 @@ MonoBehaviour:
   _itemId: cosm_titulo_defensor_da_lampada
   _displayName: "Título: Defensor da Lâmpada"
   _description: "Título que aparece sobre o nome de quem não deixou a Treva apagar a Lâmpada do Portão. Prêmio raro do Cerco da Treva. Só aparência, sem atributo."
-  _icon: {fileID: 0}
+  _icon: {fileID: 21300000, guid: a09c34666c9a76e8546b88d48a2945ae, type: 3}
   _worldModelPrefab: {fileID: 0}
   _type: 0
   _category: 21

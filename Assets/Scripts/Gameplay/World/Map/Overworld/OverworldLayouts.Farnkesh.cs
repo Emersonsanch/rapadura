@@ -182,6 +182,9 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             // the Sino Rachado (56, was the broken lantern) are their own beasts now; the mist and the lantern keep their other roles here.
             public const string Echo = "enemy_mountain_dimmed_echo";
             public const string CrackedBell = "enemy_desert_cracked_bell";
+            // The twenty-ninth pass (NorthOwn2BeastRecipes, OverworldLayouts.NorthOwn2Beasts): the Ventania (58, was the ill-wind mist) is its
+            // own beast now; the mist keeps the Pontes de Vento and the Mar de Nuvens.
+            public const string Gale = "enemy_mountain_gale";
         }
 
         private static OverworldLayout FarnkeshRegion()
@@ -470,12 +473,12 @@ namespace Rapadura.Gameplay.World.Map.Overworld
             escarpa.Fauna.Add(Fauna("pedras_da_escarpa", "[tanque]", T(N(Fark.Stone, 3), N(Fark.StormEagle, 1)), T(V(Fark.Stone, 2), S(owl, 1)), 3, null, 28f));
             escarpa.Fauna.Add(Fauna("gatos_da_escarpa", "[rápido]", T(N(Fark.Cat, 3), N(Fark.Stone, 1)), T(V(Fark.Cat, 2), S(werewolf, 1)), 4));
 
-            // Ilhas de Nuvem and Ninho da Huma (58): the Ventania [controle] (the mist), the Harpia de Fumaça [rápido],
+            // Ilhas de Nuvem and Ninho da Huma (58): the Ventania [controle] (its own beast now, NorthOwn2Beasts; the mist before), the Harpia de Fumaça [rápido],
             // the Grifo Selvagem [elite] (a young griffin), the Raio Preso [distância] (its own beast now, NorthBeasts).
-            ilhas.Fauna.Add(Fauna("ventanias", "[controle]", T(N(Fark.Mist, 3), N(Fark.Harpy, 1)), T(V(Fark.Mist, 3), S(moon, 1)), 4));
+            ilhas.Fauna.Add(Fauna("ventanias", "[controle]", T(N(Fark.Gale, 3), N(Fark.Harpy, 1)), T(V(Fark.Gale, 3), S(moon, 1)), 4));
             ilhas.Fauna.Add(Fauna("harpias_de_fumaca", "[rápido]", T(N(Fark.Harpy, 3), N(Fark.Vulture, 1)), T(V(Fark.Harpy, 3), S(bats, 1)), 4));
             ninho.Fauna.Add(Fauna("grifos_selvagens", "[elite]", T(N(Fark.Griffin, 3), N(Fark.Lightning, 1)), T(V(Fark.Griffin, 2), S(owl, 1)), 3, null, 32f));
-            ninho.Fauna.Add(Fauna("raios_presos", "[distância]", T(N(Fark.Lightning, 3), N(Fark.Mist, 1)), T(V(Fark.Lightning, 2), S(moon, 1)), 3));
+            ninho.Fauna.Add(Fauna("raios_presos", "[distância]", T(N(Fark.Lightning, 3), N(Fark.Gale, 1)), T(V(Fark.Lightning, 2), S(moon, 1)), 3));
         }
     }
 }

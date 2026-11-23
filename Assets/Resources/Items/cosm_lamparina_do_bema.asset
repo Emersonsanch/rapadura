@@ -15,7 +15,7 @@ MonoBehaviour:
   _itemId: cosm_lamparina_do_bema
   _displayName: "Lamparina do Bema"
   _description: "Lamparina de barro pintado que flutua ao lado do herói, como as que enfeitam o Bema em junho. Prêmio raro de qualquer evento durante o Bema. Só aparência, sem atributo."
-  _icon: {fileID: 0}
+  _icon: {fileID: 21300000, guid: bad3e1af552eea4e086bbef53df17b10, type: 3}
   _worldModelPrefab: {fileID: 0}
   _type: 0
   _category: 21

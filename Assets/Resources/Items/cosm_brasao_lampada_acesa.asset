@@ -15,7 +15,7 @@ MonoBehaviour:
   _itemId: cosm_brasao_lampada_acesa
   _displayName: "Brasão da Lâmpada Acesa"
   _description: "Brasão pintado nas costas do herói: uma lâmpada acesa sobre o portão. Prêmio raro do Cerco da Treva. Só aparência, sem atributo."
-  _icon: {fileID: 0}
+  _icon: {fileID: 21300000, guid: 3a93aaefb68245252c64be50300bcd45, type: 3}
   _worldModelPrefab: {fileID: 0}
   _type: 0
   _category: 21

@@ -15,7 +15,7 @@ MonoBehaviour:
   _itemId: item_ticket_marca_cacador
   _displayName: "Marca do Caçador"
   _description: "Tira de couro curtido com o risco de um gigante marcado a ferro. Vale uma entrada na Caçada a Ohyah, em qualquer força. Cai rara dos chefes de região do nível 100 para cima, e o Fortim dos Gigantes-da-Colina troca uma por 5 Fragmentos de Ohyah."
-  _icon: {fileID: 0}
+  _icon: {fileID: 21300000, guid: c09f5b47e3c5163343a91de6ead3cbb6, type: 3}
   _worldModelPrefab: {fileID: 0}
   _type: 5
   _category: 18

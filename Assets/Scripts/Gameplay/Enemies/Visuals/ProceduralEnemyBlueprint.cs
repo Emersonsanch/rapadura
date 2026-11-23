@@ -613,6 +613,27 @@ namespace Rapadura.Gameplay.Enemies.Visuals
         /// <summary>Guardião de Cal (42): a lime-plastered guard of the white spires with the bow of Ta-Seti; both arms go up on the windup.</summary>
         LimeGuardian = 594,
 
+        // The twenty-ninth pass of beasts (bible §3.2.1): the roles of the sheets 57–100 and the Guarda de Taowu (46) still played by another
+        // region's beast after the twenty-eighth (NorthOwn2BeastRecipes). Kinds 610–619 (595–609 left to the passes running beside it).
+        /// <summary>Ventania (58): a funnel of the Destroying Wind with golden twigs from the huma's nest; squashes on the windup and the stolen shadow flares.</summary>
+        Gale = 610,
+        /// <summary>Rachadura do Gelo (60): a slab of canal ice heaved round a crack of black water; squashes on the windup and the light in the crack flares.</summary>
+        IceCrack = 611,
+        /// <summary>Cristal Vivo (62): a cluster of cold crystals on a clod of frozen earth; leans back on the windup and the kept light flares.</summary>
+        LivingCrystal = 612,
+        /// <summary>Raiz-Gelo (62): a knot of frozen roots the mammoth tore out; squashes on the windup and the cold light flares.</summary>
+        IceRoot = 613,
+        /// <summary>Carpa de Brasa (66): a lacquer-red koi of the lava ponds swimming in the hot air; jaw and tail.</summary>
+        EmberCarp = 614,
+        /// <summary>Bambu de Fumaça (66): a walking clump of smoke-grey bamboo; leans back on the windup and the light in the node flares.</summary>
+        SmokeBamboo = 615,
+        /// <summary>Fumarola (67): a vent of black lava rock breathing sulphur smoke; squashes on the windup and the spark in its throat flares.</summary>
+        Fumarole = 616,
+        /// <summary>Fole Vivo (69): a forge bellows that blows on its own; squashes on the windup and the coal at its nozzle flares.</summary>
+        LivingBellows = 617,
+        /// <summary>Guarda de Taowu (46): a tiger with a man's face and a boar's tusks in a bronze collar; jaw and tail.</summary>
+        TaowuGuard = 618,
+
         // The twenty-first pass of beasts (bible §3.2.1): the most-seen roles of Regions 10–12, Farnkesh, the Mar Gelado and Hinokura, still
         // played by another beast (NorthOwnBeastRecipes).
         /// <summary>Pedra Voadora (57): a scree stone held up by the ill wind in a ring of grey dust; squashes on the windup and its core flares.</summary>

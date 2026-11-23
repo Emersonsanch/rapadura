@@ -81,6 +81,12 @@ MonoBehaviour:
     _weight: 0
   - _enemy: {fileID: 11400000, guid: a1f5b05bebe2401fa6330887b5cd6685, type: 2}
     _weight: 0
+  - _enemy: {fileID: 11400000, guid: d68512ec3516487d8c4076a67d544689, type: 2}
+    _weight: 0
+  - _enemy: {fileID: 11400000, guid: 5d9f495bb0b745948f12536d022ca7a8, type: 2}
+    _weight: 0
+  - _enemy: {fileID: 11400000, guid: a257bc844f23450998253cda3fee1c4d, type: 2}
+    _weight: 0
   _loot:
   - _item: {fileID: 11400000, guid: cd94a946f8299c04893b92f91853aede, type: 2}
     _weight: 8

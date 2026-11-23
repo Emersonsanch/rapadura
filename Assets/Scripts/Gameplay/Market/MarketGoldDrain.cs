@@ -40,7 +40,10 @@ namespace Rapadura.Gameplay.Market
     /// Result: auction tax 36 + deposits ≈ 29 + stall tax ≈ 10 ≈ <b>75 gold per player per day, ~2.5% of income</b>
     /// (≈ 75 000 a day on a 1 000-player server). Small on purpose ("taxa pequena"): the market is a steady sink on top of
     /// repairs, Barca fares, house upgrades (4 050 in all, Docs/Housing.md §10.4), guild founding (5 000) and resets
-    /// (20 000+), not the main one. The test keeps it within 1.5–5% of income.
+    /// (20 000+), not the main one: the NPC sinks of 101–500 already take 30–60% of the gold
+    /// (<c>economy.py</c> <c>BUDGET_SINK_SHARE</c>, refine fee + repair + talent reset), so with the market on top the total
+    /// stays under ~65%. Note it is the <i>volume</i> that drains, not the income: gold that only changes hands is taxed once
+    /// per sale. The test keeps it within 1.5–5% of income.
     /// </summary>
     public static class MarketGoldDrain
     {

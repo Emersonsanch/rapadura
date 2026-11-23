@@ -15,7 +15,7 @@ MonoBehaviour:
   _itemId: cosm_sombra_do_gigante
   _displayName: "Sombra do Gigante"
   _description: "A sombra do herói no chão fica do tamanho da de um gigante. Prêmio raro da Caçada a Ohyah. Só aparência, sem atributo."
-  _icon: {fileID: 0}
+  _icon: {fileID: 21300000, guid: 102cdde519880755281d45bb15933f41, type: 3}
   _worldModelPrefab: {fileID: 0}
   _type: 0
   _category: 21

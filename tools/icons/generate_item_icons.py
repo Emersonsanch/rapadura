@@ -1449,6 +1449,157 @@ def r_bomba_agua(ic):
         ic.ngon(x, y, r, 6, WATER, rot=30)
 
 
+# ---------------------------------------------------------------- eventos agendados (Docs/Network.md §14)
+WAX = (240, 232, 206)
+STONE_GREY = (128, 122, 116)
+STONE_DARK = (86, 80, 76)
+ASH = (170, 164, 156)
+
+
+def r_vela_vigilia(ic):
+    # Vela da Vigília: vela clara num pires de barro, pavio torto para a Coluna.
+    ic.ngon(64, 100, 34, 10, CLAY_RED, ry=10)
+    ic.rect(50, 46, 78, 98, WAX)
+    ic.poly([(50, 46), (78, 46), (74, 54), (54, 52)], lighter(WAX, 0.1))
+    ic.stroke([(64, 46), (66, 38)], 2.2, BROWN_DEEP)
+    flame(ic, 67, 30, 9)
+    ic.stroke([(56, 60), (56, 86)], 2, darker(WAX, 0.12))
+
+
+def r_marca_cacador(ic):
+    # Marca do Caçador: tira de couro com um gigante marcado a ferro.
+    ic.poly([(26, 34), (102, 26), (106, 94), (22, 102)], LEATHER)
+    ic.stroke([(32, 40), (98, 33)], 2, darker(LEATHER, 0.3))
+    ic.stroke([(30, 94), (100, 88)], 2, darker(LEATHER, 0.3))
+    burn = (60, 34, 20)
+    ic.dot(64, 46, 7, burn)
+    ic.stroke([(64, 52), (64, 74)], 5, burn)
+    ic.stroke([(50, 58), (78, 58)], 4, burn)
+    ic.stroke([(64, 74), (54, 88)], 4, burn)
+    ic.stroke([(64, 74), (74, 88)], 4, burn)
+
+
+def r_cinza_vigilia(ic):
+    # Cinza da Vigília: montinho de cinza com uma brasa clara.
+    ic.poly([(18, 98), (40, 66), (62, 56), (88, 64), (110, 98)], ASH)
+    ic.poly([(40, 80), (58, 70), (76, 74), (84, 90), (46, 92)], lighter(ASH, 0.15), outline=False)
+    ic.glow(66, 80, 10, FLAME, 140)
+    ic.ngon(66, 80, 5, 6, FLAME_CORE, outline=False, shade=False)
+
+
+def r_oleo_lampada(ic):
+    # Óleo da Lâmpada: frasco de óleo claro.
+    bottle(ic, (236, 206, 110))
+    ic.glow(64, 76, 16, GOLD_LIGHT, 90)
+
+
+def r_fragmento_ohyah(ic):
+    # Fragmento de Ohyah: lasca de pedra cinza com veio de luz.
+    ic.poly([(30, 92), (40, 40), (70, 22), (100, 52), (88, 100)], STONE_GREY)
+    ic.poly([(40, 40), (70, 22), (64, 56)], lighter(STONE_GREY, 0.18), outline=False)
+    ic.stroke([(50, 84), (62, 60), (80, 50)], 2.4, GOLD_LIGHT)
+
+
+def r_bau_ohyah(ic):
+    # Baú de Ohyah: baú de pedra rachada.
+    ic.rect(20, 56, 108, 104, STONE_GREY)
+    ic.poly([(20, 56), (30, 34), (98, 34), (108, 56)], STONE_DARK)
+    ic.rect(56, 52, 72, 72, GOLD)
+    ic.stroke([(36, 64), (46, 82), (40, 98)], 2.2, NIGHT)
+    ic.glow(64, 46, 18, GOLD_LIGHT, 100)
+
+
+def r_marca_ohyah(ic):
+    # Marca de Ohyah: dente de pedra numa tira, troféu.
+    ic.stroke([(30, 26), (64, 46), (98, 26)], 3, LEATHER)
+    ic.poly([(46, 44), (82, 44), (72, 104), (64, 112), (56, 104)], BONE_DARK)
+    ic.poly([(46, 44), (64, 44), (60, 100)], lighter(BONE_DARK, 0.15), outline=False)
+    ic.stroke([(58, 60), (70, 60)], 2, BROWN)
+
+
+def title_scroll(col, glyph):
+    def draw(ic):
+        ic.glow(64, 64, 34, col, 110)
+        scroll(ic, paper=CREAM_DIM, seal=col, ribbon=col, glyph=glyph)
+    return draw
+
+
+def _g_lamp(ic):
+    flame(ic, 64, 58, 9)
+
+
+def _g_gate(ic):
+    ic.rect(50, 52, 78, 78, STONE_DARK)
+    ic.poly([(50, 52), (64, 42), (78, 52)], STONE_GREY)
+    flame(ic, 64, 34, 6)
+
+
+def _g_giant(ic):
+    ic.dot(64, 46, 6, NIGHT)
+    ic.stroke([(64, 52), (64, 72)], 5, NIGHT)
+    ic.stroke([(52, 58), (76, 58)], 4, NIGHT)
+
+
+def r_aura_coluna(ic):
+    # Aura da Coluna da Glória: coluna de luz subindo até uma lua.
+    ic.glow(64, 64, 40, GOLD_LIGHT, 140)
+    ic.poly([(54, 112), (74, 112), (70, 30), (58, 30)], GOLD_LIGHT, outline=False)
+    ic.poly([(58, 112), (70, 112), (66, 30), (62, 30)], CREAM, outline=False, shade=False)
+    ic.ngon(64, 22, 12, 12, CREAM)
+    ic.ngon(70, 20, 10, 12, (210, 200, 170), outline=False, shade=False)
+
+
+def r_lanterna_vigilia(ic):
+    # Lanterna da Vigília: lanterna pequena flutuando.
+    ic.glow(64, 66, 32, GOLD_LIGHT, 120)
+    ic.stroke([(64, 16), (64, 30)], 2.4, BRONZE)
+    ic.rect(46, 30, 82, 38, BRONZE)
+    ic.rect(48, 38, 80, 90, (250, 230, 170))
+    ic.stroke([(56, 40), (56, 88)], 2, BRONZE)
+    ic.stroke([(72, 40), (72, 88)], 2, BRONZE)
+    ic.rect(44, 90, 84, 98, BRONZE)
+    flame(ic, 64, 68, 8)
+
+
+def r_manto_portao(ic):
+    cloak(ic, STONE_GREY, trim=(60, 40, 30))
+
+
+def r_brasao_lampada(ic):
+    # Brasão da Lâmpada Acesa: escudo com a lâmpada sobre o portão.
+    ic.poly([(26, 24), (102, 24), (100, 70), (64, 108), (28, 70)], (60, 70, 120))
+    ic.poly([(26, 24), (64, 24), (64, 108), (28, 70)], (76, 88, 144), outline=False)
+    ic.rect(48, 62, 80, 88, STONE_GREY)
+    ic.rect(58, 72, 70, 88, NIGHT)
+    flame(ic, 64, 46, 9)
+
+
+def r_elmo_ohyah(ic):
+    # Elmo de Ohyah: elmo de pedra com chifres quebrados.
+    ic.poly([(30, 92), (30, 56), (44, 34), (84, 34), (98, 56), (98, 92), (80, 96), (80, 72), (48, 72), (48, 96)], STONE_GREY)
+    ic.poly([(30, 56), (14, 36), (20, 24), (36, 46)], BONE_DARK)
+    ic.poly([(98, 56), (110, 40), (104, 32), (92, 46)], BONE_DARK)
+    ic.rect(48, 56, 80, 62, NIGHT)
+
+
+def r_sombra_gigante(ic):
+    # Sombra do Gigante: silhueta de gigante atrás de um herói pequeno.
+    ic.glow(64, 70, 38, VIOLET, 110)
+    shade = (52, 40, 70)
+    ic.ngon(64, 32, 14, 8, shade)
+    ic.poly([(40, 48), (88, 48), (96, 92), (82, 112), (46, 112), (32, 92)], shade)
+    ic.ngon(64, 84, 6, 8, CREAM)
+    ic.poly([(58, 92), (70, 92), (72, 110), (56, 110)], CREAM)
+
+
+def r_lamparina_bema(ic):
+    # Lamparina do Bema: lamparina de barro pintado.
+    lamp(ic, (196, 120, 70), FLAME, FLAME_CORE)
+    ic.stroke([(44, 80), (88, 80)], 2.4, TURQUOISE)
+    ic.stroke([(40, 88), (86, 88)], 2.4, GOLD)
+
+
+
 RECIPES = {
     # exigências de mapa (MapRequirementRules)
     "item_corda_escalada": r_corda_escalada,
@@ -1634,6 +1785,24 @@ RECIPES = {
     "item_whistle_mount_pony": r_whistle((170, 110, 60)),
     "item_whistle_mount_rhea": r_whistle((60, 60, 60)),
     "item_whistle_mount_kirta_hippocamp": r_apito_concha,
+    # eventos agendados (Docs/Network.md §14)
+    "item_ticket_vela_vigilia": r_vela_vigilia,
+    "item_ticket_marca_cacador": r_marca_cacador,
+    "mat_cinza_da_vigilia": r_cinza_vigilia,
+    "mat_oleo_da_lampada": r_oleo_lampada,
+    "mat_fragmento_de_ohyah": r_fragmento_ohyah,
+    "item_bau_de_ohyah": r_bau_ohyah,
+    "item_marca_de_ohyah": r_marca_ohyah,
+    "cosm_titulo_guardiao_da_vigilia": title_scroll(GOLD, _g_lamp),
+    "cosm_aura_coluna_da_gloria": r_aura_coluna,
+    "cosm_lanterna_da_vigilia": r_lanterna_vigilia,
+    "cosm_titulo_defensor_da_lampada": title_scroll((90, 110, 190), _g_gate),
+    "cosm_manto_do_portao": r_manto_portao,
+    "cosm_brasao_lampada_acesa": r_brasao_lampada,
+    "cosm_titulo_cacador_de_gigantes": title_scroll(CLAY_RED, _g_giant),
+    "cosm_elmo_de_ohyah": r_elmo_ohyah,
+    "cosm_sombra_do_gigante": r_sombra_gigante,
+    "cosm_lamparina_do_bema": r_lamparina_bema,
 }
 
 

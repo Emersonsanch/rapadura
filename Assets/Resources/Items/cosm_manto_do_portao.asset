@@ -15,7 +15,7 @@ MonoBehaviour:
   _itemId: cosm_manto_do_portao
   _displayName: "Manto do Portão"
   _description: "Visual de manto cor de pedra de muralha, com a barra chamuscada pela Treva. Prêmio raro do Cerco da Treva. Só aparência, sem atributo."
-  _icon: {fileID: 0}
+  _icon: {fileID: 21300000, guid: 6f593ec18ac0a90c163fc57e1dfe4b68, type: 3}
   _worldModelPrefab: {fileID: 0}
   _type: 0
   _category: 21

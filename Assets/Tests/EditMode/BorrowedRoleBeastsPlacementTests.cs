@@ -114,15 +114,14 @@ namespace Rapadura.Tests
         public void EachBeast_SpawnsInItsGroupsClearings_AtTheAreasLevels([ValueSource(nameof(All))] Placement placement) =>
             checks.EachBeast_SpawnsInItsGroupsClearings_AtTheAreasLevels(placement);
 
-        // The Sky's garden and noon shadows have their own beasts since the eighteenth pass (SkyOwnBeastsPlacementTests).
-        [TestCase(Gelo, "rachaduras", Ooze)]
-        [TestCase(Gelo, "raizes_gelo", Ooze)]
-        // The Polvo de Obsidiana has its own beast since the twenty-first pass (NorthOwnBeastsPlacementTests).
-        public void TheSheetsThatSharedTheStandIn_KeepIt(string region, string group, string standIn)
+        // The Sky's garden and noon shadows have their own beasts since the eighteenth pass (SkyOwnBeastsPlacementTests), the Polvo de
+        // Obsidiana since the twenty-first (NorthOwnBeastsPlacementTests), and the Rachadura and the Raiz-Gelo of the Mar Gelado, which shared
+        // the ooze with the Fenda Viva, since the twenty-ninth (NorthOwn2BeastsPlacementTests): the ooze left the Mar Gelado.
+        [Test]
+        public void TheOoze_NoLongerSpawnsByDay_InTheMarGelado()
         {
-            OverworldFauna fauna = OverworldLayouts.Get(region).Zones.SelectMany(z => z.Fauna).FirstOrDefault(f => f.Id == group);
-            Assert.IsNotNull(fauna, group);
-            Assert.IsTrue(fauna.Day.Any(e => e.EnemyId == standIn), $"{group}: still {standIn} by day");
+            OverworldLayout w = OverworldLayouts.Get(Gelo);
+            Assert.IsFalse(w.World.Zones.SelectMany(s => s.Day).Any(e => e.EnemyId == Ooze), "the Rachadura and the Raiz-Gelo were the last oozes of the Mar Gelado");
         }
 
         [Test]

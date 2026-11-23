@@ -220,10 +220,10 @@ namespace Rapadura.Gameplay.TimedEvents
         public const string CercoId = "cerco_da_treva";
         public const string CacadaId = "cacada_a_ohyah";
 
-        /// <summary>"Vela da Vigília": the Vigília ticket (drops in Regions 5+, sold by no one for real money).</summary>
+        /// <summary>"Vela da Vigília": the Vigília ticket (rare drop of common beasts 15+, or 5 Cinzas da Vigília at the Vila das Lamparinas; <see cref="TimedEventItems"/>). Never sold for real money.</summary>
         public const string VigiliaTicketId = "item_ticket_vela_vigilia";
 
-        /// <summary>"Marca do Caçador": the Caçada ticket (crafted from 5 Fragmentos de Ohyah or bought with gold at the gate).</summary>
+        /// <summary>"Marca do Caçador": the Caçada ticket (rare drop of region bosses 100+, or 5 Fragmentos de Ohyah at the Fortim; <see cref="TimedEventItems"/>). Never sold for real money.</summary>
         public const string CacadaTicketId = "item_ticket_marca_cacador";
 
         /// <summary>The 7 Blood Castle-like rooms of the Vigília and the Cerco (levels 15–500).</summary>

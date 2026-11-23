@@ -31,6 +31,14 @@ namespace Rapadura.Gameplay.World.Map.Areas
         /// <summary>Off in tests that build a map without monsters.</summary>
         public static bool SpawningEnabled { get; set; } = true;
 
+        /// <summary>
+        /// Off by default (today's behaviour): on, a death waits the shared-world agenda's time for its tier
+        /// (<see cref="Rapadura.Gameplay.SharedWorld.SharedSpawnBridge"/>, Network.md §18) instead of the clearing's flat <see cref="MapSpawnZone.RespawnSeconds"/>.
+        /// </summary>
+        public static bool UseSharedSchedule { get; set; }
+
+        private int _deaths;
+
         private readonly List<GameObject> _alive = new List<GameObject>();
         private readonly List<(GameObject Enemy, float At)> _corpses = new List<(GameObject, float)>();
         private Transform[] _waypoints;
@@ -299,7 +307,10 @@ namespace Rapadura.Gameplay.World.Map.Areas
             }
 
             _corpses.Add((evt.Enemy, Time.time + CorpseSeconds));
-            _nextSpawnAt = Mathf.Max(_nextSpawnAt, Time.time + Mathf.Max(1f, Zone.RespawnSeconds));
+            string speciesId = UseSharedSchedule && evt.Enemy.TryGetComponent(out MapMonsterInfo info) ? info.SpeciesId : null;
+            float respawn = Rapadura.Gameplay.SharedWorld.SharedSpawnBridge.RespawnSeconds(UseSharedSchedule, Zone.RespawnSeconds, Zone.Id, speciesId, _deaths);
+            _deaths++;
+            _nextSpawnAt = Mathf.Max(_nextSpawnAt, Time.time + Mathf.Max(1f, respawn));
         }
 
         private void ReleaseCorpses()

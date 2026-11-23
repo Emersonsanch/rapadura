@@ -15,7 +15,7 @@ MonoBehaviour:
   _itemId: cosm_lanterna_da_vigilia
   _displayName: "Lanterna da Vigília"
   _description: "Lanterninha que flutua ao lado do herói e nunca apaga. Prêmio raro da Vigília da Coluna. Só aparência, sem atributo."
-  _icon: {fileID: 0}
+  _icon: {fileID: 21300000, guid: e771d39611db87ea6c9450bca2989455, type: 3}
   _worldModelPrefab: {fileID: 0}
   _type: 0
   _category: 21
